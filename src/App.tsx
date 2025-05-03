@@ -1,15 +1,13 @@
-import React, { useState } from 'react'
-import './App.css'
+import React, { useState } from "react";
+import "./App.css";
+import LoginPage from "./Pages/Auth/LoginPage";
 
 function App() {
-
   return (
     <div>
-      <h1 className='text-blue-700'>Enterprise Admin Portal</h1>
-      
-      <p>Happy coding!</p>
+      <LoginPage />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
