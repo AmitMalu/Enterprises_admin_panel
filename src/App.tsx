@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import "./App.css";
-import LoginPage from "./Pages/Auth/LoginPage";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./Routes/AppRoutes";
 
 function App() {
   return (
-    <div>
-      <LoginPage />
-    </div>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 

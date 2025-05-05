@@ -28,11 +28,15 @@
     "@tiptap/pm": "^2.11.9",
     "@tiptap/react": "^2.11.9",
     "@tiptap/starter-kit": "^2.11.9",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^7.1.0",
+    "formik": "^2.4.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recharts": "^2.15.3"
+    "react-router-dom": "^7.5.3",
+    "recharts": "^2.15.3",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -50,6 +54,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
-    "vite": "^6.3.1"
+    "vite": "^6.3.1",
+    "vite-plugin-svgr": "^4.3.0"
   }
 }
