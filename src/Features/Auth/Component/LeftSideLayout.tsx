@@ -1,14 +1,13 @@
 import React from "react";
+import orgLogo from '../../../assets/Images/orgLogo.png';
 
 interface LeftSideLayoutProps {
   bgImage: string;
-  orgLogo: string;
   children?: React.ReactNode;
 }
 
 const LeftSideLayout: React.FC<LeftSideLayoutProps> = ({
   bgImage,
-  orgLogo,
   children,
 }) => {
   return (

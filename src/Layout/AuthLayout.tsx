@@ -3,8 +3,7 @@ import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
   return (
-    <div className="auth-layout"> 
-      {/* This is where the child routes will be rendered */}
+    <div className="w-screen h-screen flex flex-col lg:flex-row bg-white ">
       <Outlet />
     </div>
   );

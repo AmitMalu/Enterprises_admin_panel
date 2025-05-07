@@ -3,10 +3,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoutes from "../Layout/ProtectedRoutes";
 import AuthLayout from "../Layout/AuthLayout";
 import MainLayout from "../Layout/MainLayout";
-import OtpVerify from "../Features/Auth/Pages/OtpVerify";
 
 // Lazy loaded pages
 const LoginPage = lazy(() => import("../Features/Auth/Pages/LoginPage"));
+const OtpVerify = lazy(() => import("../Features/Auth/Pages/OtpVerify"));
+const SetPassword = lazy(() => import("../Features/Auth/Pages/SetPassword"));
+const ForgetPassword = lazy(() => import("../Features/Auth/Pages/ForgetPassword"));
 const HomePage = lazy(() => import("../Features/Home/HomePage"));
 
 const AppRoutes = () => {
@@ -17,6 +19,8 @@ const AppRoutes = () => {
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/otp-verify" element={<OtpVerify />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/set-password" element={<SetPassword />} />
         </Route>
 
         {/* protected Routes with MainLayout */}

@@ -66,22 +66,17 @@ const LoginPage: React.FC = () => {
   }) => {
     try {
       const result = await dispatch(login(values)).unwrap();
-      if (result.statusCode === 200) {
-        toast.success(result.message);
-        navigate("/otp-verify");
-      } else {
-        // Handle error case
-        toast.error(result.message || "Login failed");
-      }
+      toast.success(result.message);
+      navigate("/otp-verify", { state: { username: values.username } });
     } catch (error) {
       toast.error((error as string) || "Login failed");
     }
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col lg:flex-row bg-white ">
+    <>
       {/* Left Side - only visible on large screens */}
-      <LeftSideLayout bgImage={bgImage} orgLogo={orgLogo}>
+      <LeftSideLayout bgImage={bgImage}>
         <StepperLines activeStep={1} totalSteps={4} />
       </LeftSideLayout>
 
@@ -98,17 +93,16 @@ const LoginPage: React.FC = () => {
 
           {/* Username */}
           <form onSubmit={formik.handleSubmit}>
-            <div className="mb-4">
-              <UsernameInput
-                name="username"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                placeholder="Username"
-                required
-                error={formik.touched.username && formik.errors.username}
-                max={51}
-              />
-            </div>
+            <UsernameInput
+              className="mb-4"
+              name="username"
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              placeholder="Username"
+              required
+              error={formik.touched.username && formik.errors.username}
+              max={51}
+            />
 
             {/* Password */}
             <PasswordInputBox
@@ -131,7 +125,10 @@ const LoginPage: React.FC = () => {
           </form>
 
           {/* Forgot Password? */}
-          <div className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl cursor-pointer text-right text-[#4C4C57]">
+          <div
+            onClick={() => navigate("/forget-password")}
+            className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl cursor-pointer text-right text-[#4C4C57]"
+          >
             Forget Password?
           </div>
 
@@ -158,7 +155,7 @@ const LoginPage: React.FC = () => {
           </p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
