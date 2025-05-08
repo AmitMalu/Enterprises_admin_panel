@@ -1,14 +1,35 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import { AppShell, Burger, Group, Skeleton, Text } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import Navbar from "./Components/Navbar";
 
-const MainLayout = () => {
+const MainLayout: React.FC = () => {
+  const [opened, { toggle }] = useDisclosure();
+
   return (
-    <div className="main-layout">
-      <header>Header</header>
-      <main>
-        <Outlet />
-      </main>
-    </div>
+    <AppShell
+      layout="alt"
+      header={{ height: 60 }}
+      navbar={{ width: 250, breakpoint: "sm", collapsed: { mobile: !opened } }}
+      padding="md"
+    >
+      <AppShell.Header>
+        <Group h="100%" px="md">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          Header
+        </Group>
+      </AppShell.Header>
+
+      <AppShell.Navbar p="sm" style={{ backgroundColor: "#EBF7F6" }} >
+        <Group>
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          <Navbar />
+        </Group>
+      </AppShell.Navbar>
+
+      <AppShell.Main>
+        Alt layout – Navbar and Aside are rendered on top on Header and Footer
+      </AppShell.Main>
+    </AppShell>
   );
 };
 

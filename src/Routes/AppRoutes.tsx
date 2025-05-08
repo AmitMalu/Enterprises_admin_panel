@@ -24,12 +24,12 @@ const AppRoutes = () => {
         </Route>
 
         {/* protected Routes with MainLayout */}
-        <Route element={<ProtectedRoutes />}>
+        {/* <Route element={<ProtectedRoutes />}> */}
           {/* check if User has token? if yes ? render MainLayout : loginPage */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
           </Route>
-        </Route>
+        {/* </Route> */}
 
         {/* Redirect all unknown routes */}
         <Route path="*" element={<Navigate to="/login" />} />
