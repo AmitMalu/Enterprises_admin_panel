@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LeftSideLayout from "../Component/LeftSideLayout";
 import StepperLines from "../Component/StepperLines";
 import otpVerifyBgImage from "../../../assets/Images/otpVerifyBg.png";
-import orgLogo from "../../../assets/Images/orgLogo.png";
 import { PinInput } from "@mantine/core";
 import CommonButton from "../Component/CommonButton";
 import { useScreenSize } from "../../../Utils/CustomHooks/useScreenSize";
@@ -20,7 +19,14 @@ const OtpVerify: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const username = (location.state as { username?: string })?.username ?? ""; // Extract username from location state
+  const locationState = location.state as {
+    username?: string;
+    otpFor?: string;
+  };
+  const username =
+    locationState?.username ?? sessionStorage.getItem("otp-username") ?? "";
+  const otpFor =
+    locationState?.otpFor ?? sessionStorage.getItem("otpFor") ?? "";
 
   const pinSize =
     screenSize === "sm"
@@ -51,11 +57,32 @@ const OtpVerify: React.FC = () => {
     try {
       const result = await dispatch(otpVerify({ username, otp: Otp })).unwrap();
       toast.success(result.message);
-      navigate("/");
+      if (otpFor === "forgetPassword") {
+        navigate("/set-password");
+      } else if (otpFor === "login") {
+        sessionStorage.removeItem("otpFor");
+        sessionStorage.removeItem("otp-username");
+        navigate("/");
+      }
     } catch (error: any) {
       toast.error(error.message || "OTP verification failed");
     }
   };
+
+  useEffect(() => {
+    const resolvedUsername =
+      locationState?.username ?? sessionStorage.getItem("otp-username");
+    const resolvedOtpFor =
+      locationState?.otpFor ?? sessionStorage.getItem("otpFor");
+
+    if (!resolvedUsername || !resolvedOtpFor) {
+      toast.error("Session expired. Please login again.");
+      navigate("/login", { replace: true });
+    } else {
+      sessionStorage.setItem("otp-username", resolvedUsername);
+      sessionStorage.setItem("otpFor", resolvedOtpFor);
+    }
+  }, []);
 
   return (
     <>

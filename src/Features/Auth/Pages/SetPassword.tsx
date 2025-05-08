@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LeftSideLayout from "../Component/LeftSideLayout";
 import StepperLines from "../Component/StepperLines";
 import setPassBgImage from "../../../assets/Images/setPassBg.png";
@@ -61,11 +61,24 @@ const SetPassword: React.FC = () => {
         })
       ).unwrap();
       toast.success(result.message);
+      sessionStorage.removeItem("from-login-forget");
+      sessionStorage.removeItem("otp-username");
+      sessionStorage.removeItem("otpFor");
       navigate("/login"); // Navigate to login page after successful password reset
     } catch (error: any) {
       toast.error(error.message || "failed to Set Password");
     }
   };
+
+  useEffect(() => {
+    const username = sessionStorage.getItem("otp-username");
+    const otpFor = sessionStorage.getItem("otpFor");
+
+    if (!username || otpFor !== "forgetPassword") {
+      toast.error("Session expired. Please try again.");
+      navigate("/login", { replace: true });
+    }
+  }, []);
 
   return (
     <>

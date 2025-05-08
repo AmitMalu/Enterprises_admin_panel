@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import bgImage from "../../../assets/Images/loginPageBg.png";
 import orgLogo from "../../../assets/Images/orgLogo.png";
 import { UsernameInput } from "../Component/UsernameInput";
@@ -14,6 +14,7 @@ import { AppDispatch, RootState } from "../../../Redux/store";
 import { login } from "../../../Redux/reducers/AuthReducer";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { persistOtpSession } from "../../../Utils/utils";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -60,6 +61,11 @@ const LoginPage: React.FC = () => {
     },
   });
 
+  const handleForgetPassword = () => {
+    sessionStorage.setItem("from-login-forget", "true");
+    navigate("/forget-password");
+  };
+
   const handleLogin = async (values: {
     username: string;
     password: string;
@@ -67,11 +73,18 @@ const LoginPage: React.FC = () => {
     try {
       const result = await dispatch(login(values)).unwrap();
       toast.success(result.message);
-      navigate("/otp-verify", { state: { username: values.username } });
+      persistOtpSession(values.username, "login"); //set both values in Session storage
+      navigate("/otp-verify", {
+        state: { username: values.username, otpFor: "login" },
+      });
     } catch (error) {
       toast.error((error as string) || "Login failed");
     }
   };
+
+  useEffect(() => {
+    sessionStorage.removeItem("from-login-forget"); // Remove stale flag
+  }, []);
 
   return (
     <>
@@ -126,7 +139,7 @@ const LoginPage: React.FC = () => {
 
           {/* Forgot Password? */}
           <div
-            onClick={() => navigate("/forget-password")}
+            onClick={handleForgetPassword}
             className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl cursor-pointer text-right text-[#4C4C57]"
           >
             Forget Password?

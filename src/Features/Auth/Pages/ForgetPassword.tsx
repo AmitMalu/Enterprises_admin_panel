@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LeftSideLayout from "../Component/LeftSideLayout";
 import StepperLines from "../Component/StepperLines";
 import bgImage from "../../../assets/Images/forgetPassBg.png";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CommonButton from "../Component/CommonButton";
 import { forgetPassword } from "../../../Redux/reducers/AuthReducer";
+import { persistOtpSession } from "../../../Utils/utils";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -49,11 +50,21 @@ const ForgetPassword: React.FC = () => {
     try {
       const result = await dispatch(forgetPassword(values)).unwrap();
       toast.success(result.message);
-      navigate("/set-password", { state: { username: values.username }});
+      sessionStorage.removeItem("from-login-forget");
+      persistOtpSession(values.username, "forgetPassword"); //set both values in Session storage
+      navigate("/otp-verify", {
+        state: { username: values.username, otpFor: "forgetPassword" },
+      });
     } catch (error) {
       toast.error((error as string) || "Login failed");
     }
   };
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("from-login-forget")) {
+      navigate("/login", { replace: true });
+    }
+  }, []);
 
   return (
     <>
