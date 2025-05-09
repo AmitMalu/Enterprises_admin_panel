@@ -28,6 +28,8 @@ const AppRoutes = () => {
           {/* check if User has token? if yes ? render MainLayout : loginPage */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/funding/overview1" element={<HomePage />} />
+            <Route path="/funding/overview2" element={<HomePage />} />
           </Route>
         {/* </Route> */}
 

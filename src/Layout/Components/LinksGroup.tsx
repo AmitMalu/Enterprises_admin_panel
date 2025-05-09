@@ -1,46 +1,83 @@
 import { Box, Collapse, Group, ThemeIcon, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import React from "react";
+import React, { useState } from "react";
 import { IconChevronRight } from "@tabler/icons-react";
+import { useAppDispatch, useAppSelector } from "../../Redux/Hooks";
+import { useNavigate } from "react-router-dom";
+import {
+  setActiveMenu,
+  setActiveSubMenu,
+} from "../../Redux/reducers/MenuReducer";
 
 interface linksGroupProps {
   icon: React.FC<any>;
   label: string;
   initiallyOpened: boolean;
-  links?: { label: string; link: string }[];
+  link?: string;
+  links?: { label: string; link: string; icon?: React.FC<any> }[];
 }
 
 const LinksGroup: React.FC<linksGroupProps> = ({
   icon: Icon,
   label,
   links,
+  link,
   initiallyOpened,
 }: linksGroupProps) => {
-  const [opened, { toggle }] = useDisclosure(initiallyOpened);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const hasLinks = Array.isArray(links);
+  const { activeMenu, activeSubMenu, openedMenu } = useAppSelector(
+    (state) => state.menu
+  );
+
+  const isActiveMenu = label === activeMenu;
+  const isOpened = label === openedMenu;
+
+  const handleClick = () => {
+    dispatch(setActiveMenu(label)); // also toggles openedMenu inside reducer
+
+    if (!hasLinks && link) {
+      dispatch(setActiveSubMenu(null)); // Clear submenu selection
+      navigate(link); // navigate directly if no submenu
+    }
+  };
 
   const items = hasLinks
-    ? links.map((link) => (
-        <a
-          key={link.label}
-          href={link.link}
-          className="pl-8 text-sm font-poppins font-normal leading-[16px] text-black mt-0 py-1"
-        >
-          {link.label}
-        </a>
-      ))
+    ? links.map((link) => {
+        const isActive = link.label === activeSubMenu;
+        return (
+          <a
+            key={link.label}
+            onClick={() => {
+              dispatch(setActiveSubMenu(link.label));
+              navigate(link.link); // no <a> tag used
+            }}
+            className={`flex items-center gap-2 cursor-pointer text-sm font-poppins font-normal px-4 py-1 rounded-xl ${
+              isActive ? "text-submenuActive" : "text-black"
+            } bg-submenuBg`}
+          >
+            {link.icon && <link.icon />}
+            {link.label}
+          </a>
+        );
+      })
     : null;
 
   return (
     <>
       <UnstyledButton
-        onClick={toggle}
-        className="w-full px-4 py-2 text-left hover:bg-gray-100 transition rounded"
+        className={`rounded-xl w-full text-left transition`}
+        onClick={handleClick}
+        style={{
+          backgroundColor: isOpened ? "#BDC4C3" : "transparent",
+          padding: "8px 4px",
+        }}
       >
-        <Group justify="space-between" gap="sm" className="mb-2">
+        <Group justify="space-between" gap="sm">
           <Box className="flex items-center">
             <Icon />
-            <Box className="ml-4 text-xl font-poppins font-normal leading-[27px] text-black">
+            <Box className="ml-4 text-lg font-poppins font-normal leading-[27px] text-black">
               {label}
             </Box>
           </Box>
@@ -48,16 +85,14 @@ const LinksGroup: React.FC<linksGroupProps> = ({
             <IconChevronRight
               stroke={1.5}
               size={16}
-              style={{ transform: opened ? "rotate(-90deg)" : "none" }}
+              style={{ transform: isOpened ? "rotate(-90deg)" : "none" }}
             />
           )}
         </Group>
       </UnstyledButton>
       {hasLinks ? (
-        <Collapse in={opened}>
-          <Box className="flex flex-col">
-            {items}
-          </Box>
+        <Collapse in={isOpened}>
+          <Box className="flex flex-col">{items}</Box>
         </Collapse>
       ) : null}
     </>

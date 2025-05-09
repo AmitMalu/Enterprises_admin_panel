@@ -6,13 +6,12 @@ import { UsernameInput } from "../Component/UsernameInput";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../Redux/store";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CommonButton from "../Component/CommonButton";
 import { forgetPassword } from "../../../Redux/reducers/AuthReducer";
 import { persistOtpSession } from "../../../Utils/utils";
+import { useAppDispatch, useAppSelector } from "../../../Redux/Hooks";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -31,9 +30,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const ForgetPassword: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const {} = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const {} = useAppSelector((state) => state.auth);
 
   // Formik setup
   const formik = useFormik({

@@ -309,3 +309,28 @@ export const reportsSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
     </svg>
   );
 };
+
+export const userCreationSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 13 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        cx="6.29406"
+        cy="3.52941"
+        r="2.52941"
+        stroke="#FF0000"
+        strokeWidth="2"
+      />
+      <path
+        d="M11.5879 15.0011L11.5879 11.707C11.5879 10.6025 10.6925 9.70703 9.58789 9.70703L2.99965 9.70703C1.89509 9.70703 0.999655 10.6025 0.999655 11.707L0.999655 15.0011"
+        stroke="#FF0000"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+};

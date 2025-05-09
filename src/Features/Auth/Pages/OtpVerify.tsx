@@ -6,10 +6,9 @@ import { PinInput } from "@mantine/core";
 import CommonButton from "../Component/CommonButton";
 import { useScreenSize } from "../../../Utils/CustomHooks/useScreenSize";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../../../Redux/store";
 import { otpVerify, resendOtp } from "../../../Redux/reducers/AuthReducer";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../../Redux/Hooks";
 
 const OtpVerify: React.FC = () => {
   const screenSize = useScreenSize();
@@ -17,7 +16,7 @@ const OtpVerify: React.FC = () => {
   const [Otp, setOtp] = useState<string>("");
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const locationState = location.state as {
     username?: string;

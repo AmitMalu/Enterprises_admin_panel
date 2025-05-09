@@ -9,12 +9,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import StepperLines from "../Component/StepperLines";
 import LeftSideLayout from "../Component/LeftSideLayout";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../Redux/store";
 import { login } from "../../../Redux/reducers/AuthReducer";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { persistOtpSession } from "../../../Utils/utils";
+import { useAppDispatch, useAppSelector } from "../../../Redux/Hooks";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -45,9 +44,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const LoginPage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const {} = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const {} = useAppSelector((state) => state.auth);
 
   // Formik setup
   const formik = useFormik({

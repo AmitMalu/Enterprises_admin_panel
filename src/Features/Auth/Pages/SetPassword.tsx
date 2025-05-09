@@ -7,10 +7,9 @@ import * as Yup from "yup";
 import { PasswordInputBox } from "../Component/PasswordInputBox";
 import CommonButton from "../Component/CommonButton";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../../../Redux/store";
 import { setPassword } from "../../../Redux/reducers/AuthReducer";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../../Redux/Hooks";
 
 const validationSchema = Yup.object().shape({
   newPassword: Yup.string()
@@ -31,7 +30,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const SetPassword: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const username = (location.state as { username?: string })?.username ?? ""; // Extract username from location state

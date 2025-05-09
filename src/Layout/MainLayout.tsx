@@ -1,6 +1,8 @@
 import { AppShell, Burger, Group, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Navbar from "./Components/Navbar";
+import { Outlet } from "react-router-dom";
+import Sidebar from "./Components/Sidebar";
 
 const MainLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -19,15 +21,15 @@ const MainLayout: React.FC = () => {
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="sm" style={{ backgroundColor: "#EBF7F6" }} >
+      <AppShell.Navbar p="sm" style={{ backgroundColor: "#EBF7F6" }}>
         <Group>
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Navbar />
+          <Sidebar />
         </Group>
       </AppShell.Navbar>
 
       <AppShell.Main>
-        Alt layout – Navbar and Aside are rendered on top on Header and Footer
+        <Outlet />
       </AppShell.Main>
     </AppShell>
   );
