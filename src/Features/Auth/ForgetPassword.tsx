@@ -1,17 +1,14 @@
 import React, { useEffect } from "react";
-import LeftSideLayout from "../Component/LeftSideLayout";
-import StepperLines from "../Component/StepperLines";
-import bgImage from "../../../assets/Images/forgetPassBg.png";
-import { UsernameInput } from "../Component/UsernameInput";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import CommonButton from "../Component/CommonButton";
-import { forgetPassword } from "../../../Redux/reducers/AuthReducer";
-import { persistOtpSession } from "../../../Utils/utils";
-import { useAppDispatch, useAppSelector } from "../../../Redux/Hooks";
+import CommonButton from "../../Components/Atoms/CommonButton";
+import { forgetPassword } from "../../Redux/reducers/AuthReducer";
+import { persistOtpSession } from "../../Utils/utils";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import TextInputComponent from "../../Components/Atoms/TextInputComponent";
+import { UsernameSvg } from "../../assets/Icons/Svgs";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -32,7 +29,6 @@ const validationSchema = Yup.object().shape({
 const ForgetPassword: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {} = useAppSelector((state) => state.auth);
 
   // Formik setup
   const formik = useFormik({
@@ -66,40 +62,34 @@ const ForgetPassword: React.FC = () => {
   }, []);
 
   return (
-    <>
-      {/* Left Side - only visible on large screens */}
-      <LeftSideLayout bgImage={bgImage}>
-        <StepperLines activeStep={4} totalSteps={4} />
-      </LeftSideLayout>
+    <div className="w-full px-10 flex flex-col text-left">
+      <h2 className="mb-8 text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
+        Forget Password
+      </h2>
 
-      {/* Right Side */}
-      <div className="w-full lg:w-[35%] h-full flex items-center justify-center overflow-auto">
-        <div className="w-full px-10 flex flex-col text-left">
-          <h2 className="mb-8 text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
-            Forget Password
-          </h2>
-
-          <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-[#BF0204]">
-            Please Enter Your Username
-          </div>
-
-          <form onSubmit={formik.handleSubmit}>
-            <UsernameInput
-              className="mb-8"
-              name="username"
-              value={formik.values.username}
-              onChange={formik.handleChange}
-              placeholder="Username"
-              required
-              error={formik.touched.username && formik.errors.username}
-              max={51}
-            />
-
-            <CommonButton type="submit">CONTINUE</CommonButton>
-          </form>
-        </div>
+      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-[#BF0204]">
+        Please Enter Your Username
       </div>
-    </>
+
+      <form onSubmit={formik.handleSubmit}>
+         <TextInputComponent
+          type="text"
+          className="mb-8"
+          name="username"
+          value={formik.values.username}
+          onChange={formik.handleChange}
+          placeholder="Username"
+          required
+          error={formik.touched.username && formik.errors.username}
+          maxLength={51}
+          leftSection={<UsernameSvg />} 
+          leftSectionWidth={36}
+        />
+
+
+        <CommonButton type="submit">CONTINUE</CommonButton>
+      </form>
+    </div>
   );
 };
 

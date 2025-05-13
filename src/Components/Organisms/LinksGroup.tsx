@@ -1,13 +1,12 @@
-import { Box, Collapse, Group, ThemeIcon, UnstyledButton } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import React, { useState } from "react";
+import { Box, Collapse, Group, UnstyledButton } from "@mantine/core";
+import React from "react";
 import { IconChevronRight } from "@tabler/icons-react";
-import { useAppDispatch, useAppSelector } from "../../Redux/Hooks";
 import { useNavigate } from "react-router-dom";
 import {
   setActiveMenu,
   setActiveSubMenu,
 } from "../../Redux/reducers/MenuReducer";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 
 interface linksGroupProps {
   icon: React.FC<any>;

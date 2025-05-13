@@ -1,8 +1,8 @@
 import { AppShell, Burger, Group, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import Navbar from "./Components/Navbar";
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Components/Sidebar";
+import Sidebar from "../Components/Organisms/Sidebar";
+import Navbar from "../Components/Organisms/Navbar";
 
 const MainLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -17,7 +17,7 @@ const MainLayout: React.FC = () => {
       <AppShell.Header>
         <Group h="100%" px="md">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          Header
+          <Navbar />
         </Group>
       </AppShell.Header>
 
