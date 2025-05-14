@@ -1,8 +1,8 @@
 import React, { Children } from "react";
-import LeftSideLayout from "./LeftSideLayout";
-import StepperLines from "../../Components/Atoms/StepperLines";
+import AuthLeftImagePanel from "../Organisms/AuthLeftImagePanel";
+import StepperLines from "../Atoms/StepperLines";
 import { useLocation } from "react-router-dom";
-import { authLayoutRouteConfig } from "./AuthLayoutConfig";
+import { authLayoutRouteConfig } from "../../Config/Auth/AuthImagePanelConfig";
 
 interface AuthContentWrapperProps {
     children : React.ReactNode
@@ -16,9 +16,9 @@ const AuthContentWrapper: React.FC<AuthContentWrapperProps> = ({children}) => {
     return (
     <>
       {/* Left Side - only visible on large screens  */}
-      <LeftSideLayout bgImage={bg}>
+      <AuthLeftImagePanel bgImage={bg}>
         <StepperLines activeStep={step} totalSteps={4} />
-      </LeftSideLayout>
+      </AuthLeftImagePanel>
 
       <div className="w-full lg:w-[35%] h-full flex items-center justify-center overflow-auto">
         {children}

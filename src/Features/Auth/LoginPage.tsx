@@ -47,7 +47,7 @@ const validationSchema = Yup.object().shape({
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {} = useAppSelector((state) => state.auth);
+  const { } = useAppSelector((state) => state.auth);
 
   // Formik setup
   const formik = useFormik({
@@ -163,7 +163,7 @@ const LoginPage: React.FC = () => {
         Don't have an account?
         <span className="text-[#BF0204] cursor-pointer"> Sign up here</span>
       </p>
-    </div>
+    </div >
   );
 };
 

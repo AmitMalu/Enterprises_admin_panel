@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../Api/AxiosInstance";
+import { axiosInstance } from "../../Config/Api/AxiosInstance";
+import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 
 interface AuthState {
   loading: boolean;
@@ -50,7 +51,7 @@ export const login = createAsyncThunk(
   async (payload: loginPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        "/adminPortal/auth/login",
+        API_ENDPOINTS.AUTH.LOGIN,
         null, // No body, since we are sending query params
         {
           params: payload,
@@ -77,7 +78,7 @@ export const otpVerify = createAsyncThunk(
   async (payload: optVerifyPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        "/adminPortal/auth/verify-otp",
+        API_ENDPOINTS.AUTH.VERIFY_OTP,
         null, // No body, since we are sending query params
         {
           params: payload,
@@ -94,8 +95,8 @@ export const otpVerify = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-          error.message ||
-          "OTP verification failed"
+        error.message ||
+        "OTP verification failed"
       );
     }
   }
@@ -106,7 +107,7 @@ export const resendOtp = createAsyncThunk(
   async (payload: resendOtpPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        "/adminPortal/auth/resend-otp",
+        API_ENDPOINTS.AUTH.RESEND_OTP,
         null, // No body, since we are sending query params
         {
           params: payload,
@@ -131,7 +132,7 @@ export const forgetPassword = createAsyncThunk(
   async (payload: forgetPasswordPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        "/adminPortal/auth/forget-password",
+        API_ENDPOINTS.AUTH.FORGET_PASSWORD,
         null, // No body, since we are sending query params
         {
           params: payload,
@@ -156,7 +157,7 @@ export const setPassword = createAsyncThunk(
   async (payload: setPasswordPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        "/adminPortal/auth/set-password",
+        API_ENDPOINTS.AUTH.SET_PASSWORD,
         null, // No body, since we are sending query params
         {
           params: payload,

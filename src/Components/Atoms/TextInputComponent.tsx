@@ -72,7 +72,6 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     placeholder,
     value,
     onChange,
-    oneTimeCode,
     onFocus: () => setIsFocused(true),
     onBlur: () => setIsFocused(false),
     error: typeof error === "string" ? true : !!error,

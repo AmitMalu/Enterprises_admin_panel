@@ -1,8 +1,8 @@
 import { AppShell, Burger, Group, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../Components/Organisms/Sidebar";
-import Navbar from "../Components/Organisms/Navbar";
+import Sidebar from "../Organisms/Sidebar";
+import Navbar from "../Organisms/Navbar";
 
 const MainLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();

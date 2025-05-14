@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import AuthContentWrapper from "../Features/Auth/AuthContentWrapper";
+import AuthContentWrapper from "./AuthContentWrapper";
 
 const AuthLayout : React.FC = () => {
   return (

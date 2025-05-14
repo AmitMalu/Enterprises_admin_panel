@@ -1,13 +1,13 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import AuthLayout from "../Layout/AuthLayout";
-import MainLayout from "../Layout/MainLayout";
+import AuthLayout from "../Components/Layout/AuthLayout";
+import MainLayout from "../Components/Layout/MainLayout";
+import LoginPage from "../Features/Auth/LoginPage";
+import OtpVerify from "../Features/Auth/OtpVerify";
+import ForgetPassword from "../Features/Auth/ForgetPassword";
+import SetPassword from "../Features/Auth/SetPassword";
 
 // Lazy loaded pages
-const LoginPage = lazy(() => import("../Features/Auth/LoginPage"));
-const OtpVerify = lazy(() => import("../Features/Auth/OtpVerify"));
-const SetPassword = lazy(() => import("../Features/Auth/SetPassword"));
-const ForgetPassword = lazy(() => import("../Features/Auth/ForgetPassword"));
 const HomePage = lazy(() => import("../Features/Dashboard/HomePage"));
 
 const AppRoutes = () => {
