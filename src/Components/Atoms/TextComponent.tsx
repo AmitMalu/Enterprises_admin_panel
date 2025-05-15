@@ -1,5 +1,4 @@
 import { Text } from '@mantine/core';
-import clsx from 'clsx';
 
 interface TextComponentProps {
     children: React.ReactNode;

@@ -9,12 +9,12 @@ import {
 } from "../../assets/Icons/Svgs";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { login } from "../../Redux/reducers/AuthReducer";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { persistOtpSession } from "../../Utils/utils";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
+import { login } from "../../Redux/Features/Auth/Thunk";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()

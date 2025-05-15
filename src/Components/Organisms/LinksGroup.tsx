@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   setActiveMenu,
   setActiveSubMenu,
-} from "../../Redux/reducers/MenuReducer";
+} from "../../Redux/Features/Menu/MenuReducer";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 
 interface linksGroupProps {

@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CommonButton from "../../Components/Atoms/CommonButton";
-import { forgetPassword } from "../../Redux/reducers/AuthReducer";
+import { forgetPassword } from "../../Redux/Features/Auth/Thunk";
 import { persistOtpSession } from "../../Utils/utils";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";

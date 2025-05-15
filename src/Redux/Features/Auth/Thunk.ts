@@ -1,49 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { axiosInstance } from "../../Config/Api/AxiosInstance";
-import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
-
-interface AuthState {
-  loading: boolean;
-  user: any;
-  error: string | null;
-  token: string | null;
-}
-
-interface loginPayload {
-  username: string | number;
-  password: string;
-  [key: string]: any;
-}
-
-interface optVerifyPayload {
-  username: string | number;
-  otp: string | number;
-  [key: string]: any;
-}
-
-interface resendOtpPayload {
-  username: string | number;
-  [key: string]: any;
-}
-
-interface forgetPasswordPayload {
-  username: string | number;
-  [key: string]: any;
-}
-
-interface setPasswordPayload {
-  username: string | number;
-  newPassword: string;
-  reEnteredPassword: string;
-  [key: string]: any;
-}
-
-const initialState: AuthState = {
-  loading: false,
-  user: null,
-  error: null,
-  token: null,
-};
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { axiosInstance } from "../../../Config/Api/AxiosInstance";
+import { API_ENDPOINTS } from "../../../Config/Api/EndPoints";
+import { forgetPasswordPayload, loginPayload, optVerifyPayload, resendOtpPayload, setPasswordPayload } from "./Types";
 
 // Async thunk for login
 export const login = createAsyncThunk(
@@ -52,11 +10,7 @@ export const login = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.LOGIN,
-        null, // No body, since we are sending query params
-        {
-          params: payload,
-          timeout: 10000, // 10 seconds timeout
-        }
+        payload, // No body, since we are sending query params
       );
 
       if (response.data.statusCode == 200) {
@@ -176,76 +130,3 @@ export const setPassword = createAsyncThunk(
     }
   }
 );
-
-const authReducer = createSlice({
-  name: "auth",
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(login.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(login.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(otpVerify.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(otpVerify.fulfilled, (state, action) => {
-        state.token = action.payload.data.token;
-        localStorage.setItem("token", action.payload.data.token);
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(otpVerify.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(resendOtp.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(resendOtp.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(resendOtp.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(forgetPassword.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(forgetPassword.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(forgetPassword.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(setPassword.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(setPassword.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(setPassword.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-  },
-});
-
-export default authReducer.reducer;

@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface MenuState {
-  activeMenu: string;
-  activeSubMenu: string | null;
-  openedMenu: string | null;
-}
+import { MenuState } from "./Types";
 
 const initialState: MenuState = {
   activeMenu: "Dashboard", //to track Currently active Top Menu

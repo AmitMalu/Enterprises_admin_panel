@@ -6,13 +6,20 @@ import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store.ts";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./Utils/ErrorFallback.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <MantineProvider>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </MantineProvider>
+    <ErrorBoundary
+      fallbackRender={ErrorFallback}
+      onReset={() => (window.location.href = "/login")}
+    >
+      <MantineProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </MantineProvider>
+    </ErrorBoundary>
   </StrictMode>
 );

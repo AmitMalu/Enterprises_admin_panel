@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CommonButton from "../../Components/Atoms/CommonButton";
 import { useLocation, useNavigate } from "react-router-dom";
-import { setPassword } from "../../Redux/reducers/AuthReducer";
+import { setPassword } from "../../Redux/Features/Auth/Thunk";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";

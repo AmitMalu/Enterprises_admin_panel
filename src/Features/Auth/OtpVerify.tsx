@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CommonButton from "../../Components/Atoms/CommonButton";
 import { useScreenSize } from "../../Utils/CustomHooks/useScreenSize";
 import { useLocation, useNavigate } from "react-router-dom";
-import { otpVerify, resendOtp } from "../../Redux/reducers/AuthReducer";
+import { otpVerify, resendOtp } from "../../Redux/Features/Auth/Thunk";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
