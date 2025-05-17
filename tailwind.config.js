@@ -12,6 +12,7 @@ export default {
         open: ['"Open Sans"', "sans-serif"],
         lora: ["Lora", "serif"],
         poppins: ["Poppins", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       colors: {
         menuActiveBg: "#BDC4C3",
