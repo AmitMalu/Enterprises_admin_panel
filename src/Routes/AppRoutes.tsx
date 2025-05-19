@@ -7,6 +7,7 @@ import OtpVerify from "../Features/Auth/OtpVerify";
 import ForgetPassword from "../Features/Auth/ForgetPassword";
 import SetPassword from "../Features/Auth/SetPassword";
 import UserCreation from "../Features/Management/UserCreation";
+import UserFormPage from "../Features/Management/UserFormPage";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Features/Dashboard/HomePage"));
@@ -29,6 +30,10 @@ const AppRoutes = () => {
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/management/user-creation" element={<UserCreation />} />
+          <Route
+            path="/management/user/create/:type"
+            element={<UserFormPage />}
+          />
           <Route path="/funding/overview2" element={<HomePage />} />
         </Route>
         {/* </Route> */}

@@ -10,20 +10,31 @@ import {
   SuperDistributorLogoSvg,
   WhiteLabelLogoSvg,
 } from "../../assets/Icons";
+import { useNavigate } from "react-router-dom";
 
 const userTypes = [
-  { label: "IM Admin", icon: <IMAdminLogoSvg /> },
-  { label: "Enterprise", icon: <EnterpriseLogoSvg /> },
-  { label: "Retailer", icon: <RetailerLogoSvg /> },
-  { label: "Super Distributor", icon: <SuperDistributorLogoSvg /> },
-  { label: "Partner", icon: <PartnerLogoSvg /> },
-  { label: "White Label", icon: <WhiteLabelLogoSvg /> },
-  { label: "Distributor", icon: <DistributorLogoSvg /> },
+  { label: "IM Admin", icon: <IMAdminLogoSvg />, type: "im-admin" },
+  { label: "Enterprise", icon: <EnterpriseLogoSvg />, type: "enterprise" },
+  { label: "Retailer", icon: <RetailerLogoSvg />, type: "retailer" },
+  {
+    label: "Super Distributor",
+    icon: <SuperDistributorLogoSvg />,
+    type: "super-distributor",
+  },
+  { label: "Partner", icon: <PartnerLogoSvg />, type: "partner" },
+  { label: "White Label", icon: <WhiteLabelLogoSvg />, type: "white-label" },
+  { label: "Distributor", icon: <DistributorLogoSvg />, type: "distributor" },
 ];
 
-const radius = 190;
-
 const UserCreation: React.FC = () => {
+  const navigate = useNavigate();
+
+  const radius = 190;
+
+  const handleUserTypeClick = (type: string) => {
+    navigate(`/management/user/create/${type}`);
+  };
+
   return (
     <div className="w-full min-h-[calc(100vh-90px)] flex flex-col p-2">
       {/* Heading */}
@@ -31,10 +42,10 @@ const UserCreation: React.FC = () => {
         User Creation
       </TextComponent>
 
-      {/* Logo and Blades */} 
+      {/* Logo and Blades */}
       <div className="flex-1 flex items-center justify-center relative cursor-pointer">
         {/* Center Logo */}
-        <div className="w-fit h-fit p-8 pl-10 border-[14px] border-[#F0F3FF] bg-white rounded-full p-2 z-10 border border-black">
+        <div className="w-fit h-fit p-8 pl-10 border-[14px] border-[#F0F3FF] bg-white rounded-full p-2 z-10 ">
           <IMLogoWhiteBGSvg />
         </div>
 
@@ -49,6 +60,7 @@ const UserCreation: React.FC = () => {
               key={type.label}
               className="absolute w-[110px] h-[110px]"
               style={{ transform: `translate(${x}px , ${y}px)` }}
+              onClick={() => handleUserTypeClick(type.type)}
             >
               <div className="w-full h-full bg-white flex flex-col items-center text-center rounded-full border-[14px] border-[#F0F3FF] p-2.5">
                 <div className="flex items-center justify-center">

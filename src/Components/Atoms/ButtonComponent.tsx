@@ -44,10 +44,10 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
             leftSection={leftIcon}
             rightSection={rightIcon}
             disabled={disabled}
+            fullWidth={fullWidth}
             loading={loading}
             radius={radius || 16}
             size={size}
-            fullWidth={fullWidth}
             className={className || ''}
             styles={{
                 root: {
@@ -58,10 +58,8 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
                         opacity: 0.8,
                     },
                     color: textColor,
-                    height: '100%',
-                    width: '100%',
                     opacity: disabled ? 0.6 : 1,
-                    padding: 5,
+                    width : fullWidth ? "100%" : "fit-content",
                     ...style, // Apply custom styles passed from the parent component
                 },
             }}

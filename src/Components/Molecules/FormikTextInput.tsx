@@ -1,0 +1,18 @@
+// components/FormikTextInput.tsx
+import React from "react";
+import { useField } from "formik";
+import TextInputComponent from "../Atoms/TextInputComponent";
+
+const FormikTextInput = ({ name, ...props }: any) => {
+  const [field, meta] = useField(name);
+
+  return (
+    <TextInputComponent
+      {...field}
+      {...props}
+      error={meta.touched && meta.error}
+    />
+  );
+};
+
+export default FormikTextInput;
