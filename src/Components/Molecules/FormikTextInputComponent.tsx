@@ -3,7 +3,7 @@ import React from "react";
 import { useField } from "formik";
 import TextInputComponent from "../Atoms/TextInputComponent";
 
-const FormikTextInput = ({ name, ...props }: any) => {
+const FormikTextInputComponent = ({ name, ...props }: any) => {
   const [field, meta] = useField(name);
 
   return (
@@ -15,4 +15,4 @@ const FormikTextInput = ({ name, ...props }: any) => {
   );
 };
 
-export default FormikTextInput;
+export default FormikTextInputComponent;

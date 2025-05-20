@@ -15,7 +15,7 @@ const FormStepperButton: React.FC<FormStepperButtonProps> = ({
   onNext,
   onFinalStep,
 }) => (
-  <div className="mt-2 flex justify-end items-center gap-x-3">
+  <div className="mt-5 flex justify-end items-center gap-x-3">
     {activeStep > 0 && (
       <ButtonComponent
         fullWidth={false}

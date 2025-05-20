@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import * as Yup from "yup";
 import {
   UserConfig,
   UserType,
@@ -9,6 +10,11 @@ import { capitalizeWords } from "../../Utils/utils";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import FormStepperButton from "../../Components/Molecules/FormStepperButton";
 import FormStepper from "../../Components/Atoms/FormStepper";
+import {
+  masterInitialValues,
+  masterValidationSchema,
+} from "../../Config/UserCreationConfig/MasterFormConfig";
+import { Form, Formik, FormikProps } from "formik";
 
 const UserFormPage = () => {
   const { type } = useParams<{ type: string }>();
@@ -22,7 +28,23 @@ const UserFormPage = () => {
     return <div>User Type Not Available</div>;
   }
 
-  const config = UserConfig[type];
+  const getValidationSchema = (
+    userType: UserType,
+    step: number
+  ): Yup.ObjectSchema<any> => {
+    const fields = UserConfig[userType].stepFieldMap[step];
+    const shape: Record<string, any> = {};
+
+    fields.forEach((field) => {
+      shape[field] =
+        masterValidationSchema[field as keyof typeof masterValidationSchema];
+    });
+
+    return Yup.object().shape(shape);
+  };
+
+  const userType: UserType = type;
+  const config = UserConfig[userType];
 
   return (
     <div className="p-4 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -37,18 +59,52 @@ const UserFormPage = () => {
       {/* Stepper */}
       <FormStepper steps={config.steps} activeStep={activeStep} />
 
-      {/* Scrollable Form Content area */}
-      <div className="flex-1 overflow-auto mt-2 scrollbar-hide p-4 bg-white rounded-2xl ">
-        {config.renderStepForm(activeStep)}
+      {/* Formik Wrapper */}
+      <Formik
+        initialValues={masterInitialValues}
+        validationSchema={getValidationSchema(userType, activeStep)}
+        onSubmit={(values, formikHelpers) => {
+          if (activeStep === config.steps.length - 1) {
+            console.log("Final SUbmission", values);
+            alert("Form submitted successfully!");
+          } else {
+            setActiveStep((prev) => prev + 1);
 
-        <FormStepperButton
-          activeStep={activeStep}
-          maxSteps={config.steps.length}
-          onBack={() => setActiveStep((prev) => prev - 1)}
-          onNext={() => setActiveStep((prev) => prev + 1)}
-          onFinalStep={() => alert("Thank you")}
-        />
-      </div>
+            // ✅ Reset submit count to treat next step as fresh
+            formikHelpers.setTouched({});
+            formikHelpers.setFormikState((prev) => ({
+              ...prev,
+              submitCount: 0,
+            }));
+          }
+        }}
+        // validateOnChange={false} // ✅ Prevent validation while typing
+        // validateOnBlur={true}
+      >
+        {(formik: FormikProps<any>) => (
+          // Scrollable Form Content area
+          <Form className="flex-1 overflow-auto mt-2 scrollbar-hide p-4 bg-white rounded-2xl ">
+            {/* Form Heading */}
+            <div className="mb-8">
+              <TextComponent fontFamily="Inter" fontSize={20} fontWeight={500}>
+                {config.steps[activeStep]}
+              </TextComponent>
+            </div>
+
+            {/* Render the actual form for current step */}
+            {config.renderStepForm(activeStep, formik)}
+
+            {/* Buttons */}
+            <FormStepperButton
+              activeStep={activeStep}
+              maxSteps={config.steps.length}
+              onBack={() => setActiveStep((prev) => prev - 1)}
+              onNext={() => formik.handleSubmit()}
+              onFinalStep={() => formik.handleSubmit()}
+            />
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

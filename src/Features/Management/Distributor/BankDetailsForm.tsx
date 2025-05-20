@@ -1,9 +1,9 @@
+import { FormikProps } from 'formik'
 import React from 'react'
 
-const BankDetailsForm = () => {
+const BankDetailsForm = ({formik} : {formik : FormikProps<any>}) => {
   return (
     <div>
-      Distributor Bank Details
     </div>
   )
 }

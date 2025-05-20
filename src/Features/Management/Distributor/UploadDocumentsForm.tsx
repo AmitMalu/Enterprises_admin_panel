@@ -1,9 +1,9 @@
+import { FormikProps } from 'formik'
 import React from 'react'
 
-const UploadDocumentsForm = () => {
+const UploadDocumentsForm = ({formik} : {formik : FormikProps<any>}) => {
   return (
     <div>
-      Distributor Upload Documents
     </div>
   )
 }

@@ -92,6 +92,7 @@ const OtpVerify: React.FC = () => {
       <form onSubmit={handleOTPSubmit}>
         <div className="flex justify-center items-center ">
           <TextInputComponent
+            name="otp"
             value={Otp}
             onChange={(e) => setOtp(e.target.value)} // Update OTP state on change
             oneTimeCode
