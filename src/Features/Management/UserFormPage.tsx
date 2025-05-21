@@ -78,14 +78,12 @@ const UserFormPage = () => {
             }));
           }
         }}
-        // validateOnChange={false} // ✅ Prevent validation while typing
-        // validateOnBlur={true}
       >
         {(formik: FormikProps<any>) => (
           // Scrollable Form Content area
-          <Form className="flex-1 overflow-auto mt-2 scrollbar-hide p-4 bg-white rounded-2xl ">
+          <Form className="flex-1 overflow-auto scrollbar-hide py-2 xl:py-4 px-4 bg-white rounded-2xl">
             {/* Form Heading */}
-            <div className="mb-8">
+            <div className="mb-4">
               <TextComponent fontFamily="Inter" fontSize={20} fontWeight={500}>
                 {config.steps[activeStep]}
               </TextComponent>

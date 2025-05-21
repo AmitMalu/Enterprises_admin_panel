@@ -12,11 +12,11 @@ const FormStepper: React.FC<FormStepperProps> = ({ steps, activeStep }) => {
   return (
     <div className="w-full mx-auto m-w-screen my-4">
       {/* Step labels */}
-      <div className="flex justify-between mb-2">
+      <div className="flex flex-wrap justify-between mb-2">
         {steps.map((step, index) => (
           <div key={index} className="text-center flex flex-col items-center">
             <span
-              className={`text-[14px] sm:text-[16px] md:text-[18px] font-['Inter'] whitespace-nowrap ${
+              className={`text-[12px] sm:text-[14px] md:text-[16px] xl:text-[18px] font-['Inter'] whitespace-nowrap ${
                 index <= activeStep
                   ? "text-[#D82226] font-medium"
                   : "text-[#91929F] font-normal"

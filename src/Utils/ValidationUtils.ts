@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import moment from "moment";
 
 // Common text field validation
 export const textField = (
@@ -57,8 +58,14 @@ export const zipValidation = Yup.string()
 
 // Date of Birth: basic string check + optional length cap
 export const dobValidation = Yup.string()
+  .required("Date of Birth is required")
   .max(10, "DOB must be in format YYYY-MM-DD")
-  .required("Date of Birth is required");
+  .test("is-valid-date", "Invalid date format", (value) => {
+    return moment(value, "YYYY-MM-DD", true).isValid();
+  })
+  .test("not-in-future", "Birth date cannot be in the future", (value) => {
+    return moment(value).isSameOrBefore(moment());
+  });
 
 // Aadhaar Number: 12 digits only
 export const aadhaarValidation = Yup.string()

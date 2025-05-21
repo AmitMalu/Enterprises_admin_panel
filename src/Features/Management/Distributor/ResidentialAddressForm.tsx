@@ -1,9 +1,17 @@
 import { FormikProps } from "formik";
-import React from "react";
 import FormikTextInputComponent from "../../../Components/Molecules/FormikTextInputComponent";
 import { Grid } from "@mantine/core";
+import FormikSelectComponent from "../../../Components/Molecules/FormikSelectComponent";
+import { useIndianStateCity } from "../../../Utils/CustomHooks/useIndianStateCity";
 
 const ResidentialAddressForm = ({ formik }: { formik: FormikProps<any> }) => {
+
+  const { states, cities, cityKey } = useIndianStateCity({
+    selectedStateName: formik.values.state,
+    selectedCityName: formik.values.city,
+    onCityReset: () => formik.setFieldValue("city", ""),
+  });
+
   return (
     <div>
       <Grid gutter="lg">
@@ -17,28 +25,30 @@ const ResidentialAddressForm = ({ formik }: { formik: FormikProps<any> }) => {
             maxLength={150}
           />
         </Grid.Col>
+
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
-          <FormikTextInputComponent
+          <FormikSelectComponent
+            value={formik.values.state}
+            name="state"
+            label="State"
+            placeholder="Select Your State"
+            withAsterisk
+            searchable
+            data={states}
+          />
+        </Grid.Col>
+
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+          <FormikSelectComponent
+            key={cityKey}
+            value={formik.values.city}
             name="city"
             label="City"
             placeholder="Select Your City"
             withAsterisk
             required
-            maxLength={50}
-            allowNumber={false}
-            allowSpecialChar={false}
-          />
-        </Grid.Col>
-
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
-          <FormikTextInputComponent
-            name="state"
-            label="State"
-            placeholder="Select Your State"
-            withAsterisk
-            maxLength={50}
-            allowNumber={false}
-            allowSpecialChar={false}
+            searchable
+            data={cities}
           />
         </Grid.Col>
 

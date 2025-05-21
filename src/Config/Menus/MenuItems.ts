@@ -22,6 +22,16 @@ export const sidebarData = [
         link: "/management/user-creation",
         icon: userCreationSvg,
       },
+       {
+        label: "Pending User",
+        link: "/management/user/pending",
+        icon: userCreationSvg,
+      },
+       {
+        label: "Activation User",
+        link: "/management/user/activation",
+        icon: userCreationSvg,
+      },
     ],
   },
   {

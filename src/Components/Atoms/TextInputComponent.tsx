@@ -66,11 +66,11 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
 
   const defaultSize =
     size ||
-    (screenSize === "sm"
+    (screenSize === "sm" || screenSize === "md" || screenSize === "lg"
       ? "sm"
-      : screenSize === "md" || screenSize === "lg"
-      ? "md"
       : screenSize === "xl" || screenSize === "2xl"
+      ? "md"
+      : screenSize === "3xl"
       ? "lg"
       : "xl");
 
@@ -120,8 +120,8 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     required,
     maxLength,
     minLength,
-    radius: radius || defaultRadius,
-    size: size || defaultSize,
+    radius: defaultRadius,
+    size: defaultSize,
     withAsterisk,
     disabled,
     leftSection,
