@@ -5,7 +5,7 @@ import FormikTextInputComponent from "../../../Components/Molecules/FormikTextIn
 
 const BankDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
   return (
-    <div>
+    <>
       <Grid gutter="lg">
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
@@ -57,7 +57,7 @@ const BankDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
       </Grid>
-    </div>
+    </>
   );
 };
 

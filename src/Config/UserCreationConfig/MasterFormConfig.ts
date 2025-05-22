@@ -4,6 +4,7 @@ import {
   accountNumberValidation,
   dobValidation,
   emailValidation,
+  fileValidation,
   ifscValidation,
   mobileValidation,
   panValidation,
@@ -32,8 +33,9 @@ export const masterInitialValues = {
   accountNumber: "",
   ifsc: "",
   branchName: "",
-  adhaarNumber: "",
-  pancardNumber: "",
+  adhaarFront: null,
+  adhaarBack: null,
+  pancardPhoto: null,
   shopPhoto: null,
   businessProof: null,
 };
@@ -60,34 +62,63 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   accountNumber: accountNumberValidation,
   ifsc: ifscValidation,
   branchName: textField("Branch Name", 50, true, true),
-  adhaarNumber: aadhaarValidation,
-  pancardNumber: panValidation,
-  shopPhoto: Yup.mixed()
-    .required("Shop photo is required")
-    .test(
-      "fileType",
-      "Only image files are allowed",
-      (value) =>
-        value instanceof File &&
-        ["image/jpeg", "image/png"].includes(value.type)
-    )
-    .test(
-      "fileSize",
-      "File too large. Max 2MB.",
-      (value) => value instanceof File && value.size <= 2 * 1024 * 1024
-    ),
-  businessProof: Yup.mixed()
-    .required("Business proof document is required")
-    .test(
-      "fileType",
-      "Only PDF or image files are allowed",
-      (value) =>
-        value instanceof File &&
-        ["application/pdf", "image/jpeg", "image/png"].includes(value.type)
-    )
-    .test(
-      "fileSize",
-      "File too large. Max 2MB.",
-      (value) => value instanceof File && value.size <= 2 * 1024 * 1024
-    ),
+  adhaarFront: fileValidation("Adhaar Front Photo"),
+  adhaarBack: fileValidation("Adhaar Back Photo"),
+  pancardPhoto: fileValidation("Pancard Photo"),
+  shopPhoto: fileValidation("Shop Photo"),
+  businessProof: fileValidation("Business Proof", [
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+  ]),
 };
+
+export function transformUserCreationPayload(values: any) {
+  return {
+    parentAccount: values.parentAccount || "",
+    title: values.parentTitle || "",
+    abbreviation: values.prefix || "",
+    name: values.name || "",
+    mobile: values.mobileNumber || "",
+    email: values.email || "",
+    dob: values.dob || "",
+    outletName: values.outletName || "",
+    companyType: values.companyType || "",
+    competitor: values.competitor || "",
+    address: {
+      address: values.address || "",
+      city: values.city || "",
+      state: values.state || "",
+      zipCode: values.zipcode || "",
+    },
+    outletAddress: {
+      address: values.outletName || "",
+      city: values.outletCity || "",
+      state: values.outletState || "",
+      zipCode: values.outletZipcode || "",
+    },
+  };
+}
+
+export function cleanPayload(obj: any) {
+  if (typeof obj !== "object" || obj === null) return obj;
+
+  const result: Record<string, any> = {};
+
+  for (const key in obj) {
+    const value = obj[key];
+
+    if (value === undefined || value === null) continue;
+
+    if (typeof value === "object") {
+      const cleanedValue = cleanPayload(value);
+      if (Object.keys(cleanedValue).length > 0) {
+        result[key] = cleanedValue;
+      }
+    } else if (value !== "") {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}

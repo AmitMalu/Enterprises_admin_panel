@@ -50,7 +50,13 @@ export const UserConfig: Record<
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      ["adhaarNumber", "pancardNumber", "shopPhoto", "businessProof"], // Step 4
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "businessProof",
+      ], // Step 4
     ],
     renderStepForm: (step, formik) => {
       switch (step) {
@@ -69,7 +75,7 @@ export const UserConfig: Record<
       }
     },
   },
-  "distributor": {
+  distributor: {
     steps: [
       "Personal Details",
       "Residentials Address",
@@ -90,7 +96,13 @@ export const UserConfig: Record<
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      ["adhaarNumber", "pancardNumber", "shopPhoto", "businessProof"], // Step 4
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "businessProof",
+      ], // Step 4
     ],
     renderStepForm: (step, formik) => {
       switch (step) {
@@ -130,7 +142,13 @@ export const UserConfig: Record<
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      ["adhaarNumber", "pancardNumber", "shopPhoto", "businessProof"], // Step 4
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "businessProof",
+      ], // Step 4
     ],
     renderStepForm: (step, formik) => {
       switch (step) {
@@ -149,7 +167,7 @@ export const UserConfig: Record<
       }
     },
   },
-  "partner": {
+  partner: {
     steps: [
       "Personal Details",
       "Residentials Address",
@@ -170,7 +188,13 @@ export const UserConfig: Record<
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      ["adhaarNumber", "pancardNumber", "shopPhoto", "businessProof"], // Step 4
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "businessProof",
+      ], // Step 4
     ],
     renderStepForm: (step, formik) => {
       switch (step) {
@@ -210,7 +234,13 @@ export const UserConfig: Record<
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      ["adhaarNumber", "pancardNumber", "shopPhoto", "businessProof"], // Step 4
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "businessProof",
+      ], // Step 4
     ],
     renderStepForm: (step, formik) => {
       switch (step) {
@@ -229,7 +259,7 @@ export const UserConfig: Record<
       }
     },
   },
-  "retailer": {
+  retailer: {
     steps: [
       "Personal Details",
       "Residentials Address",
@@ -250,7 +280,13 @@ export const UserConfig: Record<
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      ["adhaarNumber", "pancardNumber", "shopPhoto", "businessProof"], // Step 4
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "businessProof",
+      ], // Step 4
     ],
     renderStepForm: (step, formik) => {
       switch (step) {
@@ -269,7 +305,7 @@ export const UserConfig: Record<
       }
     },
   },
-  "enterprise": {
+  enterprise: {
     steps: [
       "Personal Details",
       "Residentials Address",
@@ -290,7 +326,13 @@ export const UserConfig: Record<
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      ["adhaarNumber", "pancardNumber", "shopPhoto", "businessProof"], // Step 4
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "businessProof",
+      ], // Step 4
     ],
     renderStepForm: (step, formik) => {
       switch (step) {

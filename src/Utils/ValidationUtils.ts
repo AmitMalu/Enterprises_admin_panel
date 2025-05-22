@@ -90,3 +90,22 @@ export const accountNumberValidation = Yup.string()
 export const prefixValidation = Yup.string()
   .matches(/^[a-zA-Z]{3}$/, "Prefix must be 3 digit alphabetic characters")
   .required("Prefix is required");
+
+export const fileValidation = (
+  field: string,
+  allowedTypes: string[] = ["image/jpeg", "image/png"],
+  maxSizedMB = 1.5
+) =>
+  Yup.mixed()
+    .required(`${field} is required`)
+    .test(
+      "fileType",
+      `Only ${allowedTypes.join(", ")} files are allowed`,
+      (value) =>
+        value instanceof File ? allowedTypes.includes(value.type) : false
+    )
+    .test(
+      "fileSize",
+      `File too large. Max ${maxSizedMB}MB`,
+      (value) => value instanceof File && value.size <= maxSizedMB * 1024 * 1024
+    );

@@ -33,7 +33,7 @@ const authReducer = createSlice({
       })
       .addCase(otpVerify.fulfilled, (state, action) => {
         state.token = action.payload.data.token;
-        localStorage.setItem("token", action.payload.data.token);
+        localStorage.setItem("token", action.payload.data);
         state.loading = false;
         state.error = null;
       })

@@ -7,3 +7,4 @@ export const capitalizeWords = (str: string) =>
   str
     .replace(/-/g, " ") // Replace hyphens with spaces
     .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+

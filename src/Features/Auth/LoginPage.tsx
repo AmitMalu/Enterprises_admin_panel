@@ -71,7 +71,7 @@ const LoginPage: React.FC = () => {
     password: string;
   }) => {
     try {
-      const result = await dispatch(login(values)).unwrap();
+      const result = await dispatch(login({userName : values.username, password : values.password})).unwrap();
       toast.success(result.message);
       persistOtpSession(values.username, "login"); //set both values in Session storage
       navigate("/otp-verify", {

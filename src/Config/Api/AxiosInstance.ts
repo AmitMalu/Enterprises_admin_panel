@@ -11,24 +11,24 @@ const axiosConfig: CreateAxiosDefaults = {
 // Create Axios instance
 export const axiosInstance: AxiosInstance = axios.create(axiosConfig)
 
-// // Request Interceptor
-// axiosInstance.interceptors.request.use(
-//     (config) => {
-//         // Add Authorization header if token exists
-//         const token = localStorage.getItem("token");
-//         if (token) {
-//             config.headers.Authorization = `Bearer ${token}`
-//         }
+// // // Request Interceptor
+axiosInstance.interceptors.request.use(
+    (config) => {
+        // Add Authorization header if token exists
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
 
-//         return config
-//     },
-//     (error) => {
-//         // Handle request error
-//         return Promise.reject(error);
-//     }
-// )
+        return config
+    },
+    (error) => {
+        // Handle request error
+        return Promise.reject(error);
+    }
+)
 
-// // Response Interceptor
+// // // Response Interceptor
 // axiosInstance.interceptors.response.use(
 //     (response) => {
 //         // Handle successful response

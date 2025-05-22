@@ -5,7 +5,6 @@ import FormikSelectComponent from "../../../Components/Molecules/FormikSelectCom
 import { useIndianStateCity } from "../../../Utils/CustomHooks/useIndianStateCity";
 
 const ResidentialAddressForm = ({ formik }: { formik: FormikProps<any> }) => {
-
   const { states, cities, cityKey } = useIndianStateCity({
     selectedStateName: formik.values.state,
     selectedCityName: formik.values.city,
@@ -13,7 +12,7 @@ const ResidentialAddressForm = ({ formik }: { formik: FormikProps<any> }) => {
   });
 
   return (
-    <div>
+    <>
       <Grid gutter="lg">
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
@@ -65,7 +64,7 @@ const ResidentialAddressForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
       </Grid>
-    </div>
+    </>
   );
 };
 

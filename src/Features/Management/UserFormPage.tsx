@@ -11,12 +11,18 @@ import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import FormStepperButton from "../../Components/Molecules/FormStepperButton";
 import FormStepper from "../../Components/Atoms/FormStepper";
 import {
+  cleanPayload,
   masterInitialValues,
   masterValidationSchema,
+  transformUserCreationPayload,
 } from "../../Config/UserCreationConfig/MasterFormConfig";
 import { Form, Formik, FormikProps } from "formik";
+import { useAppDispatch } from "../../Redux/hooks";
+import { createUser } from "../../Redux/Features/Management/Thunk";
+import { toast } from "react-toastify";
 
 const UserFormPage = () => {
+  const dispatch = useAppDispatch();
   const { type } = useParams<{ type: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
 
@@ -63,14 +69,49 @@ const UserFormPage = () => {
       <Formik
         initialValues={masterInitialValues}
         validationSchema={getValidationSchema(userType, activeStep)}
-        onSubmit={(values, formikHelpers) => {
+        onSubmit={async (values, formikHelpers) => {
           if (activeStep === config.steps.length - 1) {
-            console.log("Final SUbmission", values);
-            alert("Form submitted successfully!");
+            console.log("Final Submission", values);
+
+            // 1. Transforming form values to the payload structure
+            const payload = transformUserCreationPayload(values);
+            // 2. Filter Empty or null values
+            const cleanedPayload = cleanPayload(payload);
+
+            const formData = new FormData();
+            formData.append("data", JSON.stringify(cleanedPayload));
+
+            // 3. Append Files if they exist
+            const fileFields = {
+              aadhaarCardFrontImage: values.adhaarFront,
+              aadhaarCardBackImage: values.adhaarBack,
+              shopImage: values.shopPhoto,
+              panCardImage: values.pancardPhoto,
+              businessProofImage: values.businessProof,
+            };
+
+            Object.entries(fileFields).forEach(([key, file]) => {
+              if (file) formData.append(key, file);
+            });
+
+            try {
+              await dispatch(
+                createUser({
+                  userType: userType,
+                  data: formData,
+                })
+              ).unwrap();
+
+              // Success
+              formikHelpers.resetForm();
+              
+            } catch (err) {
+              toast.error((err as string) || "Login failed");
+            }
           } else {
             setActiveStep((prev) => prev + 1);
 
-            // ✅ Reset submit count to treat next step as fresh
+            // Reset submit count to treat next step as fresh
             formikHelpers.setTouched({});
             formikHelpers.setFormikState((prev) => ({
               ...prev,
