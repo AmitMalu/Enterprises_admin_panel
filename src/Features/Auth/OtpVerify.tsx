@@ -6,6 +6,7 @@ import { otpVerify, resendOtp } from "../../Redux/Features/Auth/Thunk";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
+import { logoutUser } from "../../Utils/utils";
 
 const OtpVerify: React.FC = () => {
   const screenSize = useScreenSize();
@@ -47,9 +48,8 @@ const OtpVerify: React.FC = () => {
   ): Promise<void> => {
     e.preventDefault(); // Prevent default form submission
     setHasSubmitted(true); // Set submitted state to true
-    if (Otp.length < 6) {
-      return; // Do not proceed if invalid
-    }
+    if (Otp.length < 6) return
+    
     try {
       const result = await dispatch(otpVerify({ username, otp: Otp })).unwrap();
       toast.success(result.message);
@@ -72,8 +72,7 @@ const OtpVerify: React.FC = () => {
       locationState?.otpFor ?? sessionStorage.getItem("otpFor");
 
     if (!resolvedUsername || !resolvedOtpFor) {
-      toast.error("Session expired. Please login again.");
-      navigate("/login", { replace: true });
+      logoutUser();
     } else {
       sessionStorage.setItem("otp-username", resolvedUsername);
       sessionStorage.setItem("otpFor", resolvedOtpFor);

@@ -8,6 +8,7 @@ import ForgetPassword from "../Features/Auth/ForgetPassword";
 import SetPassword from "../Features/Auth/SetPassword";
 import UserCreation from "../Features/Management/UserCreation";
 import UserFormPage from "../Features/Management/UserFormPage";
+import ProtectedRoutes from "./ProtectedRoutes";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Features/Dashboard/HomePage"));
@@ -25,18 +26,21 @@ const AppRoutes = () => {
         </Route>
 
         {/* protected Routes with MainLayout */}
-        {/* <Route element={<ProtectedRoutes />}> */}
-        {/* check if User has token? if yes ? render MainLayout : loginPage */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/management/user-creation" element={<UserCreation />} />
-          <Route
-            path="/management/user/create/:type"
-            element={<UserFormPage />}
-          />
-          <Route path="/funding/overview2" element={<HomePage />} />
+        <Route element={<ProtectedRoutes />}>
+          {/* check if User has token? if yes ? render MainLayout : loginPage */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/management/user-creation"
+              element={<UserCreation />}
+            />
+            <Route
+              path="/management/user/create/:type"
+              element={<UserFormPage />}
+            />
+            <Route path="/funding/overview2" element={<HomePage />} />
+          </Route>
         </Route>
-        {/* </Route> */}
 
         {/* Redirect all unknown routes */}
         <Route path="*" element={<Navigate to="/login" />} />

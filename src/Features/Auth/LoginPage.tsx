@@ -15,33 +15,11 @@ import { persistOtpSession } from "../../Utils/utils";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { login } from "../../Redux/Features/Auth/Thunk";
+import { passwordValidation, usernamePhoneEmailValidation } from "../../Utils/ValidationUtils";
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string()
-    .required("Username is required")
-    .max(50, "Username cannot be longer than 50 characters")
-    .test(
-      "is-valid-username",
-      "Username must be a valid mobile number or email",
-      function (value) {
-        const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile numbers start from 6-9
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!value) return false;
-        return phoneRegex.test(value) || emailRegex.test(value);
-      }
-    ),
-  password: Yup.string()
-    .required("Password is required")
-    .max(50, "Password cannot be longer than 50 characters")
-    .min(8, "Password must be at least 8 characters long")
-    .matches(/[A-Z]/, "Password must contain at least One Uppercase letter")
-    .matches(/[a-z]/, "Password must contain at least One Lowercase letter")
-    .matches(/[0-9]/, "Password must contain at least One Number")
-    .matches(
-      /[^A-Za-z0-9]/,
-      "Password must contain at least One Special Character"
-    )
-    .matches(/^\S*$/, "No spaces allowed"),
+  username: usernamePhoneEmailValidation,
+  password: passwordValidation
 });
 
 const LoginPage: React.FC = () => {

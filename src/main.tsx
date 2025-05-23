@@ -5,9 +5,10 @@ import App from "./App.tsx";
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { Provider } from "react-redux";
-import { store } from "./Redux/Store/store.ts";
+import { persistor, store } from "./Redux/Store/store.ts";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./Utils/ErrorFallback.tsx";
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -17,7 +18,9 @@ createRoot(document.getElementById("root")!).render(
     >
       <MantineProvider>
         <Provider store={store}>
-          <App />
+          <PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
         </Provider>
       </MantineProvider>
     </ErrorBoundary>

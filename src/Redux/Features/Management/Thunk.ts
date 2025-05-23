@@ -6,7 +6,6 @@ import { CreateUserPayload } from "./Types";
 export const createUser = createAsyncThunk(
   "management/create",
   async ({ userType, data }: CreateUserPayload, { rejectWithValue }) => {
-    
     try {
       const endPoint = API_ENDPOINTS?.MANAGEMENT.USER_CREATE[userType];
 
@@ -26,14 +25,21 @@ export const createUser = createAsyncThunk(
         return response.data;
       } else {
         // If not 200, treat as failure
-        return rejectWithValue(response.data.message || "Login failed");
+        return rejectWithValue(
+          response.data.message || "Failed to Create User"
+        );
       }
     } catch (error: any) {
       console.error(error, "error");
-      
-      return rejectWithValue(
-        error.response?.data?.message || error.message || "Login failed"
-      );
+
+      const serverMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.messages?.[0] ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Failed to Create User";
+
+      return rejectWithValue(serverMessage || "Failed to Create User");
     }
   }
 );

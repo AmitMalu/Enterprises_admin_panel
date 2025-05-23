@@ -52,6 +52,51 @@ const UserFormPage = () => {
   const userType: UserType = type;
   const config = UserConfig[userType];
 
+  const handleFormSubmit = async (
+    values: any,
+    formikHelpers: import("formik").FormikHelpers<any>
+  ) => {
+    console.log("Final Submission", values);
+
+    // 1. Transforming form values to the payload structure
+    const payload = transformUserCreationPayload(values);
+    // 2. Filter Empty or null values
+    const cleanedPayload = cleanPayload(payload);
+
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(cleanedPayload));
+
+    // 3. Append Files if they exist
+    const fileFields = {
+      aadhaarCardFrontImage: values.adhaarFront,
+      aadhaarCardBackImage: values.adhaarBack,
+      shopImage: values.shopPhoto,
+      panCardImage: values.pancardPhoto,
+      businessProofImage: values.businessProof,
+    };
+
+    Object.entries(fileFields).forEach(([key, file]) => {
+      if (file) formData.append(key, file);
+    });
+
+    try {
+      const result = await dispatch(
+        createUser({
+          userType: userType,
+          data: formData,
+        })
+      ).unwrap();
+
+      // ✅ Show success message from API
+      toast.success(result.message || "User created successfully");
+      // Reset form and go back to step 1
+      formikHelpers.resetForm();
+      setActiveStep(0);
+    } catch (err) {
+      toast.error((err as string) || "Failed to Create User");
+    }
+  };
+
   return (
     <div className="p-4 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Header Form Type */}
@@ -71,43 +116,7 @@ const UserFormPage = () => {
         validationSchema={getValidationSchema(userType, activeStep)}
         onSubmit={async (values, formikHelpers) => {
           if (activeStep === config.steps.length - 1) {
-            console.log("Final Submission", values);
-
-            // 1. Transforming form values to the payload structure
-            const payload = transformUserCreationPayload(values);
-            // 2. Filter Empty or null values
-            const cleanedPayload = cleanPayload(payload);
-
-            const formData = new FormData();
-            formData.append("data", JSON.stringify(cleanedPayload));
-
-            // 3. Append Files if they exist
-            const fileFields = {
-              aadhaarCardFrontImage: values.adhaarFront,
-              aadhaarCardBackImage: values.adhaarBack,
-              shopImage: values.shopPhoto,
-              panCardImage: values.pancardPhoto,
-              businessProofImage: values.businessProof,
-            };
-
-            Object.entries(fileFields).forEach(([key, file]) => {
-              if (file) formData.append(key, file);
-            });
-
-            try {
-              await dispatch(
-                createUser({
-                  userType: userType,
-                  data: formData,
-                })
-              ).unwrap();
-
-              // Success
-              formikHelpers.resetForm();
-              
-            } catch (err) {
-              toast.error((err as string) || "Login failed");
-            }
+            await handleFormSubmit(values, formikHelpers);
           } else {
             setActiveStep((prev) => prev + 1);
 

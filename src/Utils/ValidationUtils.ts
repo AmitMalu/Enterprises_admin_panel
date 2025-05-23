@@ -51,6 +51,19 @@ export const passwordValidation = Yup.string()
   )
   .matches(/^\S*$/, "Password cannot contain spaces");
 
+export const usernamePhoneEmailValidation = Yup.string()
+  .required("Username is required")
+  .max(50, "Username cannot be longer than 50 characters")
+  .test(
+    "is-valid-username",
+    "Username must be a valid mobile number or email",
+    function (value) {
+      const phoneRegex = /^[6-9]\d{9}$/; // Indian mobile numbers start from 6-9
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!value) return false;
+      return phoneRegex.test(value) || emailRegex.test(value);
+    }
+  );
 // Zipcode: exactly 6 digits
 export const zipValidation = Yup.string()
   .matches(/^\d{6}$/, "Zipcode must be 6 digits")
