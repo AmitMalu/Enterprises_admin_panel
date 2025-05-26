@@ -11,6 +11,7 @@ interface TextComponentProps {
     lineClamp?: number;
     className?: string;
     onClick?: () => void;
+    style?: React.CSSProperties; // allow inline styles
     [key: string]: any
 }
 
@@ -25,12 +26,13 @@ const TextComponent: React.FC<TextComponentProps> = ({
     lineClamp,
     className,
     onClick,
+    style,
     ...props
 }) => {
 
     return (
         <Text
-            style={{ fontSize, fontFamily }}  // Apply fontFamily and other styles dynamically
+            style={{ fontSize, fontFamily, ...style }}  // Apply fontFamily and other styles dynamically
             fw={fontWeight}
             c={color}
             truncate={truncate}

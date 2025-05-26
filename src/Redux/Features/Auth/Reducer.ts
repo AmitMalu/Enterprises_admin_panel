@@ -7,6 +7,7 @@ import {
   resendOtp,
   setPassword,
 } from "./Thunk";
+import { string } from "yup";
 
 const initialState: AuthState = {
   loading: false,
@@ -46,6 +47,9 @@ const authReducer = createSlice({
         state.error = null;
 
         if (otpFor === "login") {
+          const username = action?.meta?.arg?.username;
+          state.user = username;
+          localStorage.setItem("username", username as string);
           localStorage.setItem("token", token);
         }
       })

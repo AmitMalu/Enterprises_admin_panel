@@ -17,14 +17,18 @@ import {
   transformUserCreationPayload,
 } from "../../Config/UserCreationConfig/MasterFormConfig";
 import { Form, Formik, FormikProps } from "formik";
-import { useAppDispatch } from "../../Redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { createUser } from "../../Redux/Features/Management/Thunk";
 import { toast } from "react-toastify";
+import FormSuccessModel from "../../Components/Atoms/FormSuccessModel";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
+  const auth = useAppSelector((state) => state.auth);
   const { type } = useParams<{ type: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+  console.log(auth);
 
   const isValidType = (type: string): type is UserType => {
     return type in UserConfig;
@@ -59,7 +63,7 @@ const UserFormPage = () => {
     console.log("Final Submission", values);
 
     // 1. Transforming form values to the payload structure
-    const payload = transformUserCreationPayload(values);
+    const payload = transformUserCreationPayload(values, auth.user);
     // 2. Filter Empty or null values
     const cleanedPayload = cleanPayload(payload);
 
@@ -87,9 +91,16 @@ const UserFormPage = () => {
         })
       ).unwrap();
 
-      // ✅ Show success message from API
+      // Show success message from API
       toast.success(result.message || "User created successfully");
       // Reset form and go back to step 1
+      // On success, show the modal
+      setShowSuccessModal(true);
+
+      // Auto-close after 2 seconds
+      setTimeout(() => {
+        setShowSuccessModal(false);
+      }, 2000);
       formikHelpers.resetForm();
       setActiveStep(0);
     } catch (err) {
@@ -153,6 +164,12 @@ const UserFormPage = () => {
           </Form>
         )}
       </Formik>
+
+      {/* Success Modal */}
+      <FormSuccessModel
+        opened={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+      />
     </div>
   );
 };

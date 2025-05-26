@@ -79,7 +79,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
 
         <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikTextInputComponent
-            name="email"
+            name="emailId"
             label="Email ID"
             placeholder="Enter Your Email Address"
             withAsterisk

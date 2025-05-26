@@ -1,11 +1,11 @@
-import UserCreation from "../../Features/Management/UserCreation";
-import {
-  BankDetails,
-  OutletDetails,
-  PersonalDetails,
-  ResidentialAddress,
-  UploadDocumens,
-} from "../../Features/Management/Distributor";
+import * as retailerForm from "../../Features/Management/Retailer";
+import * as distributorForm from "../../Features/Management/Distributor";
+import * as partnerForm from "../../Features/Management/Partner";
+import * as superDistributorForm from "../../Features/Management/SuperDistributor";
+import * as whiteLabelForm from "../../Features/Management/WhiteLabel";
+import * as enterpriseForm from "../../Features/Management/Enterprise";
+import * as imAdminForm from "../../Features/Management/IMAdmin";
+
 import { FormikProps } from "formik";
 import { FieldNames } from "./MasterFormConfig";
 
@@ -22,11 +22,11 @@ export const UserConfig: Record<
   UserType,
   {
     steps: string[];
+    stepFieldMap: FieldNames[][];
     renderStepForm: (
       step: number,
       formik: FormikProps<any>
     ) => JSX.Element | null;
-    stepFieldMap: FieldNames[][];
   }
 > = {
   "im-admin": {
@@ -45,7 +45,7 @@ export const UserConfig: Record<
         "name",
         "dob",
         "mobileNumber",
-        "email",
+        "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
@@ -61,15 +61,15 @@ export const UserConfig: Record<
     renderStepForm: (step, formik) => {
       switch (step) {
         case 0:
-          return <PersonalDetails formik={formik} />;
+          return <imAdminForm.PersonalDetails formik={formik} />;
         case 1:
-          return <ResidentialAddress formik={formik} />;
+          return <imAdminForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <OutletDetails formik={formik} />;
+          return <imAdminForm.OutletDetails formik={formik} />;
         case 3:
-          return <BankDetails formik={formik} />;
+          return <imAdminForm.BankDetails formik={formik} />;
         case 4:
-          return <UploadDocumens formik={formik} />;
+          return <imAdminForm.UploadDocuments formik={formik} />;
         default:
           return null;
       }
@@ -91,7 +91,7 @@ export const UserConfig: Record<
         "name",
         "dob",
         "mobileNumber",
-        "email",
+        "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
@@ -107,15 +107,15 @@ export const UserConfig: Record<
     renderStepForm: (step, formik) => {
       switch (step) {
         case 0:
-          return <PersonalDetails formik={formik} />;
+          return <distributorForm.PersonalDetails formik={formik} />;
         case 1:
-          return <ResidentialAddress formik={formik} />;
+          return <distributorForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <OutletDetails formik={formik} />;
+          return <distributorForm.OutletDetails formik={formik} />;
         case 3:
-          return <BankDetails formik={formik} />;
+          return <distributorForm.BankDetails formik={formik} />;
         case 4:
-          return <UploadDocumens formik={formik} />;
+          return <distributorForm.UploadDocuments formik={formik} />;
         default:
           return null;
       }
@@ -137,7 +137,7 @@ export const UserConfig: Record<
         "name",
         "dob",
         "mobileNumber",
-        "email",
+        "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
@@ -153,15 +153,15 @@ export const UserConfig: Record<
     renderStepForm: (step, formik) => {
       switch (step) {
         case 0:
-          return <PersonalDetails formik={formik} />;
+          return <whiteLabelForm.PersonalDetails formik={formik} />;
         case 1:
-          return <ResidentialAddress formik={formik} />;
+          return <whiteLabelForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <OutletDetails formik={formik} />;
+          return <whiteLabelForm.OutletDetails formik={formik} />;
         case 3:
-          return <BankDetails formik={formik} />;
+          return <whiteLabelForm.BankDetails formik={formik} />;
         case 4:
-          return <UploadDocumens formik={formik} />;
+          return <whiteLabelForm.UploadDocuments formik={formik} />;
         default:
           return null;
       }
@@ -183,7 +183,7 @@ export const UserConfig: Record<
         "name",
         "dob",
         "mobileNumber",
-        "email",
+        "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
@@ -199,15 +199,15 @@ export const UserConfig: Record<
     renderStepForm: (step, formik) => {
       switch (step) {
         case 0:
-          return <PersonalDetails formik={formik} />;
+          return <partnerForm.PersonalDetails formik={formik} />;
         case 1:
-          return <ResidentialAddress formik={formik} />;
+          return <partnerForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <OutletDetails formik={formik} />;
+          return <partnerForm.OutletDetails formik={formik} />;
         case 3:
-          return <BankDetails formik={formik} />;
+          return <partnerForm.BankDetails formik={formik} />;
         case 4:
-          return <UploadDocumens formik={formik} />;
+          return <partnerForm.UploadDocuments formik={formik} />;
         default:
           return null;
       }
@@ -229,7 +229,7 @@ export const UserConfig: Record<
         "name",
         "dob",
         "mobileNumber",
-        "email",
+        "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
@@ -245,15 +245,15 @@ export const UserConfig: Record<
     renderStepForm: (step, formik) => {
       switch (step) {
         case 0:
-          return <PersonalDetails formik={formik} />;
+          return <superDistributorForm.PersonalDetails formik={formik} />;
         case 1:
-          return <ResidentialAddress formik={formik} />;
+          return <superDistributorForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <OutletDetails formik={formik} />;
+          return <superDistributorForm.OutletDetails formik={formik} />;
         case 3:
-          return <BankDetails formik={formik} />;
+          return <superDistributorForm.BankDetails formik={formik} />;
         case 4:
-          return <UploadDocumens formik={formik} />;
+          return <superDistributorForm.UploadDocuments formik={formik} />;
         default:
           return null;
       }
@@ -264,7 +264,6 @@ export const UserConfig: Record<
       "Personal Details",
       "Residentials Address",
       "Outlet Details",
-      "Bank Details",
       "Upload Documents",
     ],
     stepFieldMap: [
@@ -275,31 +274,28 @@ export const UserConfig: Record<
         "name",
         "dob",
         "mobileNumber",
-        "email",
+        "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
         "businessProof",
-      ], // Step 4
+      ], // Step 3
     ],
     renderStepForm: (step, formik) => {
       switch (step) {
         case 0:
-          return <PersonalDetails formik={formik} />;
+          return <retailerForm.PersonalDetails formik={formik} />;
         case 1:
-          return <ResidentialAddress formik={formik} />;
+          return <retailerForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <OutletDetails formik={formik} />;
+          return <retailerForm.OutletDetails formik={formik} />;
         case 3:
-          return <BankDetails formik={formik} />;
-        case 4:
-          return <UploadDocumens formik={formik} />;
+          return <retailerForm.UploadDocuments formik={formik} />;
         default:
           return null;
       }
@@ -321,7 +317,7 @@ export const UserConfig: Record<
         "name",
         "dob",
         "mobileNumber",
-        "email",
+        "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
       ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
@@ -337,15 +333,15 @@ export const UserConfig: Record<
     renderStepForm: (step, formik) => {
       switch (step) {
         case 0:
-          return <PersonalDetails formik={formik} />;
+          return <enterpriseForm.PersonalDetails formik={formik} />;
         case 1:
-          return <ResidentialAddress formik={formik} />;
+          return <enterpriseForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <OutletDetails formik={formik} />;
+          return <enterpriseForm.OutletDetails formik={formik} />;
         case 3:
-          return <BankDetails formik={formik} />;
+          return <enterpriseForm.BankDetails formik={formik} />;
         case 4:
-          return <UploadDocumens formik={formik} />;
+          return <enterpriseForm.UploadDocuments formik={formik} />;
         default:
           return null;
       }

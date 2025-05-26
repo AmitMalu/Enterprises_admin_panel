@@ -27,6 +27,15 @@ export const textField = (
   return schema;
 };
 
+// GST Number: 15 characters (e.g., 22ABCDE1234F1Z5)
+export const gstValidation = Yup.string()
+  .matches(
+    /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
+    "Invalid GST number format"
+  )
+  .max(15, "GST number must be 15 characters")
+  .required("GST number is required");
+
 // Email: standard format
 export const emailValidation = Yup.string()
   .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email")
@@ -85,10 +94,11 @@ export const aadhaarValidation = Yup.string()
   .matches(/^\d{12}$/, "Aadhaar must be 12 digits")
   .required("Aadhaar Number is required");
 
-// PAN Card: 10-character alphanumeric (uppercase only)
+// PAN Card Number: 10 characters (e.g., ABCDE1234F)
 export const panValidation = Yup.string()
-  .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Invalid PAN format")
-  .required("PAN Card Number is required");
+  .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, "Invalid PAN number format")
+  .max(10, "PAN number must be exactly 10 characters")
+  .required("PAN number is required");
 
 // IFSC Code: 4 uppercase letters, 0, then 6 digits
 export const ifscValidation = Yup.string()
@@ -103,6 +113,11 @@ export const accountNumberValidation = Yup.string()
 export const prefixValidation = Yup.string()
   .matches(/^[a-zA-Z]{3}$/, "Prefix must be 3 digit alphabetic characters")
   .required("Prefix is required");
+
+// Website URL
+export const websiteValidation = Yup.string()
+  .url("Must be a valid URL")
+  .nullable();
 
 export const fileValidation = (
   field: string,
