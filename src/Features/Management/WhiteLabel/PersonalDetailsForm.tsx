@@ -2,12 +2,13 @@ import React from "react";
 import { FormikProps } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../../Components/Molecules/FormikTextInputComponent";
+import FormikSwitchComponent from "../../../Components/Molecules/FormikSwitchComponent";
 
 const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
   return (
     <>
       <Grid gutter="lg">
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 6 }}>
           <FormikTextInputComponent
             name="parentAccount"
             label="Parent Account"
@@ -18,15 +19,26 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             allowSpecialChar={false}
           />
         </Grid.Col>
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikTextInputComponent
-            name="parentTitle"
-            label="Parent Title"
-            placeholder="Type Parent Title.."
+            name="title"
+            label="Title"
+            placeholder="Enter Title"
             withAsterisk
             required
             maxLength={51}
             allowSpecialChar={false}
+          />
+        </Grid.Col>
+
+        <Grid.Col className="mt-5" span={{ base: 12, md: 4, lg: 2 }}>
+          <FormikSwitchComponent
+          name="isAdmin"
+          label="Is Admin"
+          size="md"
+          defaultChecked={false}
+          withAsterisk
+          labelPosition="left"
           />
         </Grid.Col>
 

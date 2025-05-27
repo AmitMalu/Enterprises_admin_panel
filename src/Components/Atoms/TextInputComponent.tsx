@@ -74,7 +74,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
       ? "lg"
       : "xl");
 
-  const defaultRadius = radius || (screenSize === "sm" ? "sm" : "md");
+  const defaultRadius = radius || (screenSize === "3xl" ? "md" : "sm");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = event.target.value;

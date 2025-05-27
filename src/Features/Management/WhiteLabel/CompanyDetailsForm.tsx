@@ -5,7 +5,7 @@ import { Grid } from "@mantine/core";
 import FormikSelectComponent from "../../../Components/Molecules/FormikSelectComponent";
 import { useIndianStateCity } from "../../../Utils/CustomHooks/useIndianStateCity";
 
-const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
+const CompanyDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
   const { states, cities, cityKey } = useIndianStateCity({
     selectedStateName: formik.values.outletState,
     selectedCityName: formik.values.outletCity,
@@ -15,18 +15,40 @@ const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
   return (
     <>
       <Grid gutter="lg">
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikTextInputComponent
-            name="outletName"
-            label="Outlet Name"
-            placeholder="Enter Your Outlet Name"
+            name="companyName"
+            label="Company Name"
+            placeholder="Enter Your Company Name"
             withAsterisk
             required
             maxLength={150}
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+          <FormikTextInputComponent
+            name="companyType"
+            label="Company Type"
+            placeholder="Enter Your Company Type"
+            withAsterisk
+            required
+            maxLength={150}
+          />
+        </Grid.Col>
+
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+          <FormikTextInputComponent
+            name="outletAddress"
+            label="Company Address"
+            placeholder="Enter Your Company Address"
+            withAsterisk
+            required
+            maxLength={150}
+          />
+        </Grid.Col>
+
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikSelectComponent
             value={formik.values.outletState}
             name="outletState"
@@ -39,7 +61,7 @@ const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikSelectComponent
             key={cityKey}
             value={formik.values.outletCity}
@@ -53,7 +75,7 @@ const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikTextInputComponent
             name="outletZipcode"
             label="Outlet Zip Code"
@@ -70,4 +92,4 @@ const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
   );
 };
 
-export default OutletDetailsForm;
+export default CompanyDetailsForm;

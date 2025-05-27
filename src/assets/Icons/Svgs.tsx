@@ -399,14 +399,34 @@ export const IMLogoWhiteBGSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   );
 };
 
-
-
-
-
-
-
-
-
-
+export const AddIconSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      fill="none"
+      version="1.1"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
+      <defs>
+        <clipPath id="master_svg0_602_17398">
+          <rect x="0" y="0" width="24" height="24" rx="0" />
+        </clipPath>
+      </defs>
+      <g clip-path="url(#master_svg0_602_17398)">
+        <g>
+          <path
+            d="M11,11L11,5L13,5L13,11L19,11L19,13L13,13L13,19L11,19L11,13L5,13L5,11L11,11Z"
+            fill="#FFFFFF"
+            fillOpacity="1"
+            style={{ mixBlendMode: "normal" }}
+          />
+        </g>
+      </g>
+    </svg>
+  );
+};
 
 

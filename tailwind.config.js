@@ -13,6 +13,7 @@ export default {
         lora: ["Lora", "serif"],
         poppins: ["Poppins", "sans-serif"],
         inter: ["Inter", "sans-serif"],
+        manrope : ["Manrope", "sans-serif"],
       },
       colors: {
         menuActiveBg: "#BDC4C3",

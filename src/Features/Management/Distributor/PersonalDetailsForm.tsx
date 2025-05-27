@@ -20,9 +20,9 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
         </Grid.Col>
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
-            name="parentTitle"
-            label="Parent Title"
-            placeholder="Type Parent Title.."
+            name="title"
+            label="Title"
+            placeholder="Enter Title"
             withAsterisk
             required
             maxLength={51}

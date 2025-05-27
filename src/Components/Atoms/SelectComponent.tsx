@@ -50,7 +50,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
       ? "lg"
       : "xl");
 
-  const defaultRadius = radius || (screenSize === "sm" ? "sm" : "md");
+  const defaultRadius = radius || (screenSize === "3xl" ? "md" : "sm");
 
   return (
     <div className={className}>

@@ -6,7 +6,7 @@ import {
   UserType,
 } from "../../Config/UserCreationConfig/UserConfig";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { capitalizeWords } from "../../Utils/utils";
+import { capitalizeWords, getIpAddress } from "../../Utils/utils";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import FormStepperButton from "../../Components/Molecules/FormStepperButton";
 import FormStepper from "../../Components/Atoms/FormStepper";
@@ -63,7 +63,8 @@ const UserFormPage = () => {
     console.log("Final Submission", values);
 
     // 1. Transforming form values to the payload structure
-    const payload = transformUserCreationPayload(values, auth.user);
+    const ip = await getIpAddress();
+    const payload = transformUserCreationPayload(values, auth.user, ip);
     // 2. Filter Empty or null values
     const cleanedPayload = cleanPayload(payload);
 
@@ -124,7 +125,7 @@ const UserFormPage = () => {
       {/* Formik Wrapper */}
       <Formik
         initialValues={masterInitialValues}
-        validationSchema={getValidationSchema(userType, activeStep)}
+        validationSchema={null}
         onSubmit={async (values, formikHelpers) => {
           if (activeStep === config.steps.length - 1) {
             await handleFormSubmit(values, formikHelpers);

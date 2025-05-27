@@ -1,12 +1,12 @@
 import { useField, useFormikContext } from "formik";
-import { FileInput } from "@mantine/core";
+import FileInputComponent from "../Atoms/FileInputComponent";
 
 const FormikFileInput = ({ name , ...props }: any) => {
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(name);
 
   return (
-    <FileInput
+    <FileInputComponent
       {...props}
       name={name}
       value={field.value}

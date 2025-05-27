@@ -40,7 +40,7 @@ export const UserConfig: Record<
     stepFieldMap: [
       [
         "parentAccount",
-        "parentTitle",
+        "title",
         "prefix",
         "name",
         "dob",
@@ -86,7 +86,7 @@ export const UserConfig: Record<
     stepFieldMap: [
       [
         "parentAccount",
-        "parentTitle",
+        "title",
         "prefix",
         "name",
         "dob",
@@ -94,14 +94,24 @@ export const UserConfig: Record<
         "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
-      ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
+      [
+        "outletAddress",
+        "outletName",
+        "outletCity",
+        "outletState",
+        "outletZipcode",
+      ], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
+        "adhaarNumber",
+        "panNumber",
+        "shopNumber",
         "businessProof",
+        "businessNumber",
       ], // Step 4
     ],
     renderStepForm: (step, formik) => {
@@ -125,29 +135,41 @@ export const UserConfig: Record<
     steps: [
       "Personal Details",
       "Residentials Address",
-      "Outlet Details",
+      "Company Details",
       "Bank Details",
       "Upload Documents",
     ],
     stepFieldMap: [
       [
         "parentAccount",
-        "parentTitle",
+        "title",
         "prefix",
         "name",
         "dob",
         "mobileNumber",
         "emailId",
+        "isAdmin",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
-      ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
+      [
+        "companyName",
+        "companyType",
+        "outletAddress",
+        "outletCity",
+        "outletState",
+        "outletZipcode",
+      ], // Step 2
+      ["bankName", "accountNumber", "ifsc", "branchName", "websiteURL"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
+        "adhaarNumber",
+        "panNumber",
+        "shopNumber",
         "businessProof",
+        "businessNumber",
       ], // Step 4
     ],
     renderStepForm: (step, formik) => {
@@ -157,7 +179,7 @@ export const UserConfig: Record<
         case 1:
           return <whiteLabelForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <whiteLabelForm.OutletDetails formik={formik} />;
+          return <whiteLabelForm.CompanyDetails formik={formik} />;
         case 3:
           return <whiteLabelForm.BankDetails formik={formik} />;
         case 4:
@@ -178,7 +200,7 @@ export const UserConfig: Record<
     stepFieldMap: [
       [
         "parentAccount",
-        "parentTitle",
+        "title",
         "prefix",
         "name",
         "dob",
@@ -186,14 +208,24 @@ export const UserConfig: Record<
         "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
-      ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
+      [
+        "outletAddress",
+        "outletName",
+        "outletCity",
+        "outletState",
+        "outletZipcode",
+      ], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
+        "adhaarNumber",
+        "panNumber",
+        "shopNumber",
         "businessProof",
+        "businessNumber",
       ], // Step 4
     ],
     renderStepForm: (step, formik) => {
@@ -224,7 +256,7 @@ export const UserConfig: Record<
     stepFieldMap: [
       [
         "parentAccount",
-        "parentTitle",
+        "title",
         "prefix",
         "name",
         "dob",
@@ -232,14 +264,24 @@ export const UserConfig: Record<
         "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
-      ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
+      [
+        "outletName",
+        "outletAddress",
+        "outletState",
+        "outletCity",
+        "outletZipcode",
+      ], // Step 2
       ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
+        "adhaarNumber",
+        "panNumber",
+        "shopNumber",
         "businessProof",
+        "businessNumber",
       ], // Step 4
     ],
     renderStepForm: (step, formik) => {
@@ -264,12 +306,13 @@ export const UserConfig: Record<
       "Personal Details",
       "Residentials Address",
       "Outlet Details",
+      "Bank Details",
       "Upload Documents",
     ],
     stepFieldMap: [
       [
         "parentAccount",
-        "parentTitle",
+        "title",
         "prefix",
         "name",
         "dob",
@@ -277,14 +320,25 @@ export const UserConfig: Record<
         "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
-      ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
+      [
+        "outletAddress",
+        "outletName",
+        "outletCity",
+        "outletState",
+        "outletZipcode",
+      ], // Step 2
+      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
+        "adhaarNumber",
+        "panNumber",
+        "shopNumber",
         "businessProof",
-      ], // Step 3
+        "businessNumber",
+      ], // Step 4
     ],
     renderStepForm: (step, formik) => {
       switch (step) {
@@ -295,6 +349,8 @@ export const UserConfig: Record<
         case 2:
           return <retailerForm.OutletDetails formik={formik} />;
         case 3:
+          return <retailerForm.BankDetails formik={formik} />;
+        case 4:
           return <retailerForm.UploadDocuments formik={formik} />;
         default:
           return null;
@@ -305,14 +361,14 @@ export const UserConfig: Record<
     steps: [
       "Personal Details",
       "Residentials Address",
-      "Outlet Details",
+      "Company Details",
       "Bank Details",
       "Upload Documents",
     ],
     stepFieldMap: [
       [
         "parentAccount",
-        "parentTitle",
+        "title",
         "prefix",
         "name",
         "dob",
@@ -320,14 +376,25 @@ export const UserConfig: Record<
         "emailId",
       ], // Step 0
       ["address", "city", "state", "zipcode"], // Step 1
-      ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
+      [
+        "companyName",
+        "companyType",
+        "outletAddress",
+        "outletCity",
+        "outletState",
+        "outletZipcode",
+      ], // Step 2
+      ["bankName", "accountNumber", "ifsc", "branchName", "websiteURL"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
+        "adhaarNumber",
+        "panNumber",
+        "shopNumber",
         "businessProof",
+        "businessNumber",
       ], // Step 4
     ],
     renderStepForm: (step, formik) => {
@@ -337,7 +404,7 @@ export const UserConfig: Record<
         case 1:
           return <enterpriseForm.ResidentialAddress formik={formik} />;
         case 2:
-          return <enterpriseForm.OutletDetails formik={formik} />;
+          return <enterpriseForm.CompanyDetails formik={formik} />;
         case 3:
           return <enterpriseForm.BankDetails formik={formik} />;
         case 4:
