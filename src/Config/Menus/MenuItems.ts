@@ -25,8 +25,8 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "Operation Master",
-        link: "/master/operation-master",
+        label: "Operator Master",
+        link: "/master/operator-master",
         icon: userCreationSvg,
       },
       {
@@ -42,7 +42,7 @@ export const sidebarData = [
     initiallyOpened: false,
     links: [
       {
-        label: "Pre Funding Authorization",
+        label: "Prefunding Authorization",
         link: "/funding/pre-funding-authorization",
         icon: userCreationSvg,
       },

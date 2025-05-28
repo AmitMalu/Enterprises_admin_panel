@@ -11,9 +11,14 @@ import UserFormPage from "../Features/Management/UserFormPage";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PreFundingAuth from "../Features/Funding/PreFundingAuth";
 import VendorMaster from "../Features/Master/VendorMaster";
-import OperationMaster from "../Features/Master/OperationMaster";
+import OperatorMaster from "../Features/Master/OperatorMaster";
 import SubProductMaster from "../Features/Master/SubProductMaster";
 import ProductMaster from "../Features/Master/ProductMaster";
+import PrefundingForm from "../Features/Funding/PrefundingForm";
+import ProductForm from "../Features/Master/ProductForm";
+import SubOperatorForm from "../Features/Master/SubOperatorForm";
+import OperatorForm from "../Features/Master/OperatorForm";
+import VendorForm from "../Features/Master/VendorForm";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Features/Dashboard/HomePage"));
@@ -37,17 +42,62 @@ const AppRoutes = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/master/product-master" element={<ProductMaster />} />
             <Route
+              path="/master/product-master/add"
+              element={<ProductForm mode="add" />}
+            />
+            <Route
+              path="/master/product-master/edit/:id"
+              element={<ProductForm mode="edit" />}
+            />
+            <Route
               path="/master/sub-product-master"
               element={<SubProductMaster />}
             />
             <Route
-              path="/master/operation-master"
-              element={<OperationMaster />}
+              path="/master/sub-product-master/add"
+              element={<SubOperatorForm mode="add" />}
             />
-            <Route path="/master/vendor-master" element={<VendorMaster />} />
+            <Route
+              path="/master/sub-product-master/edit/:id"
+              element={<SubOperatorForm mode="edit" />}
+            />
 
-            <Route path="/funding/pre-funding-authorization" element={<PreFundingAuth />} />
-            
+            <Route
+              path="/master/operator-master"
+              element={<OperatorMaster />}
+            />
+            <Route
+              path="/master/operator-master/add"
+              element={<OperatorForm mode="add" />}
+            />
+            <Route
+              path="/master/operator-master/edit/:id"
+              element={<OperatorForm mode="edit" />}
+            />
+
+            <Route path="/master/vendor-master" element={<VendorMaster />} />
+            <Route
+              path="/master/vendor-master/add"
+              element={<VendorForm mode="add" />}
+            />
+            <Route
+              path="/master/vendor-master/edit/:id"
+              element={<VendorForm mode="edit" />}
+            />
+
+            <Route
+              path="/funding/pre-funding-authorization"
+              element={<PreFundingAuth />}
+            />
+            <Route
+              path="/prefunding/add"
+              element={<PrefundingForm mode="add" />}
+            />
+            <Route
+              path="/prefunding/edit/:id"
+              element={<PrefundingForm mode="edit" />}
+            />
+
             <Route
               path="/management/user-creation"
               element={<UserCreation />}

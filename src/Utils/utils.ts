@@ -48,3 +48,10 @@ export async function getIpAddress(): Promise<string> {
     return "";
   }
 }
+
+export const ellipsisCellStyle = {
+  maxWidth: 160,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+};
