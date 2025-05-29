@@ -16,170 +16,79 @@ import {
 import { Table, Tooltip } from "@mantine/core";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { ellipsisCellStyle } from "../../Utils/utils";
+import { ProductType } from "./ProductFormConfig";
+import { useNavigate } from "react-router-dom";
 
 const ProductMaster = () => {
-  const data = [
+  const navigate = useNavigate();
+
+  const data: ProductType[] = [
     {
       id: "101",
       name: "Card A",
       productCode: "V001",
       productCodeForScheme: "Vendor X",
-      isShow: "B123",
-      hasSharges: "BIN987",
-      isCommissions: "K001",
-      isInventory: "F001",
-      isSettlement: "FT01",
-      isVirtual: "U001",
-      isVisible: "R001",
+      isShow: true,
+      hasCharges: "BIN987",
+      isCommissions: false,
+      isInventory: true,
+      isSettlement: true,
+      isVirtual: false,
+      isVisible: true,
       reverseTx: "P001",
       walletType: "C001",
       subProducts: "S001",
       productGroup: "2024-05-10",
       clusterMode: "UserX",
-      blocked: "false",
-      active: "true",
+      blocked: false,
+      active: true,
     },
     {
-      id: "101",
+      id: "102",
       name: "Card A",
       productCode: "V001",
       productCodeForScheme: "Vendor X",
-      isShow: "B123",
-      hasSharges: "BIN987",
-      isCommissions: "K001",
-      isInventory: "F001",
-      isSettlement: "FT01",
-      isVirtual: "U001",
-      isVisible: "R001",
+      isShow: false,
+      hasCharges: "BIN987",
+      isCommissions: true,
+      isInventory: true,
+      isSettlement: true,
+      isVirtual: false,
+      isVisible: true,
       reverseTx: "P001",
       walletType: "C001",
       subProducts: "S001",
       productGroup: "2024-05-10",
       clusterMode: "UserX",
-      blocked: "false",
-      active: "true",
-    },
-    {
-      id: "101",
-      name: "Card A",
-      productCode: "V001",
-      productCodeForScheme: "Vendor X",
-      isShow: "B123",
-      hasSharges: "BIN987",
-      isCommissions: "K001",
-      isInventory: "F001",
-      isSettlement: "FT01",
-      isVirtual: "U001",
-      isVisible: "R001",
-      reverseTx: "P001",
-      walletType: "C001",
-      subProducts: "S001",
-      productGroup: "2024-05-10",
-      clusterMode: "UserX",
-      blocked: "false",
-      active: "true",
-    },
-    {
-      id: "101",
-      name: "Card A",
-      productCode: "V001",
-      productCodeForScheme: "Vendor X",
-      isShow: "B123",
-      hasSharges: "BIN987",
-      isCommissions: "K001",
-      isInventory: "F001",
-      isSettlement: "FT01",
-      isVirtual: "U001",
-      isVisible: "R001",
-      reverseTx: "P001",
-      walletType: "C001",
-      subProducts: "S001",
-      productGroup: "2024-05-10",
-      clusterMode: "UserX",
-      blocked: "false",
-      active: "true",
-    },
-    {
-      id: "101",
-      name: "Card A",
-      productCode: "V001",
-      productCodeForScheme: "Vendor X",
-      isShow: "B123",
-      hasSharges: "BIN987",
-      isCommissions: "K001",
-      isInventory: "F001",
-      isSettlement: "FT01",
-      isVirtual: "U001",
-      isVisible: "R001",
-      reverseTx: "P001",
-      walletType: "C001",
-      subProducts: "S001",
-      productGroup: "2024-05-10",
-      clusterMode: "UserX",
-      blocked: "false",
-      active: "true",
-    },
-    {
-      id: "101",
-      name: "Card A",
-      productCode: "V001",
-      productCodeForScheme: "Vendor X",
-      isShow: "B123",
-      hasSharges: "BIN987",
-      isCommissions: "K001",
-      isInventory: "F001",
-      isSettlement: "FT01",
-      isVirtual: "U001",
-      isVisible: "R001",
-      reverseTx: "P001",
-      walletType: "C001",
-      subProducts: "S001",
-      productGroup: "2024-05-10",
-      clusterMode: "UserX",
-      blocked: "false",
-      active: "true",
-    },
-    {
-      id: "101",
-      name: "Card A",
-      productCode: "V001",
-      productCodeForScheme: "Vendor X",
-      isShow: "B123",
-      hasSharges: "BIN987",
-      isCommissions: "K001",
-      isInventory: "F001",
-      isSettlement: "FT01",
-      isVirtual: "U001",
-      isVisible: "R001",
-      reverseTx: "P001",
-      walletType: "C001",
-      subProducts: "S001",
-      productGroup: "2024-05-10",
-      clusterMode: "UserX",
-      blocked: "false",
-      active: "true",
-    },
-    {
-      id: "101",
-      name: "Card A",
-      productCode: "V001",
-      productCodeForScheme: "Vendor X",
-      isShow: "B123",
-      hasSharges: "BIN987asdasda",
-      isCommissions: "K001",
-      isInventory: "F001",
-      isSettlement: "FT01",
-      isVirtual: "U001",
-      isVisible: "R001",
-      reverseTx: "P001",
-      walletType: "C001",
-      subProducts: "S001",
-      productGroup: "2024-05-10",
-      clusterMode: "UserX",
-      blocked: "false",
-      active: "true",
+      blocked: false,
+      active: true,
     },
   ];
+
+  const headers: { key: keyof ProductType; label: string }[] = [
+    { key: "id", label: "Id" },
+    { key: "name", label: "Name" },
+    { key: "productCode", label: "Product Code" },
+    { key: "productCodeForScheme", label: "Product Code For Scheme" },
+    { key: "isShow", label: "Is Show" },
+    { key: "hasCharges", label: "Has Charges" },
+    { key: "isCommissions", label: "Is Commissions" },
+    { key: "isInventory", label: "Is Inventory" },
+    { key: "isSettlement", label: "Is Settlement" },
+    { key: "isVirtual", label: "Is Virtual" },
+    { key: "isVisible", label: "Is Visible" },
+    { key: "reverseTx", label: "Reverse Tx" },
+    { key: "walletType", label: "Wallet Type" },
+    { key: "subProducts", label: "Sub Products" },
+    { key: "productGroup", label: "Product Group" },
+    { key: "clusterMode", label: "Cluster Mode" },
+    { key: "blocked", label: "Blocked" },
+    { key: "active", label: "Active" },
+  ];
+
+  const handleEdit = (item: any) => {
+    navigate(`/master/product-master/edit/${item.id}`, { state: item });
+  };
 
   const rows = data.map((item, index) => (
     <Table.Tr key={index}>
@@ -188,229 +97,31 @@ const ProductMaster = () => {
           <span className="cursor-pointer">
             <EyeIcon />
           </span>
-          <span className="cursor-pointer">
+          <span onClick={() => handleEdit(item)} className="cursor-pointer">
             <EditIcon />
           </span>
         </div>
       </Table.Td>
 
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.id}
-          withArrow
-        >
-          <span>{item.id}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.name}
-          withArrow
-        >
-          <span>{item.name}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.productCode}
-          withArrow
-        >
-          <span>{item.productCode}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.productCodeForScheme}
-          withArrow
-        >
-          <span>{item.productCodeForScheme}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.isShow)}
-          withArrow
-        >
-          <span>{String(item.isShow)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.hasSharges)}
-          withArrow
-        >
-          <span>{String(item.hasSharges)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.isCommissions)}
-          withArrow
-        >
-          <span>{String(item.isCommissions)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.isInventory)}
-          withArrow
-        >
-          <span>{String(item.isInventory)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.isSettlement)}
-          withArrow
-        >
-          <span>{String(item.isSettlement)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.isVirtual)}
-          withArrow
-        >
-          <span>{String(item.isVirtual)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.isVisible)}
-          withArrow
-        >
-          <span>{String(item.isVisible)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.reverseTx)}
-          withArrow
-        >
-          <span>{String(item.reverseTx)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.walletType}
-          withArrow
-        >
-          <span>{item.walletType}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.subProducts}
-          withArrow
-        >
-          <span>{item.subProducts}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.productGroup}
-          withArrow
-        >
-          <span>{item.productGroup}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.clusterMode}
-          withArrow
-        >
-          <span>{item.clusterMode}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.blocked)}
-          withArrow
-        >
-          <span>{String(item.blocked)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.active)}
-          withArrow
-        >
-          <span>{String(item.active)}</span>
-        </Tooltip>
-      </Table.Td>
+      {headers.map(({ key }) => (
+        <Table.Td key={key} style={ellipsisCellStyle}>
+          <Tooltip
+            arrowPosition="side"
+            arrowSize={5}
+            position="top-start"
+            label={String(item[key as keyof ProductType])}
+            withArrow
+          >
+            <span>{String(item[key as keyof ProductType])}</span>
+          </Tooltip>
+        </Table.Td>
+      ))}
     </Table.Tr>
   ));
+
+  const handleAdd = () => {
+    navigate("/master/product-master/add");
+  };
 
   const handleSearchChange = () => {};
 
@@ -446,6 +157,7 @@ const ProductMaster = () => {
         <ButtonComponent
           style={{ padding: "5px 30px", height: 40 }}
           radius={1}
+          onClick={handleAdd}
           textColor="#fff"
           bgColor="#BF0204"
           borderColor="#FFFFFF"
@@ -537,24 +249,9 @@ const ProductMaster = () => {
           <Table.Thead>
             <Table.Tr>
               <Table.Th></Table.Th>
-              <Table.Th>Id</Table.Th>
-              <Table.Th>Name</Table.Th>
-              <Table.Th>Product Code</Table.Th>
-              <Table.Th>Product Code for Scheme</Table.Th>
-              <Table.Th>Is Show</Table.Th>
-              <Table.Th>Has Sharges</Table.Th>
-              <Table.Th>Is Commisions</Table.Th>
-              <Table.Th>Is Inventory</Table.Th>
-              <Table.Th>Is Settlement</Table.Th>
-              <Table.Th>Is Virtual</Table.Th>
-              <Table.Th>Is Visible</Table.Th>
-              <Table.Th>Reverse Tx</Table.Th>
-              <Table.Th>Wallet Type</Table.Th>
-              <Table.Th>Sub Product</Table.Th>
-              <Table.Th>Product Group</Table.Th>
-              <Table.Th>Cluster Mode</Table.Th>
-              <Table.Th>Blocked</Table.Th>
-              <Table.Th>Active</Table.Th>
+              {headers.map(({ key, label }) => (
+                <Table.Th key={key}>{label}</Table.Th>
+              ))}
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

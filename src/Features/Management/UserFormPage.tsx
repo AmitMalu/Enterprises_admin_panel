@@ -28,7 +28,6 @@ const UserFormPage = () => {
   const { type } = useParams<{ type: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
-  console.log(auth);
 
   const isValidType = (type: string): type is UserType => {
     return type in UserConfig;
@@ -117,7 +116,7 @@ const UserFormPage = () => {
       </TextComponent>
 
       {/* Sub Heading */}
-      <BreadCrumb type={type} />
+      <BreadCrumb type={`${type} Form`} text="Management"/>
 
       {/* Stepper */}
       <FormStepper steps={config.steps} activeStep={activeStep} />
@@ -125,7 +124,7 @@ const UserFormPage = () => {
       {/* Formik Wrapper */}
       <Formik
         initialValues={masterInitialValues}
-        validationSchema={null}
+        validationSchema={getValidationSchema(userType, activeStep)}
         onSubmit={async (values, formikHelpers) => {
           if (activeStep === config.steps.length - 1) {
             await handleFormSubmit(values, formikHelpers);

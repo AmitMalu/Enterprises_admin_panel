@@ -16,9 +16,10 @@ import SubProductMaster from "../Features/Master/SubProductMaster";
 import ProductMaster from "../Features/Master/ProductMaster";
 import PrefundingForm from "../Features/Funding/PrefundingForm";
 import ProductForm from "../Features/Master/ProductForm";
-import SubOperatorForm from "../Features/Master/SubOperatorForm";
 import OperatorForm from "../Features/Master/OperatorForm";
 import VendorForm from "../Features/Master/VendorForm";
+import SubProductForm from "../Features/Master/SubProductForm";
+import SchemesList from "../Features/Schemes/SchemesList";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Features/Dashboard/HomePage"));
@@ -55,11 +56,11 @@ const AppRoutes = () => {
             />
             <Route
               path="/master/sub-product-master/add"
-              element={<SubOperatorForm mode="add" />}
+              element={<SubProductForm mode="add" />}
             />
             <Route
               path="/master/sub-product-master/edit/:id"
-              element={<SubOperatorForm mode="edit" />}
+              element={<SubProductForm mode="edit" />}
             />
 
             <Route
@@ -105,6 +106,10 @@ const AppRoutes = () => {
             <Route
               path="/management/user/create/:type"
               element={<UserFormPage />}
+            />
+             <Route
+              path="/schemes/schemeslist"
+              element={<SchemesList />}
             />
           </Route>
         </Route>

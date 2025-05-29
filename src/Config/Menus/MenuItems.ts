@@ -74,7 +74,7 @@ export const sidebarData = [
     label: "Schemes",
     icon: schemesSvg,
     initiallyOpened: false,
-    Links: [{ label: "Scheme 1", link: "/schemes/sh1", icon: userCreationSvg }],
+    links: [{ label: "Schemes List", link: "/schemes/schemeslist", icon: userCreationSvg }],
   },
   {
     label: "Reports",

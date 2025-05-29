@@ -16,27 +16,18 @@ import {
 import { Table, Tooltip } from "@mantine/core";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { ellipsisCellStyle } from "../../Utils/utils";
-
-type DataType = {
-  id: string;
-  productId: string;
-  productName: string;
-  vendorName: string;
-  vendorCode: string;
-  subProductId: string;
-  subProductCode: string;
-  modesSupported: string;
-  priority: string;
-  isActive: string;
-  blanks: string;
-  createdOn: string;
-  createdBy: string;
-  editedOn: string;
-  editedBy: string;
-};
+import { VendorType } from "./VendorFormConfig";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const VendorMaster = () => {
-  const headers: { key: keyof DataType; label: string }[] = [
+  const navigate = useNavigate();
+
+  const handleEdit = (item: any) => {
+    navigate(`/master/vendor-master/edit/${item.id}`, { state: item });
+  };
+
+  const headers: { key: keyof VendorType; label: string }[] = [
     { key: "id", label: "Id" },
     { key: "productId", label: "Product Id" },
     { key: "productName", label: "Product Name" },
@@ -54,7 +45,7 @@ const VendorMaster = () => {
     { key: "editedBy", label: "Edited By" },
   ];
 
-  const data: DataType[] = [
+  const data: VendorType[] = [
     {
       id: "201",
       productId: "PID-001",
@@ -65,11 +56,11 @@ const VendorMaster = () => {
       subProductCode: "CARD-T001",
       modesSupported: "Online, NFC",
       priority: "High",
-      isActive: "true",
-      blanks: "",
-      createdOn: "2024-01-10",
+      isActive: true,
+      blanks: "abc",
+      createdOn: moment().format("2024-09-23"),
       createdBy: "Admin",
-      editedOn: "2024-03-01",
+      editedOn: moment().format("2025-01-22"),
       editedBy: "Editor1",
     },
     {
@@ -82,11 +73,11 @@ const VendorMaster = () => {
       subProductCode: "CARD-G002",
       modesSupported: "Online",
       priority: "Medium",
-      isActive: "false",
+      isActive: false,
       blanks: "",
-      createdOn: "2024-02-15",
+      createdOn: moment().format("2024-02-15"),
       createdBy: "System",
-      editedOn: "2024-04-20",
+      editedOn: moment().format("2024-04-20"),
       editedBy: "Editor2",
     },
   ];
@@ -98,7 +89,7 @@ const VendorMaster = () => {
           <span className="cursor-pointer">
             <EyeIcon />
           </span>
-          <span className="cursor-pointer">
+          <span onClick={() => handleEdit(item)} className="cursor-pointer">
             <EditIcon />
           </span>
         </div>
@@ -119,6 +110,10 @@ const VendorMaster = () => {
       ))}
     </Table.Tr>
   ));
+
+  const handleAdd = () => {
+    navigate("/master/vendor-master/add");
+  };
 
   const handleSearchChange = () => {};
 
@@ -156,6 +151,7 @@ const VendorMaster = () => {
           radius={1}
           textColor="#fff"
           bgColor="#BF0204"
+          onClick={handleAdd}
           borderColor="#FFFFFF"
           leftIcon={<AddIconSvg />}
         >

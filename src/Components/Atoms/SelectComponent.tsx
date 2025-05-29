@@ -18,6 +18,7 @@ interface SelectComponentProps {
   data: { value: string; label: string }[];
   onBlur?: () => void;
   className?: string;
+  allowDeselect? : boolean
   searchable : boolean
 }
 
@@ -35,6 +36,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   disabled = false,
   data,
   onBlur,
+  allowDeselect = false,
   searchable = true,
   className = "",
 }) => {
@@ -59,6 +61,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         label={label}
         placeholder={placeholder}
         value={value}
+        allowDeselect={allowDeselect}
         onChange={onChange}
         onBlur={onBlur}
         error={typeof error === "string" ? true : !!error}

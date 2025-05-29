@@ -37,7 +37,7 @@ const headers: { key: keyof PrefundingType; label: string }[] = [
 const data: PrefundingType[] = [
   {
     depositType: "Cash",
-    transactionId: "TX123456",
+    transactionId: "TX1001",
     amount: "1000",
     bankAccount: "AXIS-12345",
     depositDate: moment().format("2024-12-18"),
@@ -50,7 +50,7 @@ const data: PrefundingType[] = [
   },
   {
     depositType: "Cash",
-    transactionId: "TX123456",
+    transactionId: "TX1002",
     amount: "1000",
     bankAccount: "AXIS-12345",
     depositDate: "2024-06-01",
@@ -63,7 +63,7 @@ const data: PrefundingType[] = [
   },
   {
     depositType: "Cash",
-    transactionId: "TX123456",
+    transactionId: "TX1003",
     amount: "1000",
     bankAccount: "AXIS-12345",
     depositDate: "2024-06-01",
@@ -76,7 +76,7 @@ const data: PrefundingType[] = [
   },
   {
     depositType: "Cash",
-    transactionId: "TX123456",
+    transactionId: "TX1004",
     amount: "1000",
     bankAccount: "AXIS-12345",
     depositDate: "2024-06-01",
@@ -120,10 +120,11 @@ const PreFundingAuth = () => {
       ))}
     </Table.Tr>
   ));
+
   const handleSearchChange = () => {};
 
   const handleEdit = (item: any) => {
-    navigate(`/prefunding/edit/${item.id}`, { state: item });
+    navigate(`/prefunding/edit/${item.transactionId}`, { state: item });
   };
 
   const handleAdd = () => {

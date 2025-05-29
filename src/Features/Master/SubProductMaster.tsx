@@ -16,22 +16,27 @@ import {
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { ellipsisCellStyle } from "../../Utils/utils";
+import { SubProductType } from "./SubProductFormConfig";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const SubProductMaster = () => {
-  const data = [
+  const navigate = useNavigate();
+
+  const data: SubProductType[] = [
     {
       id: "101",
       subProductCode: "CARD-AX123",
       subProductTitle: "Prepaid Visa",
       productId: "Vendor Alpha",
-      isSettlement: "Yes",
+      isSettlement: false,
       settlementName: "Standard Settlement",
-      enabled: "true",
+      enabled: true,
       product: "BIN1234",
       walletType: "Digital",
-      isActive: "true",
-      createdOn: "2024-01-15",
-      editedOn: "2024-04-12",
+      isActive: true,
+      createdOn: moment().format("2024-01-15"),
+      editedOn: moment().format("2024-04-12"),
       createdBy: "Alice",
       editedBy: "Bob",
     },
@@ -40,66 +45,39 @@ const SubProductMaster = () => {
       subProductCode: "CARD-MC456",
       subProductTitle: "Mastercard Gold",
       productId: "Vendor Beta",
-      isSettlement: "No",
+      isSettlement: false,
       settlementName: "None",
-      enabled: "false",
+      enabled: false,
       product: "BIN5678",
       walletType: "Physical",
-      isActive: "false",
-      createdOn: "2023-11-10",
-      editedOn: "2024-02-18",
+      isActive: false,
+      createdOn: moment().format("2023-11-10"),
+      editedOn: moment().format("2024-02-18"),
       createdBy: "Charlie",
       editedBy: "Diana",
     },
-    {
-      id: "103",
-      subProductCode: "CARD-UPI789",
-      subProductTitle: "UPI Virtual",
-      productId: "Vendor Gamma",
-      isSettlement: "Yes",
-      settlementName: "Real-time",
-      enabled: "true",
-      product: "BIN9012",
-      walletType: "UPI",
-      isActive: "true",
-      createdOn: "2024-03-22",
-      editedOn: "2024-05-01",
-      createdBy: "Eve",
-      editedBy: "Frank",
-    },
-    {
-      id: "104",
-      subProductCode: "CARD-NFC321",
-      subProductTitle: "NFC Enabled",
-      productId: "Vendor Delta",
-      isSettlement: "Yes",
-      settlementName: "Instant",
-      enabled: "true",
-      product: "BIN4321",
-      walletType: "Tap&Pay",
-      isActive: "true",
-      createdOn: "2023-12-01",
-      editedOn: "2024-01-05",
-      createdBy: "Grace",
-      editedBy: "Heidi",
-    },
-    {
-      id: "105",
-      subProductCode: "CARD-INTL654",
-      subProductTitle: "International Travel",
-      productId: "Vendor Zeta",
-      isSettlement: "No",
-      settlementName: "Manual",
-      enabled: "false",
-      product: "BIN8765",
-      walletType: "Travel",
-      isActive: "false",
-      createdOn: "2024-02-14",
-      editedOn: "2024-04-10",
-      createdBy: "Ivan",
-      editedBy: "Judy",
-    },
   ];
+
+  const headers: { key: keyof SubProductType; label: string }[] = [
+    { key: "id", label: "ID" },
+    { key: "subProductCode", label: "Sub Product Code" },
+    { key: "subProductTitle", label: "Sub Product Title" },
+    { key: "productId", label: "Product ID" },
+    { key: "isSettlement", label: "Is Settlement" },
+    { key: "settlementName", label: "Settlement Name" },
+    { key: "enabled", label: "Enabled" },
+    { key: "product", label: "Product" },
+    { key: "walletType", label: "Wallet Type" },
+    { key: "isActive", label: "Is Active" },
+    { key: "createdOn", label: "Created On" },
+    { key: "editedOn", label: "Edited On" },
+    { key: "createdBy", label: "Created By" },
+    { key: "editedBy", label: "Edited By" },
+  ];
+
+  const handleEdit = (item: any) => {
+    navigate(`/master/sub-product-master/edit/${item.id}`, { state: item });
+  };
 
   const rows = data.map((item, index) => (
     <Table.Tr key={index}>
@@ -108,181 +86,31 @@ const SubProductMaster = () => {
           <span className="cursor-pointer">
             <EyeIcon />
           </span>
-          <span className="cursor-pointer">
+          <span onClick={() => handleEdit(item)} className="cursor-pointer">
             <EditIcon />
           </span>
         </div>
       </Table.Td>
 
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.id}
-          withArrow
-        >
-          <span>{item.id}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.subProductCode}
-          withArrow
-        >
-          <span>{item.subProductCode}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.subProductTitle}
-          withArrow
-        >
-          <span>{item.subProductTitle}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.productId}
-          withArrow
-        >
-          <span>{String(item.productId)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.isSettlement)}
-          withArrow
-        >
-          <span>{String(item.isSettlement)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.settlementName)}
-          withArrow
-        >
-          <span>{item.settlementName}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.enabled}
-          withArrow
-        >
-          <span>{String(item.enabled)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.product)}
-          withArrow
-        >
-          <span>{String(item.product)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.walletType)}
-          withArrow
-        >
-          <span>{String(item.walletType)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.isActive)}
-          withArrow
-        >
-          <span>{String(item.isActive)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={String(item.createdOn)}
-          withArrow
-        >
-          <span>{String(item.createdOn)}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.editedOn}
-          withArrow
-        >
-          <span>{item.editedOn}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.createdBy}
-          withArrow
-        >
-          <span>{item.createdBy}</span>
-        </Tooltip>
-      </Table.Td>
-
-      <Table.Td style={ellipsisCellStyle}>
-        <Tooltip
-          arrowPosition="side"
-          arrowSize={5}
-          position="top-start"
-          label={item.editedBy}
-          withArrow
-        >
-          <span>{item.editedBy}</span>
-        </Tooltip>
-      </Table.Td>
+      {headers.map(({ key }) => (
+        <Table.Td style={ellipsisCellStyle}>
+          <Tooltip
+            arrowPosition="side"
+            arrowSize={5}
+            position="top-start"
+            label={String(item[key as keyof SubProductType])}
+            withArrow
+          >
+            <span>{String(item[key as keyof SubProductType])}</span>
+          </Tooltip>
+        </Table.Td>
+      ))}
     </Table.Tr>
   ));
+
+  const handleAdd = () => {
+    navigate("/master/sub-product-master/add");
+  };
 
   const handleSearchChange = () => {};
 
@@ -322,6 +150,7 @@ const SubProductMaster = () => {
           bgColor="#BF0204"
           borderColor="#FFFFFF"
           leftIcon={<AddIconSvg />}
+          onClick={handleAdd}
         >
           Add Sub Product
         </ButtonComponent>
@@ -408,20 +237,10 @@ const SubProductMaster = () => {
         >
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>{" "}</Table.Th>
-              <Table.Th>ID</Table.Th> <Table.Th>Sub Product Code</Table.Th>
-              <Table.Th>Sub Product Title</Table.Th>
-              <Table.Th>Product ID</Table.Th>
-              <Table.Th>Is Settlement</Table.Th>
-              <Table.Th>Settlement Name</Table.Th>
-              <Table.Th>Enabled</Table.Th>
-              <Table.Th>Product</Table.Th>
-              <Table.Th>Wallet Type</Table.Th>
-              <Table.Th>Is Active</Table.Th>
-              <Table.Th>Created On</Table.Th>
-              <Table.Th>Edited On</Table.Th>
-              <Table.Th>Created By</Table.Th>
-              <Table.Th>Edited By</Table.Th>
+              <Table.Th></Table.Th>
+              {headers.map(({ key, label }) => (
+                <Table.Th key={key}>{label}</Table.Th>
+              ))}
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

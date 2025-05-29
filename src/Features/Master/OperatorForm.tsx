@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   initialValues,
   OperatorFormType,
-  OperatorType,
   validationSchema,
 } from "./OperatorFormConfig";
 import { useLocation, useParams } from "react-router-dom";
@@ -13,16 +12,19 @@ import * as Yup from "yup";
 import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
-import FormikSwitchComponent from "../../Components/Molecules/FormikSwitchComponent";
+import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 
 const OperatorForm = ({ mode }: { mode: string }) => {
   const { id } = useParams();
   const location = useLocation();
   const [formData, setFormData] = useState<OperatorFormType>(initialValues);
+  const booleanSelectData = [
+    { label: "Yes", value: "true" },
+    { label: "No", value: "false" },
+  ];
 
   const handleSubmit = (values: OperatorFormType) => {
     console.log("Submitted values:", values);
-    // Add API call here
   };
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const OperatorForm = ({ mode }: { mode: string }) => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
       <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Operator Form" : "Operator Form"}
+        {mode === "edit" ? "Edit Operator Master Form" : "Operator Master Form"}
       </TextComponent>
 
       {/* Sub Heading */}
@@ -50,6 +52,18 @@ const OperatorForm = ({ mode }: { mode: string }) => {
       >
         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
           <Grid gutter="lg">
+             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+              <FormikTextInputComponent
+                name="id"
+                label="ID"
+                placeholder="ID"
+                withAsterisk
+                maxLength={51}
+                disabled={mode === "edit" ? true : false}
+                allowSpecialChar={false}
+              />
+            </Grid.Col>
+
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
                 name="operatorAlias"
@@ -169,16 +183,14 @@ const OperatorForm = ({ mode }: { mode: string }) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <div className="h-full flex justify-center items-center border-none py-5">
-                <FormikSwitchComponent
-                  name="isActive"
-                  label="Is Active"
-                  size="md"
-                  defaultChecked={false}
-                  withAsterisk
-                  labelPosition="left"
-                />
-              </div>
+              <FormikSelectComponent
+                name="isActive"
+                label="Is Active"
+                allowDeselect={false}
+                placeholder="Select Is Active"
+                withAsterisk
+                data={booleanSelectData}
+              />
             </Grid.Col>
           </Grid>
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { PrefundingType, validationSchema } from "./PrefundingConfig";
+import { initialValues, PrefundingType, validationSchema } from "./PrefundingConfig";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
@@ -11,19 +11,7 @@ import FormikFileInput from "../../Components/Molecules/FormikFileInput";
 import * as Yup from 'yup'
 
 const PrefundingForm = ({ mode }: { mode: string }) => {
-  const initialValues: PrefundingType = {
-    depositType: "",
-    transactionId: "",
-    amount: "",
-    bankAccount: "",
-    depositDate: "",
-    depositSlip: null,
-    partnerName: "",
-    requestedBy: "",
-    clientIp: "",
-    partnerMobileNumber: "",
-    requestStatus: "",
-  };
+  
 
   const { id } = useParams();
   const location = useLocation();

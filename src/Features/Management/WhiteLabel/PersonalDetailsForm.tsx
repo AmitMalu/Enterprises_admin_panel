@@ -3,12 +3,18 @@ import { FormikProps } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../../Components/Molecules/FormikTextInputComponent";
 import FormikSwitchComponent from "../../../Components/Molecules/FormikSwitchComponent";
+import FormikSelectComponent from "../../../Components/Molecules/FormikSelectComponent";
 
 const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
+  const booleanSelectData = [
+    { label: "Yes", value: "true" },
+    { label: "No", value: "false" },
+  ];
+
   return (
     <>
       <Grid gutter="lg">
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
           <FormikTextInputComponent
             name="parentAccount"
             label="Parent Account"
@@ -19,7 +25,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             allowSpecialChar={false}
           />
         </Grid.Col>
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
           <FormikTextInputComponent
             name="title"
             label="Title"
@@ -31,18 +37,18 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="mt-5" span={{ base: 12, md: 4, lg: 2 }}>
-          <FormikSwitchComponent
-          name="isAdmin"
-          label="Is Admin"
-          size="md"
-          defaultChecked={false}
-          withAsterisk
-          labelPosition="left"
+        <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+          <FormikSelectComponent
+            name="isAdmin"
+            label="Is Admin"
+            allowDeselect={false}
+            placeholder="Select Is Admin"
+            withAsterisk
+            data={booleanSelectData}
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
           <FormikTextInputComponent
             name="prefix"
             label="Prefix"
@@ -55,7 +61,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
           <FormikTextInputComponent
             name="name"
             label="Name"
@@ -67,7 +73,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
           <FormikTextInputComponent
             name="dob"
             type="date"
@@ -77,7 +83,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
           <FormikTextInputComponent
             name="mobileNumber"
             label="Mobile Number"
@@ -89,7 +95,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
           <FormikTextInputComponent
             name="emailId"
             label="Email ID"

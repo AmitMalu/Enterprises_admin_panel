@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 const OperatorMaster = () => {
   const navigate = useNavigate();
 
-  const data : OperatorType[] = [
+  const data: OperatorType[] = [
     {
       id: "101",
       operatorAlias: "Airtel DTH",
@@ -115,6 +115,25 @@ const OperatorMaster = () => {
     },
   ];
 
+  const headers: { key: keyof OperatorType; label: string }[] = [
+    { key: "id", label: "ID" },
+    { key: "operatorAlias", label: "Operator Alias" },
+    { key: "operatorCategory", label: "Operator Category" },
+    { key: "operatorCode", label: "Operator Code" },
+    { key: "operatorName", label: "Operator Name" },
+    { key: "productCode", label: "Product Code" },
+    { key: "productId", label: "Product ID" },
+    { key: "subProductCode", label: "Sub Product Code" },
+    { key: "subProductId", label: "Sub Product ID" },
+    { key: "alias", label: "Alias" },
+    { key: "isActive", label: "Is Active" },
+    { key: "cardBinNo", label: "Card BIN No" },
+    { key: "createdOn", label: "Created On" },
+    { key: "editedOn", label: "Edited On" },
+    { key: "createdBy", label: "Created By" },
+    { key: "editedBy", label: "Edited By" },
+  ];
+
   const handleEdit = (item: any) => {
     navigate(`/master/operator-master/edit/${item.id}`, { state: item });
   };
@@ -132,24 +151,7 @@ const OperatorMaster = () => {
         </div>
       </Table.Td>
 
-      {[
-        "id",
-        "operatorAlias",
-        "operatorCategory",
-        "operatorCode",
-        "operatorName",
-        "productCode",
-        "productId",
-        "subProductCode",
-        "subProductId",
-        "alias",
-        "isActive",
-        "cardBinNo",
-        "createdOn",
-        "editedOn",
-        "createdBy",
-        "editedBy",
-      ].map((key) => (
+      {headers.map(({ key }) => (
         <Table.Td key={key} style={ellipsisCellStyle}>
           <Tooltip
             arrowPosition="side"
@@ -174,7 +176,7 @@ const OperatorMaster = () => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
-        Operato Master
+        Operator Master
       </TextComponent>
 
       <div className="flex justify-end items-center gap-2 mt-2">
@@ -295,22 +297,9 @@ const OperatorMaster = () => {
           <Table.Thead>
             <Table.Tr>
               <Table.Th></Table.Th>
-              <Table.Th>Id</Table.Th>
-              <Table.Th>Operator Alias</Table.Th>
-              <Table.Th>Operator Category</Table.Th>
-              <Table.Th>Operator Code</Table.Th>
-              <Table.Th>Operator Name</Table.Th>
-              <Table.Th>Product Code</Table.Th>
-              <Table.Th>Product Id</Table.Th>
-              <Table.Th>Sub Product Code</Table.Th>
-              <Table.Th>Sub Product Id</Table.Th>
-              <Table.Th>Alias</Table.Th>
-              <Table.Th>Is Active</Table.Th>
-              <Table.Th>Card Bin No</Table.Th>
-              <Table.Th>Created On</Table.Th>
-              <Table.Th>Edited On</Table.Th>
-              <Table.Th>Created By</Table.Th>
-              <Table.Th>Edited By</Table.Th>
+              {headers.map(({ key, label }) => (
+                <Table.Th key={key}>{label}</Table.Th>
+              ))}
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

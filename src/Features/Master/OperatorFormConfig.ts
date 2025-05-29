@@ -24,6 +24,7 @@ export type OperatorType = {
 // Separate type for Formik
 export type OperatorFormType = Pick<
   OperatorType,
+  | "id"
   | "operatorAlias"
   | "operatorCategory"
   | "operatorCode"
@@ -38,6 +39,7 @@ export type OperatorFormType = Pick<
 >;
 
 export const validationSchema: Record<keyof OperatorFormType, Yup.AnySchema> = {
+  id: textField("Id", 20, true),
   operatorAlias: textField("Operator Alias", 50, true),
   operatorCategory: textField("Operator Category", 50, true),
   operatorCode: textField("Operator Code", 30, true),
@@ -52,6 +54,7 @@ export const validationSchema: Record<keyof OperatorFormType, Yup.AnySchema> = {
 };
 
 export const initialValues: OperatorFormType = {
+  id: "",
   operatorAlias: "",
   operatorCategory: "",
   operatorCode: "",

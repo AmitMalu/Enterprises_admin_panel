@@ -18,6 +18,9 @@ interface ButtonComponentProps {
   type?: "button" | "submit" | "reset";
   children: React.ReactNode; // Only this instead of `title`
   style?: React.CSSProperties; // Add this line for custom inline styles
+  font? : string
+  fontSize? : string
+  fw? :string
 }
 
 const ButtonComponent: React.FC<ButtonComponentProps> = ({
@@ -32,10 +35,13 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   size = "sm",
   fullWidth = false,
   radius,
-  borderColor = "#000000",
+  borderColor = "",
   bgColor = "transparent",
   textColor = "#000000",
   type = "button",
+  font = "",
+  fw = "500",
+  fontSize = "",
   style = {}, // Default empty object for custom inline styles
 }) => {
   const isStringChild = typeof children === "string";
@@ -56,7 +62,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
       styles={{
         root: {
           backgroundColor: variant === "filled" ? bgColor : "transparent",
-          borderColor: borderColor || bgColor,
+          borderColor: borderColor ? borderColor : bgColor,
           margin: "3px",
           "&:hover": {
             backgroundColor: variant === "filled" ? "#A30002" : "transparent",
@@ -71,7 +77,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
     >
       {isStringChild ? (
         <span
-          style={{ color: textColor }}
+          style={{ color: textColor , fontFamily : font, fontSize : `${fontSize}px`, fontWeight : fw}}
           className="font-open text-sm xl:text-lg 2xl:text-xl 3xl:text-2xl font-semibold text-white"
         >
           {children}

@@ -1,10 +1,23 @@
 import TextComponent from "../Atoms/TextComponent";
 import { capitalizeWords } from "../../Utils/utils";
+import { BreadCrumbIcon } from "../../assets/Icons";
 
-const BreadCrumb = ({ type, text = "Management" }: { type: string, text? : string }) => (
+const BreadCrumb = ({
+  type,
+  text = "Management",
+  color = "#CA4343",
+  gap = 2,
+}: {
+  type: string;
+  text?: string;
+  color?: string;
+  gap?: number;
+}) => (
   <TextComponent fontSize={12} fontFamily="Inter" fontWeight={400}>
-    <span style={{ color: "#CA4343" }}>{text}</span> &gt;{" "}
-    {capitalizeWords(type)} Form
+    <div className={`flex gap-${gap}`}>
+      <span style={{ color: color }}>{text}</span>
+      <BreadCrumbIcon /> {capitalizeWords(type)}
+    </div>
   </TextComponent>
 );
 

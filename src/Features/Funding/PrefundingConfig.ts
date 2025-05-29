@@ -19,6 +19,20 @@ export type PrefundingType = {
   requestStatus: string;
 };
 
+export const initialValues: PrefundingType = {
+  depositType: "",
+  transactionId: "",
+  amount: "",
+  bankAccount: "",
+  depositDate: "",
+  depositSlip: null,
+  partnerName: "",
+  requestedBy: "",
+  clientIp: "",
+  partnerMobileNumber: "",
+  requestStatus: "",
+};
+
 export const validationSchema: Record<keyof PrefundingType, Yup.AnySchema> = {
   depositType: textField("Deposit Type", 50, true),
   transactionId: textField("Transaction Id", 50, true),
