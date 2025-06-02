@@ -1,18 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import {
   AddIconSvg,
+  DeleteIcon,
+  EditIcon,
+  EditIcon2,
   ExportIcon,
+  EyeIcon,
+  EyeIcon2,
   FilterIcon2,
+  paginationBackIcon,
+  paginationFrontIcon,
   SearchIcon,
   SelectDateIcon,
+  SettingIcon2,
 } from "../../assets/Icons";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
+import { Group, Pagination, Table, Tooltip } from "@mantine/core";
+import {
+  columnStyles,
+  data,
+  headers,
+  SchemesListType,
+} from "./SchemesListConfig";
+import { ellipsisCellStyle } from "../../Utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const SchemesList = () => {
   const handleSearchChange = () => {};
+  const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const totalRecords = data.length;
+  const pageSize = 5;
+  const totalPages = Math.ceil(totalRecords / pageSize);
+  const start = totalRecords === 0 ? 0 : (page - 1) * pageSize + 1;
+  const end = Math.min(totalRecords, page * pageSize);
+  const message = `Showing ${start} – ${end} of ${totalRecords} records`;
+
+  const currentPageData = data.slice((page - 1) * pageSize, page * pageSize);
+
+  const rows = currentPageData.map((item, index) => (
+    <Table.Tr key={index}>
+      {headers.map(({ key }) => (
+        <Table.Td
+          key={key}
+          style={{ ...ellipsisCellStyle, ...columnStyles[key] }}
+        >
+          <Tooltip
+            arrowPosition="side"
+            arrowSize={5}
+            position="top-start"
+            label={String(item[key as keyof SchemesListType])}
+            withArrow
+          >
+            <span>{String(item[key as keyof SchemesListType])}</span>
+          </Tooltip>
+        </Table.Td>
+      ))}
+
+      <Table.Td>
+        <div className="flex justify-center gap-2">
+          <span
+            onClick={() =>
+              navigate(`/schemes/setting/${item.schemeId}`, { state: item })
+            }
+            className="cursor-pointer"
+          >
+            <SettingIcon2 />
+          </span>
+          <span className="cursor-pointer">
+            <EyeIcon2 />
+          </span>
+          <span className="cursor-pointer">
+            <DeleteIcon />
+          </span>
+          <span className="cursor-pointer">
+            <EditIcon2 />
+          </span>
+        </div>
+      </Table.Td>
+    </Table.Tr>
+  ));
 
   return (
     <div className="w-full min-h-[calc(100vh-90px)] flex flex-col p-2">
@@ -131,6 +201,77 @@ const SchemesList = () => {
           </ButtonComponent>
         </div>
       </div>
+
+      <Table.ScrollContainer minWidth={1000} style={{ marginTop: "20px" }}>
+        <Table
+          withColumnBorders
+          style={{ borderRadius: 8, overflow: "hidden", background: "#fff" }}
+          styles={{
+            th: {
+              background:
+                "linear-gradient(180deg, rgba(2, 53, 91, 0.16) 60%, rgba(50, 47, 53, 0) 100%)",
+              textAlign: "center",
+              fontFamily: "Segoe UI",
+              padding: "10px 6px",
+              fontWeight: "bold",
+              fontSize: 14,
+              whiteSpace: "nowrap", // prevent wrapping
+            },
+            td: {
+              textAlign: "center",
+              fontSize: 14,
+              padding: "10px 6px",
+            },
+          }}
+        >
+          <Table.Thead>
+            <Table.Tr>
+              {headers.map(({ key, label }) => (
+                <Table.Th key={key}>{label}</Table.Th>
+              ))}
+              <Table.Th>Action</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>{rows}</Table.Tbody>
+          <Table.Tfoot>
+            <Table.Tr>
+              <Table.Td colSpan={headers.length + 1}>
+                <Group
+                  style={{
+                    padding: "6px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <TextComponent
+                    color="#667085"
+                    fontFamily="Inter"
+                    fontSize={14}
+                  >
+                    {message}
+                  </TextComponent>
+                  <Pagination
+                    total={totalPages}
+                    onChange={setPage}
+                    styles={{
+                      control: {
+                        borderColor: "#fff",
+                        // backgroundColor: "#ECFAFF",
+                        // color: "#12B5F1",
+                      },
+                    }}
+                    color="#12B5F1"
+                    size="sm"
+                    radius="md"
+                    previousIcon={paginationBackIcon}
+                    nextIcon={paginationFrontIcon}
+                  />
+                </Group>
+              </Table.Td>
+            </Table.Tr>
+          </Table.Tfoot>
+        </Table>
+      </Table.ScrollContainer>
     </div>
   );
 };

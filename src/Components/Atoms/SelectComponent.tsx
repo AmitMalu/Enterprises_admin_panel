@@ -19,7 +19,7 @@ interface SelectComponentProps {
   onBlur?: () => void;
   className?: string;
   allowDeselect? : boolean
-  searchable : boolean
+  searchable? : boolean
 }
 
 const SelectComponent: React.FC<SelectComponentProps> = ({

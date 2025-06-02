@@ -14,6 +14,7 @@ export default {
         poppins: ["Poppins", "sans-serif"],
         inter: ["Inter", "sans-serif"],
         manrope : ["Manrope", "sans-serif"],
+        segoe: ["Segoe UI", "sans-serif"],
       },
       colors: {
         menuActiveBg: "#BDC4C3",
