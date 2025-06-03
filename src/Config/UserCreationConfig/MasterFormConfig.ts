@@ -16,6 +16,10 @@ import {
   websiteValidation,
   zipValidation,
 } from "../../Utils/ValidationUtils";
+import { UserConfig, UserType } from "./UserConfig";
+import { getIpAddress } from "../../Utils/utils";
+import { createUser } from "../../Redux/Features/Management/Thunk";
+import { toast } from "react-toastify";
 
 export const masterInitialValues = {
   // Common fields
@@ -139,6 +143,89 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   // Admin-only
   userName: usernamePhoneEmailValidation,
   password: passwordValidation,
+};
+
+export const getValidationSchema = (
+  userType: UserType,
+  step: number
+): Yup.ObjectSchema<any> => {
+  const fields = UserConfig[userType].stepFieldMap[step];
+  const shape: Record<string, any> = {};
+
+  fields.forEach((field) => {
+    shape[field] =
+      masterValidationSchema[field as keyof typeof masterValidationSchema];
+  });
+
+  return Yup.object().shape(shape);
+};
+
+interface SubmitHandlerArgs {
+  values: any;
+  formikHelpers: import("formik").FormikHelpers<any>;
+  username: UserType;
+  userType: string;
+  dispatch: any;
+  setShowSuccessModal: (show: boolean) => void;
+  setActiveStep: (step: number) => void;
+}
+
+export const handleFormSubmit = async ({
+  values,
+  formikHelpers,
+  username,
+  userType,
+  dispatch,
+  setShowSuccessModal,
+  setActiveStep,
+}: SubmitHandlerArgs) => {
+  console.log("Final Submission", values);
+
+  // 1. Transforming form values to the payload structure
+  const ip = await getIpAddress();
+  const payload = transformUserCreationPayload(values, username, ip);
+  // 2. Filter Empty or null values
+  const cleanedPayload = cleanPayload(payload);
+
+  const formData = new FormData();
+  formData.append("data", JSON.stringify(cleanedPayload));
+
+  // 3. Append Files if they exist
+  const fileFields = {
+    aadhaarCardFrontImage: values.adhaarFront,
+    aadhaarCardBackImage: values.adhaarBack,
+    shopImage: values.shopPhoto,
+    panCardImage: values.pancardPhoto,
+    businessProofImage: values.businessProof,
+  };
+
+  Object.entries(fileFields).forEach(([key, file]) => {
+    if (file) formData.append(key, file);
+  });
+
+  try {
+    const result = await dispatch(
+      createUser({
+        userType: userType as UserType,
+        data: formData,
+      })
+    ).unwrap();
+
+    // Show success message from API
+    toast.success(result.message || "User created successfully");
+    // Reset form and go back to step 1
+    // On success, show the modal
+    setShowSuccessModal(true);
+
+    // Auto-close after 2 seconds
+    setTimeout(() => {
+      setShowSuccessModal(false);
+    }, 2000);
+    formikHelpers.resetForm();
+    setActiveStep(0);
+  } catch (err) {
+    toast.error((err as string) || "Failed to Create User");
+  }
 };
 
 export function transformUserCreationPayload(

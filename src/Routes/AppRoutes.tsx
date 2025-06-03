@@ -2,28 +2,28 @@ import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthLayout from "../Components/Layout/AuthLayout";
 import MainLayout from "../Components/Layout/MainLayout";
-import LoginPage from "../Features/Auth/LoginPage";
-import OtpVerify from "../Features/Auth/OtpVerify";
-import ForgetPassword from "../Features/Auth/ForgetPassword";
-import SetPassword from "../Features/Auth/SetPassword";
-import UserCreation from "../Features/Management/UserCreation";
-import UserFormPage from "../Features/Management/UserFormPage";
+import LoginPage from "../Pages/Auth/LoginPage";
+import OtpVerify from "../Pages/Auth/OtpVerify";
+import ForgetPassword from "../Pages/Auth/ForgetPassword";
+import SetPassword from "../Pages/Auth/SetPassword";
+import UserCreation from "../Pages/Management/UserCreation";
+import UserFormPage from "../Pages/Management/UserFormPage";
 import ProtectedRoutes from "./ProtectedRoutes";
-import PreFundingAuth from "../Features/Funding/PreFundingAuth";
-import VendorMaster from "../Features/Master/VendorMaster";
-import OperatorMaster from "../Features/Master/OperatorMaster";
-import SubProductMaster from "../Features/Master/SubProductMaster";
-import ProductMaster from "../Features/Master/ProductMaster";
-import PrefundingForm from "../Features/Funding/PrefundingForm";
-import ProductForm from "../Features/Master/ProductForm";
-import OperatorForm from "../Features/Master/OperatorForm";
-import VendorForm from "../Features/Master/VendorForm";
-import SubProductForm from "../Features/Master/SubProductForm";
-import SchemesList from "../Features/Schemes/SchemesList";
-import SchemeSettingsPage from "../Features/Schemes/SchemeSettingsPage";
+import PreFundingAuth from "../Pages/Funding/PreFundingAuth";
+import VendorMaster from "../Pages/Master/Types/Vendor/VendorMaster";
+import OperatorMaster from "../Pages/Master/Types/Operator/OperatorMaster";
+import SubProductMaster from "../Pages/Master/Types/SubProduct/SubProductMaster";
+import ProductMaster from "../Pages/Master/Types/Product/ProductMaster";
+import PrefundingForm from "../Components/Organisms/PrefundingForm";
+import ProductForm from "../Pages/Master/Types/Product/ProductForm";
+import OperatorForm from "../Pages/Master/Types/Operator/OperatorForm";
+import VendorForm from "../Pages/Master/Types/Vendor/VendorForm";
+import SubProductForm from "../Pages/Master/Types/SubProduct/SubProductForm";
+import SchemesList from "../Pages/Schemes/SchemesList";
+import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
 
 // Lazy loaded pages
-const HomePage = lazy(() => import("../Features/Dashboard/HomePage"));
+const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
 
 const AppRoutes = () => {
   return (

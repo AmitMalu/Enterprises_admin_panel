@@ -1,13 +1,22 @@
-import * as retailerForm from "../../Features/Management/Retailer";
-import * as distributorForm from "../../Features/Management/Distributor";
-import * as partnerForm from "../../Features/Management/Partner";
-import * as superDistributorForm from "../../Features/Management/SuperDistributor";
-import * as whiteLabelForm from "../../Features/Management/WhiteLabel";
-import * as enterpriseForm from "../../Features/Management/Enterprise";
-import * as imAdminForm from "../../Features/Management/IMAdmin";
+import * as retailerForm from "../../Pages/Management/Types/Retailer";
+import * as distributorForm from "../../Pages/Management/Types/Distributor";
+import * as partnerForm from "../../Pages/Management/Types/Partner";
+import * as superDistributorForm from "../../Pages/Management/Types/SuperDistributor";
+import * as whiteLabelForm from "../../Pages/Management/Types/WhiteLabel";
+import * as enterpriseForm from "../../Pages/Management/Types/Enterprise";
+import * as imAdminForm from "../../Pages/Management/Types/IMAdmin";
 
 import { FormikProps } from "formik";
 import { FieldNames } from "./MasterFormConfig";
+import {
+  DistributorLogoSvg,
+  EnterpriseLogoSvg,
+  IMAdminLogoSvg,
+  PartnerLogoSvg,
+  RetailerLogoSvg,
+  SuperDistributorLogoSvg,
+  WhiteLabelLogoSvg,
+} from "../../assets/Icons";
 
 export type UserType =
   | "im-admin"
@@ -17,6 +26,20 @@ export type UserType =
   | "super-distributor"
   | "retailer"
   | "enterprise";
+
+export const userTypeSelectorOptions = [
+  { label: "IM Admin", icon: <IMAdminLogoSvg />, type: "im-admin" },
+  { label: "Enterprise", icon: <EnterpriseLogoSvg />, type: "enterprise" },
+  { label: "Retailer", icon: <RetailerLogoSvg />, type: "retailer" },
+  {
+    label: "Super Distributor",
+    icon: <SuperDistributorLogoSvg />,
+    type: "super-distributor",
+  },
+  { label: "Partner", icon: <PartnerLogoSvg />, type: "partner" },
+  { label: "White Label", icon: <WhiteLabelLogoSvg />, type: "white-label" },
+  { label: "Distributor", icon: <DistributorLogoSvg />, type: "distributor" },
+];
 
 export const UserConfig: Record<
   UserType,
@@ -415,3 +438,4 @@ export const UserConfig: Record<
     },
   },
 };
+
