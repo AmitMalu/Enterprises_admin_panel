@@ -3,16 +3,16 @@ import {
   initialValues,
   OperatorFormType,
   validationSchema,
-} from "../../../../Config/Master/OperatorFormConfig";
+} from "../../Config/Master/OperatorConfig";
 import { useLocation, useParams } from "react-router-dom";
-import TextComponent from "../../../../Components/Atoms/TextComponent";
-import BreadCrumb from "../../../../Components/Molecules/BreadCrumb";
+import TextComponent from "../../Components/Atoms/TextComponent";
+import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Grid } from "@mantine/core";
-import ButtonComponent from "../../../../Components/Atoms/ButtonComponent";
-import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
-import FormikSelectComponent from "../../../../Components/Molecules/FormikSelectComponent";
+import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
+import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 
 const OperatorForm = ({ mode }: { mode: string }) => {
   const { id } = useParams();

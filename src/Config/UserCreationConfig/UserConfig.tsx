@@ -52,52 +52,6 @@ export const UserConfig: Record<
     ) => JSX.Element | null;
   }
 > = {
-  "im-admin": {
-    steps: [
-      "Personal Details",
-      "Residentials Address",
-      "Outlet Details",
-      "Bank Details",
-      "Upload Documents",
-    ],
-    stepFieldMap: [
-      [
-        "parentAccount",
-        "title",
-        "prefix",
-        "name",
-        "dob",
-        "mobileNumber",
-        "emailId",
-      ], // Step 0
-      ["address", "city", "state", "zipcode"], // Step 1
-      ["outletName", "outletCity", "outletState", "outletZipcode"], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      [
-        "adhaarFront",
-        "adhaarBack",
-        "pancardPhoto",
-        "shopPhoto",
-        "businessProof",
-      ], // Step 4
-    ],
-    renderStepForm: (step, formik) => {
-      switch (step) {
-        case 0:
-          return <imAdminForm.PersonalDetails formik={formik} />;
-        case 1:
-          return <imAdminForm.ResidentialAddress formik={formik} />;
-        case 2:
-          return <imAdminForm.OutletDetails formik={formik} />;
-        case 3:
-          return <imAdminForm.BankDetails formik={formik} />;
-        case 4:
-          return <imAdminForm.UploadDocuments formik={formik} />;
-        default:
-          return null;
-      }
-    },
-  },
   distributor: {
     steps: [
       "Personal Details",
@@ -149,64 +103,6 @@ export const UserConfig: Record<
           return <distributorForm.BankDetails formik={formik} />;
         case 4:
           return <distributorForm.UploadDocuments formik={formik} />;
-        default:
-          return null;
-      }
-    },
-  },
-  "white-label": {
-    steps: [
-      "Personal Details",
-      "Residentials Address",
-      "Company Details",
-      "Bank Details",
-      "Upload Documents",
-    ],
-    stepFieldMap: [
-      [
-        "parentAccount",
-        "title",
-        "prefix",
-        "name",
-        "dob",
-        "mobileNumber",
-        "emailId",
-        "isAdmin",
-      ], // Step 0
-      ["address", "city", "state", "zipcode"], // Step 1
-      [
-        "companyName",
-        "companyType",
-        "outletAddress",
-        "outletCity",
-        "outletState",
-        "outletZipcode",
-      ], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName", "websiteURL"], // Step 3
-      [
-        "adhaarFront",
-        "adhaarBack",
-        "pancardPhoto",
-        "shopPhoto",
-        "adhaarNumber",
-        "panNumber",
-        "shopNumber",
-        "businessProof",
-        "businessNumber",
-      ], // Step 4
-    ],
-    renderStepForm: (step, formik) => {
-      switch (step) {
-        case 0:
-          return <whiteLabelForm.PersonalDetails formik={formik} />;
-        case 1:
-          return <whiteLabelForm.ResidentialAddress formik={formik} />;
-        case 2:
-          return <whiteLabelForm.CompanyDetails formik={formik} />;
-        case 3:
-          return <whiteLabelForm.BankDetails formik={formik} />;
-        case 4:
-          return <whiteLabelForm.UploadDocuments formik={formik} />;
         default:
           return null;
       }
@@ -268,62 +164,6 @@ export const UserConfig: Record<
       }
     },
   },
-  "super-distributor": {
-    steps: [
-      "Personal Details",
-      "Residentials Address",
-      "Outlet Details",
-      "Bank Details",
-      "Upload Documents",
-    ],
-    stepFieldMap: [
-      [
-        "parentAccount",
-        "title",
-        "prefix",
-        "name",
-        "dob",
-        "mobileNumber",
-        "emailId",
-      ], // Step 0
-      ["address", "city", "state", "zipcode"], // Step 1
-      [
-        "outletName",
-        "outletAddress",
-        "outletState",
-        "outletCity",
-        "outletZipcode",
-      ], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
-      [
-        "adhaarFront",
-        "adhaarBack",
-        "pancardPhoto",
-        "shopPhoto",
-        "adhaarNumber",
-        "panNumber",
-        "shopNumber",
-        "businessProof",
-        "businessNumber",
-      ], // Step 4
-    ],
-    renderStepForm: (step, formik) => {
-      switch (step) {
-        case 0:
-          return <superDistributorForm.PersonalDetails formik={formik} />;
-        case 1:
-          return <superDistributorForm.ResidentialAddress formik={formik} />;
-        case 2:
-          return <superDistributorForm.OutletDetails formik={formik} />;
-        case 3:
-          return <superDistributorForm.BankDetails formik={formik} />;
-        case 4:
-          return <superDistributorForm.UploadDocuments formik={formik} />;
-        default:
-          return null;
-      }
-    },
-  },
   retailer: {
     steps: [
       "Personal Details",
@@ -380,6 +220,127 @@ export const UserConfig: Record<
       }
     },
   },
+  "super-distributor": {
+    steps: [
+      "Personal Details",
+      "Residentials Address",
+      "Outlet Details",
+      "Bank Details",
+      "Upload Documents",
+    ],
+    stepFieldMap: [
+      [
+        "parentAccount",
+        "title",
+        "prefix",
+        "name",
+        "dob",
+        "mobileNumber",
+        "emailId",
+      ], // Step 0
+      ["address", "city", "state", "zipcode"], // Step 1
+      [
+        "outletName",
+        "outletAddress",
+        "outletState",
+        "outletCity",
+        "outletZipcode",
+      ], // Step 2
+      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "adhaarNumber",
+        "panNumber",
+        "shopNumber",
+        "businessProof",
+        "businessNumber",
+      ], // Step 4
+    ],
+    renderStepForm: (step, formik) => {
+      switch (step) {
+        case 0:
+          return <superDistributorForm.PersonalDetails formik={formik} />;
+        case 1:
+          return <superDistributorForm.ResidentialAddress formik={formik} />;
+        case 2:
+          return <superDistributorForm.OutletDetails formik={formik} />;
+        case 3:
+          return <superDistributorForm.BankDetails formik={formik} />;
+        case 4:
+          return <superDistributorForm.UploadDocuments formik={formik} />;
+        default:
+          return null;
+      }
+    },
+  },
+  "white-label": {
+    steps: [
+      "Personal Details",
+      "Residentials Address",
+      "Company Details",
+      "Bank Details",
+      "Upload Documents",
+    ],
+    stepFieldMap: [
+      [
+        "parentAccount",
+        "title",
+        "prefix",
+        "name",
+        "dob",
+        "mobileNumber",
+        "emailId",
+        "isAdmin",
+      ], // Step 0
+      ["address", "city", "state", "zipcode"], // Step 1
+      [
+        "companyName",
+        "companyType",
+        "outletAddress",
+        "outletCity",
+        "outletState",
+        "outletZipcode",
+      ], // Step 2
+      [
+        "bankName",
+        "accountNumber",
+        "ifsc",
+        "branchName",
+        "businessDesc",
+        "websiteURL",
+      ], // Step 3
+      [
+        "adhaarFront",
+        "adhaarBack",
+        "pancardPhoto",
+        "shopPhoto",
+        "adhaarNumber",
+        "panNumber",
+        "shopNumber",
+        "businessProof",
+        "businessNumber",
+      ], // Step 4
+    ],
+    renderStepForm: (step, formik) => {
+      switch (step) {
+        case 0:
+          return <whiteLabelForm.PersonalDetails formik={formik} />;
+        case 1:
+          return <whiteLabelForm.ResidentialAddress formik={formik} />;
+        case 2:
+          return <whiteLabelForm.CompanyDetails formik={formik} />;
+        case 3:
+          return <whiteLabelForm.BankDetails formik={formik} />;
+        case 4:
+          return <whiteLabelForm.UploadDocuments formik={formik} />;
+        default:
+          return null;
+      }
+    },
+  },
   enterprise: {
     steps: [
       "Personal Details",
@@ -407,7 +368,14 @@ export const UserConfig: Record<
         "outletState",
         "outletZipcode",
       ], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName", "websiteURL"], // Step 3
+      [
+        "bankName",
+        "accountNumber",
+        "ifsc",
+        "branchName",
+        "websiteURL",
+        "businessDesc",
+      ], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
@@ -437,5 +405,18 @@ export const UserConfig: Record<
       }
     },
   },
+  "im-admin": {
+    steps: ["Details"],
+    stepFieldMap: [
+      ["name", "mobileNumber", "emailId", "userName", "password"], // Step 0
+    ],
+    renderStepForm: (step, formik) => {
+      switch (step) {
+        case 0:
+          return <imAdminForm.PersonalDetails formik={formik} />;
+        default:
+          return <imAdminForm.PersonalDetails formik={formik} />;
+      }
+    },
+  },
 };
-

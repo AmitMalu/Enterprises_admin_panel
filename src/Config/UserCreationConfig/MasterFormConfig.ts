@@ -179,16 +179,20 @@ export const handleFormSubmit = async ({
   setShowSuccessModal,
   setActiveStep,
 }: SubmitHandlerArgs) => {
-  console.log("Final Submission", values);
-
   // 1. Transforming form values to the payload structure
   const ip = await getIpAddress();
-  const payload = transformUserCreationPayload(values, username, ip);
+  const payload = transformUserCreationPayload(
+    userType as UserType,
+    values,
+    username,
+    ip
+  );
   // 2. Filter Empty or null values
-  const cleanedPayload = cleanPayload(payload);
+  // const cleanedPayload = cleanPayload(payload);
+  console.log("Payload to be Submit", payload);
 
   const formData = new FormData();
-  formData.append("data", JSON.stringify(cleanedPayload));
+  formData.append("data", JSON.stringify(payload));
 
   // 3. Append Files if they exist
   const fileFields = {
@@ -229,11 +233,13 @@ export const handleFormSubmit = async ({
 };
 
 export function transformUserCreationPayload(
+  userType: UserType,
   values: any,
   createdBy?: string | null,
   ip?: string | null
 ) {
-  return {
+  // Base payload structure common to all user types except IM-Admin
+  const basePayload = {
     parentAccount: values.parentAccount || "",
     title: values.title || "",
     abbreviation: values.prefix || "",
@@ -242,52 +248,94 @@ export function transformUserCreationPayload(
     mobileNumber: values.mobileNumber || "",
     emailId: values.emailId || "",
     createdBy: createdBy || localStorage.getItem("username") || "",
-    createdByIPAddress: ip || "", // Assuming 'ip' is defined in the scope where this function is called
-
-    address: {
-      address: values.address || "",
-      city: values.city || "",
-      state: values.state || "",
-      zipCode: values.zipcode || "",
-    },
-
-    outletAddress: {
-      outletName: values.outletName || "",
-      address: values.outletName || "",
-      city: values.outletCity || "",
-      state: values.outletState || "",
-      zipCode: values.outletZipcode || "",
-      companyName: values.companyName || "",
-      companyType: values.companyType || "",
-    },
-
-    bankDetails: {
-      bankName: values.bankName || "",
-      bankAccountNumber: values.accountNumber || "",
-      ifscCode: values.ifsc || "",
-      branchName: values.branchName || "",
-    },
-    theme: {
-      id: 1,
-    },
-    domainURL: values.websiteURL || "",
-    businessDesc: values.businessDesc || "",
+    createdByIPAddress: ip || "",
     aadhaarNumber: values.adhaarNumber || "",
     panNumber: values.panNumber || "",
     shopNumber: values.shopNumber || "",
     businessNumber: values.businessNumber || "",
-
-    imAccountMemberID: values.imAccountMemberID || "",
-    isServiceAllow: values.isServiceAllow || "",
-    allowPrepaidCards: values.allowPrepaidCards || "",
-    prepaidCardName: values.prepaidCardName || "",
-    allowPostpaidCards: values.allowPostpaidCards || "",
-    postpaidCardName: values.postpaidCardName || "",
-    isAdmin: values.isAdmin ?? "",
-
-    username: values.userName || "", //added for admin user creation
-    password: values.password || "", // added for admin user creation
   };
+
+  const address = {
+    address: values.address || "",
+    city: values.city || "",
+    state: values.state || "",
+    zipCode: values.zipcode || "",
+  };
+
+  const outletAddress = {
+    address: values.outletAddress || "",
+    city: values.outletCity || "",
+    state: values.outletState || "",
+    zipCode: values.outletZipcode || "",
+  };
+
+  const bankDetails = {
+    bankName: values.bankName || "",
+    bankAccountNumber: values.accountNumber || "",
+    ifscCode: values.ifsc || "",
+    branchName: values.branchName || "",
+  };
+
+  switch (userType) {
+    case "partner":
+    case "retailer":
+    case "distributor":
+    case "super-distributor":
+      return {
+        ...basePayload,
+        address,
+        outletAddress: {
+          ...outletAddress,
+          outletName: values.outletName || "",
+        },
+        bankDetails,
+      };
+
+    case "enterprise":
+      return {
+        ...basePayload,
+        address,
+        outletAddress: {
+          ...outletAddress,
+          companyName: values.companyName || "",
+          companyType: values.companyType || "",
+        },
+        bankDetails,
+        theme: { id: 1 },
+        websiteURL: values.websiteURL || "",
+        businessDesc: values.businessDesc || "",
+      };
+
+    case "white-label":
+      return {
+        ...basePayload,
+        isAdmin: values.isAdmin ?? false,
+        address,
+        outletAddress: {
+          ...outletAddress,
+          companyName: values.companyName || "",
+          companyType: values.companyType || "",
+        },
+        bankDetails,
+        theme: { id: 1 },
+        websiteURL: values.websiteURL || "",
+        businessDesc: values.businessDesc || "",
+      };
+
+    case "im-admin":
+      return {
+        name: values.name || "",
+        mobileNumber: values.mobileNumber || "",
+        emailId: values.emailId || "",
+        userName: values.userName || "",
+        password: values.password || "",
+        createdBy: createdBy || localStorage.getItem("username") || "",
+        createdByIPAddress: ip || "",
+      };
+
+    default:
+      return basePayload;
+  }
 }
 
 export function cleanPayload(obj: any) {

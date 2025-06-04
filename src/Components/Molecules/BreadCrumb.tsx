@@ -13,7 +13,7 @@ const BreadCrumb = ({
   color?: string;
   gap?: number;
 }) => (
-  <TextComponent fontSize={12} fontFamily="Inter" fontWeight={400}>
+  <TextComponent component="div" fontSize={12} fontFamily="Inter" fontWeight={400}>
     <div className={`flex gap-${gap}`}>
       <span style={{ color: color }}>{text}</span>
       <BreadCrumbIcon /> {capitalizeWords(type)}

@@ -17,10 +17,6 @@ const PreFundingAuth = () => {
     navigate(`/prefunding/edit/${item.transactionId}`, { state: item });
   };
 
-  const handleAdd = () => {
-    navigate("/prefunding/add");
-  };
-
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
@@ -30,7 +26,6 @@ const PreFundingAuth = () => {
 
       {/* Toolbar */}
       <PreFundingToolbar
-        handleAdd={handleAdd}
         handleSearchChange={handleSearchChange}
         searchValue={searchValue}
       />

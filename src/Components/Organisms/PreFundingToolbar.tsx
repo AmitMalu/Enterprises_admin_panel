@@ -13,7 +13,6 @@ import {
 import TextInputComponent from "../Atoms/TextInputComponent";
 
 const PreFundingToolbar = ({
-  handleAdd,
   handleRefresh,
   handleFilter,
   handleExport,
@@ -23,7 +22,6 @@ const PreFundingToolbar = ({
   handleSearchChange,
   searchValue = "",
 }: {
-  handleAdd: () => void;
   handleRefresh?: () => void;
   handleFilter?: () => void;
   handleExport?: () => void;
@@ -36,43 +34,7 @@ const PreFundingToolbar = ({
   return (
     <>
       {/* Refresh button and Search Input  */}
-      <div className="flex justify-end items-center gap-2 mt-2">
-        {/* Refresh button */}
-        <ButtonComponent
-          style={{ height: 40, width: 10, paddingLeft: "28px" }}
-          radius={1}
-          textColor="#000000"
-          bgColor="#ffffff"
-          borderColor="#CACACA"
-          leftIcon={<RefreshIcon />}
-        >
-          <></>
-        </ButtonComponent>
-
-        {/* Search Input */}
-        <TextInputComponent
-          size="md"
-          type="text"
-          placeholder="Search"
-          name="search"
-          value={searchValue}
-          onChange={(e) => handleSearchChange?.(e.target.value)}    
-        />
-      </div>
-      <div className="flex justify-between mt-2">
-        {/* Add Product Button */}
-        <ButtonComponent
-          onClick={handleAdd}
-          style={{ padding: "5px 20px", height: 40 }}
-          radius={1}
-          textColor="#fff"
-          bgColor="#BF0204"
-          borderColor="#FFFFFF"
-          leftIcon={<AddIconSvg />}
-        >
-          Add Product
-        </ButtonComponent>
-
+      <div className="flex justify-between mt-4">
         {/* Action Buttons */}
         <div>
           {/* Filter Button */}
@@ -134,6 +96,30 @@ const PreFundingToolbar = ({
           >
             <DropDownArrowIcon />
           </ButtonComponent>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {/* Refresh button */}
+          <ButtonComponent
+            style={{ height: 36, width: 10, paddingLeft: "28px" }}
+            radius={1}
+            textColor="#000000"
+            bgColor="#ffffff"
+            borderColor="#CACACA"
+            leftIcon={<RefreshIcon />}
+          >
+            <></>
+          </ButtonComponent>
+
+          {/* Search Input */}
+          <TextInputComponent
+            size="md"
+            type="text"
+            placeholder="Search"
+            name="search"
+            value={searchValue}
+            onChange={(e) => handleSearchChange?.(e.target.value)}
+          />
         </div>
       </div>
     </>

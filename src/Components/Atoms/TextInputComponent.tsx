@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useScreenSize } from "../../Utils/CustomHooks/useScreenSize";
+import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { PasswordInput, PinInput, TextInput } from "@mantine/core";
 
 type InputType = "text" | "password" | "number" | "email";

@@ -2,7 +2,7 @@ import { Box, Image, ScrollArea } from "@mantine/core";
 import React from "react";
 import orgLogo from "../../assets/Images/orgLogo.png";
 import { sidebarData } from "../../Config/Menus/MenuItems";
-import LinksGroup from "./LinksGroup";
+import LinksGroup from "../Organisms/LinksGroup";
 
 const Sidebar: React.FC = () => {
   const links = sidebarData.map((item) => (

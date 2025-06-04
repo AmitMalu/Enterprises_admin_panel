@@ -2,7 +2,7 @@ import { FormikProps } from "formik";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
 import { Grid } from "@mantine/core";
 import FormikSelectComponent from "../../../../Components/Molecules/FormikSelectComponent";
-import { useIndianStateCity } from "../../../../Utils/CustomHooks/useIndianStateCity";
+import { useIndianStateCity } from "../../../../Utils/hooks/useIndianStateCity";
 
 const ResidentialAddressForm = ({ formik }: { formik: FormikProps<any> }) => {
   const { states, cities, cityKey } = useIndianStateCity({

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useScreenSize } from "../../Utils/CustomHooks/useScreenSize";
+import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { useLocation, useNavigate } from "react-router-dom";
 import { otpVerify, resendOtp } from "../../Redux/Features/Auth/Thunk";
 import { toast } from "react-toastify";

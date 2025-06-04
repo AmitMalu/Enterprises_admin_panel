@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import TextComponent from "../../../../Components/Atoms/TextComponent";
-import BreadCrumb from "../../../../Components/Molecules/BreadCrumb";
+import TextComponent from "../../Components/Atoms/TextComponent";
+import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Grid } from "@mantine/core";
-import ButtonComponent from "../../../../Components/Atoms/ButtonComponent";
-import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
-import FormikSelectComponent from "../../../../Components/Molecules/FormikSelectComponent";
+import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
+import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import {
   initialValues,
   validationSchema,
   VendorFormType,
-} from "../../../../Config/Master/VendorFormConfig";
+} from "../../Config/Master/VendorConfig";
 
 const VendorForm = ({ mode }: { mode: string }) => {
   const { id } = useParams();

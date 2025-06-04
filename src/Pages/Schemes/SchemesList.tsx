@@ -3,7 +3,7 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { AddIconSvg } from "../../assets/Icons";
-import { data, headers } from "../../Config/Schemes/SchemesListConfig";
+import { data, headers } from "../../Config/Schemes/SchemesConfig";
 import SchemeListToolbar from "../../Components/Organisms/SchemeListToolbar";
 import SchemeListTable from "../../Components/Organisms/SchemeListTable";
 

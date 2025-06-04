@@ -7,20 +7,17 @@ import OtpVerify from "../Pages/Auth/OtpVerify";
 import ForgetPassword from "../Pages/Auth/ForgetPassword";
 import SetPassword from "../Pages/Auth/SetPassword";
 import UserCreation from "../Pages/Management/UserCreation";
-import UserFormPage from "../Pages/Management/UserFormPage";
+import UserFormPage from "../Components/Organisms/UserFormPage";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PreFundingAuth from "../Pages/Funding/PreFundingAuth";
-import VendorMaster from "../Pages/Master/Types/Vendor/VendorMaster";
-import OperatorMaster from "../Pages/Master/Types/Operator/OperatorMaster";
-import SubProductMaster from "../Pages/Master/Types/SubProduct/SubProductMaster";
-import ProductMaster from "../Pages/Master/Types/Product/ProductMaster";
 import PrefundingForm from "../Components/Organisms/PrefundingForm";
-import ProductForm from "../Pages/Master/Types/Product/ProductForm";
-import OperatorForm from "../Pages/Master/Types/Operator/OperatorForm";
-import VendorForm from "../Pages/Master/Types/Vendor/VendorForm";
-import SubProductForm from "../Pages/Master/Types/SubProduct/SubProductForm";
 import SchemesList from "../Pages/Schemes/SchemesList";
 import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
+import { OperatorMaster, ProductMaster, SubProductMaster, VendorMaster } from "../Pages/Master";
+import SubProductForm from "../Components/Organisms/SubProductForm";
+import VendorForm from "../Components/Organisms/VendorForm";
+import OperatorForm from "../Components/Organisms/OperatorForm";
+import ProductForm from "../Components/Organisms/ProductForm";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));

@@ -21,17 +21,6 @@ const BankDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
 
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
-            name="websiteURL"
-            label="Website Url"
-            placeholder="Enter Your Website Url"
-            withAsterisk
-            required
-            maxLength={100}
-          />
-        </Grid.Col>
-
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
-          <FormikTextInputComponent
             name="accountNumber"
             label="Bank Account Number"
             placeholder="Enter Your bank Account Number"
@@ -44,7 +33,7 @@ const BankDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
             name="ifsc"
             label="Bank IFSC Code"
@@ -58,13 +47,36 @@ const BankDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
             name="branchName"
             label="Bank Branch Name"
             placeholder="Enter Your Bank branch Name"
             withAsterisk
             maxLength={50}
+          />
+        </Grid.Col>
+
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+          <FormikTextInputComponent
+            name="businessDesc"
+            label="Business Description"
+            placeholder="Enter Your Business Description"
+            withAsterisk
+            required
+            maxLength={100}
+            allowSpecialChar={false}
+          />
+        </Grid.Col>
+
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+          <FormikTextInputComponent
+            name="websiteURL"
+            label="Website Url"
+            placeholder="Enter Your Website Url"
+            withAsterisk
+            required
+            maxLength={100}
           />
         </Grid.Col>
       </Grid>

@@ -4,11 +4,11 @@ import {
   UserConfig,
   UserType,
 } from "../../Config/UserCreationConfig/UserConfig";
-import TextComponent from "../../Components/Atoms/TextComponent";
+import TextComponent from "../Atoms/TextComponent";
 import { capitalizeWords } from "../../Utils/utils";
-import BreadCrumb from "../../Components/Molecules/BreadCrumb";
-import FormStepperButton from "../../Components/Molecules/FormStepperButton";
-import FormStepper from "../../Components/Atoms/FormStepper";
+import BreadCrumb from "../Molecules/BreadCrumb";
+import FormStepperButton from "../Molecules/FormStepperButton";
+import FormStepper from "../Atoms/FormStepper";
 import {
   getValidationSchema,
   handleFormSubmit,
@@ -16,7 +16,7 @@ import {
 } from "../../Config/UserCreationConfig/MasterFormConfig";
 import { Form, Formik, FormikProps } from "formik";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import FormSuccessModel from "../../Components/Atoms/FormSuccessModel";
+import FormSuccessModel from "../Atoms/FormSuccessModel";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();

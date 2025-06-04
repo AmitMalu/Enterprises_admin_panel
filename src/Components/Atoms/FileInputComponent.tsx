@@ -1,6 +1,6 @@
 import { FileInput } from "@mantine/core";
 import React from "react";
-import { useScreenSize } from "../../Utils/CustomHooks/useScreenSize";
+import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 
 interface FileInputComponentProps {
   label?: string;

@@ -4,7 +4,7 @@ import TextComponent from "../Atoms/TextComponent";
 import {
   columnStyles,
   SchemesListType,
-} from "../../Config/Schemes/SchemesListConfig";
+} from "../../Config/Schemes/SchemesConfig";
 import {
   DeleteIcon,
   EditIcon2,

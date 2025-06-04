@@ -7,43 +7,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
   return (
     <>
       <Grid gutter="lg">
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
-          <FormikTextInputComponent
-            name="parentAccount"
-            label="Parent Account"
-            placeholder="Type Parent Account.."
-            withAsterisk
-            required
-            maxLength={51}
-            allowSpecialChar={false}
-          />
-        </Grid.Col>
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
-          <FormikTextInputComponent
-            name="title"
-            label="Title"
-            placeholder="Enter Title"
-            withAsterisk
-            required
-            maxLength={51}
-            allowSpecialChar={false}
-          />
-        </Grid.Col>
-
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
-          <FormikTextInputComponent
-            name="prefix"
-            label="Prefix"
-            placeholder="Type Prefix"
-            withAsterisk
-            capitalize
-            maxLength={3}
-            allowNumber={false}
-            allowSpecialChar={false}
-          />
-        </Grid.Col>
-
-        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikTextInputComponent
             name="name"
             label="Name"
@@ -52,16 +16,6 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             maxLength={51}
             allowNumber={false}
             allowSpecialChar={false}
-          />
-        </Grid.Col>
-
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
-          <FormikTextInputComponent
-            name="dob"
-            type="date"
-            label="Date of Birth"
-            placeholder="Select Date"
-            withAsterisk
           />
         </Grid.Col>
 
@@ -84,6 +38,29 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             placeholder="Enter Your Email Address"
             withAsterisk
             maxLength={50}
+          />
+        </Grid.Col>
+
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+          <FormikTextInputComponent
+            name="userName"
+            label="Username"
+            placeholder="Enter Username"
+            withAsterisk
+            required
+            maxLength={51}
+            allowSpecialChar={true}
+          />
+        </Grid.Col>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+          <FormikTextInputComponent
+            name="password"
+            label="Password"
+            placeholder="Enter Password"
+            withAsterisk
+            required
+            maxLength={51}
+            allowSpecialChar={true}
           />
         </Grid.Col>
       </Grid>

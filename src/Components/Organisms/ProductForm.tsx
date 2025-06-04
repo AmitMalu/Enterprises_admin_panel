@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import TextComponent from "../../../../Components/Atoms/TextComponent";
-import BreadCrumb from "../../../../Components/Molecules/BreadCrumb";
+import TextComponent from "../../Components/Atoms/TextComponent";
+import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Grid } from "@mantine/core";
-import ButtonComponent from "../../../../Components/Atoms/ButtonComponent";
-import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
-import FormikSwitchComponent from "../../../../Components/Molecules/FormikSwitchComponent";
+import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
+import FormikSwitchComponent from "../../Components/Molecules/FormikSwitchComponent";
 import {
   initialValues,
   ProductType,
   validationSchema,
-} from "../../../../Config/Master/ProductFormConfig";
-import FormikSelectComponent from "../../../../Components/Molecules/FormikSelectComponent";
+} from "../../Config/Master/ProductConfig";
+import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 
 const ProductForm = ({ mode }: { mode: string }) => {
   const { id } = useParams();

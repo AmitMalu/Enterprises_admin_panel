@@ -1,7 +1,7 @@
 // components/Atoms/SelectComponent.tsx
 import React from "react";
 import { Select } from "@mantine/core";
-import { useScreenSize } from "../../Utils/CustomHooks/useScreenSize";
+import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 
 interface SelectComponentProps {
   label?: string;
