@@ -302,7 +302,7 @@ export function transformUserCreationPayload(
         },
         bankDetails,
         theme: { id: 1 },
-        websiteURL: values.websiteURL || "",
+        domainURL: values.websiteURL || "",
         businessDesc: values.businessDesc || "",
       };
 
@@ -318,7 +318,7 @@ export function transformUserCreationPayload(
         },
         bankDetails,
         theme: { id: 1 },
-        websiteURL: values.websiteURL || "",
+        domainURL: values.websiteURL || "",
         businessDesc: values.businessDesc || "",
       };
 

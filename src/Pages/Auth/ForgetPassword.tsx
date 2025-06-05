@@ -40,6 +40,7 @@ const ForgetPassword: React.FC = () => {
         state: { username: values.username, otpFor: "forgetPassword" },
       });
     } catch (error) {
+      console.error("Forget Password Error:", error);
       toast.error((error as string) || "Login failed");
     }
   };

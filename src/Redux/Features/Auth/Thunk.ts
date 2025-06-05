@@ -13,8 +13,6 @@ export const login = createAsyncThunk(
         API_ENDPOINTS.AUTH.LOGIN,
         payload, // No body, since we are sending query params
       );
-
-      console.log(response, "response");
       
       if (response.data.statusCode == 200) {
         return response.data;

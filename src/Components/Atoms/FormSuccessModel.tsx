@@ -32,6 +32,7 @@ const FormSuccessModel: React.FC<FormSuccessModelProps> = ({
         </div>
 
         <TextComponent
+          component="div"
           fontFamily="inter"
           fontSize={32}
           weight={500}
@@ -43,6 +44,7 @@ const FormSuccessModel: React.FC<FormSuccessModelProps> = ({
         </TextComponent>
 
         <TextComponent
+          component="div"
           fontFamily="inter"
           fontSize={18}
           weight={500}

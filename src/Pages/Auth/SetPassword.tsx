@@ -20,7 +20,10 @@ const SetPassword: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const username = (location.state as { username?: string })?.username ?? ""; // Extract username from location state
+  const username =
+    (location.state as { username?: string })?.username ??
+    sessionStorage.getItem("otp-username") ??
+    ""; // Extract username from location state or session storage
 
   const formik = useFormik({
     initialValues: {

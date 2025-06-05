@@ -54,7 +54,9 @@ const OtpVerify: React.FC = () => {
       const result = await dispatch(otpVerify({ username, otp: Otp })).unwrap();
       toast.success(result.message);
       if (otpFor === "forgetPassword") {
-        navigate("/set-password");
+        navigate("/set-password", {
+          state: { username: username }, // Pass username to Set Password page);
+        });
       } else if (otpFor === "login") {
         sessionStorage.removeItem("otpFor");
         sessionStorage.removeItem("otp-username");
