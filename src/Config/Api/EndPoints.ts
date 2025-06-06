@@ -10,5 +10,9 @@ export const API_ENDPOINTS = {
     },
     MANAGEMENT : {
         USER_CREATE : USER_FORM_ENDPOINTS
+    },
+    MASTER : {
+        PRODUCT_LIST : "api/products",
     }
+
 }

@@ -1,26 +1,28 @@
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
+import { ProductStateType } from "../../Redux/Features/Masters/ProductMaster/types";
 
-export type ProductType = {
-  id: string;
-  name: string;
-  productCode: string;
-  productCodeForScheme: string;
-  isShow: boolean;
-  hasCharges: string;
-  isCommissions: boolean;
-  isInventory: boolean;
-  isSettlement: boolean;
-  isVirtual: boolean;
-  isVisible: boolean;
-  reverseTx: string;
-  walletType: string;
-  subProducts: string;
-  productGroup: string;
-  clusterMode: string;
-  blocked: boolean;
-  active: boolean;
-};
+export type ProductType = Pick<
+  ProductStateType,
+  | "id"
+  | "name"
+  | "productCode"
+  | "productCodeForScheme"
+  | "isShow"
+  | "hasCharges"
+  | "isCommissions"
+  | "isInventory"
+  | "isSettlement"
+  | "isVirtual"
+  | "isVisible"
+  | "reverseTx"
+  | "walletType"
+  | "subProducts"
+  | "productGroup"
+  | "clusterMode"
+  | "blocked"
+  | "active"
+>;
 
 export const initialValues: ProductType = {
   id: "",
@@ -28,38 +30,38 @@ export const initialValues: ProductType = {
   productCode: "",
   productCodeForScheme: "",
   isShow: false,
-  hasCharges: "",
+  hasCharges: false,
   isCommissions: false,
   isInventory: false,
   isSettlement: false,
   isVirtual: false,
   isVisible: false,
-  reverseTx: "",
+  reverseTx: false,
   walletType: "",
   subProducts: "",
   productGroup: "",
-  clusterMode: "",
+  clusterMode: false,
   blocked: false,
   active: false,
 };
 
 export const validationSchema: Record<keyof ProductType, Yup.AnySchema> = {
-  id: textField("ID", 50, true),
+  id: textField("ID", 50, false),
   name: textField("Name", 50, true),
   productCode: textField("Product Code", 30, true),
   productCodeForScheme: textField("Product Code For Scheme", 30, true),
   isShow: Yup.boolean().required("Is Show is required"),
-  hasCharges: textField("Has Charges", 20, true),
+  hasCharges: Yup.boolean().required("Has Charges is required"),
   isCommissions: Yup.boolean().required("Is Commissions is required"),
   isInventory: Yup.boolean().required("Is Inventory is required"),
   isSettlement: Yup.boolean().required("Is Settlement is required"),
   isVirtual: Yup.boolean().required("Is Virtual is required"),
   isVisible: Yup.boolean().required("Is Visible is required"),
-  reverseTx: textField("Reverse Tx", 20, true),
+  reverseTx: Yup.boolean().required("ReverseTx is required"),
   walletType: textField("Wallet Type", 30, true),
   subProducts: textField("Sub Products", 50, true),
   productGroup: textField("Product Group", 50, true),
-  clusterMode: textField("Cluster Mode", 30, true),
+  clusterMode: Yup.boolean().required("ClusterMode is required"),
   blocked: Yup.boolean().required("Blocked is required"),
   active: Yup.boolean().required("Active is required"),
 };
@@ -71,17 +73,17 @@ export const data: ProductType[] = [
     productCode: "V001",
     productCodeForScheme: "Vendor X",
     isShow: true,
-    hasCharges: "BIN987",
+    hasCharges: false,
     isCommissions: false,
     isInventory: true,
     isSettlement: true,
     isVirtual: false,
     isVisible: true,
-    reverseTx: "P001",
+    reverseTx: true,
     walletType: "C001",
     subProducts: "S001",
     productGroup: "2024-05-10",
-    clusterMode: "UserX",
+    clusterMode: true,
     blocked: false,
     active: true,
   },
@@ -91,17 +93,17 @@ export const data: ProductType[] = [
     productCode: "V001",
     productCodeForScheme: "Vendor X",
     isShow: false,
-    hasCharges: "BIN987",
+    hasCharges: true,
     isCommissions: true,
     isInventory: true,
     isSettlement: true,
     isVirtual: false,
     isVisible: true,
-    reverseTx: "P001",
+    reverseTx: false,
     walletType: "C001",
     subProducts: "S001",
     productGroup: "2024-05-10",
-    clusterMode: "UserX",
+    clusterMode: false,
     blocked: false,
     active: true,
   },

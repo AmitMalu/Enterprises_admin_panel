@@ -11,7 +11,7 @@ export const login = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.LOGIN,
-        payload, // No body, since we are sending query params
+        payload, // Sending payload as body
       );
       
       if (response.data.statusCode == 200) {
@@ -38,7 +38,6 @@ export const otpVerify = createAsyncThunk(
         null, // No body, since we are sending query params
         {
           params: payload,
-          timeout: 10000, // 10 seconds timeout
         }
       );
       if (response.data.statusCode == 200) {
@@ -67,7 +66,6 @@ export const resendOtp = createAsyncThunk(
         null, // No body, since we are sending query params
         {
           params: payload,
-          timeout: 10000, // 10 seconds timeout
         }
       );
       if (response.data.statusCode == 200) {
@@ -92,7 +90,6 @@ export const forgetPassword = createAsyncThunk(
         null, // No body, since we are sending query params
         {
           params: payload,
-          timeout: 10000, // 10 seconds timeout
         }
       );
       if (response.data.statusCode == 200) {
