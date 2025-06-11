@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { EditIcon, EyeIcon } from "../../assets/Icons";
-import { data, headers, ProductType } from "../../Config/Master/ProductConfig";
+import { headers, ProductType } from "../../Config/Master/ProductConfig";
 import { useNavigate } from "react-router-dom";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
@@ -13,11 +13,11 @@ import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 const ProductMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { products, loading } = useAppSelector(
+  const { products, loading, loaded } = useAppSelector(
     (state) => state.masters.product
   );
 
-  const transformedData: ProductType[] = products.map(
+  const transformedData: ProductType[] = products?.map(
     transformProductToFormData
   );
 
@@ -36,7 +36,9 @@ const ProductMaster = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchProduct());
+    if (!loaded) {
+      dispatch(fetchProduct());
+    }
   }, []);
 
   return (
@@ -66,7 +68,7 @@ const ProductMaster = () => {
                 <EyeIcon />
               </span>
               <span
-                onClick={() => handleEdit(item.id)}
+                onClick={() => handleEdit(item?.id || "")}
                 className="cursor-pointer"
               >
                 <EditIcon />

@@ -1,21 +1,28 @@
-import { useState } from "react";
-import {
-  EditIcon,
-  EyeIcon,
-} from "../../assets/Icons";
+import { useEffect, useState } from "react";
+import { EditIcon, EyeIcon } from "../../assets/Icons";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { data, headers, SubProductType } from "../../Config/Master/SubProductConfig";
+import {
+  headers,
+  SubProductTableType,
+} from "../../Config/Master/SubProductConfig";
 import { useNavigate } from "react-router-dom";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { fetchSubProduct } from "../../Redux/Features/Masters/SubProductMaster/thunks";
+import { mapToSubProductTableType } from "../../Redux/Features/Masters/SubProductMaster/utils";
+import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 
 const SubProductMaster = () => {
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
+  const { loading, loaded, subProducts } = useAppSelector(
+    (state) => state.masters.subProduct
+  );
   const [searchValue, setSearchValue] = useState("");
 
-  const handleEdit = (item: any) => {
-    navigate(`/master/sub-product-master/edit/${item.id}`, { state: item });
+  const handleEdit = (id: string) => {
+    navigate(`/master/sub-product-master/edit/${id}`, { state: id });
   };
 
   const handleSearchChange = (value: string) => {
@@ -25,6 +32,14 @@ const SubProductMaster = () => {
   const handleAdd = () => {
     navigate("/master/sub-product-master/add");
   };
+
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(fetchSubProduct());
+    }
+  }, []);
+
+  const data = subProducts?.map(mapToSubProductTableType);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -39,21 +54,29 @@ const SubProductMaster = () => {
         searchValue={searchValue}
       />
 
-      <GenericMasterTable<SubProductType>
-        data={data}
-        headers={headers}
-        renderExtraHeader={() => <></>} // empty header for action column/>
-        renderExtraRowCell={(item) => (
-          <div className="flex justify-center gap-2">
-            <span className="cursor-pointer">
-              <EyeIcon />
-            </span>
-            <span onClick={() => handleEdit(item)} className="cursor-pointer">
-              <EditIcon />
-            </span>
-          </div>
-        )}
-      />
+      {loading ? (
+        // Render shimmer
+        <ShimmerTableRows rowCount={6} columnCount={headers.length} />
+      ) : (
+        <GenericMasterTable<SubProductTableType>
+          data={data}
+          headers={headers}
+          renderExtraHeader={() => <></>} // empty header for action column/>
+          renderExtraRowCell={(item) => (
+            <div className="flex justify-center gap-2">
+              <span className="cursor-pointer">
+                <EyeIcon />
+              </span>
+              <span
+                onClick={() => handleEdit(item?.id || "")}
+                className="cursor-pointer"
+              >
+                <EditIcon />
+              </span>
+            </div>
+          )}
+        />
+      )}
     </div>
   );
 };

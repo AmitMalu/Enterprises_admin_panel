@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { persistor } from "../Redux/Store/store";
+import moment from "moment";
 
 export const persistOtpSession = (username: string, otpFor: string) => {
   sessionStorage.setItem("otp-username", username);
@@ -55,3 +56,12 @@ export const ellipsisCellStyle = {
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
 };
+
+export const formatDateTime = (dateString: string) => {
+  return dateString ? moment(dateString).format("DD-MM-YYYY HH:mm") : "";
+};
+
+export const booleanSelectData = [
+  { label: "Yes", value: "true" },
+  { label: "No", value: "false" },
+];

@@ -16,8 +16,8 @@ export type ProductType = Pick<
   | "isVirtual"
   | "isVisible"
   | "reverseTx"
-  | "walletType"
-  | "subProducts"
+  // | "walletType"
+  // | "subProducts"
   | "productGroup"
   | "clusterMode"
   | "blocked"
@@ -37,8 +37,8 @@ export const initialValues: ProductType = {
   isVirtual: false,
   isVisible: false,
   reverseTx: false,
-  walletType: "",
-  subProducts: "",
+  // walletType: "",
+  // subProducts: "",
   productGroup: "",
   clusterMode: false,
   blocked: false,
@@ -58,56 +58,56 @@ export const validationSchema: Record<keyof ProductType, Yup.AnySchema> = {
   isVirtual: Yup.boolean().required("Is Virtual is required"),
   isVisible: Yup.boolean().required("Is Visible is required"),
   reverseTx: Yup.boolean().required("ReverseTx is required"),
-  walletType: textField("Wallet Type", 30, true),
-  subProducts: textField("Sub Products", 50, true),
+  // walletType: textField("Wallet Type", 30, false),
+  // subProducts: textField("Sub Products", 50, false),
   productGroup: textField("Product Group", 50, true),
   clusterMode: Yup.boolean().required("ClusterMode is required"),
   blocked: Yup.boolean().required("Blocked is required"),
   active: Yup.boolean().required("Active is required"),
 };
 
-export const data: ProductType[] = [
-  {
-    id: "101",
-    name: "Card A",
-    productCode: "V001",
-    productCodeForScheme: "Vendor X",
-    isShow: true,
-    hasCharges: false,
-    isCommissions: false,
-    isInventory: true,
-    isSettlement: true,
-    isVirtual: false,
-    isVisible: true,
-    reverseTx: true,
-    walletType: "C001",
-    subProducts: "S001",
-    productGroup: "2024-05-10",
-    clusterMode: true,
-    blocked: false,
-    active: true,
-  },
-  {
-    id: "102",
-    name: "Card A",
-    productCode: "V001",
-    productCodeForScheme: "Vendor X",
-    isShow: false,
-    hasCharges: true,
-    isCommissions: true,
-    isInventory: true,
-    isSettlement: true,
-    isVirtual: false,
-    isVisible: true,
-    reverseTx: false,
-    walletType: "C001",
-    subProducts: "S001",
-    productGroup: "2024-05-10",
-    clusterMode: false,
-    blocked: false,
-    active: true,
-  },
-];
+// export const data: ProductType[] = [
+//   {
+//     id: "101",
+//     name: "Card A",
+//     productCode: "V001",
+//     productCodeForScheme: "Vendor X",
+//     isShow: true,
+//     hasCharges: false,
+//     isCommissions: false,
+//     isInventory: true,
+//     isSettlement: true,
+//     isVirtual: false,
+//     isVisible: true,
+//     reverseTx: true,
+//     walletType: "C001",
+//     subProducts: "S001",
+//     productGroup: "2024-05-10",
+//     clusterMode: true,
+//     blocked: false,
+//     active: true,
+//   },
+//   {
+//     id: "102",
+//     name: "Card A",
+//     productCode: "V001",
+//     productCodeForScheme: "Vendor X",
+//     isShow: false,
+//     hasCharges: true,
+//     isCommissions: true,
+//     isInventory: true,
+//     isSettlement: true,
+//     isVirtual: false,
+//     isVisible: true,
+//     reverseTx: false,
+//     walletType: "C001",
+//     subProducts: "S001",
+//     productGroup: "2024-05-10",
+//     clusterMode: false,
+//     blocked: false,
+//     active: true,
+//   },
+// ];
 
 export const headers: { key: keyof ProductType; label: string }[] = [
   { key: "id", label: "Id" },
@@ -122,8 +122,8 @@ export const headers: { key: keyof ProductType; label: string }[] = [
   { key: "isVirtual", label: "Is Virtual" },
   { key: "isVisible", label: "Is Visible" },
   { key: "reverseTx", label: "Reverse Tx" },
-  { key: "walletType", label: "Wallet Type" },
-  { key: "subProducts", label: "Sub Products" },
+  // { key: "walletType", label: "Wallet Type" },
+  // { key: "subProducts", label: "Sub Products" },
   { key: "productGroup", label: "Product Group" },
   { key: "clusterMode", label: "Cluster Mode" },
   { key: "blocked", label: "Blocked" },

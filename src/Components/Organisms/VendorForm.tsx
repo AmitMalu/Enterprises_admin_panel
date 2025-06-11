@@ -13,15 +13,12 @@ import {
   validationSchema,
   VendorFormType,
 } from "../../Config/Master/VendorConfig";
+import { booleanSelectData } from "../../Utils/utils";
 
 const VendorForm = ({ mode }: { mode: string }) => {
   const { id } = useParams();
   const location = useLocation();
   const [formData, setFormData] = useState<VendorFormType>(initialValues);
-  const booleanSelectData = [
-    { label: "Yes", value: "true" },
-    { label: "No", value: "false" },
-  ];
 
   const handleSubmit = (values: VendorFormType) => {
     console.log("Submitted values:", values);

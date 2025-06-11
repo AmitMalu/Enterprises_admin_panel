@@ -53,4 +53,5 @@ export interface ProductMasterState {
   selectedProduct: ProductStateType | null;
   loading: boolean;
   error: string | null;
+  loaded : boolean;
 }

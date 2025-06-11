@@ -2,6 +2,8 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "../Features/Auth/Reducer";
 import menuReducer from "../Features/Menu/MenuReducer";
 import productMasterSlice from "../Features/Masters/ProductMaster/slice";
+import subProductMasterSlice from "../Features/Masters/SubProductMaster/slice";
+import operatorMasterSlice from "../Features/Masters/OperatorMaster/slice";
 import storageSession from "redux-persist/lib/storage/session";
 import { persistReducer, persistStore } from "redux-persist";
 
@@ -15,6 +17,8 @@ const rootReducer = combineReducers({
   menu: persistReducer(menuPersistConfig, menuReducer), // only this is persisted
   masters: combineReducers({
     product: productMasterSlice,
+    subProduct: subProductMasterSlice,
+    operator: operatorMasterSlice,
   }),
 });
 

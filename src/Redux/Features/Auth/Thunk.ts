@@ -14,12 +14,12 @@ export const login = createAsyncThunk(
         payload, // Sending payload as body
       );
       
-      if (response.data.statusCode == 200) {
-        return response.data;
+      if (response?.data?.statusCode == 200) {
+        return response?.data;
 
       } else {
         // If not 200, treat as failure
-        return rejectWithValue(response.data.message || "Login failed");
+        return rejectWithValue(response?.data?.message || "Login failed");
       }
     } catch (error: any) {
       return rejectWithValue(
@@ -40,11 +40,11 @@ export const otpVerify = createAsyncThunk(
           params: payload,
         }
       );
-      if (response.data.statusCode == 200) {
-        return response.data;
+      if (response?.data?.statusCode == 200) {
+        return response?.data;
       } else {
         return rejectWithValue(
-          response.data.message || "OTP verification failed"
+          response?.data?.message || "OTP verification failed"
         );
       }
     } catch (error: any) {

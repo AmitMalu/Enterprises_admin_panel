@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
@@ -14,45 +14,24 @@ import {
 } from "../../Config/Master/ProductConfig";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { fetchProductById } from "../../Redux/Features/Masters/ProductMaster/thunks";
 import {
-  createProduct,
-  fetchProductById,
-} from "../../Redux/Features/Masters/ProductMaster/thunks";
-import {
-  transformFormDataToApiPayload,
+  handleProductFormSubmit,
   transformProductToFormData,
 } from "../../Redux/Features/Masters/ProductMaster/utils";
 import { clearSelectedProduct } from "../../Redux/Features/Masters/ProductMaster/slice";
+import { booleanSelectData } from "../../Utils/utils";
 
 const ProductForm = ({ mode }: { mode: string }) => {
   const { id } = useParams<{ id: string }>();
-  const location = useLocation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { selectedProduct } = useAppSelector((state) => state.masters.product);
 
   const [formData, setFormData] = useState<ProductType>(initialValues);
 
-  const booleanSelectData = [
-    { label: "Yes", value: "true" },
-    { label: "No", value: "false" },
-  ];
-
   const handleSubmit = (values: ProductType) => {
-    const payload = transformFormDataToApiPayload(values);
-    if (mode === "edit") {
-      console.log("edit mode", payload);
-    } else {
-      dispatch(createProduct(payload))
-        .unwrap()
-        .then((res) => {
-          // Clear form on successful API response
-          console.log("Product created successfully:", res);
-          setFormData(initialValues);
-        })
-        .catch((err) => {
-          console.error("Create product failed:", err);
-        });
-    }
+    handleProductFormSubmit(mode, id, values, dispatch, navigate, setFormData);
   };
 
   useEffect(() => {
@@ -92,17 +71,6 @@ const ProductForm = ({ mode }: { mode: string }) => {
       >
         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
           <Grid gutter="lg">
-            {/* <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="id"
-                label="Id"
-                disabled={mode === "edit" ? true : false}
-                placeholder="Enter ID"
-                withAsterisk
-                maxLength={50}
-              />
-            </Grid.Col> */}
-
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
                 name="name"
@@ -210,26 +178,6 @@ const ProductForm = ({ mode }: { mode: string }) => {
                 placeholder="Select Reverse Tx"
                 withAsterisk
                 data={booleanSelectData}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="walletType"
-                label="Wallet Type"
-                placeholder="Enter Wallet Type"
-                withAsterisk
-                maxLength={30}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="subProducts"
-                label="Sub Products"
-                placeholder="Enter Sub Products"
-                withAsterisk
-                maxLength={50}
               />
             </Grid.Col>
 

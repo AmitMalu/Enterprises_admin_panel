@@ -1,10 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  initialValues,
-  OperatorFormType,
-  validationSchema,
-} from "../../Config/Master/OperatorConfig";
-import { useLocation, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
@@ -13,27 +8,124 @@ import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import {
+  initialValues,
+  OperatorFormType,
+  validationSchema,
+} from "../../Config/Master/OperatorConfig";
+import {
+  handleOperatorFormSubmit,
+  transformOperatorToFormData,
+} from "../../Redux/Features/Masters/OperatorMaster/utils";
+import { clearSelectedOperator } from "../../Redux/Features/Masters/OperatorMaster/slice";
+import { fetchOperatorById } from "../../Redux/Features/Masters/OperatorMaster/thunks";
+import { booleanSelectData } from "../../Utils/utils";
+import { fetchDropDownForProducts } from "../../Redux/Features/Masters/ProductMaster/thunks";
+import { fetchDropDownForSubProducts } from "../../Redux/Features/Masters/SubProductMaster/thunks";
 
 const OperatorForm = ({ mode }: { mode: string }) => {
   const { id } = useParams();
-  const location = useLocation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { selectedOperator } = useAppSelector(
+    (state) => state.masters.operator
+  );
+
   const [formData, setFormData] = useState<OperatorFormType>(initialValues);
-  const booleanSelectData = [
-    { label: "Yes", value: "true" },
-    { label: "No", value: "false" },
-  ];
+  const [loadingProductList, setLoadingProductList] = useState(false);
+  const [productDropdownList, setProductDropdownList] = useState<any[]>([]);
+
+  const [subProductDropdownList, setSubProductDropdownList] = useState<any[]>(
+    []
+  );
+  const [loadingSubProductList, setLoadingSubProductList] = useState(false);
 
   const handleSubmit = (values: OperatorFormType) => {
-    console.log("Submitted values:", values);
+    handleOperatorFormSubmit(mode, id, values, dispatch, navigate, setFormData);
   };
 
   useEffect(() => {
-    if (mode === "edit") {
-      if (location.state) {
-        setFormData(location.state);
+    const fetchSubProductList = async () => {
+      setLoadingProductList(true);
+      try {
+        const response = await dispatch(fetchDropDownForProducts()).unwrap();
+        setProductDropdownList(response || []);
+      } catch (err) {
+        setProductDropdownList([]);
+        console.error("Failed to fetch product list", err);
+      } finally {
+        setLoadingProductList(false);
       }
+    };
+
+    fetchSubProductList();
+  }, [dispatch]);
+
+  useEffect(() => {
+    const productId = formData.productId;
+    if (!productId) {
+      setSubProductDropdownList([]);
+      return;
     }
-  }, [id, location.state, mode]);
+
+    const fetchSubProducts = async () => {
+      setLoadingSubProductList(true);
+      try {
+        const response = await dispatch(
+          fetchDropDownForSubProducts(productId as string)
+        ).unwrap();
+        setSubProductDropdownList(response || []);
+      } catch (err) {
+        setSubProductDropdownList([]);
+        console.error("Failed to fetch sub product list", err);
+      } finally {
+        setLoadingSubProductList(false);
+      }
+    };
+
+    fetchSubProducts();
+  }, [formData.productId, dispatch]);
+
+  // Fetch Data by Id when Edit
+  useEffect(() => {
+    if (mode === "edit" && id) {
+      dispatch(fetchOperatorById(id));
+    }
+
+    return () => {
+      // Only clear form and selected Operator on unmount in "edit" mode
+      if (mode === "edit") {
+        setFormData(initialValues); // Reset form data on unmount
+        dispatch(clearSelectedOperator()); // Reset selected Operator in the store
+      }
+    };
+  }, [id, dispatch, mode]);
+
+  // Set data to the form when Edit Mode
+  useEffect(() => {
+    if (selectedOperator && mode === "edit") {
+      setFormData(transformOperatorToFormData(selectedOperator));
+    }
+  }, [selectedOperator, mode]);
+
+  const productDropdownData = useMemo(() => {
+    return (
+      productDropdownList?.map((item: any) => ({
+        label: item.productName,
+        value: String(item.id),
+      })) || []
+    );
+  }, [productDropdownList]);
+
+  const subProductDropdownData = useMemo(() => {
+    return (
+      subProductDropdownList?.map((item: any) => ({
+        label: item.subProductTitle,
+        value: String(item.id),
+      })) || []
+    );
+  }, [subProductDropdownList]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
@@ -52,18 +144,6 @@ const OperatorForm = ({ mode }: { mode: string }) => {
       >
         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
           <Grid gutter="lg">
-             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="id"
-                label="ID"
-                placeholder="ID"
-                withAsterisk
-                maxLength={51}
-                disabled={mode === "edit" ? true : false}
-                allowSpecialChar={false}
-              />
-            </Grid.Col>
-
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
                 name="operatorAlias"
@@ -112,26 +192,19 @@ const OperatorForm = ({ mode }: { mode: string }) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="productCode"
-                label="Product Code"
-                placeholder="Enter Product Code"
-                withAsterisk
-                required
-                maxLength={31}
-                allowSpecialChar={false}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
+              <FormikSelectComponent
                 name="productId"
-                label="Product ID"
-                placeholder="Enter Product ID"
+                label="Product"
+                placeholder="Select Product"
                 withAsterisk
                 required
-                maxLength={31}
-                allowSpecialChar={false}
+                data={productDropdownData}
+                disabled={loadingProductList}
+                onChange={(value: any, formik: any) => {
+                  formik.setFieldValue("productId", value);
+                  formik.setFieldValue("subProductId", ""); // Reset sub-product when product changes
+                  setFormData((prev) => ({ ...prev, productId: value })); // Sync for useEffect
+                }}
               />
             </Grid.Col>
 

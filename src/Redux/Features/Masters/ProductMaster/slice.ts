@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createProduct, fetchProduct, fetchProductById } from "./thunks";
+import {
+  createProduct,
+  fetchProduct,
+  fetchProductById,
+  updateProduct,
+} from "./thunks";
 import { ProductMasterState, ProductStateType } from "./types";
 
 const initialState: ProductMasterState = {
@@ -7,6 +12,7 @@ const initialState: ProductMasterState = {
   selectedProduct: null,
   loading: false,
   error: null,
+  loaded: false,
 };
 
 const productMasterSlice = createSlice({
@@ -19,16 +25,38 @@ const productMasterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
- // Create Product
+      // Create Product
       .addCase(createProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createProduct.fulfilled, (state, action: PayloadAction<ProductStateType>) => {
-        state.loading = false;
-        state.products.push(action.payload);
-      })
+      .addCase(
+        createProduct.fulfilled,
+        (state, action: PayloadAction<ProductStateType>) => {
+          state.loading = false;
+          state.products.push(action.payload.data);
+        }
+      )
       .addCase(createProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Update Product
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        const updated = action?.payload?.data;
+        const index = state.products.findIndex((p) => p.id === updated?.id);
+        if (index !== -1) {
+          state.products[index] = updated;
+        }
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -40,6 +68,7 @@ const productMasterSlice = createSlice({
       .addCase(fetchProduct.fulfilled, (state, action) => {
         state.products = action.payload;
         state.loading = false;
+        state.loaded = true;
         state.error = null;
       })
       .addCase(fetchProduct.rejected, (state, action) => {

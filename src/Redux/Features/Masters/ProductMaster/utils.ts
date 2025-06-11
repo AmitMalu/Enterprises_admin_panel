@@ -1,5 +1,12 @@
-import { ProductType } from "../../../../Config/Master/ProductConfig";
+import { toast } from "react-toastify";
+import {
+  initialValues,
+  ProductType,
+} from "../../../../Config/Master/ProductConfig";
 import { ProductStateType } from "./types";
+import { createProduct, updateProduct } from "./thunks";
+import { AppDispatch } from "../../../Store/store";
+import { NavigateFunction } from "react-router-dom";
 
 export function transformProductToFormData(
   product: ProductStateType
@@ -17,8 +24,8 @@ export function transformProductToFormData(
     isVirtual: product.inventory?.isVirtual ?? false,
     isVisible: product.isVisible ?? false,
     reverseTx: product.reverseTx ?? false,
-    walletType: "", // Fill if applicable
-    subProducts: "", // Fill if applicable
+    // walletType: "", // Fill if applicable
+    // subProducts: "", // Fill if applicable
     productGroup: product.productGroup ?? "",
     clusterMode: product.clusterMode ?? false,
     blocked: product.blocked ?? false,
@@ -27,7 +34,7 @@ export function transformProductToFormData(
 }
 
 export const transformFormDataToApiPayload = (
-  formData: ProductType,
+  formData: ProductType
 ): ProductStateType => {
   return {
     // id: formData.id || "", // optional
@@ -56,7 +63,7 @@ export const transformFormDataToApiPayload = (
     maximumSingleTransactionAmount: 500100,
     sgst: 0.0,
     tds: 5.0,
-    createdBy : localStorage.getItem("username") || "system",
+    createdBy: localStorage.getItem("username") || "system",
     // editedBy: null,
     // createdOn: new Date().toISOString(),
     // editedOn: new Date().toISOString(),
@@ -71,4 +78,37 @@ export const transformFormDataToApiPayload = (
       schemeEngine: false,
     },
   };
+};
+
+export const handleProductFormSubmit = async (
+  mode: string,
+  id: string | undefined,
+  values: ProductType,
+  dispatch: AppDispatch,
+  navigate: NavigateFunction,
+  resetFormData: (data: ProductType) => void
+) => {
+  const payload = transformFormDataToApiPayload(values);
+
+  if (mode === "edit" && id) {
+    try {
+      const res = await dispatch(updateProduct({ id, data: payload })).unwrap();
+      toast.success(res.message || "Product updated successfully");
+      resetFormData(initialValues);
+      navigate("/master/product-master");
+    } catch (err: any) {
+      console.error("Update product failed:", err);
+      toast.error(err || "Failed to update product");
+    }
+  } else {
+    try {
+      const res = await dispatch(createProduct(payload)).unwrap();
+      toast.success(res.message || "Product created successfully");
+      resetFormData(initialValues);
+      navigate("/master/product-master");
+    } catch (err: any) {
+      console.error("Create product failed:", err);
+      toast.error(err || "Failed to create product");
+    }
+  }
 };

@@ -1,0 +1,29 @@
+export interface SubProductMasterState {
+  subProducts: Record<string, any>[];
+  selectedSubProduct: Record<string, any> | null;
+  loading: boolean;
+  error: string | null;
+  loaded: boolean;
+}
+
+export interface CreateSubProductPayload {
+  subProductTitle: string;
+  subProductCode: string;
+  productId: string | number;
+  walletType: string;
+  isSettlement: boolean;
+  isActive: boolean;
+  enabled: boolean;
+  createdBy: string;
+}
+
+export interface UpdateSubProductPayload {
+  subProductTitle: string;
+  subProductCode: string;
+  productId: string | number;
+  walletType: string;
+  isSettlement: boolean;
+  isActive: boolean;
+  enabled: boolean;
+  editedBy: string;
+}

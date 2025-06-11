@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
@@ -13,27 +13,86 @@ import {
   SubProductFormType,
   validationSchema,
 } from "../../Config/Master/SubProductConfig";
+import { fetchDropDownForProducts } from "../../Redux/Features/Masters/ProductMaster/thunks";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { fetchSubProductById } from "../../Redux/Features/Masters/SubProductMaster/thunks";
+import { clearSelectedSubProduct } from "../../Redux/Features/Masters/SubProductMaster/slice";
+import {
+  handleSubProductFormSubmit,
+  transformSubProductToFormData,
+} from "../../Redux/Features/Masters/SubProductMaster/utils";
+import { booleanSelectData } from "../../Utils/utils";
 
 const SubProductForm = ({ mode }: { mode: string }) => {
   const { id } = useParams();
-  const location = useLocation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { selectedSubProduct } = useAppSelector(
+    (state) => state.masters.subProduct
+  );
   const [formData, setFormData] = useState<SubProductFormType>(initialValues);
-  const booleanSelectData = [
-    { label: "Yes", value: "true" },
-    { label: "No", value: "false" },
-  ];
+  const [loadingProductList, setLoadingProductList] = useState(false);
+  const [productDropdownList, setProductDropdownList] = useState<any[]>([]);
 
   const handleSubmit = (values: SubProductFormType) => {
-    console.log("Submitted values:", values);
+    handleSubProductFormSubmit(
+      mode,
+      id,
+      values,
+      dispatch,
+      navigate,
+      setFormData
+    );
   };
 
   useEffect(() => {
-    if (mode === "edit") {
-      if (location.state) {
-        setFormData(location.state);
+    const fetchSubProductList = async () => {
+      setLoadingProductList(true);
+      try {
+        const response = await dispatch(fetchDropDownForProducts()).unwrap();
+        // If your thunk returns data in action.payload, use that
+        setProductDropdownList(response || []);
+      } catch (err) {
+        setProductDropdownList([]);
+        console.error("Failed to fetch product list", err);
+      } finally {
+        setLoadingProductList(false);
       }
+    };
+
+    fetchSubProductList();
+  }, [dispatch]);
+
+  // Fetch Data by Id when Edit
+  useEffect(() => {
+    if (mode === "edit" && id) {
+      dispatch(fetchSubProductById(id));
     }
-  }, [id, location.state, mode]);
+
+    return () => {
+      // Only clear form and selected product on unmount in "edit" mode
+      if (mode === "edit") {
+        setFormData(initialValues); // Reset form data on unmount
+        dispatch(clearSelectedSubProduct()); // Reset selected product in the store
+      }
+    };
+  }, [id, dispatch, mode]);
+
+  // Set data to the form when Edit Mode
+  useEffect(() => {
+    if (selectedSubProduct && mode === "edit") {
+      setFormData(transformSubProductToFormData(selectedSubProduct));
+    }
+  }, [selectedSubProduct, mode]);
+
+  const productDropdownData = useMemo(() => {
+    return (
+      productDropdownList?.map((item: any) => ({
+        label: item.productName,
+        value: String(item.id),
+      })) || []
+    );
+  }, [productDropdownList]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
@@ -56,13 +115,12 @@ const SubProductForm = ({ mode }: { mode: string }) => {
           <Grid gutter="lg">
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="id"
-                label="ID"
-                placeholder="Enter ID"
+                name="subProductTitle"
+                label="Sub Product Title"
+                placeholder="Enter Sub Product Title"
                 withAsterisk
                 required
-                disabled={mode === "edit" ? true : false}
-                maxLength={50}
+                maxLength={100}
               />
             </Grid.Col>
 
@@ -77,21 +135,22 @@ const SubProductForm = ({ mode }: { mode: string }) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="subProductTitle"
-                label="Sub Product Title"
-                placeholder="Enter Sub Product Title"
+              <FormikSelectComponent
+                name="productId"
+                label="Product"
+                placeholder="Select Product"
                 withAsterisk
                 required
-                maxLength={100}
+                data={productDropdownData} //this will be replace with actual api data list {productName: "abc", productCode: "123", productId: 12}
+                disabled={loadingProductList}
               />
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="productId"
-                label="Product ID"
-                placeholder="Enter Product ID"
+                name="walletType"
+                label="Wallet Type"
+                placeholder="Enter Wallet Type"
                 withAsterisk
                 required
                 maxLength={50}
@@ -110,20 +169,9 @@ const SubProductForm = ({ mode }: { mode: string }) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="settlementName"
-                label="Settlement Name"
-                placeholder="Enter Settlement Name"
-                withAsterisk
-                required
-                maxLength={100}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikSelectComponent
-                name="enabled"
-                label="Enabled"
+                name="isActive"
+                label="Is Active"
                 placeholder="Select"
                 withAsterisk
                 allowDeselect={false}
@@ -132,31 +180,9 @@ const SubProductForm = ({ mode }: { mode: string }) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="product"
-                label="Product"
-                placeholder="Enter Product"
-                withAsterisk
-                required
-                maxLength={50}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="walletType"
-                label="Wallet Type"
-                placeholder="Enter Wallet Type"
-                withAsterisk
-                required
-                maxLength={50}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikSelectComponent
-                name="isActive"
-                label="Is Active"
+                name="enabled"
+                label="Enabled"
                 placeholder="Select"
                 withAsterisk
                 allowDeselect={false}
