@@ -36,11 +36,11 @@ export const initialValues: OperatorFormType = {
 };
 
 export const validationSchema: Record<keyof OperatorFormType, Yup.AnySchema> = {
-  operatorCategory: textField("Operator Category", 100, true),
-  operatorCode: textField("Operator Code", 50, true),
-  operatorName: textField("Operator Name", 50, true),
-  operatorAlias: textField("Operator Alias", 50, true),
-  alias: textField("Alias", 50, true),
+  operatorCategory: textField("Operator Category", 100, true, true),
+  operatorCode: textField("Operator Code", 50, true, true),
+  operatorName: textField("Operator Name", 50, true, true),
+  operatorAlias: textField("Operator Alias", 50, true, true),
+  alias: textField("Alias", 50, true, true),
   productId: textField("Product Id", 50, true),
   subProductId: textField("Sub Product Id", 50, true),
   cardBinNo: textField("Card Bin No", 50, true),

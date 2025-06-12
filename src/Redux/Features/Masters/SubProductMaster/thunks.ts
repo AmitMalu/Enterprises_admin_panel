@@ -5,10 +5,13 @@ import { CreateSubProductPayload, UpdateSubProductPayload } from "./types";
 
 export const fetchSubProduct = createAsyncThunk(
   "subProductMaster/fetchSubProduct",
-  async (_, { rejectWithValue }) => {
+  async (
+    { page = 0, size = 10 }: { page: number; size: number },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.get(
-        API_ENDPOINTS?.MASTER?.SUB_PRODUCT
+        `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}?page=${page-1}&size=${size}`
       );
       if (response?.data) {
         return response?.data.data;
@@ -109,15 +112,15 @@ export const updateSubProduct = createAsyncThunk(
   }
 );
 
-export const fetchDropDownForSubProducts = createAsyncThunk(
+export const fetchSubProductsByProductId = createAsyncThunk(
   "subProductMaster/fetchDropDownForSubProducts",
-  async (id : string, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
         `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}/dropdown/${id}`
       );
       if (response.data) {
-        return response.data;
+        return response.data.data;
       } else {
         return rejectWithValue(response.data.message || "No list found");
       }

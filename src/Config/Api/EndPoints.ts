@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
     MASTER : {
         PRODUCTS : "api/products",
         SUB_PRODUCT : "api/sub-products",
-        OPERATOR :  "api/operators"
+        OPERATOR :  "api/operators",
+        VENDOR : "api/vendors"
     }
 }

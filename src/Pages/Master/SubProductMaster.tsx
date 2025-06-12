@@ -12,17 +12,26 @@ import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { fetchSubProduct } from "../../Redux/Features/Masters/SubProductMaster/thunks";
 import { mapToSubProductTableType } from "../../Redux/Features/Masters/SubProductMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
+import {
+  setCurrentPage,
+  setPageSize,
+} from "../../Redux/Features/Masters/SubProductMaster/slice";
 
 const SubProductMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, loaded, subProducts } = useAppSelector(
+  const { loading, subProducts, pagination } = useAppSelector(
     (state) => state.masters.subProduct
   );
+  const currentPage = pagination.currentPage;
   const [searchValue, setSearchValue] = useState("");
 
   const handleEdit = (id: string) => {
     navigate(`/master/sub-product-master/edit/${id}`, { state: id });
+  };
+
+  const setPage = (page: number) => {
+    dispatch(setCurrentPage(page));
   };
 
   const handleSearchChange = (value: string) => {
@@ -34,10 +43,8 @@ const SubProductMaster = () => {
   };
 
   useEffect(() => {
-    if (!loaded) {
-      dispatch(fetchSubProduct());
-    }
-  }, []);
+    dispatch(fetchSubProduct({ page: currentPage, size: 5 }));
+  }, [currentPage]);
 
   const data = subProducts?.map(mapToSubProductTableType);
 
@@ -75,6 +82,11 @@ const SubProductMaster = () => {
               </span>
             </div>
           )}
+          pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={setPage}
+          message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}
     </div>

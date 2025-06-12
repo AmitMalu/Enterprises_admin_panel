@@ -22,6 +22,7 @@ import {
   transformSubProductToFormData,
 } from "../../Redux/Features/Masters/SubProductMaster/utils";
 import { booleanSelectData } from "../../Utils/utils";
+import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 
 const SubProductForm = ({ mode }: { mode: string }) => {
   const { id } = useParams();
@@ -31,8 +32,8 @@ const SubProductForm = ({ mode }: { mode: string }) => {
     (state) => state.masters.subProduct
   );
   const [formData, setFormData] = useState<SubProductFormType>(initialValues);
-  const [loadingProductList, setLoadingProductList] = useState(false);
-  const [productDropdownList, setProductDropdownList] = useState<any[]>([]);
+
+  const { productDropdownData, loadingProductList } = useProductSubProduct({});
 
   const handleSubmit = (values: SubProductFormType) => {
     handleSubProductFormSubmit(
@@ -44,24 +45,6 @@ const SubProductForm = ({ mode }: { mode: string }) => {
       setFormData
     );
   };
-
-  useEffect(() => {
-    const fetchSubProductList = async () => {
-      setLoadingProductList(true);
-      try {
-        const response = await dispatch(fetchDropDownForProducts()).unwrap();
-        // If your thunk returns data in action.payload, use that
-        setProductDropdownList(response || []);
-      } catch (err) {
-        setProductDropdownList([]);
-        console.error("Failed to fetch product list", err);
-      } finally {
-        setLoadingProductList(false);
-      }
-    };
-
-    fetchSubProductList();
-  }, [dispatch]);
 
   // Fetch Data by Id when Edit
   useEffect(() => {
@@ -84,15 +67,6 @@ const SubProductForm = ({ mode }: { mode: string }) => {
       setFormData(transformSubProductToFormData(selectedSubProduct));
     }
   }, [selectedSubProduct, mode]);
-
-  const productDropdownData = useMemo(() => {
-    return (
-      productDropdownList?.map((item: any) => ({
-        label: item.productName,
-        value: String(item.id),
-      })) || []
-    );
-  }, [productDropdownList]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">

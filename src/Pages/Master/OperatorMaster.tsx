@@ -9,6 +9,7 @@ import { fetchOperator } from "../../Redux/Features/Masters/OperatorMaster/thunk
 import { mapToOperatorTableType } from "../../Redux/Features/Masters/OperatorMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import { headers, OperatorTableType } from "../../Config/Master/OperatorConfig";
+import { toast } from "react-toastify";
 
 const OperatorMaster = () => {
   const navigate = useNavigate();
@@ -32,7 +33,10 @@ const OperatorMaster = () => {
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(fetchOperator());
+      dispatch(fetchOperator())
+        .unwrap()
+        .then()
+        .catch((err) => toast.error(err));
     }
   }, []);
 

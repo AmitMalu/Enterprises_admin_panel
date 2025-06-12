@@ -9,19 +9,26 @@ import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { fetchProduct } from "../../Redux/Features/Masters/ProductMaster/thunks";
 import { transformProductToFormData } from "../../Redux/Features/Masters/ProductMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
+import { setCurrentPage } from "../../Redux/Features/Masters/ProductMaster/slice";
 
 const ProductMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { products, loading, loaded } = useAppSelector(
+  const { products, loading, pagination } = useAppSelector(
     (state) => state.masters.product
   );
+
+  const currentPage = pagination.currentPage;
 
   const transformedData: ProductType[] = products?.map(
     transformProductToFormData
   );
 
   const [searchValue, setSearchValue] = useState("");
+
+  const setPage = (page: number) => {
+    dispatch(setCurrentPage(page));
+  };
 
   const handleEdit = (id: string) => {
     navigate(`/master/product-master/edit/${id}`, { state: id });
@@ -36,10 +43,8 @@ const ProductMaster = () => {
   };
 
   useEffect(() => {
-    if (!loaded) {
-      dispatch(fetchProduct());
-    }
-  }, []);
+    dispatch(fetchProduct({ page: currentPage, size: 5 }));
+  }, [currentPage]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -75,6 +80,11 @@ const ProductMaster = () => {
               </span>
             </div>
           )}
+          pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={setPage}
+          message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}
     </div>

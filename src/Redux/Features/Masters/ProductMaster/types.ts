@@ -51,7 +51,13 @@ export interface ProductStateType {
 export interface ProductMasterState {
   products: ProductStateType[];
   selectedProduct: ProductStateType | null;
+  pagination: {
+    totalPages: number;
+    totalElements: number;
+    pageSize: number;
+    currentPage: number;
+  };
   loading: boolean;
   error: string | null;
-  loaded : boolean;
+  loaded: boolean;
 }

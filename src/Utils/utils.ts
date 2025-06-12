@@ -65,3 +65,16 @@ export const booleanSelectData = [
   { label: "Yes", value: "true" },
   { label: "No", value: "false" },
 ];
+
+export const prioritySelectDataInNumbers = [
+  { label: "1 - Very High", value: "1" },
+  { label: "2 - High", value: "2" },
+  { label: "3 - Medium", value: "3" },
+  { label: "4 - Low", value: "4" },
+  { label: "5 - Very Low", value: "5" },
+];
+
+export const pubPvtSelectData = [
+  { label: "Public", value: "Public" },
+  { label: "Private", value: "Private" },
+];

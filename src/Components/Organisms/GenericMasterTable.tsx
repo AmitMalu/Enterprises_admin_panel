@@ -1,6 +1,8 @@
-import { Table, Tooltip } from "@mantine/core";
+import { Group, Pagination, Table, Tooltip } from "@mantine/core";
 import React from "react";
 import { ellipsisCellStyle } from "../../Utils/utils";
+import TextComponent from "../Atoms/TextComponent";
+import { paginationBackIcon, paginationFrontIcon } from "../../assets/Icons";
 
 type Header<T> = {
   key: keyof T;
@@ -12,6 +14,16 @@ type GenericMasterTableProps<T> = {
   headers: Header<T>[];
   renderExtraHeader?: () => React.ReactNode;
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
+  pagination?: boolean;
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+
+  pageSize?: number;
+  onPageSizeChange?: (size: number) => void;
+  pageSizeOptions?: number[];
+
+  message?: string;
 };
 
 const GenericMasterTable = <T,>({
@@ -19,6 +31,15 @@ const GenericMasterTable = <T,>({
   headers,
   renderExtraHeader,
   renderExtraRowCell,
+  currentPage,
+  totalPages,
+  onPageChange,
+
+  pagination = false,
+  pageSize = 5,
+  onPageSizeChange,
+  pageSizeOptions,
+  message,
 }: GenericMasterTableProps<T>) => {
   return (
     <Table.ScrollContainer minWidth={1600} className="mt-4">
@@ -83,6 +104,48 @@ const GenericMasterTable = <T,>({
             </Table.Tr>
           )}
         </Table.Tbody>
+
+        {pagination && totalPages && totalPages > 0 && (
+          <Table.Tfoot>
+            <Table.Tr>
+              <Table.Td colSpan={headers.length + (renderExtraRowCell ? 1 : 0)}>
+                <Group
+                  style={{
+                    padding: "6px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {message && (
+                    <TextComponent
+                      color="#667085"
+                      fontFamily="Inter"
+                      fontSize={14}
+                    >
+                      {message}
+                    </TextComponent>
+                  )}
+
+                  <Pagination
+                    total={totalPages}
+                    value={currentPage}
+                    onChange={onPageChange}
+                    styles={{ control: { borderColor: "#fff" } }}
+                    color="#BF0204"
+                    size="sm"
+                    radius="md"
+                    previousIcon={(props) =>
+                      paginationBackIcon({ ...props, color: "#BF0204" })
+                    }
+                    nextIcon={(props) =>
+                      paginationFrontIcon({ ...props, color: "#BF0204" })
+                    }
+                  />
+                </Group>
+              </Table.Td>
+            </Table.Tr>
+          </Table.Tfoot>
+        )}
       </Table>
     </Table.ScrollContainer>
   );

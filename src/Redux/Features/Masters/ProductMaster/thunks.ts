@@ -5,18 +5,22 @@ import { ProductStateType } from "./types";
 
 export const fetchProduct = createAsyncThunk(
   "productMaster/fetchProduct",
-  async (_, { rejectWithValue }) => {
+  async (
+    { page = 0, size = 10 }: { page: number; size: number },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await axiosInstance.get(API_ENDPOINTS?.MASTER?.PRODUCTS);
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS?.MASTER?.PRODUCTS}?page=${page - 1}&size=${size}`
+      );
       if (response.data) {
-        return response.data;
+        return response?.data?.data;
       } else {
-        return rejectWithValue(response.data.message || "No data found");
+        return rejectWithValue(response.data.message || "No Products found");
       }
     } catch (error: any) {
-      console.log(error);
       return rejectWithValue(
-        error.response?.data?.message || error.message || "No data found"
+        error.response?.data?.message || error.message || "No Products found"
       );
     }
   }
@@ -26,7 +30,9 @@ export const fetchDropDownForProducts = createAsyncThunk(
   "productMaster/fetchDropDownForProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`${API_ENDPOINTS?.MASTER?.PRODUCTS}/dropdown/active`);
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS?.MASTER?.PRODUCTS}/dropdown/active`
+      );
       if (response.data) {
         return response.data;
       } else {
@@ -55,7 +61,6 @@ export const fetchProductById = createAsyncThunk(
         );
       }
     } catch (error: any) {
-      console.log(error);
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
@@ -83,7 +88,6 @@ export const createProduct = createAsyncThunk(
         );
       }
     } catch (error: any) {
-      console.log(error);
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||

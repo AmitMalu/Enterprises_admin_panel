@@ -11,12 +11,11 @@ export const fetchOperator = createAsyncThunk(
         `${API_ENDPOINTS?.MASTER?.OPERATOR}?page=${0}&size=${10}`
       );
       if (response.data) {
-        return response.data;
+        return response.data.data;
       } else {
         return rejectWithValue(response.data.message || "No Operator found");
       }
     } catch (error: any) {
-      console.log(error);
       return rejectWithValue(
         error.response?.data?.message || error.message || "No Operator found"
       );
@@ -32,7 +31,7 @@ export const fetchOperatorById = createAsyncThunk(
         `${API_ENDPOINTS.MASTER.OPERATOR}/${id}` // endpoint requires the ID,
       );
       if (response.data) {
-        return response.data;
+        return response.data.data;
       } else {
         return rejectWithValue(
           response.data.message || "No data found for this ID - " + id
