@@ -10,14 +10,21 @@ import { toast } from "react-toastify";
 import { mapToVendorTableType } from "../../Redux/Features/Masters/VendorMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import { headers, VendorTableType } from "../../Config/Master/VendorConfig";
+import { setCurrentPage } from "../../Redux/Features/Masters/VendorMaster/slice";
 
 const VendorMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, loaded, vendors } = useAppSelector(
+  const { loading, vendors, pagination } = useAppSelector(
     (state) => state.masters.vendor
   );
+
+  const currentPage = pagination?.currentPage;
   const [searchValue, setSearchValue] = useState("");
+
+  const setPage = (page: number) => {
+    dispatch(setCurrentPage(page));
+  };
 
   const handleEdit = (id: any) => {
     navigate(`/master/vendor-master/edit/${id}`, { state: id });
@@ -32,12 +39,10 @@ const VendorMaster = () => {
   };
 
   useEffect(() => {
-    if (!loaded) {
-      dispatch(fetchVendor())
-        .unwrap()
-        .then()
-        .catch((err) => toast.error(err));
-    }
+    dispatch(fetchVendor({ page: currentPage, size: 5 }))
+      .unwrap()
+      .then()
+      .catch((err) => toast.error(err));
   }, []);
 
   const data = vendors?.map(mapToVendorTableType);
@@ -76,6 +81,11 @@ const VendorMaster = () => {
               </span>
             </div>
           )}
+          pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={setPage}
+          message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}
     </div>

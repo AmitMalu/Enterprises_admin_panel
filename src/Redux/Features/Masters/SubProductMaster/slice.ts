@@ -13,7 +13,7 @@ const initialState: SubProductMasterState = {
   pagination: {
     totalPages: 0,
     totalElements: 0,
-    pageSize: 10,
+    pageSize: 5,
     currentPage: 1,
   },
   loading: false,
@@ -43,7 +43,7 @@ const subProductMasterSlice = createSlice({
       })
       .addCase(fetchSubProduct.fulfilled, (state, action) => {
         const { content, totalPages, totalElements, size, number } =
-          action.payload;
+          action.payload.data;
         state.subProducts = content;
         state.pagination = {
           totalPages,
@@ -60,7 +60,7 @@ const subProductMasterSlice = createSlice({
         state.pagination = {
           totalPages: 0,
           totalElements: 0,
-          pageSize: 10,
+          pageSize: 5,
           currentPage: 1,
         };
         state.loading = false;
@@ -72,7 +72,7 @@ const subProductMasterSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchSubProductById.fulfilled, (state, action) => {
-        state.selectedSubProduct = action.payload;
+        state.selectedSubProduct = action.payload.data;
         state.loading = false;
         state.error = null;
       })
@@ -85,7 +85,6 @@ const subProductMasterSlice = createSlice({
       // Update Product
       .addCase(updateSubProduct.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(updateSubProduct.fulfilled, (state) => {
         // const updated = action?.payload?.data;
@@ -103,7 +102,6 @@ const subProductMasterSlice = createSlice({
       // Create Product
       .addCase(createSubProduct.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(createSubProduct.fulfilled, (state) => {
         // state.subProducts.push(action.payload.data);

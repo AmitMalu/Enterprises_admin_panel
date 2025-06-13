@@ -16,6 +16,7 @@ import {
   setCurrentPage,
   setPageSize,
 } from "../../Redux/Features/Masters/SubProductMaster/slice";
+import { toast } from "react-toastify";
 
 const SubProductMaster = () => {
   const navigate = useNavigate();
@@ -43,7 +44,10 @@ const SubProductMaster = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchSubProduct({ page: currentPage, size: 5 }));
+    dispatch(fetchSubProduct({ page: currentPage, size: 5 }))
+      .unwrap()
+      .then()
+      .catch((err) => toast.error(err));
   }, [currentPage]);
 
   const data = subProducts?.map(mapToSubProductTableType);

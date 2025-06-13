@@ -10,6 +10,12 @@ import { OperatorMasterState } from "./types";
 const initialState: OperatorMasterState = {
   operators: [],
   selectedOperator: null,
+  pagination: {
+    totalPages: 0,
+    totalElements: 0,
+    pageSize: 5,
+    currentPage: 1,
+  },
   loading: false,
   error: null,
   loaded: false,
@@ -22,48 +28,30 @@ const operatorMasterSlice = createSlice({
     clearSelectedOperator(state) {
       state.selectedOperator = null;
     },
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.pagination.currentPage = action.payload;
+    },
+    setPageSize(state, action: PayloadAction<number>) {
+      state.pagination.pageSize = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-      // Create Operator
-      .addCase(createOperator.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createOperator.fulfilled, (state, action) => {
-        state.loading = false;
-        state.operators.push(action.payload.data);
-      })
-      .addCase(createOperator.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-
-      // Update Operator
-      .addCase(updateOperator.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateOperator.fulfilled, (state, action) => {
-        const updated = action?.payload?.data;
-        const index = state.operators.findIndex((p) => p.id === updated?.id);
-        if (index !== -1) {
-          state.operators[index] = updated;
-        }
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(updateOperator.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
 
       // fetchOperator
       .addCase(fetchOperator.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchOperator.fulfilled, (state, action) => {
-        state.operators = action.payload.content;
+        const { content, totalPages, totalElements, size, number } =
+          action.payload.data;
+        state.operators = content;
+        state.pagination = {
+          totalPages,
+          totalElements,
+          pageSize: size,
+          currentPage: number + 1, // Convert 0-based to 1-based
+        };
         state.loading = false;
         state.loaded = true;
         state.error = null;
@@ -79,7 +67,7 @@ const operatorMasterSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchOperatorById.fulfilled, (state, action) => {
-        state.selectedOperator = action.payload;
+        state.selectedOperator = action.payload.data;
         state.loading = false;
         state.error = null;
       })
@@ -87,9 +75,41 @@ const operatorMasterSlice = createSlice({
         state.selectedOperator = null;
         state.loading = false;
         state.error = action.payload as string;
+      })
+
+      // Update Operator
+      .addCase(updateOperator.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateOperator.fulfilled, (state) => {
+        // const updated = action?.payload?.data;
+        // const index = state.operators.findIndex((p) => p.id === updated?.id);
+        // if (index !== -1) {
+        //   state.operators[index] = updated;
+        // }
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateOperator.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Create Operator
+      .addCase(createOperator.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createOperator.fulfilled, (state) => {
+        // state.operators.push(action.payload.data);
+        state.loading = false;
+      })
+      .addCase(createOperator.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
-export const { clearSelectedOperator } = operatorMasterSlice.actions;
+export const { clearSelectedOperator, setCurrentPage, setPageSize } =
+  operatorMasterSlice.actions;
 export default operatorMasterSlice.reducer;

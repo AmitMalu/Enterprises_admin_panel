@@ -1,56 +1,7 @@
-export interface Inventory {
-  isInventory: boolean;
-  inventoryPrice: number;
-  isVirtual: boolean;
-  isShow: boolean;
-}
-
-export interface Cluster {
-  surcharge: boolean;
-  schemeEngine: boolean;
-}
-
-export interface ProductStateType {
-  id?: string;
-  name: string;
-  productCode: string;
-  productCodeForScheme: string;
-  isVisible: boolean;
-  transactionType?: string | null;
-  isCommissions: boolean;
-  selectIsCommission: string;
-  active: boolean;
-  dashboardUrl: string;
-  dashboardUrlForApk: string;
-  dashboardImage: string;
-  priority: number;
-  productGroup: string;
-  reverseTx: boolean;
-  clusterMode: boolean;
-  isSettlement: boolean;
-  hasCharges: boolean;
-  blocked: boolean;
-  inventory: Inventory;
-  cluster: Cluster;
-  minimumPostpaidBalance: number;
-  minimumPrepaidBalance: number;
-  minimumGullakBalance: number;
-  minimumSingleTransactionAmount: number;
-  maximumSingleTransactionAmount: number;
-  sgst: number;
-  tds: number;
-  createdOn?: string;
-  createdBy: string;
-  editedOn?: string;
-  editedBy?: string | null;
-
-  // For any unknown/extra fields
-  [key: string]: any;
-}
-
+import { ProductFormType } from "../../../../Config/Master/ProductConfig";
 export interface ProductMasterState {
-  products: ProductStateType[];
-  selectedProduct: ProductStateType | null;
+  products: Record<string, any>[];
+  selectedProduct: Record<string, any> | null;
   pagination: {
     totalPages: number;
     totalElements: number;
@@ -61,3 +12,63 @@ export interface ProductMasterState {
   error: string | null;
   loaded: boolean;
 }
+
+export type CreateProductPayload = Omit<
+  ProductFormType,
+  "isInventory" | "isVirtual" | "isShow"
+> & {
+  selectIsCommission: string;
+  transactionType: string;
+  dashboardUrl: string;
+  dashboardUrlForApk: string;
+  dashboardImage: string;
+  priority: Number | string;
+  minimumPostpaidBalance: Number;
+  minimumPrepaidBalance: Number;
+  minimumGullakBalance: Number;
+  minimumSingleTransactionAmount: Number;
+  maximumSingleTransactionAmount: Number;
+  sgst: Number;
+  tds: Number;
+  createdBy: string;
+  inventory: {
+    isInventory: Boolean;  // Omit, because it is nested inside object
+    inventoryPrice: number; 
+    isVirtual: Boolean;  // Same
+    isShow: Boolean; //Same
+  };
+  cluster: {
+    surcharge: Boolean;
+    schemeEngine: Boolean;
+  };
+};
+
+export type UpdateProductPayload = Omit<
+  ProductFormType,
+  "isInventory" | "isVirtual" | "isShow"
+> & {
+  selectIsCommission: string;
+  transactionType: string;
+  dashboardUrl: string;
+  dashboardUrlForApk: string;
+  dashboardImage: string;
+  priority: Number | string;
+  minimumPostpaidBalance: Number;
+  minimumPrepaidBalance: Number;
+  minimumGullakBalance: Number;
+  minimumSingleTransactionAmount: Number;
+  maximumSingleTransactionAmount: Number;
+  sgst: Number;
+  tds: Number;
+  editedBy: string;
+  inventory: {
+    isInventory: Boolean;
+    inventoryPrice: number;
+    isVirtual: Boolean;
+    isShow: Boolean;
+  };
+  cluster: {
+    surcharge: Boolean;
+    schemeEngine: Boolean;
+  };
+};

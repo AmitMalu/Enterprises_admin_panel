@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   createProduct,
+  fetchDropDownForProducts,
   fetchProduct,
   fetchProductById,
   updateProduct,
 } from "./thunks";
-import { ProductMasterState, ProductStateType } from "./types";
+import { ProductMasterState } from "./types";
 
 const initialState: ProductMasterState = {
   products: [],
@@ -13,7 +14,7 @@ const initialState: ProductMasterState = {
   pagination: {
     totalPages: 0,
     totalElements: 0,
-    pageSize: 10,
+    pageSize: 5,
     currentPage: 1,
   },
   loading: false,
@@ -44,7 +45,7 @@ const productMasterSlice = createSlice({
       })
       .addCase(fetchProduct.fulfilled, (state, action) => {
         const { content, totalPages, totalElements, size, number } =
-          action.payload;
+          action.payload.data;
         state.products = content;
         state.pagination = {
           totalPages,
@@ -61,7 +62,7 @@ const productMasterSlice = createSlice({
         state.pagination = {
           totalPages: 0,
           totalElements: 0,
-          pageSize: 10,
+          pageSize: 5,
           currentPage: 1,
         };
         state.loading = false;
@@ -73,7 +74,7 @@ const productMasterSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchProductById.fulfilled, (state, action) => {
-        state.selectedProduct = action.payload;
+        state.selectedProduct = action.payload.data;
         state.loading = false;
         state.error = null;
       })
@@ -86,7 +87,6 @@ const productMasterSlice = createSlice({
       // Update Product
       .addCase(updateProduct.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(updateProduct.fulfilled, (state) => {
         // const updated = action?.payload?.data;
@@ -95,6 +95,7 @@ const productMasterSlice = createSlice({
         //   state.products[index] = updated;
         // }
         state.loading = false;
+        state.error = null;
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.loading = false;
@@ -104,7 +105,6 @@ const productMasterSlice = createSlice({
       // Create Product
       .addCase(createProduct.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(createProduct.fulfilled, (state) => {
         // state.products.push(action.payload.data);
@@ -113,7 +113,7 @@ const productMasterSlice = createSlice({
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
   },
 });
 

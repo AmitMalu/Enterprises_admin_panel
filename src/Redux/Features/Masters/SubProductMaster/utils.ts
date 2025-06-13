@@ -49,26 +49,14 @@ export const transformSubProductToFormData = (
 export const transformFormToCreatePayload = (
   formData: SubProductFormType
 ): CreateSubProductPayload => ({
-  subProductTitle: formData.subProductTitle,
-  subProductCode: formData.subProductCode,
-  productId: formData.productId, // assuming it's productId (you may need to adjust this)
-  walletType: formData.walletType,
-  isSettlement: formData.isSettlement,
-  isActive: formData.isActive,
-  enabled: formData.enabled,
+  ...formData,
   createdBy: localStorage.getItem("username") || "system",
 });
 
 export const transformFormToUpdatePayload = (
   formData: SubProductFormType
 ): UpdateSubProductPayload => ({
-  subProductTitle: formData.subProductTitle,
-  subProductCode: formData.subProductCode,
-  productId: formData.productId, // assuming it's productId
-  walletType: formData.walletType,
-  isSettlement: formData.isSettlement,
-  isActive: formData.isActive,
-  enabled: formData.enabled,
+  ...formData,
   editedBy: localStorage.getItem("username") || "system",
 });
 

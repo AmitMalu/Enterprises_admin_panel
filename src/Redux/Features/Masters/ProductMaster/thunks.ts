@@ -1,7 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../../Config/Api/EndPoints";
-import { ProductStateType } from "./types";
+import {
+  CreateProductPayload,
+  UpdateProductPayload,
+} from "./types";
 
 export const fetchProduct = createAsyncThunk(
   "productMaster/fetchProduct",
@@ -13,10 +16,12 @@ export const fetchProduct = createAsyncThunk(
       const response = await axiosInstance.get(
         `${API_ENDPOINTS?.MASTER?.PRODUCTS}?page=${page - 1}&size=${size}`
       );
-      if (response.data) {
-        return response?.data?.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
       } else {
-        return rejectWithValue(response.data.message || "No Products found");
+        return rejectWithValue(responseData?.message || "No Products found");
       }
     } catch (error: any) {
       return rejectWithValue(
@@ -33,10 +38,12 @@ export const fetchDropDownForProducts = createAsyncThunk(
       const response = await axiosInstance.get(
         `${API_ENDPOINTS?.MASTER?.PRODUCTS}/dropdown/active`
       );
-      if (response.data) {
-        return response.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData.data;
       } else {
-        return rejectWithValue(response.data.message || "No list found");
+        return rejectWithValue(responseData?.message || "No list found");
       }
     } catch (error: any) {
       return rejectWithValue(
@@ -53,11 +60,13 @@ export const fetchProductById = createAsyncThunk(
       const response = await axiosInstance.get(
         `${API_ENDPOINTS.MASTER.PRODUCTS}/${id}` // endpoint requires the ID,
       );
-      if (response.data) {
-        return response.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
       } else {
         return rejectWithValue(
-          response.data.message || "No data found for this ID - " + id
+          responseData?.message || "No data found for this ID - " + id
         );
       }
     } catch (error: any) {
@@ -72,7 +81,7 @@ export const fetchProductById = createAsyncThunk(
 
 export const createProduct = createAsyncThunk(
   "productMaster/createProduct",
-  async (data: ProductStateType, { rejectWithValue }) => {
+  async (data: CreateProductPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.MASTER.PRODUCTS,
@@ -84,7 +93,7 @@ export const createProduct = createAsyncThunk(
         return responseData;
       } else {
         return rejectWithValue(
-          responseData.message || "Failed to Create product"
+          responseData?.message || "Failed to Create product"
         );
       }
     } catch (error: any) {
@@ -100,7 +109,7 @@ export const createProduct = createAsyncThunk(
 export const updateProduct = createAsyncThunk(
   "productMaster/updateProduct",
   async (
-    { id, data }: { id: string; data: ProductStateType },
+    { id, data }: { id: string; data: UpdateProductPayload },
     { rejectWithValue }
   ) => {
     try {
@@ -115,7 +124,7 @@ export const updateProduct = createAsyncThunk(
         return responseData;
       } else {
         return rejectWithValue(
-          responseData.message || "Failed to update product"
+          responseData?.message || "Failed to update product"
         );
       }
     } catch (error: any) {

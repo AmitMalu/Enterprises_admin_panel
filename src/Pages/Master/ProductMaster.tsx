@@ -10,6 +10,7 @@ import { fetchProduct } from "../../Redux/Features/Masters/ProductMaster/thunks"
 import { transformProductToFormData } from "../../Redux/Features/Masters/ProductMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import { setCurrentPage } from "../../Redux/Features/Masters/ProductMaster/slice";
+import { toast } from "react-toastify";
 
 const ProductMaster = () => {
   const navigate = useNavigate();
@@ -43,7 +44,10 @@ const ProductMaster = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchProduct({ page: currentPage, size: 5 }));
+    dispatch(fetchProduct({ page: currentPage, size: 5 }))
+      .unwrap()
+      .then()
+      .catch((err) => toast.error(err));
   }, [currentPage]);
 
   return (

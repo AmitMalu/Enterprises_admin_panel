@@ -6,19 +6,19 @@ import { CreateSubProductPayload, UpdateSubProductPayload } from "./types";
 export const fetchSubProduct = createAsyncThunk(
   "subProductMaster/fetchSubProduct",
   async (
-    { page = 0, size = 10 }: { page: number; size: number },
+    { page = 0, size = 5 }: { page: number; size: number },
     { rejectWithValue }
   ) => {
     try {
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}?page=${page-1}&size=${size}`
+        `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}?page=${page - 1}&size=${size}`
       );
-      if (response?.data) {
-        return response?.data.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
       } else {
-        return rejectWithValue(
-          response.data.message || "No Sub Products found"
-        );
+        return rejectWithValue(responseData?.message || "No SubProducts found");
       }
     } catch (error: any) {
       return rejectWithValue(
@@ -37,11 +37,13 @@ export const fetchSubProductById = createAsyncThunk(
       const response = await axiosInstance.get(
         `${API_ENDPOINTS.MASTER.SUB_PRODUCT}/${id}` // endpoint requires the ID,
       );
-      if (response.data) {
-        return response.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
       } else {
         return rejectWithValue(
-          response.data.message || "No data found for this ID - " + id
+          responseData?.message || "No data found for this ID - " + id
         );
       }
     } catch (error: any) {
@@ -68,7 +70,7 @@ export const createSubProduct = createAsyncThunk(
         return responseData;
       } else {
         return rejectWithValue(
-          responseData.message || "Failed to Create Sub product"
+          responseData?.message || "Failed to Create Sub product"
         );
       }
     } catch (error: any) {
@@ -99,7 +101,7 @@ export const updateSubProduct = createAsyncThunk(
         return responseData;
       } else {
         return rejectWithValue(
-          responseData.message || "Failed to update Subproduct"
+          responseData?.message || "Failed to update Subproduct"
         );
       }
     } catch (error: any) {
@@ -119,8 +121,10 @@ export const fetchSubProductsByProductId = createAsyncThunk(
       const response = await axiosInstance.get(
         `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}/dropdown/${id}`
       );
-      if (response.data) {
-        return response.data.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData.data;
       } else {
         return rejectWithValue(response.data.message || "No list found");
       }

@@ -24,8 +24,35 @@ export type ProductType = Pick<
   | "active"
 >;
 
-export const initialValues: ProductType = {
-  id: "",
+export interface ProductFormType {
+  name: "";
+  productCode: "";
+  productCodeForScheme: "";
+  isShow: false;
+  hasCharges: false;
+  isCommissions: false;
+  isInventory: false;
+  isSettlement: false;
+  isVirtual: false;
+  isVisible: false;
+  reverseTx: false;
+  // walletType: "",
+  // subProducts: "",
+  productGroup: "";
+  clusterMode: false;
+  blocked: false;
+  active: false;
+}
+
+export interface ProductTableType extends ProductFormType {
+  id: string;
+  // createdBy: string;
+  // createdOn?: string;
+  // editedBy?: string;
+  // editedOn?: string;
+}
+
+export const initialValues: ProductFormType = {
   name: "",
   productCode: "",
   productCodeForScheme: "",
@@ -45,8 +72,7 @@ export const initialValues: ProductType = {
   active: false,
 };
 
-export const validationSchema: Record<keyof ProductType, Yup.AnySchema> = {
-  id: textField("ID", 50, false),
+export const validationSchema: Record<keyof ProductFormType, Yup.AnySchema> = {
   name: textField("Name", 50, true),
   productCode: textField("Product Code", 30, true),
   productCodeForScheme: textField("Product Code For Scheme", 30, true),
@@ -66,50 +92,7 @@ export const validationSchema: Record<keyof ProductType, Yup.AnySchema> = {
   active: Yup.boolean().required("Active is required"),
 };
 
-// export const data: ProductType[] = [
-//   {
-//     id: "101",
-//     name: "Card A",
-//     productCode: "V001",
-//     productCodeForScheme: "Vendor X",
-//     isShow: true,
-//     hasCharges: false,
-//     isCommissions: false,
-//     isInventory: true,
-//     isSettlement: true,
-//     isVirtual: false,
-//     isVisible: true,
-//     reverseTx: true,
-//     walletType: "C001",
-//     subProducts: "S001",
-//     productGroup: "2024-05-10",
-//     clusterMode: true,
-//     blocked: false,
-//     active: true,
-//   },
-//   {
-//     id: "102",
-//     name: "Card A",
-//     productCode: "V001",
-//     productCodeForScheme: "Vendor X",
-//     isShow: false,
-//     hasCharges: true,
-//     isCommissions: true,
-//     isInventory: true,
-//     isSettlement: true,
-//     isVirtual: false,
-//     isVisible: true,
-//     reverseTx: false,
-//     walletType: "C001",
-//     subProducts: "S001",
-//     productGroup: "2024-05-10",
-//     clusterMode: false,
-//     blocked: false,
-//     active: true,
-//   },
-// ];
-
-export const headers: { key: keyof ProductType; label: string }[] = [
+export const headers: { key: keyof ProductTableType; label: string }[] = [
   { key: "id", label: "Id" },
   { key: "name", label: "Name" },
   { key: "productCode", label: "Product Code" },

@@ -5,15 +5,20 @@ import { CreateVendorPayload, UpdateVendorPayload } from "./types";
 
 export const fetchVendor = createAsyncThunk(
   "vendorMaster/fetchVendor",
-  async (_, { rejectWithValue }) => {
+  async (
+    { page = 0, size = 5 }: { page: number; size: number },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS?.MASTER?.VENDOR}?page=${0}&size=${10}`
+        `${API_ENDPOINTS?.MASTER?.VENDOR}?page=${page - 1}&size=${size}`
       );
-      if (response.data) {
-        return response.data.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
       } else {
-        return rejectWithValue(response.data.message || "No Vendor found");
+        return rejectWithValue(responseData?.message || "No Vendor found");
       }
     } catch (error: any) {
       return rejectWithValue(
@@ -30,15 +35,16 @@ export const fetchVendorById = createAsyncThunk(
       const response = await axiosInstance.get(
         `${API_ENDPOINTS.MASTER.VENDOR}/${id}` // endpoint requires the ID,
       );
-      if (response.data) {
-        return response.data.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
       } else {
         return rejectWithValue(
-          response.data.message || "No data found for this ID - " + id
+          responseData?.message || "No data found for this ID - " + id
         );
       }
     } catch (error: any) {
-      console.log(error);
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||

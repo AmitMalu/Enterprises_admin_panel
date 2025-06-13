@@ -5,15 +5,20 @@ import { CreateOperatorPayload, UpdateOperatorPayload } from "./types";
 
 export const fetchOperator = createAsyncThunk(
   "operatorMaster/fetchOperator",
-  async (_, { rejectWithValue }) => {
+  async (
+    { page = 0, size = 5 }: { page: number; size: number },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS?.MASTER?.OPERATOR}?page=${0}&size=${10}`
+        `${API_ENDPOINTS?.MASTER?.OPERATOR}?page=${page - 1}&size=${size}`
       );
-      if (response.data) {
-        return response.data.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
       } else {
-        return rejectWithValue(response.data.message || "No Operator found");
+        return rejectWithValue(responseData?.message || "No Operator found");
       }
     } catch (error: any) {
       return rejectWithValue(
@@ -30,15 +35,16 @@ export const fetchOperatorById = createAsyncThunk(
       const response = await axiosInstance.get(
         `${API_ENDPOINTS.MASTER.OPERATOR}/${id}` // endpoint requires the ID,
       );
-      if (response.data) {
-        return response.data.data;
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
       } else {
         return rejectWithValue(
-          response.data.message || "No data found for this ID - " + id
+          responseData?.message || "No data found for this ID - " + id
         );
       }
     } catch (error: any) {
-      console.log(error);
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
@@ -58,15 +64,14 @@ export const createOperator = createAsyncThunk(
       );
       const responseData = response?.data;
 
-      if (responseData && responseData.statusCode === 201) {
+      if (responseData && responseData?.statusCode === 201) {
         return responseData;
       } else {
         return rejectWithValue(
-          responseData.message || "Failed to Create Operator"
+          responseData?.message || "Failed to Create Operator"
         );
       }
     } catch (error: any) {
-      console.log(error);
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||

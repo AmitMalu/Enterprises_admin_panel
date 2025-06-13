@@ -10,14 +10,21 @@ import { mapToOperatorTableType } from "../../Redux/Features/Masters/OperatorMas
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import { headers, OperatorTableType } from "../../Config/Master/OperatorConfig";
 import { toast } from "react-toastify";
+import { setCurrentPage } from "../../Redux/Features/Masters/OperatorMaster/slice";
 
 const OperatorMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, loaded, operators } = useAppSelector(
+  const { loading, operators, pagination } = useAppSelector(
     (state) => state.masters.operator
   );
+
+  const currentPage = pagination.currentPage;
   const [searchValue, setSearchValue] = useState("");
+
+  const setPage = (page: number) => {
+    dispatch(setCurrentPage(page));
+  };
 
   const handleEdit = (id: any) => {
     navigate(`/master/operator-master/edit/${id}`, { state: id });
@@ -32,13 +39,11 @@ const OperatorMaster = () => {
   };
 
   useEffect(() => {
-    if (!loaded) {
-      dispatch(fetchOperator())
-        .unwrap()
-        .then()
-        .catch((err) => toast.error(err));
-    }
-  }, []);
+    dispatch(fetchOperator({ page: currentPage, size: 5 }))
+      .unwrap()
+      .then()
+      .catch((err) => toast.error(err));
+  }, [currentPage]);
 
   const data = operators?.map(mapToOperatorTableType);
 
@@ -76,6 +81,11 @@ const OperatorMaster = () => {
               </span>
             </div>
           )}
+          pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={setPage}
+          message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}
     </div>

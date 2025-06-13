@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
 import { fetchSubProductsByProductId } from "../../Redux/Features/Masters/SubProductMaster/thunks";
 import { fetchDropDownForProducts } from "../../Redux/Features/Masters/ProductMaster/thunks";
+import { toast } from "react-toastify";
 interface UseProductSubProductProps {
   selectedProductId?: string;
   selectedSubProductId?: string;
@@ -27,14 +28,16 @@ export const useProductSubProduct = ({
       setLoadingProductList(true);
       try {
         const result = await dispatch(fetchDropDownForProducts()).unwrap();
-        setProductDropdownData(
-          result?.map((item: any) => ({
-            label: item.productName,
-            value: String(item.id),
-          })) || []
-        );
-      } catch (err) {
+
+        const filteredData = (result || [])?.map((item: any) => ({
+          label: item.productName,
+          value: String(item.id),
+        }));
+
+        setProductDropdownData(filteredData);
+      } catch (err: any) {
         console.error("Failed to fetch product list", err);
+        toast.error(err);
         setProductDropdownData([]);
       } finally {
         setLoadingProductList(false);
@@ -55,16 +58,17 @@ export const useProductSubProduct = ({
           fetchSubProductsByProductId(selectedProductId)
         ).unwrap();
 
-        setSubProductDropdownData(
-          result?.map((item: any) => ({
-            label: item.subProduct_name,
-            value: String(item.id),
-          })) || []
-        );
+        const filteredData = (result || [])?.map((item: any) => ({
+          label: item.subProduct_name,
+          value: String(item.id),
+        }));
+
+        setSubProductDropdownData(filteredData);
 
         setSubProductKey(Date.now());
-      } catch (err) {
+      } catch (err: any) {
         console.error("Failed to fetch sub-product list", err);
+        toast.error(err);
         setSubProductDropdownData([]);
         if (onSubProductReset) onSubProductReset();
       } finally {

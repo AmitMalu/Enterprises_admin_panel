@@ -105,10 +105,10 @@ const GenericMasterTable = <T,>({
           )}
         </Table.Tbody>
 
-        {pagination && totalPages && totalPages > 0 && (
+        {pagination && data?.length > 0 && (
           <Table.Tfoot>
             <Table.Tr>
-              <Table.Td colSpan={headers.length + (renderExtraRowCell ? 1 : 0)}>
+              <Table.Td colSpan={headers?.length + (renderExtraRowCell ? 1 : 0)}>
                 <Group
                   style={{
                     padding: "6px",
@@ -127,7 +127,7 @@ const GenericMasterTable = <T,>({
                   )}
 
                   <Pagination
-                    total={totalPages}
+                    total={totalPages || 0}
                     value={currentPage}
                     onChange={onPageChange}
                     styles={{ control: { borderColor: "#fff" } }}
