@@ -9,6 +9,7 @@ import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import {
   initialValues,
+  ProductFormType,
   ProductType,
   validationSchema,
 } from "../../Config/Master/ProductConfig";
@@ -28,9 +29,9 @@ const ProductForm = ({ mode }: { mode: string }) => {
   const navigate = useNavigate();
   const { selectedProduct } = useAppSelector((state) => state.masters.product);
 
-  const [formData, setFormData] = useState<ProductType>(initialValues);
+  const [formData, setFormData] = useState<ProductFormType>(initialValues);
 
-  const handleSubmit = (values: ProductType) => {
+  const handleSubmit = (values: ProductFormType) => {
     handleProductFormSubmit(mode, id, values, dispatch, navigate, setFormData);
   };
 

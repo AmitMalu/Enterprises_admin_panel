@@ -43,7 +43,7 @@ const VendorMaster = () => {
       .unwrap()
       .then()
       .catch((err) => toast.error(err));
-  }, []);
+  }, [currentPage]);
 
   const data = vendors?.map(mapToVendorTableType);
 

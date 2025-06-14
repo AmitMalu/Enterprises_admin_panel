@@ -17,6 +17,7 @@ import {
   setPageSize,
 } from "../../Redux/Features/Masters/SubProductMaster/slice";
 import { toast } from "react-toastify";
+import { pageSizeSelectData } from "../../Utils/utils";
 
 const SubProductMaster = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const SubProductMaster = () => {
     (state) => state.masters.subProduct
   );
   const currentPage = pagination.currentPage;
+  const pageSize = pagination.pageSize;
   const [searchValue, setSearchValue] = useState("");
 
   const handleEdit = (id: string) => {
@@ -33,6 +35,11 @@ const SubProductMaster = () => {
 
   const setPage = (page: number) => {
     dispatch(setCurrentPage(page));
+  };
+
+  const OnPageSizeChange = (size: number) => {
+    dispatch(setCurrentPage(1));
+    dispatch(setPageSize(size));
   };
 
   const handleSearchChange = (value: string) => {
@@ -44,11 +51,11 @@ const SubProductMaster = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchSubProduct({ page: currentPage, size: 5 }))
+    dispatch(fetchSubProduct({ page: currentPage, size: pageSize }))
       .unwrap()
       .then()
       .catch((err) => toast.error(err));
-  }, [currentPage]);
+  }, [currentPage, pageSize]);
 
   const data = subProducts?.map(mapToSubProductTableType);
 
@@ -90,6 +97,9 @@ const SubProductMaster = () => {
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={setPage}
+          onPageSizeChange={OnPageSizeChange}
+          pageSize={pageSize}
+          pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}

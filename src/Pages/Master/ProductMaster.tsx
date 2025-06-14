@@ -9,8 +9,12 @@ import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { fetchProduct } from "../../Redux/Features/Masters/ProductMaster/thunks";
 import { transformProductToFormData } from "../../Redux/Features/Masters/ProductMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
-import { setCurrentPage } from "../../Redux/Features/Masters/ProductMaster/slice";
+import {
+  setCurrentPage,
+  setPageSize,
+} from "../../Redux/Features/Masters/ProductMaster/slice";
 import { toast } from "react-toastify";
+import { pageSizeSelectData } from "../../Utils/utils";
 
 const ProductMaster = () => {
   const navigate = useNavigate();
@@ -19,6 +23,7 @@ const ProductMaster = () => {
     (state) => state.masters.product
   );
 
+  const pageSize = pagination.pageSize;
   const currentPage = pagination.currentPage;
 
   const transformedData: ProductType[] = products?.map(
@@ -29,6 +34,10 @@ const ProductMaster = () => {
 
   const setPage = (page: number) => {
     dispatch(setCurrentPage(page));
+  };
+
+  const OnPageSizeChange = (size: number) => {
+    dispatch(setPageSize(size));
   };
 
   const handleEdit = (id: string) => {
@@ -44,11 +53,11 @@ const ProductMaster = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchProduct({ page: currentPage, size: 5 }))
+    dispatch(fetchProduct({ page: currentPage, size: pageSize }))
       .unwrap()
       .then()
       .catch((err) => toast.error(err));
-  }, [currentPage]);
+  }, [currentPage, pageSize]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -88,6 +97,9 @@ const ProductMaster = () => {
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={setPage}
+          onPageSizeChange={OnPageSizeChange}
+          pageSize={pageSize}
+          pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}

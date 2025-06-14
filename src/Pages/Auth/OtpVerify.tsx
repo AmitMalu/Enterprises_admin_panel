@@ -58,6 +58,7 @@ const OtpVerify: React.FC = () => {
           state: { username: username }, // Pass username to Set Password page);
         });
       } else if (otpFor === "login") {
+        sessionStorage.setItem("justLoggedIn", "true");
         sessionStorage.removeItem("otpFor");
         sessionStorage.removeItem("otp-username");
         navigate("/");

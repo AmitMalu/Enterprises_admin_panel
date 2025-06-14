@@ -19,8 +19,14 @@ const menuReducer = createSlice({
     setActiveSubMenu(state, action: PayloadAction<string | null>) {
       state.activeSubMenu = action.payload;
     },
+    resetMenuState(state) {
+      state.activeMenu = "Dashboard";
+      state.activeSubMenu = null;
+      state.openedMenu = "Dashboard";
+    },
   },
 });
 
-export const { setActiveMenu, setActiveSubMenu } = menuReducer.actions;
+export const { setActiveMenu, setActiveSubMenu, resetMenuState } =
+  menuReducer.actions;
 export default menuReducer.reducer;

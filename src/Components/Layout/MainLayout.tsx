@@ -1,11 +1,48 @@
 import { AppShell, Burger, Group, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import { useEffect, useRef } from "react";
+import { logoutUser } from "../../Utils/utils";
 
 const MainLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasMounted = useRef(false);
+
+  // ✅ Clear justLoggedIn if user navigates to any route other than "/"
+  useEffect(() => {
+    const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+
+    if (justLoggedIn === "true" && location.pathname !== "/") {
+      sessionStorage.removeItem("justLoggedIn");
+    }
+  }, [location.pathname]);
+
+  // ✅ Show logout prompt only on browser back/forward
+  useEffect(() => {
+    const handlePopState = () => {
+      const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+
+      if (justLoggedIn !== "true") {
+        const confirmLogout = window.confirm(
+          "Are you sure you want to logout?"
+        );
+        if (confirmLogout) {
+          sessionStorage.removeItem("justLoggedIn");
+          logoutUser(); // clearStorage + navigate to /login
+        } else {
+          // Prevent navigation by re-pushing current path
+          navigate(location.pathname, { replace: true });
+        }
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [navigate, location.pathname]);
 
   return (
     <AppShell
@@ -28,7 +65,7 @@ const MainLayout: React.FC = () => {
         </Group>
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ backgroundColor: "#F8F8F8"}}>
+      <AppShell.Main style={{ backgroundColor: "#F8F8F8" }}>
         <Outlet />
       </AppShell.Main>
     </AppShell>

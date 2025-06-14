@@ -1,8 +1,9 @@
-import { Group, Pagination, Table, Tooltip } from "@mantine/core";
+import { Group, Pagination, Select, Table, Tooltip } from "@mantine/core";
 import React from "react";
 import { ellipsisCellStyle } from "../../Utils/utils";
 import TextComponent from "../Atoms/TextComponent";
 import { paginationBackIcon, paginationFrontIcon } from "../../assets/Icons";
+import SelectComponent from "../Atoms/SelectComponent";
 
 type Header<T> = {
   key: keyof T;
@@ -21,7 +22,7 @@ type GenericMasterTableProps<T> = {
 
   pageSize?: number;
   onPageSizeChange?: (size: number) => void;
-  pageSizeOptions?: number[];
+  pageSizeOptions?: { label: string; value: string }[];
 
   message?: string;
 };
@@ -108,7 +109,9 @@ const GenericMasterTable = <T,>({
         {pagination && data?.length > 0 && (
           <Table.Tfoot>
             <Table.Tr>
-              <Table.Td colSpan={headers?.length + (renderExtraRowCell ? 1 : 0)}>
+              <Table.Td
+                colSpan={headers?.length + (renderExtraRowCell ? 1 : 0)}
+              >
                 <Group
                   style={{
                     padding: "6px",
@@ -126,21 +129,40 @@ const GenericMasterTable = <T,>({
                     </TextComponent>
                   )}
 
-                  <Pagination
-                    total={totalPages || 0}
-                    value={currentPage}
-                    onChange={onPageChange}
-                    styles={{ control: { borderColor: "#fff" } }}
-                    color="#BF0204"
-                    size="sm"
-                    radius="md"
-                    previousIcon={(props) =>
-                      paginationBackIcon({ ...props, color: "#BF0204" })
-                    }
-                    nextIcon={(props) =>
-                      paginationFrontIcon({ ...props, color: "#BF0204" })
-                    }
-                  />
+                  <div className="flex gap-4 items-center">
+                    <SelectComponent
+                      name="pageSize"
+                      size="sm"
+                      className="w-20"
+                      value={String(pageSize)}
+                      placeholder="Select Page Size"
+                      onChange={(value: string | null) => {
+                        if (onPageSizeChange && value !== null) {
+                          const num = Number(value);
+                          if (!isNaN(num)) {
+                            onPageSizeChange(num);
+                          }
+                        }
+                      }}
+                      data={pageSizeOptions || []}
+                    />
+
+                    <Pagination
+                      total={totalPages || 0}
+                      value={currentPage}
+                      onChange={onPageChange}
+                      styles={{ control: { borderColor: "#fff" } }}
+                      color="#BF0204"
+                      size="sm"
+                      radius="md"
+                      previousIcon={(props) =>
+                        paginationBackIcon({ ...props, color: "#BF0204" })
+                      }
+                      nextIcon={(props) =>
+                        paginationFrontIcon({ ...props, color: "#BF0204" })
+                      }
+                    />
+                  </div>
                 </Group>
               </Table.Td>
             </Table.Tr>
