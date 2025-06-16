@@ -13,7 +13,9 @@ import { fetchSubProduct } from "../../Redux/Features/Masters/SubProductMaster/t
 import { mapToSubProductTableType } from "../../Redux/Features/Masters/SubProductMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import {
+  resetAllStates,
   setCurrentPage,
+  setLoaded,
   setPageSize,
 } from "../../Redux/Features/Masters/SubProductMaster/slice";
 import { toast } from "react-toastify";
@@ -22,42 +24,65 @@ import { pageSizeSelectData } from "../../Utils/utils";
 const SubProductMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, subProducts, pagination } = useAppSelector(
+  const { loading, subProducts, pagination, loaded } = useAppSelector(
     (state) => state.masters.subProduct
   );
   const currentPage = pagination.currentPage;
   const pageSize = pagination.pageSize;
+
+  const [inputValue, setInputValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
-  const handleEdit = (id: string) => {
-    navigate(`/master/sub-product-master/edit/${id}`, { state: id });
-  };
+  const FilteredData: SubProductTableType[] = subProducts?.map(
+    mapToSubProductTableType
+  );
 
   const setPage = (page: number) => {
-    dispatch(setCurrentPage(page));
+    if (page !== currentPage) {
+      dispatch(setCurrentPage(page));
+      dispatch(setLoaded(false));
+    }
   };
 
   const OnPageSizeChange = (size: number) => {
+    dispatch(setLoaded(false));
     dispatch(setCurrentPage(1));
     dispatch(setPageSize(size));
   };
 
-  const handleSearchChange = (value: string) => {
-    setSearchValue(value);
+  const handleEdit = (id: string) => {
+    navigate(`/master/sub-product-master/edit/${id}`, { state: id });
   };
-
   const handleAdd = () => {
     navigate("/master/sub-product-master/add");
   };
 
-  useEffect(() => {
-    dispatch(fetchSubProduct({ page: currentPage, size: pageSize }))
-      .unwrap()
-      .then()
-      .catch((err) => toast.error(err));
-  }, [currentPage, pageSize]);
+  const handleSearchChange = (value: string) => {
+    setInputValue(value);
+  };
 
-  const data = subProducts?.map(mapToSubProductTableType);
+  const handleRefresh = () => {
+    dispatch(resetAllStates());
+    setInputValue("");
+    setSearchValue("");
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchValue(inputValue.toLowerCase());
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(fetchSubProduct({ page: currentPage, size: pageSize }))
+        .unwrap()
+        .then()
+        .catch((err) => toast.error(err));
+    }
+  }, [currentPage, pageSize, loaded]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -68,6 +93,7 @@ const SubProductMaster = () => {
       <GenericMasterToolbar
         addButtonText="Add Sub Product"
         onAdd={handleAdd}
+        onRefresh={handleRefresh}
         onSearchChange={handleSearchChange}
         searchValue={searchValue}
       />
@@ -77,7 +103,7 @@ const SubProductMaster = () => {
         <ShimmerTableRows rowCount={6} columnCount={headers.length} />
       ) : (
         <GenericMasterTable<SubProductTableType>
-          data={data}
+          data={FilteredData}
           headers={headers}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (

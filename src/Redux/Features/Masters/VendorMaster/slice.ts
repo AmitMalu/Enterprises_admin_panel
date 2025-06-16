@@ -34,6 +34,21 @@ const vendorMasterSlice = createSlice({
     setPageSize(state, action: PayloadAction<number>) {
       state.pagination.pageSize = action.payload;
     },
+    setLoaded(state, action: PayloadAction<boolean>) {
+      state.loaded = action.payload;
+    },
+    resetAllStates(state) {
+      state.selectedVendor = null;
+      state.pagination = {
+        totalPages: 0,
+        totalElements: 0,
+        pageSize: 5,
+        currentPage: 1,
+      };
+      state.loading = false;
+      state.error = null;
+      state.loaded = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -88,6 +103,8 @@ const vendorMasterSlice = createSlice({
       })
       .addCase(updateVendor.fulfilled, (state) => {
         state.loading = false;
+        state.loaded = false;
+        state.error = null;
       })
       .addCase(updateVendor.rejected, (state, action) => {
         state.loading = false;
@@ -101,6 +118,7 @@ const vendorMasterSlice = createSlice({
       .addCase(createVendor.fulfilled, (state) => {
         // state.vendors.push(action.payload.data);
         state.loading = false;
+        state.loaded = false;
       })
       .addCase(createVendor.rejected, (state, action) => {
         state.loading = false;
@@ -109,6 +127,11 @@ const vendorMasterSlice = createSlice({
   },
 });
 
-export const { clearSelectedVendor, setCurrentPage, setPageSize } =
-  vendorMasterSlice.actions;
+export const {
+  clearSelectedVendor,
+  setCurrentPage,
+  setPageSize,
+  resetAllStates,
+  setLoaded,
+} = vendorMasterSlice.actions;
 export default vendorMasterSlice.reducer;

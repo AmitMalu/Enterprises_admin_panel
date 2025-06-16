@@ -10,20 +10,38 @@ import { toast } from "react-toastify";
 import { mapToVendorTableType } from "../../Redux/Features/Masters/VendorMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import { headers, VendorTableType } from "../../Config/Master/VendorConfig";
-import { setCurrentPage } from "../../Redux/Features/Masters/VendorMaster/slice";
+import {
+  resetAllStates,
+  setCurrentPage,
+  setLoaded,
+  setPageSize,
+} from "../../Redux/Features/Masters/VendorMaster/slice";
+import { pageSizeSelectData } from "../../Utils/utils";
 
 const VendorMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, vendors, pagination } = useAppSelector(
+  const { loading, vendors, pagination, loaded } = useAppSelector(
     (state) => state.masters.vendor
   );
 
   const currentPage = pagination?.currentPage;
+  const pageSize = pagination.pageSize;
+
+  const [inputValue, setInputValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
   const setPage = (page: number) => {
-    dispatch(setCurrentPage(page));
+    if (page !== currentPage) {
+      dispatch(setCurrentPage(page));
+      dispatch(setLoaded(false));
+    }
+  };
+
+  const OnPageSizeChange = (size: number) => {
+    dispatch(setLoaded(false));
+    dispatch(setCurrentPage(1));
+    dispatch(setPageSize(size));
   };
 
   const handleEdit = (id: any) => {
@@ -35,17 +53,33 @@ const VendorMaster = () => {
   };
 
   const handleSearchChange = (value: string) => {
-    setSearchValue(value);
+    setInputValue(value);
+  };
+
+  const handleRefresh = () => {
+    dispatch(resetAllStates());
+    setInputValue("");
+    setSearchValue("");
   };
 
   useEffect(() => {
-    dispatch(fetchVendor({ page: currentPage, size: 5 }))
-      .unwrap()
-      .then()
-      .catch((err) => toast.error(err));
-  }, [currentPage]);
+    const timer = setTimeout(() => {
+      setSearchValue(inputValue.toLowerCase());
+    }, 300);
 
-  const data = vendors?.map(mapToVendorTableType);
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (!loaded) {
+      dispatch(fetchVendor({ page: currentPage, size: pageSize }))
+        .unwrap()
+        .then()
+        .catch((err) => toast.error(err));
+    }
+  }, [currentPage, pageSize, loaded]);
+
+  const transformedData: VendorTableType[] = vendors?.map(mapToVendorTableType);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -58,6 +92,7 @@ const VendorMaster = () => {
         onAdd={handleAdd}
         onSearchChange={handleSearchChange}
         searchValue={searchValue}
+        onRefresh={handleRefresh}
       />
 
       {loading ? (
@@ -65,7 +100,7 @@ const VendorMaster = () => {
         <ShimmerTableRows rowCount={6} columnCount={headers.length} />
       ) : (
         <GenericMasterTable<VendorTableType>
-          data={data}
+          data={transformedData}
           headers={headers}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
@@ -85,6 +120,9 @@ const VendorMaster = () => {
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={setPage}
+          onPageSizeChange={OnPageSizeChange}
+          pageSize={pageSize}
+          pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}

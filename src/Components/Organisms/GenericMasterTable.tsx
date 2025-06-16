@@ -1,18 +1,19 @@
 import { Group, Pagination, Select, Table, Tooltip } from "@mantine/core";
 import React from "react";
-import { ellipsisCellStyle } from "../../Utils/utils";
+import {
+  booleanSelectData,
+  ellipsisCellStyle,
+  GenericTableHeader,
+} from "../../Utils/utils";
 import TextComponent from "../Atoms/TextComponent";
 import { paginationBackIcon, paginationFrontIcon } from "../../assets/Icons";
 import SelectComponent from "../Atoms/SelectComponent";
-
-type Header<T> = {
-  key: keyof T;
-  label?: string; // Optional to allow blank header (e.g., for actions)
-};
+import TextInputComponent from "../Atoms/TextInputComponent";
+import { DateInput } from "@mantine/dates";
 
 type GenericMasterTableProps<T> = {
   data: T[];
-  headers: Header<T>[];
+  headers: GenericTableHeader<T>[];
   renderExtraHeader?: () => React.ReactNode;
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
   pagination?: boolean;
@@ -23,8 +24,11 @@ type GenericMasterTableProps<T> = {
   pageSize?: number;
   onPageSizeChange?: (size: number) => void;
   pageSizeOptions?: { label: string; value: string }[];
-
   message?: string;
+  filterVisible?: boolean;
+  onFilterChange?: (key: string, value: any) => void;
+  filterValues?: Record<string, any>;
+  onFilterSubmit?: (key: string, value: any) => void;
 };
 
 const GenericMasterTable = <T,>({
@@ -41,6 +45,10 @@ const GenericMasterTable = <T,>({
   onPageSizeChange,
   pageSizeOptions,
   message,
+  filterVisible = false,
+  onFilterChange,
+  filterValues,
+  onFilterSubmit,
 }: GenericMasterTableProps<T>) => {
   return (
     <Table.ScrollContainer minWidth={1600} className="mt-4">
@@ -76,6 +84,77 @@ const GenericMasterTable = <T,>({
         </Table.Thead>
 
         <Table.Tbody>
+          {filterVisible && data.length > 0 && (
+            <Table.Tr>
+              {renderExtraRowCell && <Table.Td></Table.Td>}
+              {headers.map(
+                ({ key, filterType = "text", searchable = true }) => {
+                  const value = filterValues?.[String(key)] ?? "";
+
+                  if (!searchable) return <Table.Td key={String(key)} />;
+
+                  switch (filterType) {
+                    case "boolean":
+                      return (
+                        <Table.Td key={String(key)}>
+                          <SelectComponent
+                            name={String(key)}
+                            value={value}
+                            onChange={(val) => {
+                              if (val !== null) {
+                                onFilterChange?.(String(key), val);
+                                onFilterSubmit?.(String(key), val);
+                              }
+                            }}
+                            data={booleanSelectData}
+                            placeholder="Select"
+                            size="xs"
+                          />
+                        </Table.Td>
+                      );
+
+                    case "date":
+                      return (
+                        <Table.Td key={String(key)}>
+                          <DateInput
+                            value={value}
+                            valueFormat="DD/MM/YYYY"
+                            onChange={(val) => {
+                              if (val) {
+                                onFilterChange?.(String(key), val);
+                                onFilterSubmit?.(String(key), val);
+                              }
+                            }}
+                            size="xs"
+                            placeholder="Pick date"
+                          />
+                        </Table.Td>
+                      );
+
+                    case "text":
+                    default:
+                      return (
+                        <Table.Td key={String(key)}>
+                          <TextInputComponent
+                            size="xs"
+                            name={String(key)}
+                            value={value}
+                            onChange={(e) => {
+                              onFilterChange?.(String(key), e.target.value);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && value?.trim() !== "") {
+                                onFilterSubmit?.(String(key), value.trim());
+                              }
+                            }}
+                          />
+                        </Table.Td>
+                      );
+                  }
+                }
+              )}
+            </Table.Tr>
+          )}
           {data?.length > 0 ? (
             data.map((item, index) => (
               <Table.Tr key={index}>

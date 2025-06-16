@@ -41,27 +41,16 @@ const GenericMasterToolbar = ({
       {/* Refresh Icon and Search */}
       <div className="flex justify-end items-center gap-2 mt-2">
         {/* Refresh Icon */}
-        <ButtonComponent
-          style={{ height: 40, width: 10, paddingLeft: "28px" }}
-          radius={1}
-          textColor="#000000"
-          bgColor="#ffffff"
-          borderColor="#CACACA"
-          leftIcon={<RefreshIcon />}
-          onClick={onRefresh}
-        >
-          <></>
-        </ButtonComponent>
 
         {/* Search Input */}
-        <TextInputComponent
+        {/* <TextInputComponent
           size="md"
           type="text"
           placeholder="Search"
           name="search"
           value={searchValue}
           onChange={(e) => onSearchChange?.(e.target.value)}
-        />
+        /> */}
       </div>
 
       <div className="flex justify-between mt-2">
@@ -107,7 +96,7 @@ const GenericMasterToolbar = ({
           </ButtonComponent>
 
           {/* Grid Icon  */}
-          <ButtonComponent
+          {/* <ButtonComponent
             style={{ height: 36, width: 10, paddingLeft: "28px" }}
             radius={1}
             textColor="#000000"
@@ -117,7 +106,7 @@ const GenericMasterToolbar = ({
             leftIcon={<GridIcon />}
           >
             <></>
-          </ButtonComponent>
+          </ButtonComponent> */}
 
           {/* Col Icon */}
           <ButtonComponent
@@ -132,8 +121,20 @@ const GenericMasterToolbar = ({
             Cols
           </ButtonComponent>
 
-          {/* Setting Icon */}
+          {/* Refresh Icon */}
           <ButtonComponent
+            style={{ height: 36, width: 10, paddingLeft: "28px" }}
+            radius={1}
+            textColor="#000000"
+            bgColor="#ffffff"
+            borderColor="#CACACA"
+            leftIcon={<RefreshIcon />}
+            onClick={onRefresh}
+          >
+            <></>
+          </ButtonComponent>
+          {/* Setting Icon */}
+          {/* <ButtonComponent
             style={{ height: 36, padding: "5px" }}
             radius={1}
             textColor="#000000"
@@ -143,7 +144,7 @@ const GenericMasterToolbar = ({
             leftIcon={<SettingIcon />}
           >
             <DropDownArrowIcon />
-          </ButtonComponent>
+          </ButtonComponent> */}
         </div>
       </div>
     </>

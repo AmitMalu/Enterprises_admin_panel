@@ -10,20 +10,42 @@ import { mapToOperatorTableType } from "../../Redux/Features/Masters/OperatorMas
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import { headers, OperatorTableType } from "../../Config/Master/OperatorConfig";
 import { toast } from "react-toastify";
-import { setCurrentPage } from "../../Redux/Features/Masters/OperatorMaster/slice";
+import {
+  resetAllStates,
+  setCurrentPage,
+  setLoaded,
+  setPageSize,
+} from "../../Redux/Features/Masters/OperatorMaster/slice";
+import { pageSizeSelectData } from "../../Utils/utils";
 
 const OperatorMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, operators, pagination } = useAppSelector(
+  const { loading, operators, pagination, loaded } = useAppSelector(
     (state) => state.masters.operator
   );
 
   const currentPage = pagination.currentPage;
+  const pageSize = pagination.pageSize;
+
+  const [inputValue, setInputValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
+  const transformedData: OperatorTableType[] = operators?.map(
+    mapToOperatorTableType
+  );
+
   const setPage = (page: number) => {
-    dispatch(setCurrentPage(page));
+    if (page !== currentPage) {
+      dispatch(setCurrentPage(page));
+      dispatch(setLoaded(false));
+    }
+  };
+
+  const OnPageSizeChange = (size: number) => {
+    dispatch(setLoaded(false));
+    dispatch(setCurrentPage(1));
+    dispatch(setPageSize(size));
   };
 
   const handleEdit = (id: any) => {
@@ -35,17 +57,29 @@ const OperatorMaster = () => {
   };
 
   const handleSearchChange = (value: string) => {
-    setSearchValue(value);
+    setInputValue(value);
+  };
+
+  const handleRefresh = () => {
+    dispatch(resetAllStates());
+    setInputValue("");
+    setSearchValue("");
   };
 
   useEffect(() => {
-    dispatch(fetchOperator({ page: currentPage, size: 5 }))
+    const timer = setTimeout(() => {
+      setSearchValue(inputValue.toLowerCase());
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
+  useEffect(() => {
+    dispatch(fetchOperator({ page: currentPage, size: pageSize }))
       .unwrap()
       .then()
       .catch((err) => toast.error(err));
-  }, [currentPage]);
-
-  const data = operators?.map(mapToOperatorTableType);
+  }, [currentPage, pageSize, loaded]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -56,6 +90,7 @@ const OperatorMaster = () => {
       <GenericMasterToolbar
         addButtonText="Add Operator"
         onAdd={handleAdd}
+        onRefresh={handleRefresh}
         onSearchChange={handleSearchChange}
         searchValue={searchValue}
       />
@@ -65,7 +100,7 @@ const OperatorMaster = () => {
         <ShimmerTableRows rowCount={6} columnCount={headers.length} />
       ) : (
         <GenericMasterTable<OperatorTableType>
-          data={data}
+          data={transformedData}
           headers={headers}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
@@ -85,11 +120,14 @@ const OperatorMaster = () => {
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={setPage}
+          onPageSizeChange={OnPageSizeChange}
+          pageSize={pageSize}
+          pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}
     </div>
   );
-};
+};  
 
 export default OperatorMaster;

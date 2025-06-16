@@ -11,7 +11,7 @@ import { createOperator, updateOperator } from "./thunks";
 import { toast } from "react-toastify";
 
 // Convert raw API response to OperatorTableType (for table display)
-export const mapToOperatorTableType = (
+export const  mapToOperatorTableType = (
   raw: Record<string, any>
 ): OperatorTableType => {
   return {

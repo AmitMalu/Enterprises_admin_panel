@@ -84,3 +84,10 @@ export const pageSizeSelectData = [
   { label: "10", value: "10" },
   { label: "15", value: "15" },
 ];
+
+export type GenericTableHeader<T> = {
+  key: keyof T;
+  label?: string;
+  filterType?: "text" | "boolean" | "date" | "none";
+  searchable?: boolean; // optionally override with this
+};

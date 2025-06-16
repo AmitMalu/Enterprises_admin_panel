@@ -1,29 +1,6 @@
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
-import { ProductStateType } from "../../Redux/Features/Masters/ProductMaster/types";
-
-export type ProductType = Pick<
-  ProductStateType,
-  | "id"
-  | "name"
-  | "productCode"
-  | "productCodeForScheme"
-  | "isShow"
-  | "hasCharges"
-  | "isCommissions"
-  | "isInventory"
-  | "isSettlement"
-  | "isVirtual"
-  | "isVisible"
-  | "reverseTx"
-  // | "walletType"
-  // | "subProducts"
-  | "productGroup"
-  | "clusterMode"
-  | "blocked"
-  | "active"
->;
-
+import { GenericTableHeader } from "../../Utils/utils";
 export interface ProductFormType {
   name: "";
   productCode: "";
@@ -92,23 +69,27 @@ export const validationSchema: Record<keyof ProductFormType, Yup.AnySchema> = {
   active: Yup.boolean().required("Active is required"),
 };
 
-export const headers: { key: keyof ProductTableType; label: string }[] = [
-  { key: "id", label: "Id" },
-  { key: "name", label: "Name" },
-  { key: "productCode", label: "Product Code" },
-  { key: "productCodeForScheme", label: "Product Code For Scheme" },
-  { key: "isShow", label: "Is Show" },
-  { key: "hasCharges", label: "Has Charges" },
-  { key: "isCommissions", label: "Is Commissions" },
-  { key: "isInventory", label: "Is Inventory" },
-  { key: "isSettlement", label: "Is Settlement" },
-  { key: "isVirtual", label: "Is Virtual" },
-  { key: "isVisible", label: "Is Visible" },
-  { key: "reverseTx", label: "Reverse Tx" },
+export const headers: GenericTableHeader<ProductTableType>[] = [
+  { key: "id", label: "Id", filterType: "text" },
+  { key: "name", label: "Name", filterType: "text" },
+  { key: "productCode", label: "Product Code", filterType: "text" },
+  {
+    key: "productCodeForScheme",
+    label: "Product Code For Scheme",
+    filterType: "text",
+  },
+  { key: "isShow", label: "Is Show", filterType: "boolean" },
+  { key: "hasCharges", label: "Has Charges", filterType: "boolean" },
+  { key: "isCommissions", label: "Is Commissions", filterType: "boolean" },
+  { key: "isInventory", label: "Is Inventory", filterType: "boolean" },
+  { key: "isSettlement", label: "Is Settlement", filterType: "boolean" },
+  { key: "isVirtual", label: "Is Virtual", filterType: "boolean" },
+  { key: "isVisible", label: "Is Visible", filterType: "boolean" },
+  { key: "reverseTx", label: "Reverse Tx", filterType: "boolean" },
   // { key: "walletType", label: "Wallet Type" },
   // { key: "subProducts", label: "Sub Products" },
-  { key: "productGroup", label: "Product Group" },
-  { key: "clusterMode", label: "Cluster Mode" },
-  { key: "blocked", label: "Blocked" },
-  { key: "active", label: "Active" },
+  { key: "productGroup", label: "Product Group", filterType: "text" },
+  { key: "clusterMode", label: "Cluster Mode", filterType: "boolean" },
+  { key: "blocked", label: "Blocked", filterType: "boolean" },
+  { key: "active", label: "Active", filterType: "boolean" },
 ];

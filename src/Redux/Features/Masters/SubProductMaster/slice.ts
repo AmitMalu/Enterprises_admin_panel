@@ -34,6 +34,21 @@ const subProductMasterSlice = createSlice({
     setPageSize(state, action: PayloadAction<number>) {
       state.pagination.pageSize = action.payload;
     },
+    setLoaded(state, action: PayloadAction<boolean>) {
+      state.loaded = action.payload;
+    },
+    resetAllStates(state) {
+      state.selectedSubProduct = null;
+      state.pagination = {
+        totalPages: 0,
+        totalElements: 0,
+        pageSize: 5,
+        currentPage: 1,
+      };
+      state.loading = false;
+      state.error = null;
+      state.loaded = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -93,6 +108,7 @@ const subProductMasterSlice = createSlice({
         //   state.subProducts[index] = updated;
         // }
         state.loading = false;
+        state.loaded = false;
       })
       .addCase(updateSubProduct.rejected, (state, action) => {
         state.loading = false;
@@ -106,6 +122,7 @@ const subProductMasterSlice = createSlice({
       .addCase(createSubProduct.fulfilled, (state) => {
         // state.subProducts.push(action.payload.data);
         state.loading = false;
+        state.loaded = false;
       })
       .addCase(createSubProduct.rejected, (state, action) => {
         state.loading = false;
@@ -114,6 +131,11 @@ const subProductMasterSlice = createSlice({
   },
 });
 
-export const { clearSelectedSubProduct, setCurrentPage, setPageSize } =
-  subProductMasterSlice.actions;
+export const {
+  clearSelectedSubProduct,
+  setCurrentPage,
+  setPageSize,
+  resetAllStates,
+  setLoaded,
+} = subProductMasterSlice.actions;
 export default subProductMasterSlice.reducer;

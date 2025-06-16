@@ -34,6 +34,21 @@ const operatorMasterSlice = createSlice({
     setPageSize(state, action: PayloadAction<number>) {
       state.pagination.pageSize = action.payload;
     },
+    setLoaded(state, action: PayloadAction<boolean>) {
+      state.loaded = action.payload;
+    },
+    resetAllStates(state) {
+      state.selectedOperator = null;
+      state.pagination = {
+        totalPages: 0,
+        totalElements: 0,
+        pageSize: 5,
+        currentPage: 1,
+      };
+      state.loading = false;
+      state.error = null;
+      state.loaded = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -58,6 +73,12 @@ const operatorMasterSlice = createSlice({
       })
       .addCase(fetchOperator.rejected, (state, action) => {
         state.operators = [];
+        state.pagination = {
+          totalPages: 0,
+          totalElements: 0,
+          pageSize: 5,
+          currentPage: 1,
+        };
         state.loading = false;
         state.error = action.payload as string;
       })
@@ -87,6 +108,7 @@ const operatorMasterSlice = createSlice({
         // if (index !== -1) {
         //   state.operators[index] = updated;
         // }
+        state.loaded = false;
         state.loading = false;
         state.error = null;
       })
@@ -102,6 +124,7 @@ const operatorMasterSlice = createSlice({
       .addCase(createOperator.fulfilled, (state) => {
         // state.operators.push(action.payload.data);
         state.loading = false;
+        state.loaded = false;
       })
       .addCase(createOperator.rejected, (state, action) => {
         state.loading = false;
@@ -110,6 +133,11 @@ const operatorMasterSlice = createSlice({
   },
 });
 
-export const { clearSelectedOperator, setCurrentPage, setPageSize } =
-  operatorMasterSlice.actions;
+export const {
+  clearSelectedOperator,
+  setCurrentPage,
+  setPageSize,
+  resetAllStates,
+  setLoaded,
+} = operatorMasterSlice.actions;
 export default operatorMasterSlice.reducer;
