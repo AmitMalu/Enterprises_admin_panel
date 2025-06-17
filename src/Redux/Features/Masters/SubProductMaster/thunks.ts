@@ -1,17 +1,27 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../../Config/Api/EndPoints";
-import { CreateSubProductPayload, UpdateSubProductPayload } from "./types";
+import {
+  CreateSubProductPayload,
+  FetchSubProductParams,
+  UpdateSubProductPayload,
+} from "./types";
 
 export const fetchSubProduct = createAsyncThunk(
   "subProductMaster/fetchSubProduct",
   async (
-    { page = 0, size = 5 }: { page: number; size: number },
+    { page = 0, size = 10, filter }: FetchSubProductParams,
     { rejectWithValue }
   ) => {
     try {
+      const params = new URLSearchParams();
+      params.append("page", String(page - 1));
+      params.append("size", String(size));
+      if (filter?.key) {
+        params.append(String(filter.key), String(filter.value ?? ""));
+      }
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}?page=${page - 1}&size=${size}`
+        `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}?${params.toString()}`
       );
       const responseData = response?.data;
 

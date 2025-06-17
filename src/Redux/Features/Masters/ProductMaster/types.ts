@@ -32,9 +32,9 @@ export type CreateProductPayload = Omit<
   tds: Number;
   createdBy: string;
   inventory: {
-    isInventory: Boolean;  // Omit, because it is nested inside object
-    inventoryPrice: number; 
-    isVirtual: Boolean;  // Same
+    isInventory: Boolean; // Omit, because it is nested inside object
+    inventoryPrice: number;
+    isVirtual: Boolean; // Same
     isShow: Boolean; //Same
   };
   cluster: {
@@ -72,3 +72,10 @@ export type UpdateProductPayload = Omit<
     schemeEngine: Boolean;
   };
 };
+
+export type FetchProductParams = {
+  page: number;
+  size: number;
+  filter?: { key: string; value: string | boolean } | null;
+};
+

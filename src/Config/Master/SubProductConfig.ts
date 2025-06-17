@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
+import { GenericTableHeader } from "../../Utils/utils";
 export interface SubProductFormType {
   subProductTitle: string;
   subProductCode: string;
@@ -40,17 +41,17 @@ export const validationSchema: Record<keyof SubProductFormType, Yup.AnySchema> =
     enabled: Yup.boolean().required("Enabled is required"),
   };
 
-export const headers: { key: keyof SubProductTableType; label: string }[] = [
-  { key: "id", label: "ID" },
-  { key: "subProductTitle", label: "Sub Product Title" },
-  { key: "subProductCode", label: "Sub Product Code" },
-  { key: "productName", label: "Product" },
-  { key: "walletType", label: "Wallet Type" },
-  { key: "isSettlement", label: "Is Settlement" },
-  { key: "isActive", label: "Is Active" },
-  { key: "enabled", label: "Enabled" },
-  { key: "createdOn", label: "Created On" },
-  { key: "editedOn", label: "Edited On" },
-  { key: "createdBy", label: "Created By" },
-  { key: "editedBy", label: "Edited By" },
+export const headers: GenericTableHeader<SubProductTableType>[] = [
+  { key: "id", label: "ID", filterType: "text" },
+  { key: "subProductTitle", label: "Sub Product Title", filterType: "text" },
+  { key: "subProductCode", label: "Sub Product Code", filterType: "text" },
+  { key: "productName", label: "Product", filterType: "text" },
+  { key: "walletType", label: "Wallet Type", filterType: "text" },
+  { key: "isSettlement", label: "Is Settlement", filterType: "boolean" },
+  { key: "isActive", label: "Is Active", filterType: "boolean" },
+  { key: "enabled", label: "Enabled", filterType: "boolean" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
+  { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
 ];

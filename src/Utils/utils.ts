@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { persistor } from "../Redux/Store/store";
 import moment from "moment";
+import * as Papa from "papaparse";
 
 export const persistOtpSession = (username: string, otpFor: string) => {
   sessionStorage.setItem("otp-username", username);
@@ -66,6 +67,12 @@ export const booleanSelectData = [
   { label: "No", value: "false" },
 ];
 
+export const booleanSelectData2 = [
+  { label: "none", value: "" },
+  { label: "true", value: "true" },
+  { label: "false", value: "false" },
+];
+
 export const prioritySelectDataInNumbers = [
   { label: "1 - Very High", value: "1" },
   { label: "2 - High", value: "2" },
@@ -91,3 +98,30 @@ export type GenericTableHeader<T> = {
   filterType?: "text" | "boolean" | "date" | "none";
   searchable?: boolean; // optionally override with this
 };
+
+/**
+ * Exports flat array of objects to CSV and triggers browser download
+ * @param data Array of flat objects to export
+ * @param filename Name of the CSV file to download
+ */
+export function exportToCsv<T extends Record<string, any>>(
+  data: T[],
+  filename: string
+) {
+  if (!data || data.length === 0) {
+    console.warn("No data available to export.");
+    return;
+  }
+
+  const csv = Papa.unparse(data);
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", `${filename}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}

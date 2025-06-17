@@ -16,7 +16,7 @@ import {
   setLoaded,
   setPageSize,
 } from "../../Redux/Features/Masters/OperatorMaster/slice";
-import { pageSizeSelectData } from "../../Utils/utils";
+import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 
 const OperatorMaster = () => {
   const navigate = useNavigate();
@@ -28,18 +28,36 @@ const OperatorMaster = () => {
   const currentPage = pagination.currentPage;
   const pageSize = pagination.pageSize;
 
-  const [inputValue, setInputValue] = useState("");
-  const [searchValue, setSearchValue] = useState("");
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(
+    headers.map((h) => h.key as string)
+  );
+  const [submittedFilter, setSubmittedFilter] = useState<{
+    key: string;
+    value: any;
+  } | null>(null);
 
   const transformedData: OperatorTableType[] = operators?.map(
     mapToOperatorTableType
   );
+
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
 
   const setPage = (page: number) => {
     if (page !== currentPage) {
       dispatch(setCurrentPage(page));
       dispatch(setLoaded(false));
     }
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(setCurrentPage(1));
+    dispatch(setPageSize(5));
+    setSubmittedFilter({ key, value });
+    dispatch(setLoaded(false));
   };
 
   const OnPageSizeChange = (size: number) => {
@@ -56,30 +74,41 @@ const OperatorMaster = () => {
     navigate("/master/operator-master/add");
   };
 
-  const handleSearchChange = (value: string) => {
-    setInputValue(value);
-  };
-
   const handleRefresh = () => {
     dispatch(resetAllStates());
-    setInputValue("");
-    setSearchValue("");
+    setFilterValues({});
+    setFilterVisible(false);
+    setSubmittedFilter(null);
+    setVisibleColumns(headers.map((h) => h.key as string));
+  };
+
+  const handleToggleColumn = (key: string) => {
+    setVisibleColumns((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
+
+  const handleExportClick = () => {
+    if (!transformedData || transformedData.length === 0) {
+      toast.warning("No data available to export.");
+      return;
+    }
+
+    exportToCsv(transformedData, "operator-master");
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchValue(inputValue.toLowerCase());
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [inputValue]);
-
-  useEffect(() => {
-    dispatch(fetchOperator({ page: currentPage, size: pageSize }))
+    dispatch(
+      fetchOperator({
+        page: currentPage,
+        size: pageSize,
+        filter: submittedFilter,
+      })
+    )
       .unwrap()
       .then()
       .catch((err) => toast.error(err));
-  }, [currentPage, pageSize, loaded]);
+  }, [currentPage, pageSize, loaded, submittedFilter]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -91,8 +120,11 @@ const OperatorMaster = () => {
         addButtonText="Add Operator"
         onAdd={handleAdd}
         onRefresh={handleRefresh}
-        onSearchChange={handleSearchChange}
-        searchValue={searchValue}
+        onColumnChange={handleToggleColumn}
+        onExport={handleExportClick}
+        onFilter={() => setFilterVisible((prev) => !prev)}
+        headers={headers}
+        visibleColumns={visibleColumns}
       />
 
       {loading ? (
@@ -101,7 +133,9 @@ const OperatorMaster = () => {
       ) : (
         <GenericMasterTable<OperatorTableType>
           data={transformedData}
-          headers={headers}
+          headers={headers.filter((h) =>
+            visibleColumns.includes(h.key as string)
+          )}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2">
@@ -124,10 +158,14 @@ const OperatorMaster = () => {
           pageSize={pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+          filterVisible={filterVisible}
+          filterValues={filterValues}
+          onFilterChange={handleFilterChange}
+          onFilterSubmit={handleFilterSubmit}
         />
       )}
     </div>
   );
-};  
+};
 
 export default OperatorMaster;

@@ -3,7 +3,6 @@ import {
   initialValues,
   ProductFormType,
   ProductTableType,
-  ProductType,
 } from "../../../../Config/Master/ProductConfig";
 import { CreateProductPayload, UpdateProductPayload } from "./types";
 import { createProduct, updateProduct } from "./thunks";
@@ -37,9 +36,8 @@ export function transformProductToTableType(
 
 export function transformProductToFormData(
   product: Record<string, any>
-): ProductType {
+): ProductFormType {
   return {
-    id: String(product.id),
     name: product.name ?? "",
     productCode: product.productCode ?? "",
     productCodeForScheme: product.productCodeForScheme ?? "",

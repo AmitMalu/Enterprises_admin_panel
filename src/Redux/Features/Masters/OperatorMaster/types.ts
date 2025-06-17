@@ -21,3 +21,9 @@ export interface CreateOperatorPayload extends OperatorFormType {
 export interface UpdateOperatorPayload extends OperatorFormType {
   editedBy: string;
 }
+
+export type FetchOperatorParams = {
+  page: number;
+  size: number;
+  filter?: { key: string; value: string | boolean } | null;
+};

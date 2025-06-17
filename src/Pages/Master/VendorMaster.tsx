@@ -16,7 +16,7 @@ import {
   setLoaded,
   setPageSize,
 } from "../../Redux/Features/Masters/VendorMaster/slice";
-import { pageSizeSelectData } from "../../Utils/utils";
+import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 
 const VendorMaster = () => {
   const navigate = useNavigate();
@@ -28,14 +28,34 @@ const VendorMaster = () => {
   const currentPage = pagination?.currentPage;
   const pageSize = pagination.pageSize;
 
-  const [inputValue, setInputValue] = useState("");
-  const [searchValue, setSearchValue] = useState("");
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(
+    headers.map((h) => h.key as string)
+  );
+  const [submittedFilter, setSubmittedFilter] = useState<{
+    key: string;
+    value: any;
+  } | null>(null);
+
+  const transformedData: VendorTableType[] = vendors?.map(mapToVendorTableType);
+
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
 
   const setPage = (page: number) => {
     if (page !== currentPage) {
       dispatch(setCurrentPage(page));
       dispatch(setLoaded(false));
     }
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(setCurrentPage(1));
+    dispatch(setPageSize(5));
+    setSubmittedFilter({ key, value });
+    dispatch(setLoaded(false));
   };
 
   const OnPageSizeChange = (size: number) => {
@@ -52,34 +72,43 @@ const VendorMaster = () => {
     navigate("/master/vendor-master/add");
   };
 
-  const handleSearchChange = (value: string) => {
-    setInputValue(value);
-  };
-
   const handleRefresh = () => {
     dispatch(resetAllStates());
-    setInputValue("");
-    setSearchValue("");
+    setFilterValues({});
+    setFilterVisible(false);
+    setSubmittedFilter(null);
+    setVisibleColumns(headers.map((h) => h.key as string));
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchValue(inputValue.toLowerCase());
-    }, 300);
+  const handleToggleColumn = (key: string) => {
+    setVisibleColumns((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
 
-    return () => clearTimeout(timer);
-  }, [inputValue]);
+  const handleExportClick = () => {
+    if (!transformedData || transformedData.length === 0) {
+      toast.warning("No data available to export.");
+      return;
+    }
+
+    exportToCsv(transformedData, "vendor-master");
+  };
 
   useEffect(() => {
     if (!loaded) {
-      dispatch(fetchVendor({ page: currentPage, size: pageSize }))
+      dispatch(
+        fetchVendor({
+          page: currentPage,
+          size: pageSize,
+          filter: submittedFilter,
+        })
+      )
         .unwrap()
         .then()
         .catch((err) => toast.error(err));
     }
-  }, [currentPage, pageSize, loaded]);
-
-  const transformedData: VendorTableType[] = vendors?.map(mapToVendorTableType);
+  }, [currentPage, pageSize, loaded, submittedFilter]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -90,9 +119,12 @@ const VendorMaster = () => {
       <GenericMasterToolbar
         addButtonText="Add Vendor"
         onAdd={handleAdd}
-        onSearchChange={handleSearchChange}
-        searchValue={searchValue}
         onRefresh={handleRefresh}
+        onColumnChange={handleToggleColumn}
+        onExport={handleExportClick}
+        onFilter={() => setFilterVisible((prev) => !prev)}
+        headers={headers}
+        visibleColumns={visibleColumns}
       />
 
       {loading ? (
@@ -124,6 +156,10 @@ const VendorMaster = () => {
           pageSize={pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+          filterVisible={filterVisible}
+          filterValues={filterValues}
+          onFilterChange={handleFilterChange}
+          onFilterSubmit={handleFilterSubmit}
         />
       )}
     </div>

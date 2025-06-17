@@ -1,17 +1,27 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../../Config/Api/EndPoints";
-import { CreateVendorPayload, UpdateVendorPayload } from "./types";
+import {
+  CreateVendorPayload,
+  FetchVendorParams,
+  UpdateVendorPayload,
+} from "./types";
 
 export const fetchVendor = createAsyncThunk(
   "vendorMaster/fetchVendor",
   async (
-    { page = 0, size = 5 }: { page: number; size: number },
+    { page = 0, size = 10, filter }: FetchVendorParams,
     { rejectWithValue }
   ) => {
     try {
+      const params = new URLSearchParams();
+      params.append("page", String(page - 1));
+      params.append("size", String(size));
+      if (filter?.key) {
+        params.append(String(filter.key), String(filter.value ?? ""));
+      }
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS?.MASTER?.VENDOR}?page=${page - 1}&size=${size}`
+        `${API_ENDPOINTS?.MASTER?.VENDOR}?${params.toString()}`
       );
       const responseData = response?.data;
 

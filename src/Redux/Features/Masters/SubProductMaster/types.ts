@@ -20,3 +20,9 @@ export interface CreateSubProductPayload extends SubProductFormType {
 export interface UpdateSubProductPayload extends SubProductFormType {
   editedBy: string;
 }
+
+export type FetchSubProductParams = {
+  page: number;
+  size: number;
+  filter?: { key: string; value: string | boolean } | null;
+};

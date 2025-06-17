@@ -3,18 +3,25 @@ import { axiosInstance } from "../../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../../Config/Api/EndPoints";
 import {
   CreateProductPayload,
+  FetchProductParams,
   UpdateProductPayload,
 } from "./types";
 
 export const fetchProduct = createAsyncThunk(
   "productMaster/fetchProduct",
   async (
-    { page = 0, size = 10 }: { page: number; size: number },
+    { page = 0, size = 10, filter }: FetchProductParams,
     { rejectWithValue }
   ) => {
     try {
+      const params = new URLSearchParams();
+      params.append("page", String(page - 1));
+      params.append("size", String(size));
+      if (filter?.key) {
+        params.append(String(filter.key), String(filter.value ?? ""));
+      }
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS?.MASTER?.PRODUCTS}?page=${page - 1}&size=${size}`
+        `${API_ENDPOINTS?.MASTER?.PRODUCTS}?${params.toString()}`
       );
       const responseData = response?.data;
 

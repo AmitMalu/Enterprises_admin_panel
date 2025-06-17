@@ -19,7 +19,7 @@ import {
   setPageSize,
 } from "../../Redux/Features/Masters/SubProductMaster/slice";
 import { toast } from "react-toastify";
-import { pageSizeSelectData } from "../../Utils/utils";
+import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 
 const SubProductMaster = () => {
   const navigate = useNavigate();
@@ -32,16 +32,36 @@ const SubProductMaster = () => {
 
   const [inputValue, setInputValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(
+    headers.map((h) => h.key as string)
+  );
+  const [submittedFilter, setSubmittedFilter] = useState<{
+    key: string;
+    value: any;
+  } | null>(null);
 
   const FilteredData: SubProductTableType[] = subProducts?.map(
     mapToSubProductTableType
   );
+
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
 
   const setPage = (page: number) => {
     if (page !== currentPage) {
       dispatch(setCurrentPage(page));
       dispatch(setLoaded(false));
     }
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(setCurrentPage(1));
+    dispatch(setPageSize(5));
+    setSubmittedFilter({ key, value });
+    dispatch(setLoaded(false));
   };
 
   const OnPageSizeChange = (size: number) => {
@@ -57,32 +77,43 @@ const SubProductMaster = () => {
     navigate("/master/sub-product-master/add");
   };
 
-  const handleSearchChange = (value: string) => {
-    setInputValue(value);
-  };
-
   const handleRefresh = () => {
     dispatch(resetAllStates());
     setInputValue("");
     setSearchValue("");
+    setSubmittedFilter(null);
+    setVisibleColumns(headers.map((h) => h.key as string));
+  };
+
+  const handleToggleColumn = (key: string) => {
+    setVisibleColumns((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
+
+  const handleExportClick = () => {
+    if (!FilteredData || FilteredData.length === 0) {
+      toast.warning("No data available to export.");
+      return;
+    }
+
+    exportToCsv(FilteredData, "sub-product-master");
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchValue(inputValue.toLowerCase());
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [inputValue]);
-
-  useEffect(() => {
     if (!loaded) {
-      dispatch(fetchSubProduct({ page: currentPage, size: pageSize }))
+      dispatch(
+        fetchSubProduct({
+          page: currentPage,
+          size: pageSize,
+          filter: submittedFilter,
+        })
+      )
         .unwrap()
         .then()
         .catch((err) => toast.error(err));
     }
-  }, [currentPage, pageSize, loaded]);
+  }, [currentPage, pageSize, loaded, submittedFilter]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -94,8 +125,11 @@ const SubProductMaster = () => {
         addButtonText="Add Sub Product"
         onAdd={handleAdd}
         onRefresh={handleRefresh}
-        onSearchChange={handleSearchChange}
-        searchValue={searchValue}
+        onColumnChange={handleToggleColumn}
+        onExport={handleExportClick}
+        onFilter={() => setFilterVisible((prev) => !prev)}
+        headers={headers}
+        visibleColumns={visibleColumns}
       />
 
       {loading ? (
@@ -104,7 +138,9 @@ const SubProductMaster = () => {
       ) : (
         <GenericMasterTable<SubProductTableType>
           data={FilteredData}
-          headers={headers}
+          headers={headers.filter((h) =>
+            visibleColumns.includes(h.key as string)
+          )}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2">
@@ -127,6 +163,10 @@ const SubProductMaster = () => {
           pageSize={pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+          filterVisible={filterVisible}
+          filterValues={filterValues}
+          onFilterChange={handleFilterChange}
+          onFilterSubmit={handleFilterSubmit}
         />
       )}
     </div>

@@ -37,3 +37,10 @@ export interface UpdateVendorPayload extends VendorFormType {
   };
   editedBy: string;
 }
+
+
+export type FetchVendorParams = {
+  page: number;
+  size: number;
+  filter?: { key: string; value: string | boolean } | null;
+};

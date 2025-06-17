@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 import { textField, websiteValidation } from "../../Utils/ValidationUtils";
+import { GenericTableHeader } from "../../Utils/utils";
 
 export type VendorFormType = {
   vendorName: string;
@@ -53,21 +54,21 @@ export const validationSchema: Record<keyof VendorFormType, Yup.AnySchema> = {
   parameter: textField("Parameter", 50, false),
 };
 
-export const headers: { key: keyof VendorTableType; label: string }[] = [
-  { key: "id", label: "Id" },
-  { key: "vendorName", label: "Vendor Name" },
-  { key: "vendorCode", label: "Vendor Code" },
-  { key: "productId", label: "Product Id" },
-  { key: "subProductId", label: "Sub Product Id" },
-  { key: "subProductCode", label: "Sub Product Code" },
-  { key: "modesSupported", label: "Modes Supported" },
-  { key: "priority", label: "Priority" },
-  { key: "isActive", label: "Active" },
-  { key: "bankType", label: "Blanks" },
-  { key: "createdOn", label: "Created On" },
-  { key: "createdBy", label: "Created By" },
-  { key: "editedOn", label: "Edited On" },
-  { key: "editedBy", label: "Edited By" },
+export const headers: GenericTableHeader<VendorTableType>[] = [
+  { key: "id", label: "Id", filterType: "text" },
+  { key: "vendorName", label: "Vendor Name", filterType: "text" },
+  { key: "vendorCode", label: "Vendor Code", filterType: "text" },
+  { key: "productId", label: "Product Id", filterType: "text" },
+  { key: "subProductId", label: "Sub Product Id", filterType: "text" },
+  { key: "subProductCode", label: "Sub Product Code", filterType: "text" },
+  { key: "modesSupported", label: "Modes Supported", filterType: "text" },
+  { key: "priority", label: "Priority", filterType: "text" },
+  { key: "isActive", label: "Active", filterType: "boolean" },
+  { key: "bankType", label: "Blanks", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
 ];
 
 // export const data: VendorType[] = [

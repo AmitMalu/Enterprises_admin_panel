@@ -1,3 +1,4 @@
+import { GenericTableHeader } from "../../Utils/utils";
 import { textField } from "../../Utils/ValidationUtils";
 import * as Yup from "yup";
 
@@ -47,21 +48,25 @@ export const validationSchema: Record<keyof OperatorFormType, Yup.AnySchema> = {
   isActive: Yup.boolean().required("Is Active is required"),
 };
 
-export const headers: { key: keyof OperatorTableType; label: string }[] = [
-  { key: "id", label: "ID" },
-  { key: "operatorAlias", label: "Operator Alias" },
-  { key: "operatorCategory", label: "Operator Category" },
-  { key: "operatorCode", label: "Operator Code" },
-  { key: "operatorName", label: "Operator Name" },
-  { key: "productCode", label: "Product Code" },
-  { key: "productId", label: "Product ID" },
-  { key: "subProductCode", label: "Sub Product Code" },
-  { key: "subProductId", label: "Sub Product ID" },
-  { key: "alias", label: "Alias" },
-  { key: "isActive", label: "Is Active" },
-  { key: "cardBinNo", label: "Card BIN No" },
-  { key: "createdOn", label: "Created On" },
-  { key: "editedOn", label: "Edited On" },
-  { key: "createdBy", label: "Created By" },
-  { key: "editedBy", label: "Edited By" },
+export const headers: GenericTableHeader<OperatorTableType>[] = [
+  { key: "id", label: "ID", filterType: "text" },
+  { key: "operatorAlias", label: "Operator Alias", filterType: "text" },
+  {
+    key: "operatorCategory",
+    label: "Operator Category",
+    filterType: "text",
+  },
+  { key: "operatorCode", label: "Operator Code", filterType: "text" },
+  { key: "operatorName", label: "Operator Name", filterType: "text" },
+  { key: "productCode", label: "Product Code", filterType: "text" },
+  { key: "productId", label: "Product ID", filterType: "text" },
+  { key: "subProductCode", label: "Sub Product Code", filterType: "text" },
+  { key: "subProductId", label: "Sub Product ID", filterType: "text" },
+  { key: "alias", label: "Alias", filterType: "text" },
+  { key: "isActive", label: "Is Active", filterType: "boolean" },
+  { key: "cardBinNo", label: "Card BIN No", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  { key: "editedOn", label: "Edited On", filterType: "text" },
+  { key: "createdBy", label: "Created By", filterType: "date" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
 ];

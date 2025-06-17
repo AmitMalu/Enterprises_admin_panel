@@ -1,17 +1,27 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../../Config/Api/EndPoints";
-import { CreateOperatorPayload, UpdateOperatorPayload } from "./types";
+import {
+  CreateOperatorPayload,
+  FetchOperatorParams,
+  UpdateOperatorPayload,
+} from "./types";
 
 export const fetchOperator = createAsyncThunk(
   "operatorMaster/fetchOperator",
   async (
-    { page = 0, size = 5 }: { page: number; size: number },
+    { page = 0, size = 10, filter }: FetchOperatorParams,
     { rejectWithValue }
   ) => {
+    const params = new URLSearchParams();
+    params.append("page", String(page - 1));
+    params.append("size", String(size));
+    if (filter?.key) {
+      params.append(String(filter.key), String(filter.value ?? ""));
+    }
     try {
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS?.MASTER?.OPERATOR}?page=${page - 1}&size=${size}`
+        `${API_ENDPOINTS?.MASTER?.OPERATOR}?${params.toString()}`
       );
       const responseData = response?.data;
 
