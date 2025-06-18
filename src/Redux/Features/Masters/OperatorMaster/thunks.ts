@@ -121,3 +121,25 @@ export const updateOperator = createAsyncThunk(
     }
   }
 );
+
+export const fetchDropDownForOperators = createAsyncThunk(
+  "productMaster/fetchDropDownForOperators",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS?.MASTER?.OPERATOR}/active`
+      );
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData.data;
+      } else {
+        return rejectWithValue(responseData?.message || "No list found");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "No list found"
+      );
+    }
+  }
+);

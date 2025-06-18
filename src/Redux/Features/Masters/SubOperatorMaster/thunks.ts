@@ -1,39 +1,50 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../../Config/Api/EndPoints";
-import { CreateOperatorPayload, UpdateOperatorPayload } from "./types";
+import { CreateSubOperatorPayload, UpdateSubOperatorPayload } from "./types";
+import { FetchSubProductParams } from "../SubProductMaster/types";
 
-export const fetchOperator = createAsyncThunk(
-  "operatorMaster/fetchOperator",
+export const fetchSubOperator = createAsyncThunk(
+  "subOperatorMaster/fetchSubOperator",
   async (
-    { page = 0, size = 5 }: { page: number; size: number },
+    { page = 0, size = 10, filter }: FetchSubProductParams,
     { rejectWithValue }
   ) => {
     try {
+      const params = new URLSearchParams();
+      params.append("page", String(page - 1));
+      params.append("size", String(size));
+      if (filter?.key) {
+        params.append(String(filter.key), String(filter.value ?? ""));
+      }
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS?.MASTER?.OPERATOR}?page=${page - 1}&size=${size}`
+        `${API_ENDPOINTS?.MASTER?.SUB_OPERATOR}?${params.toString()}`
       );
       const responseData = response?.data;
 
       if (responseData && responseData.statusCode === 200) {
         return responseData;
       } else {
-        return rejectWithValue(responseData?.message || "No Operator found");
+        return rejectWithValue(
+          responseData?.message || "No Sub-Operator found"
+        );
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "No Operator found"
+        error.response?.data?.message ||
+          error.message ||
+          "No Sub-Operator found"
       );
     }
   }
 );
 
-export const fetchOperatorById = createAsyncThunk(
-  "operatorMaster/fetchOperatorById",
+export const fetchSubOperatorById = createAsyncThunk(
+  "subOperatorMaster/fetchSubOperatorById",
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS.MASTER.OPERATOR}/${id}` // endpoint requires the ID,
+        `${API_ENDPOINTS.MASTER.SUB_OPERATOR}/${id}` // endpoint requires the ID,
       );
       const responseData = response?.data;
 
@@ -54,12 +65,12 @@ export const fetchOperatorById = createAsyncThunk(
   }
 );
 
-export const createOperator = createAsyncThunk(
-  "operatorMaster/createOperator",
-  async (data: CreateOperatorPayload, { rejectWithValue }) => {
+export const createSubOperator = createAsyncThunk(
+  "subOperatorMaster/createSubOperator",
+  async (data: CreateSubOperatorPayload, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        API_ENDPOINTS.MASTER.OPERATOR,
+        API_ENDPOINTS.MASTER.SUB_OPERATOR,
         data
       );
       const responseData = response?.data;
@@ -68,28 +79,28 @@ export const createOperator = createAsyncThunk(
         return responseData;
       } else {
         return rejectWithValue(
-          responseData?.message || "Failed to Create Operator"
+          responseData?.message || "Failed to Create Sub-Operator"
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
-          "Failed to create Operator"
+          "Failed to create Sub-Operator"
       );
     }
   }
 );
 
-export const updateOperator = createAsyncThunk(
-  "operatorMaster/updateOperator",
+export const updateSubOperator = createAsyncThunk(
+  "subOperatorMaster/updateSubOperator",
   async (
-    { id, data }: { id: string; data: UpdateOperatorPayload },
+    { id, data }: { id: string; data: UpdateSubOperatorPayload },
     { rejectWithValue }
   ) => {
     try {
       const response = await axiosInstance.put(
-        `${API_ENDPOINTS.MASTER.OPERATOR}/${id}`,
+        `${API_ENDPOINTS.MASTER.SUB_OPERATOR}/${id}`,
         data
       );
 
@@ -99,14 +110,40 @@ export const updateOperator = createAsyncThunk(
         return responseData;
       } else {
         return rejectWithValue(
-          responseData.message || "Failed to Update Operator"
+          responseData.message || "Failed to Update Sub-Operator"
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
-          "Failed to update Operator"
+          "Failed to update Sub-Operator"
+      );
+    }
+  }
+);
+
+export const fetchSubOperatorByOperatorCode = createAsyncThunk(
+  "subProductMaster/fetchSubOperatorByOperatorCode",
+  async (code: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.MASTER.SUB_OPERATOR}/${code}` // endpoint requires the ID,
+      );
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData;
+      } else {
+        return rejectWithValue(
+          responseData?.message || "No data found for this Code - " + code
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          `No data found for this Code - ${code}`
       );
     }
   }

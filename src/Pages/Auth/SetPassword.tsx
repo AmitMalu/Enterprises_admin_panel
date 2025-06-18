@@ -44,7 +44,7 @@ const SetPassword: React.FC = () => {
     try {
       const result = await dispatch(
         setPassword({
-          username,
+          userName: username,
           newPassword: values.newPassword,
           reEnteredPassword: values.reEnteredPassword,
         })

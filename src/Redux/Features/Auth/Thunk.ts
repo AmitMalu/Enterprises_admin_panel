@@ -35,10 +35,10 @@ export const otpVerify = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.VERIFY_OTP,
-        null, // No body, since we are sending query params
-        {
-          params: payload,
-        }
+        payload, // No body, since we are sending query params
+        // {
+        //   params: payload,
+        // }
       );
       if (response?.data?.statusCode == 200) {
         return response?.data;
@@ -63,10 +63,10 @@ export const resendOtp = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.RESEND_OTP,
-        null, // No body, since we are sending query params
-        {
-          params: payload,
-        }
+        payload, // No body, since we are sending query params
+        // {
+        //   params: payload,
+        // }
       );
       if (response.data.statusCode == 200) {
         return response.data;
@@ -87,10 +87,10 @@ export const forgetPassword = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.FORGET_PASSWORD,
-        null, // No body, since we are sending query params
-        {
-          params: payload,
-        }
+        payload, // No body, since we are sending query params
+        // {
+        //   params: payload,
+        // }
       );
       if (response.data.statusCode == 200) {
         return response.data;
@@ -111,11 +111,10 @@ export const setPassword = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.SET_PASSWORD,
-        null, // No body, since we are sending query params
-        {
-          params: payload,
-          timeout: 10000, // 10 seconds timeout
-        }
+        payload, // No body, since we are sending query params
+        // {
+        //   params: payload,
+        // }
       );
       if (response.data.statusCode == 200) {
         return response.data;

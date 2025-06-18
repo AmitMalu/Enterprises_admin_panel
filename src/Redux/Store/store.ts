@@ -4,7 +4,8 @@ import menuReducer from "../Features/Menu/MenuReducer";
 import productMasterSlice from "../Features/Masters/ProductMaster/slice";
 import subProductMasterSlice from "../Features/Masters/SubProductMaster/slice";
 import operatorMasterSlice from "../Features/Masters/OperatorMaster/slice";
-import vendorMasterSlice from '../Features/Masters/VendorMaster/slice'
+import vendorMasterSlice from "../Features/Masters/VendorMaster/slice";
+import subOperatorMasterSlice from "../Features/Masters/SubOperatorMaster/slice";
 import storageSession from "redux-persist/lib/storage/session";
 import { persistReducer, persistStore } from "redux-persist";
 
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
     product: productMasterSlice,
     subProduct: subProductMasterSlice,
     operator: operatorMasterSlice,
-    vendor : vendorMasterSlice
+    vendor: vendorMasterSlice,
+    subOperator: subOperatorMasterSlice,
   }),
 });
 

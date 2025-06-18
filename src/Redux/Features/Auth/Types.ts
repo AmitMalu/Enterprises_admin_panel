@@ -13,23 +13,23 @@ export interface loginPayload {
 }
 
 export interface optVerifyPayload {
-  username: string | number;
+  userName: string | number;
   otp: string | number;
   [key: string]: any;
 }
 
 export interface resendOtpPayload {
-  username: string | number;
+  userName: string | number;
   [key: string]: any;
 }
 
 export interface forgetPasswordPayload {
-  username: string | number;
+  userName: string | number;
   [key: string]: any;
 }
 
 export interface setPasswordPayload {
-  username: string | number;
+  userName: string | number;
   newPassword: string;
   reEnteredPassword: string;
   [key: string]: any;

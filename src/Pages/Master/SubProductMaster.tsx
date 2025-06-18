@@ -30,8 +30,6 @@ const SubProductMaster = () => {
   const currentPage = pagination.currentPage;
   const pageSize = pagination.pageSize;
 
-  const [inputValue, setInputValue] = useState("");
-  const [searchValue, setSearchValue] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
@@ -79,8 +77,8 @@ const SubProductMaster = () => {
 
   const handleRefresh = () => {
     dispatch(resetAllStates());
-    setInputValue("");
-    setSearchValue("");
+    setFilterValues({});
+    setFilterVisible(false);
     setSubmittedFilter(null);
     setVisibleColumns(headers.map((h) => h.key as string));
   };

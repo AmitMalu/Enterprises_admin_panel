@@ -36,7 +36,7 @@ const OtpVerify: React.FC = () => {
 
   const handleResendOtp = async (): Promise<void> => {
     try {
-      const result = await dispatch(resendOtp({ username })).unwrap();
+      const result = await dispatch(resendOtp({ userName: username })).unwrap();
       toast.success(result.message);
     } catch (error: any) {
       toast.error(error.message || "OTP resend failed");
@@ -51,7 +51,9 @@ const OtpVerify: React.FC = () => {
     if (Otp.length < 6) return;
 
     try {
-      const result = await dispatch(otpVerify({ username, otp: Otp })).unwrap();
+      const result = await dispatch(
+        otpVerify({ userName: username, otp: Otp })
+      ).unwrap();
       toast.success(result.message);
       if (otpFor === "forgetPassword") {
         navigate("/set-password", {

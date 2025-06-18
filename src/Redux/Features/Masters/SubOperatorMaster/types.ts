@@ -1,8 +1,8 @@
-import { OperatorFormType } from "../../../../Config/Master/OperatorConfig";
+import { SubOperatorFormType } from "../../../../Config/Master/SubOperatorConfig";
 
-export interface OperatorMasterState {
-  operators: Record<string, any>[];
-  selectedOperator: Record<string, any> | null;
+export interface SubOperatorMasterState {
+  subOperators: Record<string, any>[];
+  selectedSubOperator: Record<string, any> | null;
   pagination: {
     totalPages: number;
     totalElements: number;
@@ -14,10 +14,16 @@ export interface OperatorMasterState {
   loaded: boolean;
 }
 
-export interface CreateOperatorPayload extends OperatorFormType {
+export interface CreateSubOperatorPayload extends SubOperatorFormType {
   createdBy: string;
 }
 
-export interface UpdateOperatorPayload extends OperatorFormType {
+export interface UpdateSubOperatorPayload extends SubOperatorFormType {
   editedBy: string;
 }
+
+export type FetchSubOperatorParams = {
+  page: number;
+  size: number;
+  filter?: { key: string; value: string | boolean } | null;
+};
