@@ -32,6 +32,8 @@ const SubProductMaster = () => {
 
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  const [refreshKey, setRefreshKey] = useState(0);
+
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
@@ -81,6 +83,7 @@ const SubProductMaster = () => {
     setFilterVisible(false);
     setSubmittedFilter(null);
     setVisibleColumns(headers.map((h) => h.key as string));
+    setRefreshKey((prev) => prev + 1);
   };
 
   const handleToggleColumn = (key: string) => {
@@ -111,7 +114,7 @@ const SubProductMaster = () => {
         .then()
         .catch((err) => toast.error(err));
     }
-  }, [currentPage, pageSize, loaded, submittedFilter]);
+  }, [currentPage, pageSize, loaded, submittedFilter, refreshKey]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">

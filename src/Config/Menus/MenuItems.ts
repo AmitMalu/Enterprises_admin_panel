@@ -39,6 +39,16 @@ export const sidebarData = [
         link: "/master/vendor-master",
         icon: userCreationSvg,
       },
+       {
+        label: "Bank Master",
+        link: "/master/bank-master",
+        icon: userCreationSvg,
+      },
+       {
+        label: "Dropdown Master",
+        link: "/master/dropdown-master",
+        icon: userCreationSvg,
+      },
     ],
   },
   {

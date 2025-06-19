@@ -15,14 +15,16 @@ const Sidebar: React.FC = () => {
   ));
 
   return (
-    <Box w="100%">
+    <Box w="100%" className="h-[98vh] flex flex-col">
       <Box mb="sm">
         <Image src={orgLogo} alt="logo" w={180} mx="auto" />
       </Box>
 
-      <ScrollArea className="flex-1 p-2 overflow-y-auto">
-        <div className="flex flex-col gap-1">{links}</div>
-      </ScrollArea>
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea h="100%" scrollbarSize={0}>
+          <div className="flex flex-col gap-1">{links}</div>
+        </ScrollArea>
+      </div>
     </Box>
   );
 };

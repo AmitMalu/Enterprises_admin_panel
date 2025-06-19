@@ -25,6 +25,7 @@ type GenericMasterTableProps<T> = {
   headers: GenericTableHeader<T>[];
   renderExtraHeader?: () => React.ReactNode;
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
+  extraColumnPosition?: "left" | "right";
   pagination?: boolean;
   currentPage?: number;
   totalPages?: number;
@@ -44,6 +45,7 @@ const GenericMasterTable = <T,>({
   headers,
   renderExtraHeader,
   renderExtraRowCell,
+  extraColumnPosition = "left",
   currentPage,
   totalPages,
   onPageChange,
@@ -58,7 +60,7 @@ const GenericMasterTable = <T,>({
   onFilterSubmit,
 }: GenericMasterTableProps<T>) => {
   return (
-    <Table.ScrollContainer minWidth={1600} className="mt-4">
+    <Table.ScrollContainer minWidth={600} className="mt-4">
       <Table
         withColumnBorders
         striped
@@ -71,10 +73,17 @@ const GenericMasterTable = <T,>({
       >
         <Table.Thead>
           <Table.Tr>
-            {renderExtraHeader && <Table.Th>{renderExtraHeader()}</Table.Th>}
+            {/* Left Extra Header */}
+            {renderExtraHeader && extraColumnPosition === "left" ? (
+              <Table.Th>{renderExtraHeader()}</Table.Th>
+            ) : null}
             {headers.map(({ key, label }) => (
               <Table.Th key={String(key)}>{label || ""}</Table.Th>
             ))}
+            {/* Left Extra Header */}
+            {renderExtraHeader && extraColumnPosition === "right" ? (
+              <Table.Th>{renderExtraHeader()}</Table.Th>
+            ) : null}
           </Table.Tr>
         </Table.Thead>
 

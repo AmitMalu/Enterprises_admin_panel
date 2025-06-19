@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthLayout from "../Components/Layout/AuthLayout";
 import MainLayout from "../Components/Layout/MainLayout";
@@ -13,12 +13,25 @@ import PreFundingAuth from "../Pages/Funding/PreFundingAuth";
 import PrefundingForm from "../Components/Organisms/PrefundingForm";
 import SchemesList from "../Pages/Schemes/SchemesList";
 import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
-import { OperatorMaster, ProductMaster, SubOperatorMaster, SubProductMaster, VendorMaster } from "../Pages/Master";
+import {
+  BankMaster,
+  DropdownMaster,
+  OperatorMaster,
+  ProductMaster,
+  SubOperatorMaster,
+  SubProductMaster,
+  VendorMaster,
+} from "../Pages/Master";
 import SubProductForm from "../Components/Organisms/SubProductForm";
 import VendorForm from "../Components/Organisms/VendorForm";
 import OperatorForm from "../Components/Organisms/OperatorForm";
 import ProductForm from "../Components/Organisms/ProductForm";
 import SubOperatorForm from "../Components/Organisms/SubOperatorForm";
+import BankMasterForm from "../Components/Organisms/BankMasterForm";
+import PendingUser from "../Pages/Management/PendingUser";
+import ActivationUser from "../Pages/Management/ActivationUser";
+import CrmReport from "../Pages/Reports/CrmReport";
+import DropdownMasterForm from "../Components/Organisms/DropdownMasterForm";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
@@ -96,6 +109,27 @@ const AppRoutes = () => {
               path="/master/vendor-master/edit/:id"
               element={<VendorForm mode="edit" />}
             />
+            <Route path="/master/bank-master" element={<BankMaster />} />
+            <Route
+              path="/master/bank-master/add"
+              element={<BankMasterForm mode="add" />}
+            />
+            <Route
+              path="/master/bank-master/edit/:id"
+              element={<BankMasterForm mode="edit" />}
+            />
+            <Route
+              path="/master/dropdown-master"
+              element={<DropdownMaster />}
+            />
+            <Route
+              path="/master/dropdown-master/add"
+              element={<DropdownMasterForm mode="add" />}
+            />
+            <Route
+              path="/master/dropdown-master/edit"
+              element={<DropdownMasterForm mode="edit" />}
+            />
 
             <Route
               path="/funding/pre-funding-authorization"
@@ -118,12 +152,18 @@ const AppRoutes = () => {
               path="/management/user/create/:type"
               element={<UserFormPage />}
             />
+            <Route path="/management/user/pending" element={<PendingUser />} />
+            <Route
+              path="/management/user/activation"
+              element={<ActivationUser />}
+            />
             <Route path="/schemes/schemeslist" element={<SchemesList />} />
 
             <Route
               path="/schemes/setting/:schemeId"
               element={<SchemeSettingsPage />}
             />
+            <Route path="/report/crm" element={<CrmReport />} />
           </Route>
         </Route>
 

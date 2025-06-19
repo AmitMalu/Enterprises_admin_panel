@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { DeactivateIcon } from "../../assets/Icons";
@@ -9,7 +9,7 @@ import SchemeConfigurationForm from "../../Components/Organisms/SchemeConfigurat
 import SlabStructureTab from "../../Components/Organisms/SlabStructureTab";
 
 const SchemeSettingsPage = () => {
-  const { schemeId } = useParams();
+  // const { schemeId } = useParams();
   const location = useLocation();
   const state = location.state;
 

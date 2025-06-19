@@ -17,5 +17,6 @@ export const API_ENDPOINTS = {
     OPERATOR: "api/operators",
     VENDOR: "api/vendors",
     SUB_OPERATOR: "api/sub-operators",
+    DROPDOWN_MASTER: "api/master",
   },
 };

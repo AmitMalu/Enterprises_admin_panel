@@ -1,18 +1,21 @@
-import { AppShell, Burger, Group, Skeleton, Text } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Group,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { logoutUser } from "../../Utils/utils";
 
 const MainLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
-  const hasMounted = useRef(false);
 
-  // ✅ Clear justLoggedIn if user navigates to any route other than "/"
+  // Clear justLoggedIn if user navigates to any route other than "/"
   useEffect(() => {
     const justLoggedIn = sessionStorage.getItem("justLoggedIn");
 
@@ -21,7 +24,7 @@ const MainLayout: React.FC = () => {
     }
   }, [location.pathname]);
 
-  // ✅ Show logout prompt only on browser back/forward
+  // Show logout prompt only on browser back/forward
   useEffect(() => {
     const handlePopState = () => {
       const justLoggedIn = sessionStorage.getItem("justLoggedIn");

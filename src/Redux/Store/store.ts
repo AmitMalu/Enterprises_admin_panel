@@ -6,6 +6,7 @@ import subProductMasterSlice from "../Features/Masters/SubProductMaster/slice";
 import operatorMasterSlice from "../Features/Masters/OperatorMaster/slice";
 import vendorMasterSlice from "../Features/Masters/VendorMaster/slice";
 import subOperatorMasterSlice from "../Features/Masters/SubOperatorMaster/slice";
+import dropdownMasterSlice from "../Features/Masters/DropdownMaster/slice";
 import storageSession from "redux-persist/lib/storage/session";
 import { persistReducer, persistStore } from "redux-persist";
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     operator: operatorMasterSlice,
     vendor: vendorMasterSlice,
     subOperator: subOperatorMasterSlice,
+    dropdown: dropdownMasterSlice,
   }),
 });
 
