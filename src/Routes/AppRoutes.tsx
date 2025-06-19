@@ -1,15 +1,15 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import ProtectedRoutes from "../Layout/ProtectedRoutes";
-import AuthLayout from "../Layout/AuthLayout";
-import MainLayout from "../Layout/MainLayout";
+import AuthLayout from "../Components/Layout/AuthLayout";
+import MainLayout from "../Components/Layout/MainLayout";
+import LoginPage from "../Features/Auth/LoginPage";
+import OtpVerify from "../Features/Auth/OtpVerify";
+import ForgetPassword from "../Features/Auth/ForgetPassword";
+import SetPassword from "../Features/Auth/SetPassword";
+import UserCreation from "../Features/Management/UserCreation";
 
 // Lazy loaded pages
-const LoginPage = lazy(() => import("../Features/Auth/Pages/LoginPage"));
-const OtpVerify = lazy(() => import("../Features/Auth/Pages/OtpVerify"));
-const SetPassword = lazy(() => import("../Features/Auth/Pages/SetPassword"));
-const ForgetPassword = lazy(() => import("../Features/Auth/Pages/ForgetPassword"));
-const HomePage = lazy(() => import("../Features/Home/HomePage"));
+const HomePage = lazy(() => import("../Features/Dashboard/HomePage"));
 
 const AppRoutes = () => {
   return (
@@ -24,12 +24,14 @@ const AppRoutes = () => {
         </Route>
 
         {/* protected Routes with MainLayout */}
-        <Route element={<ProtectedRoutes />}>
-          {/* check if User has token? if yes ? render MainLayout : loginPage */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<HomePage />} />
-          </Route>
+        {/* <Route element={<ProtectedRoutes />}> */}
+        {/* check if User has token? if yes ? render MainLayout : loginPage */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/management/user-creation" element={<UserCreation />} />
+          <Route path="/funding/overview2" element={<HomePage />} />
         </Route>
+        {/* </Route> */}
 
         {/* Redirect all unknown routes */}
         <Route path="*" element={<Navigate to="/login" />} />

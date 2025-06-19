@@ -13,6 +13,12 @@ export default {
         lora: ["Lora", "serif"],
         poppins: ["Poppins", "sans-serif"],
       },
+      colors: {
+        menuActiveBg: "#BDC4C3",
+        submenuBg: "#DBE5E4",
+        submenuBorder: "#CECECE",
+        submenuActive: "#DB2629",
+      },
     },
   },
   plugins: [],

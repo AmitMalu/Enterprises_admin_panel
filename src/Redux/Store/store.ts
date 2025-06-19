@@ -1,9 +1,11 @@
 import {configureStore } from '@reduxjs/toolkit';
-import authReducer from './reducers/AuthReducer';
+import authReducer from '../Features/Auth/Reducer';
+import menuReducer from '../Features/Menu/MenuReducer';
 
 export const store = configureStore({
     reducer : {
         auth : authReducer,
+        menu : menuReducer
     }
 })
 

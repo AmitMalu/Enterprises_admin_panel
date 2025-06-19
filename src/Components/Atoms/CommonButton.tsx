@@ -12,6 +12,8 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   children,
   ...props
 }) => {
+  const isStringChild = typeof children === 'string';
+
   return (
     <button
       {...props}
@@ -20,9 +22,13 @@ const CommonButton: React.FC<CommonButtonProps> = ({
         className
       )}
     >
-      <span className="font-open text-sm xl:text-lg 2xl:text-xl 3xl:text-2xl font-semibold text-white">
-        {children}
-      </span>
+      {isStringChild ? (
+        <span className="font-open text-sm xl:text-lg 2xl:text-xl 3xl:text-2xl font-semibold text-white">
+          {children}
+        </span>
+      ) : (
+        children
+      )}
     </button>
   );
 };

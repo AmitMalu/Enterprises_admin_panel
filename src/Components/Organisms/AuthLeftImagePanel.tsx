@@ -1,5 +1,5 @@
 import React from "react";
-import orgLogo from '../../../assets/Images/orgLogo.png';
+import orgLogo from '../../assets/Images/orgLogo.png';
 
 interface LeftSideLayoutProps {
   bgImage: string;
@@ -27,9 +27,7 @@ const LeftSideLayout: React.FC<LeftSideLayoutProps> = ({
           className="w-24 md:w-32 max-w-none"
         />
       </div>
-
       {children}
-
     </div>
   );
 };
