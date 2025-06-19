@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.segoe-text {
+  font-family: "Segoe UI", sans-serif;
+}

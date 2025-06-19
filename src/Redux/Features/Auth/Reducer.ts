@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AuthState } from "./Types";
-import { forgetPassword, login, otpVerify, resendOtp, setPassword } from "./Thunk";
+import {
+  forgetPassword,
+  login,
+  otpVerify,
+  resendOtp,
+  setPassword,
+} from "./Thunk";
+import { string } from "yup";
 
 const initialState: AuthState = {
   loading: false,
@@ -32,10 +39,19 @@ const authReducer = createSlice({
         state.error = null;
       })
       .addCase(otpVerify.fulfilled, (state, action) => {
-        state.token = action.payload.data.token;
-        localStorage.setItem("token", action.payload.data.token);
+        const { token } = action.payload.data;
+        const otpFor = sessionStorage.getItem("otpFor");
+
+        state.token = token;
         state.loading = false;
         state.error = null;
+
+        if (otpFor === "login") {
+          const username = action?.meta?.arg?.username;
+          state.user = username;
+          localStorage.setItem("username", username as string);
+          localStorage.setItem("token", token);
+        }
       })
       .addCase(otpVerify.rejected, (state, action) => {
         state.loading = false;

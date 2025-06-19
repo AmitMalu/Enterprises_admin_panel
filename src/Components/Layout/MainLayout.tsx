@@ -1,8 +1,8 @@
 import { AppShell, Burger, Group, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../Organisms/Sidebar";
-import Navbar from "../Organisms/Navbar";
+import Sidebar from "./Sidebar";
+import Navbar from "./Navbar";
 
 const MainLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -10,11 +10,11 @@ const MainLayout: React.FC = () => {
   return (
     <AppShell
       layout="alt"
-      header={{ height: 60 }}
+      header={{ height: 70 }}
       navbar={{ width: 250, breakpoint: "sm", collapsed: { mobile: !opened } }}
-      padding="md"
+      padding="xs"
     >
-      <AppShell.Header>
+      <AppShell.Header style={{ backgroundColor: "#F8F8F8" }}>
         <Group h="100%" px="md">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Navbar />
@@ -28,7 +28,7 @@ const MainLayout: React.FC = () => {
         </Group>
       </AppShell.Navbar>
 
-      <AppShell.Main>
+      <AppShell.Main style={{ backgroundColor: "#F8F8F8"}}>
         <Outlet />
       </AppShell.Main>
     </AppShell>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useScreenSize } from "../../Utils/CustomHooks/useScreenSize";
+import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { PasswordInput, PinInput, TextInput } from "@mantine/core";
 
 type InputType = "text" | "password" | "number" | "email";
@@ -7,7 +7,7 @@ type InputType = "text" | "password" | "number" | "email";
 interface TextInputComponentProps {
   type?: InputType;
   label?: string;
-  name?: string;
+  name: string;
   placeholder?: string;
   value: string;
   oneTimeCode?: boolean;
@@ -26,6 +26,11 @@ interface TextInputComponentProps {
   rightSectionWidth?: number;
   className?: string;
   length?: number;
+  capitalize?: boolean;
+  allowNumber?: boolean;
+  allowCharacter?: boolean;
+  allowSpecialChar?: boolean;
+  allowSpace?: boolean;
 }
 
 const TextInputComponent: React.FC<TextInputComponentProps> = ({
@@ -50,28 +55,65 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
   className = "",
   oneTimeCode = false,
   length = 6,
+  capitalize = false,
+  allowNumber = true,
+  allowCharacter = true,
+  allowSpecialChar = true,
+  allowSpace = true,
 }) => {
   const screenSize = useScreenSize();
   const [isFocused, setIsFocused] = useState(false);
 
   const defaultSize =
     size ||
-    (screenSize === "sm"
+    (screenSize === "sm" || screenSize === "md" || screenSize === "lg"
       ? "sm"
-      : screenSize === "md" || screenSize === "lg"
-      ? "md"
       : screenSize === "xl" || screenSize === "2xl"
+      ? "md"
+      : screenSize === "3xl"
       ? "lg"
       : "xl");
 
-  const defaultRadius = radius || (screenSize === "sm" ? "sm" : "md");
+  const defaultRadius = radius || (screenSize === "3xl" ? "md" : "sm");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newValue = event.target.value;
+
+    if (!allowNumber) {
+      newValue = newValue.replace(/[0-9]/g, "");
+    }
+
+    if (!allowCharacter) {
+      newValue = newValue.replace(/[a-zA-Z]/g, "");
+    }
+
+    if (!allowSpecialChar) {
+      newValue = newValue.replace(/[^a-zA-Z0-9\s]/g, "");
+    }
+
+    if (!allowSpace) {
+      newValue = newValue.replace(/\s+/g, "");
+    }
+
+    if (capitalize) {
+      newValue = newValue.toUpperCase();
+    }
+    onChange({
+      ...event,
+      target: {
+        ...event.target,
+        value: newValue,
+        name: name, // Ensure name is present for Formik
+      },
+    });
+  };
 
   const sharedProps = {
     name,
     label,
     placeholder,
     value,
-    onChange,
+    onChange: handleChange,
     onFocus: () => setIsFocused(true),
     onBlur: () => setIsFocused(false),
     error: typeof error === "string" ? true : !!error,
@@ -101,7 +143,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
       value={value}
       onChange={(val) =>
         onChange({
-          target: { value: val },
+          target: { value: val, name: name },
         } as React.ChangeEvent<HTMLInputElement>)
       } // mock event
       size={defaultSize}

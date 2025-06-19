@@ -1,16 +1,17 @@
-import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-
-const isAuthenticated = () => {
-  return (
-    localStorage.getItem("token") !== null &&
-    localStorage.getItem("token") !== "undefined" &&
-    localStorage.getItem("token") !== ""
-  );
-};
+import { checkTokenValidity, clearStorage } from "../Utils/utils";
 
 const ProtectedRoutes = () => {
-  return isAuthenticated() ? <Outlet /> : <Navigate to="/login" />;
+  const token = localStorage.getItem("token");
+
+  const isValid = checkTokenValidity(token);
+
+  if (!isValid) {
+    clearStorage();
+    return <Navigate to="/login" />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoutes;

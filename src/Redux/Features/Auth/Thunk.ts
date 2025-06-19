@@ -7,14 +7,16 @@ import { forgetPasswordPayload, loginPayload, optVerifyPayload, resendOtpPayload
 export const login = createAsyncThunk(
   "auth/login",
   async (payload: loginPayload, { rejectWithValue }) => {
+
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.LOGIN,
         payload, // No body, since we are sending query params
       );
-
+      
       if (response.data.statusCode == 200) {
         return response.data;
+
       } else {
         // If not 200, treat as failure
         return rejectWithValue(response.data.message || "Login failed");

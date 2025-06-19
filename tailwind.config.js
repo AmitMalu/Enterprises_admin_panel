@@ -12,6 +12,9 @@ export default {
         open: ['"Open Sans"', "sans-serif"],
         lora: ["Lora", "serif"],
         poppins: ["Poppins", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
+        manrope : ["Manrope", "sans-serif"],
+        segoe: ["Segoe UI", "sans-serif"],
       },
       colors: {
         menuActiveBg: "#BDC4C3",
@@ -21,5 +24,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };

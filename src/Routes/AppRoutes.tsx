@@ -2,14 +2,25 @@ import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthLayout from "../Components/Layout/AuthLayout";
 import MainLayout from "../Components/Layout/MainLayout";
-import LoginPage from "../Features/Auth/LoginPage";
-import OtpVerify from "../Features/Auth/OtpVerify";
-import ForgetPassword from "../Features/Auth/ForgetPassword";
-import SetPassword from "../Features/Auth/SetPassword";
-import UserCreation from "../Features/Management/UserCreation";
+import LoginPage from "../Pages/Auth/LoginPage";
+import OtpVerify from "../Pages/Auth/OtpVerify";
+import ForgetPassword from "../Pages/Auth/ForgetPassword";
+import SetPassword from "../Pages/Auth/SetPassword";
+import UserCreation from "../Pages/Management/UserCreation";
+import UserFormPage from "../Components/Organisms/UserFormPage";
+import ProtectedRoutes from "./ProtectedRoutes";
+import PreFundingAuth from "../Pages/Funding/PreFundingAuth";
+import PrefundingForm from "../Components/Organisms/PrefundingForm";
+import SchemesList from "../Pages/Schemes/SchemesList";
+import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
+import { OperatorMaster, ProductMaster, SubProductMaster, VendorMaster } from "../Pages/Master";
+import SubProductForm from "../Components/Organisms/SubProductForm";
+import VendorForm from "../Components/Organisms/VendorForm";
+import OperatorForm from "../Components/Organisms/OperatorForm";
+import ProductForm from "../Components/Organisms/ProductForm";
 
 // Lazy loaded pages
-const HomePage = lazy(() => import("../Features/Dashboard/HomePage"));
+const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
 
 const AppRoutes = () => {
   return (
@@ -24,14 +35,84 @@ const AppRoutes = () => {
         </Route>
 
         {/* protected Routes with MainLayout */}
-        {/* <Route element={<ProtectedRoutes />}> */}
-        {/* check if User has token? if yes ? render MainLayout : loginPage */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/management/user-creation" element={<UserCreation />} />
-          <Route path="/funding/overview2" element={<HomePage />} />
+        <Route element={<ProtectedRoutes />}>
+          {/* check if User has token? if yes ? render MainLayout : loginPage */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/master/product-master" element={<ProductMaster />} />
+            <Route
+              path="/master/product-master/add"
+              element={<ProductForm mode="add" />}
+            />
+            <Route
+              path="/master/product-master/edit/:id"
+              element={<ProductForm mode="edit" />}
+            />
+            <Route
+              path="/master/sub-product-master"
+              element={<SubProductMaster />}
+            />
+            <Route
+              path="/master/sub-product-master/add"
+              element={<SubProductForm mode="add" />}
+            />
+            <Route
+              path="/master/sub-product-master/edit/:id"
+              element={<SubProductForm mode="edit" />}
+            />
+
+            <Route
+              path="/master/operator-master"
+              element={<OperatorMaster />}
+            />
+            <Route
+              path="/master/operator-master/add"
+              element={<OperatorForm mode="add" />}
+            />
+            <Route
+              path="/master/operator-master/edit/:id"
+              element={<OperatorForm mode="edit" />}
+            />
+
+            <Route path="/master/vendor-master" element={<VendorMaster />} />
+            <Route
+              path="/master/vendor-master/add"
+              element={<VendorForm mode="add" />}
+            />
+            <Route
+              path="/master/vendor-master/edit/:id"
+              element={<VendorForm mode="edit" />}
+            />
+
+            <Route
+              path="/funding/pre-funding-authorization"
+              element={<PreFundingAuth />}
+            />
+            <Route
+              path="/prefunding/add"
+              element={<PrefundingForm mode="add" />}
+            />
+            <Route
+              path="/prefunding/edit/:id"
+              element={<PrefundingForm mode="edit" />}
+            />
+
+            <Route
+              path="/management/user-creation"
+              element={<UserCreation />}
+            />
+            <Route
+              path="/management/user/create/:type"
+              element={<UserFormPage />}
+            />
+            <Route path="/schemes/schemeslist" element={<SchemesList />} />
+
+            <Route
+              path="/schemes/setting/:schemeId"
+              element={<SchemeSettingsPage />}
+            />
+          </Route>
         </Route>
-        {/* </Route> */}
 
         {/* Redirect all unknown routes */}
         <Route path="*" element={<Navigate to="/login" />} />

@@ -1,13 +1,27 @@
-import {configureStore } from '@reduxjs/toolkit';
-import authReducer from '../Features/Auth/Reducer';
-import menuReducer from '../Features/Menu/MenuReducer';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import authReducer from "../Features/Auth/Reducer";
+import menuReducer from "../Features/Menu/MenuReducer";
+import storageSession from "redux-persist/lib/storage/session";
+import { persistReducer, persistStore } from "redux-persist";
+
+const menuPersistConfig = {
+  key: "menu", // key to use in session storage
+  storage: storageSession, // storage to use
+};
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  menu: persistReducer(menuPersistConfig, menuReducer), // only this is persisted
+});
 
 export const store = configureStore({
-    reducer : {
-        auth : authReducer,
-        menu : menuReducer
-    }
-})
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }), // required for redux-persist
+});
+
+// Setup persistor
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -7,7 +7,7 @@ export interface AuthState {
 }
 
 export interface loginPayload {
-  username: string | number;
+  userName: string | number;
   password: string;
   [key: string]: any;
 }
