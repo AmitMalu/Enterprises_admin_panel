@@ -1,15 +1,28 @@
-import React, { useState } from 'react'
-import './App.css'
+import React, { useState } from "react";
+import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./Routes/AppRoutes";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-
   return (
-    <div>
-      <h1 className='text-blue-700'>Enterprise Admin Portal</h1>
-      
-      <p>Happy coding!</p>
-    </div>
-  )
+    <BrowserRouter>
+      <AppRoutes />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
