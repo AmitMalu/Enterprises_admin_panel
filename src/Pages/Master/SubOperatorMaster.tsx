@@ -72,11 +72,11 @@ const SubOperatorMaster = () => {
   };
 
   const handleEdit = (id: any) => {
-    navigate(`/master/sub-operator-master/edit/${id}`, { state: id });
+    navigate(`/master/sub-operator/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/master/sub-operator-master/add");
+    navigate("/master/sub-operator/add");
   };
 
   const handleRefresh = () => {

@@ -101,7 +101,7 @@ export const handleVendorFormSubmit = async (
       const res = await dispatch(updateVendor({ id, data: payload })).unwrap();
       toast.success(res.message || "Vendor updated successfully");
       resetFormData(initialValues);
-      navigate("/master/Vendor-master");
+      navigate("/master/Vendor");
     } catch (err: any) {
       toast.error(err || "Failed to update Vendor");
       console.error("Update Vendor failed:", err);
@@ -112,7 +112,7 @@ export const handleVendorFormSubmit = async (
       const res = await dispatch(createVendor(payload)).unwrap();
       toast.success(res.message || "Vendor created successfully");
       resetFormData(initialValues);
-      navigate("/master/Vendor-master");
+      navigate("/master/Vendor");
     } catch (err: any) {
       toast.error(err || "Failed to create Vendor");
       console.error("Create Vendor failed:", err);

@@ -68,7 +68,6 @@ export const booleanSelectData = [
 ];
 
 export const booleanSelectData2 = [
-  { label: "none", value: "" },
   { label: "true", value: "true" },
   { label: "false", value: "false" },
 ];

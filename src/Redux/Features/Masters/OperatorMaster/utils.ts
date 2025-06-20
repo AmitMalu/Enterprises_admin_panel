@@ -81,7 +81,7 @@ export const handleOperatorFormSubmit = async (
       ).unwrap();
       toast.success(res.message || "Operator updated successfully");
       resetFormData(initialValues);
-      navigate("/master/operator-master");
+      navigate("/master/operator");
     } catch (err: any) {
       toast.error(err || "Failed to update operator");
       console.error("Update Operator failed:", err);
@@ -92,7 +92,7 @@ export const handleOperatorFormSubmit = async (
       const res = await dispatch(createOperator(payload)).unwrap();
       toast.success(res.message || "Operator created successfully");
       resetFormData(initialValues);
-      navigate("/master/operator-master");
+      navigate("/master/operator");
     } catch (err: any) {
       toast.error(err || "Failed to create operator");
       console.error("Create Operator failed:", err);

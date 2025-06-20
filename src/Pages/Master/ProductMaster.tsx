@@ -69,11 +69,11 @@ const ProductMaster = () => {
   };
 
   const handleEdit = (id: string) => {
-    navigate(`/master/product-master/edit/${id}`, { state: id });
+    navigate(`/master/product/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/master/product-master/add");
+    navigate("/master/product/add");
   };
 
   const handleRefresh = () => {

@@ -70,7 +70,7 @@ export const handleSubOperatorFormSubmit = async (
       ).unwrap();
       toast.success(res.message || "Sub Operator updated successfully");
       resetFormData(initialValues);
-      navigate("/master/sub-operator-master");
+      navigate("/master/sub-operator");
     } catch (err: any) {
       toast.error(err || "Failed to update Sub Operator");
       console.error("Update Sub Operator failed:", err);
@@ -81,7 +81,7 @@ export const handleSubOperatorFormSubmit = async (
       const res = await dispatch(createSubOperator(payload)).unwrap();
       toast.success(res.message || "Sub Operator created successfully");
       resetFormData(initialValues);
-      navigate("/master/sub-operator-master");
+      navigate("/master/sub-operator");
     } catch (err: any) {
       toast.error(err || "Failed to create Sub Operator");
       console.error("Create Sub Operator failed:", err);

@@ -18,10 +18,11 @@ const ColumnVisibilityMenu: React.FC<ColumnVisibilityMenuProps> = ({
     <Menu shadow="md" width={200} position="bottom-end">
       <Menu.Target>
         <ButtonComponent
-          style={{ padding: "5px 10px", height: 36 }}
+          style={{ padding: "4px 8px", height: 32 }}
           radius={1}
           textColor="#000000"
           borderColor="#CACACA"
+          fontSize="16"
           bgColor="#ffffff"
           leftIcon={<ColIcon />}
         >

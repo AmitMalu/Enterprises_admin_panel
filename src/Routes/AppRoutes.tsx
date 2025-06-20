@@ -14,13 +14,26 @@ import PrefundingForm from "../Components/Organisms/PrefundingForm";
 import SchemesList from "../Pages/Schemes/SchemesList";
 import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
 import {
+  ApiMaster,
   BankMaster,
+  BusinessMaster,
+  CountryMaster,
   DropdownMaster,
+  KycMaster,
   OperatorMaster,
+  PaymentMaster,
   ProductMaster,
+  ProfileMaster,
+  RegistrationMaster,
+  ServiceConfigurationMaster,
   SubOperatorMaster,
   SubProductMaster,
+  SystemConfigurationMaster,
+  TaxMaster,
+  TicketMaster,
+  UserConfigurationMaster,
   VendorMaster,
+  WalletMaster,
 } from "../Pages/Master";
 import SubProductForm from "../Components/Organisms/SubProductForm";
 import VendorForm from "../Components/Organisms/VendorForm";
@@ -30,8 +43,27 @@ import SubOperatorForm from "../Components/Organisms/SubOperatorForm";
 import BankMasterForm from "../Components/Organisms/BankMasterForm";
 import PendingUser from "../Pages/Management/PendingUser";
 import ActivationUser from "../Pages/Management/ActivationUser";
-import CrmReport from "../Pages/Reports/CrmReport";
 import DropdownMasterForm from "../Components/Organisms/DropdownMasterForm";
+import {
+  AccountSummaryReport,
+  APIPerformanceReport,
+  CreateOrderReport,
+  CumulativeReport,
+  DownloadReport,
+  EmailReport,
+  GstTdsReport,
+  InvoiceReport,
+  LedgerReport,
+  LiveTransactionReport,
+  PendingTransactionReport,
+  ReconciliationReport,
+  RefundReport,
+  SearchTransactionReport,
+  SmsReport,
+  TransactionReport,
+  UnsettledTransactionReport,
+  UpdateTransactionReport,
+} from "../Pages/Reports";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
@@ -53,84 +85,101 @@ const AppRoutes = () => {
           {/* check if User has token? if yes ? render MainLayout : loginPage */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<HomePage />} />
-            <Route path="/master/product-master" element={<ProductMaster />} />
+            {/* Masters */}
+            <Route path="/master/product" element={<ProductMaster />} />
             <Route
-              path="/master/product-master/add"
+              path="/master/product/add"
               element={<ProductForm mode="add" />}
             />
             <Route
-              path="/master/product-master/edit/:id"
+              path="/master/product/edit/:id"
               element={<ProductForm mode="edit" />}
             />
+            <Route path="/master/sub-product" element={<SubProductMaster />} />
             <Route
-              path="/master/sub-product-master"
-              element={<SubProductMaster />}
-            />
-            <Route
-              path="/master/sub-product-master/add"
+              path="/master/sub-product/add"
               element={<SubProductForm mode="add" />}
             />
             <Route
-              path="/master/sub-product-master/edit/:id"
+              path="/master/sub-product/edit/:id"
               element={<SubProductForm mode="edit" />}
             />
-
+            <Route path="/master/operator" element={<OperatorMaster />} />
             <Route
-              path="/master/operator-master"
-              element={<OperatorMaster />}
-            />
-            <Route
-              path="/master/operator-master/add"
+              path="/master/operator/add"
               element={<OperatorForm mode="add" />}
             />
             <Route
-              path="/master/operator-master/edit/:id"
+              path="/master/operator/edit/:id"
               element={<OperatorForm mode="edit" />}
             />
             <Route
-              path="/master/sub-operator-master"
+              path="/master/sub-operator"
               element={<SubOperatorMaster />}
             />
             <Route
-              path="/master/sub-operator-master/add"
+              path="/master/sub-operator/add"
               element={<SubOperatorForm mode="add" />}
             />
             <Route
-              path="/master/sub-operator-master/edit/:id"
+              path="/master/sub-operator/edit/:id"
               element={<SubOperatorForm mode="edit" />}
             />
 
-            <Route path="/master/vendor-master" element={<VendorMaster />} />
+            <Route path="/master/vendor" element={<VendorMaster />} />
             <Route
-              path="/master/vendor-master/add"
+              path="/master/vendor/add"
               element={<VendorForm mode="add" />}
             />
             <Route
-              path="/master/vendor-master/edit/:id"
+              path="/master/vendor/edit/:id"
               element={<VendorForm mode="edit" />}
             />
-            <Route path="/master/bank-master" element={<BankMaster />} />
+            <Route path="/master/bank" element={<BankMaster />} />
             <Route
-              path="/master/bank-master/add"
+              path="/master/bank/add"
               element={<BankMasterForm mode="add" />}
             />
             <Route
-              path="/master/bank-master/edit/:id"
+              path="/master/bank/edit/:id"
               element={<BankMasterForm mode="edit" />}
             />
+            <Route path="/master/dropdown" element={<DropdownMaster />} />
             <Route
-              path="/master/dropdown-master"
-              element={<DropdownMaster />}
-            />
-            <Route
-              path="/master/dropdown-master/add"
+              path="/master/dropdown/add"
               element={<DropdownMasterForm mode="add" />}
             />
             <Route
-              path="/master/dropdown-master/edit"
+              path="/master/dropdown/edit"
               element={<DropdownMasterForm mode="edit" />}
             />
+            <Route path="/master/country" element={<CountryMaster />} />
+            <Route
+              path="/master/user-configuration"
+              element={<UserConfigurationMaster />}
+            />
+            <Route
+              path="/master/system-configuration"
+              element={<SystemConfigurationMaster />}
+            />
+            <Route path="/master/wallet" element={<WalletMaster />} />
+            <Route path="/master/tax" element={<TaxMaster />} />
+            <Route path="/master/api" element={<ApiMaster />} />
+            <Route
+              path="/master/service"
+              element={<ServiceConfigurationMaster />}
+            />
+            <Route path="/master/ticket" element={<TicketMaster />} />
+            <Route path="/master/profile" element={<ProfileMaster />} />
+            <Route path="/master/kyc" element={<KycMaster />} />
+            <Route path="/master/business" element={<BusinessMaster />} />
+            <Route
+              path="/master/registration"
+              element={<RegistrationMaster />}
+            />
+            <Route path="/master/payment" element={<PaymentMaster />} />
 
+            {/* Funding */}
             <Route
               path="/funding/pre-funding-authorization"
               element={<PreFundingAuth />}
@@ -163,7 +212,57 @@ const AppRoutes = () => {
               path="/schemes/setting/:schemeId"
               element={<SchemeSettingsPage />}
             />
-            <Route path="/report/crm" element={<CrmReport />} />
+            {/* Reports */}
+            <Route
+              path="/report/live-transaction"
+              element={<LiveTransactionReport />}
+            />
+            <Route path="/report/transaction" element={<TransactionReport />} />
+            <Route
+              path="/report/unsettled-transaction"
+              element={<UnsettledTransactionReport />}
+            />
+            <Route
+              path="/report/ledger-transaction"
+              element={<LedgerReport />}
+            />
+            <Route
+              path="/report/pending-transaction"
+              element={<PendingTransactionReport />}
+            />
+            <Route
+              path="/report/update-transaction"
+              element={<UpdateTransactionReport />}
+            />
+            <Route
+              path="/report/search-transaction"
+              element={<SearchTransactionReport />}
+            />
+            <Route
+              path="/report/api-performance"
+              element={<APIPerformanceReport />}
+            />
+            <Route
+              path="/report/account-summary"
+              element={<AccountSummaryReport />}
+            />
+            <Route
+              path="/report/create-order"
+              element={<CreateOrderReport />}
+            />
+            <Route path="/report/cumulative" element={<CumulativeReport />} />
+            <Route path="/report/download" element={<DownloadReport />} />
+
+            <Route path="/report/email" element={<EmailReport />} />
+            <Route path="/report/gst-tds" element={<GstTdsReport />} />
+            <Route path="/report/refund" element={<RefundReport />} />
+            <Route
+              path="/report/reconciliation"
+              element={<ReconciliationReport />}
+            />
+            <Route path="/report/sms" element={<SmsReport />} />
+
+            <Route path="/report/invoice" element={<InvoiceReport />} />
           </Route>
         </Route>
 

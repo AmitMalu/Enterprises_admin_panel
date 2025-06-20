@@ -1,4 +1,10 @@
-import { Box, Collapse, Group, UnstyledButton } from "@mantine/core";
+import {
+  Box,
+  Collapse,
+  Group,
+  ScrollArea,
+  UnstyledButton,
+} from "@mantine/core";
 import React from "react";
 import { IconChevronRight } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -52,7 +58,7 @@ const LinksGroup: React.FC<linksGroupProps> = ({
               dispatch(setActiveSubMenu(link.label));
               navigate(link.link); // no <a> tag used
             }}
-            className={`flex items-center gap-2 cursor-pointer text-sm font-poppins font-normal px-4 py-1 rounded-xl ${
+            className={`flex items-center gap-2 cursor-pointer text-[12px] font-poppins font-normal px-4 py-1 rounded-xl ${
               isActive ? "text-submenuActive" : "text-black"
             } bg-submenuBg`}
           >
@@ -70,13 +76,13 @@ const LinksGroup: React.FC<linksGroupProps> = ({
         onClick={handleClick}
         style={{
           backgroundColor: isOpened ? "#BDC4C3" : "transparent",
-          padding: "8px 4px",
+          padding: "4px 8px",
         }}
       >
         <Group justify="space-between" gap="sm">
           <Box className="flex items-center">
             <Icon />
-            <Box className="ml-4 text-lg font-poppins font-normal leading-[27px] text-black">
+            <Box className="ml-4 text-[16px] font-poppins font-normal leading-[27px] text-black">
               {label}
             </Box>
           </Box>

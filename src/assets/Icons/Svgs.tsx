@@ -179,8 +179,8 @@ export const AppleSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
 export const DashboardSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   return (
     <svg
-      width="25"
-      height="25"
+      width="20"
+      height="20"
       viewBox="0 0 21 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -208,8 +208,8 @@ export const DashboardSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
 export const fundingSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   return (
     <svg
-      width="25"
-      height="25"
+      width="20"
+      height="20"
       viewBox="0 0 19 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -229,8 +229,8 @@ export const fundingSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
 export const managementSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   return (
     <svg
-      width="25"
-      height="25"
+      width="20"
+      height="20"
       viewBox="0 0 22 19"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -264,8 +264,8 @@ export const managementSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
 export const schemesSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   return (
     <svg
-      width="25"
-      height="25"
+      width="20"
+      height="20"
       viewBox="0 0 19 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -297,8 +297,8 @@ export const schemesSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
 export const reportsSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   return (
     <svg
-      width="25"
-      height="25"
+      width="20"
+      height="20"
       viewBox="0 0 18 10"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -406,8 +406,8 @@ export const AddIconSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       fill="none"
       version="1.1"
-      width="24"
-      height="24"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
     >
       <defs>
@@ -506,8 +506,8 @@ export const FilterIcon: React.FC<React.SVGProps<SVGSVGElement>> = () => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       fill="none"
       version="1.1"
-      width="24"
-      height="24"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
     >
       <defs>
@@ -536,8 +536,8 @@ export const DownloadIcon: React.FC<React.SVGProps<SVGSVGElement>> = () => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       fill="none"
       version="1.1"
-      width="24"
-      height="24"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
     >
       <defs>
@@ -596,8 +596,8 @@ export const ColIcon: React.FC<React.SVGProps<SVGSVGElement>> = () => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       fill="none"
       version="1.1"
-      width="24"
-      height="24"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
     >
       <defs>
@@ -656,8 +656,8 @@ export const RefreshIcon: React.FC<React.SVGProps<SVGSVGElement>> = () => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       fill="none"
       version="1.1"
-      width="24"
-      height="24"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
     >
       <defs>

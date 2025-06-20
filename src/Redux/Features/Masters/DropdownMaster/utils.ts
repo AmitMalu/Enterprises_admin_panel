@@ -62,7 +62,7 @@ export const handleDropdownFormSubmit = async (
     //   ).unwrap();
     //   toast.success(res.message || "Operator updated successfully");
     //   resetFormData(initialValues);
-    //   navigate("/master/operator-master");
+    //   navigate("/master/operator");
     // } catch (err: any) {
     //   toast.error(err || "Failed to update operator");
     //   console.error("Update Operator failed:", err);
@@ -73,7 +73,7 @@ export const handleDropdownFormSubmit = async (
       const res = await dispatch(createDropdownMaster(payload)).unwrap();
       toast.success(res.message || "Dropdown created successfully");
       resetFormData(initialValues);
-      navigate("/master/dropdown-master");
+      navigate("/master/dropdown");
     } catch (err: any) {
       toast.error(err || "Failed to create Dropdown");
       console.error("Create Dropdown failed:", err);

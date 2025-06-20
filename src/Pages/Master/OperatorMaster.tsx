@@ -68,11 +68,11 @@ const OperatorMaster = () => {
   };
 
   const handleEdit = (id: any) => {
-    navigate(`/master/operator-master/edit/${id}`, { state: id });
+    navigate(`/master/operator/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/master/operator-master/add");
+    navigate("/master/operator/add");
   };
 
   const handleRefresh = () => {

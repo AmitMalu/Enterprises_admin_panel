@@ -68,11 +68,11 @@ const DropdownMaster = () => {
   };
 
   const handleEdit = (id: any) => {
-    // navigate(`/master/dropdown-master/edit/${id}`, { state: id });
+    // navigate(`/master/dropdown/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/master/dropdown-master/add");
+    navigate("/master/dropdown/add");
   };
 
   const handleRefresh = () => {

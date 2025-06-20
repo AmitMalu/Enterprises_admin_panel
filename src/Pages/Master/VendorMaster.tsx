@@ -67,11 +67,11 @@ const VendorMaster = () => {
   };
 
   const handleEdit = (id: any) => {
-    navigate(`/master/vendor-master/edit/${id}`, { state: id });
+    navigate(`/master/vendor/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/master/vendor-master/add");
+    navigate("/master/vendor/add");
   };
 
   const handleRefresh = () => {

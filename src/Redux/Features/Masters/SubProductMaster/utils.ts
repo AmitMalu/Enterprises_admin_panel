@@ -76,7 +76,7 @@ export const handleSubProductFormSubmit = async (
       ).unwrap();
       toast.success(res.message || "SubProduct updated successfully");
       resetFormData(initialValues);
-      navigate("/master/sub-product-master");
+      navigate("/master/sub-product");
     } catch (err: any) {
       console.error("Update SubProduct failed:", err);
       toast.error(err || "Failed to update SubProduct");
@@ -87,7 +87,7 @@ export const handleSubProductFormSubmit = async (
       const res = await dispatch(createSubProduct(payload)).unwrap();
       toast.success(res.message || "SubProduct created successfully");
       resetFormData(initialValues);
-      navigate("/master/sub-product-master");
+      navigate("/master/sub-product");
     } catch (err: any) {
       console.error("Create SubProduct failed:", err);
       toast.error(err || "Failed to create SubProduct");

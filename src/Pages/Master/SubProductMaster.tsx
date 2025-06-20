@@ -71,10 +71,10 @@ const SubProductMaster = () => {
   };
 
   const handleEdit = (id: string) => {
-    navigate(`/master/sub-product-master/edit/${id}`, { state: id });
+    navigate(`/master/sub-product/edit/${id}`, { state: id });
   };
   const handleAdd = () => {
-    navigate("/master/sub-product-master/add");
+    navigate("/master/sub-product/add");
   };
 
   const handleRefresh = () => {

@@ -35,26 +35,30 @@ const GenericMasterToolbar = ({
     <>
       <div className="flex justify-between mt-2">
         {/* Add Button */}
-        <ButtonComponent
-          style={{ padding: "5px 20px", height: 40 }}
-          radius={1}
-          onClick={onAdd}
-          textColor="#fff"
-          bgColor="#BF0204"
-          borderColor="#FFFFFF"
-          leftIcon={<AddIconSvg />}
-        >
-          {addButtonText}
-        </ButtonComponent>
+        <div className="flex items-end">
+          <ButtonComponent
+            style={{ padding: "4px 8px", height: 32, margin: 0 }}
+            radius={1}
+            onClick={onAdd}
+            textColor="#fff"
+            fontSize="14"
+            bgColor="#BF0204"
+            borderColor="#FFFFFF"
+            leftIcon={<AddIconSvg />}
+          >
+            {addButtonText}
+          </ButtonComponent>
+        </div>
 
         {/*Table Controls */}
         <div>
           {/* Filter Icon */}
           <ButtonComponent
-            style={{ padding: "5px 16px", height: 36 }}
+            style={{ padding: "4px 8px", height: 32 }}
             radius={1}
             textColor="#000000"
             borderColor="#CACACA"
+            fontSize="16"
             bgColor="#ffffff"
             onClick={onFilter}
             leftIcon={<FilterIcon />}
@@ -64,10 +68,11 @@ const GenericMasterToolbar = ({
 
           {/* Download Icon */}
           <ButtonComponent
-            style={{ padding: "5px 16px", height: 36 }}
+            style={{ padding: "4px 8px", height: 32 }}
             radius={1}
             textColor="#000000"
             borderColor="#CACACA"
+            fontSize="16"
             bgColor="#ffffff"
             onClick={onExport}
             leftIcon={<DownloadIcon />}
@@ -84,10 +89,11 @@ const GenericMasterToolbar = ({
 
           {/* Refresh Icon */}
           <ButtonComponent
-            style={{ height: 36, width: 10, paddingLeft: "28px" }}
+            style={{ height: 32, width: 6, paddingLeft: "28px" }}
             radius={1}
             textColor="#000000"
             bgColor="#ffffff"
+            fontSize="16"
             borderColor="#CACACA"
             leftIcon={<RefreshIcon />}
             onClick={onRefresh}
