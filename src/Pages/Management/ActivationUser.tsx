@@ -1,5 +1,4 @@
 import React from "react";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import ComingSoonPage from "../../Components/Atoms/ComingSoonPage";
 
 const ActivationUser = () => {

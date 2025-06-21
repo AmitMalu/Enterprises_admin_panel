@@ -3,6 +3,7 @@ import {
   Collapse,
   Group,
   ScrollArea,
+  Tooltip,
   UnstyledButton,
 } from "@mantine/core";
 import React from "react";
@@ -52,19 +53,28 @@ const LinksGroup: React.FC<linksGroupProps> = ({
     ? links.map((link) => {
         const isActive = link.label === activeSubMenu;
         return (
-          <a
+          <Tooltip.Floating
+            label={link.label}
+            position="top-end"
+            disabled={link.label.length <= 25} // how only when long
             key={link.label}
-            onClick={() => {
-              dispatch(setActiveSubMenu(link.label));
-              navigate(link.link); // no <a> tag used
-            }}
-            className={`flex items-center gap-2 cursor-pointer text-[12px] font-poppins font-normal px-4 py-1 rounded-xl ${
-              isActive ? "text-submenuActive" : "text-black"
-            } bg-submenuBg`}
           >
-            {link.icon && <link.icon />}
-            {link.label}
-          </a>
+            <a
+              key={link.label}
+              onClick={() => {
+                dispatch(setActiveSubMenu(link.label));
+                navigate(link.link); // no <a> tag used
+              }}
+              className={`flex items-center gap-2 cursor-pointer text-[12px] font-poppins font-normal px-4 py-1 rounded-xl ${
+                isActive ? "text-submenuActive" : "text-black"
+              } bg-submenuBg`}
+            >
+              {link.icon && <link.icon />}
+              <span className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px]">
+                {link.label}
+              </span>
+            </a>
+          </Tooltip.Floating>
         );
       })
     : null;

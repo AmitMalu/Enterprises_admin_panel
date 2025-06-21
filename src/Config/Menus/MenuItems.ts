@@ -126,6 +126,36 @@ export const sidebarData = [
         link: "/funding/pre-funding-authorization",
         icon: userCreationSvg,
       },
+      {
+        label: "Credit/Debit",
+        link: "/funding/credit-debit",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Manage Payment",
+        link: "/funding/manage-payment",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Manage Settlement",
+        link: "/funding/manage-settlement",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Settlement",
+        link: "/funding/settlement",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Low Balance",
+        link: "/funding/low-balance",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Bulk Credit/Debit",
+        link: "/funding/bulk-credit-debit",
+        icon: userCreationSvg,
+      },
     ],
   },
   {
@@ -148,6 +178,61 @@ export const sidebarData = [
         link: "/management/user/activation",
         icon: userCreationSvg,
       },
+      {
+        label: "User Management",
+        link: "/management/user-management",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Add/Manage User",
+        link: "/management/add-manage-user",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Search User",
+        link: "/management/search-user",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Bulk Users",
+        link: "/management/bulk-users",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Tenant Website Customizing",
+        link: "/management/tenant-customization",
+        icon: userCreationSvg,
+      },
+      {
+        label: "KYC Approved Summary",
+        link: "/management/kyc-approved",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Pending KYC",
+        link: "/management/kyc-pending",
+        icon: userCreationSvg,
+      },
+      {
+        label: "View User",
+        link: "/management/view-user",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Block User",
+        link: "/management/block-user",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Settlement Bank",
+        link: "/management/settlement-bank",
+        icon: userCreationSvg,
+      },
+      {
+        label: "User Mapping",
+        link: "/management/user-mapping",
+        icon: userCreationSvg,
+      },
     ],
   },
   {
@@ -158,6 +243,31 @@ export const sidebarData = [
       {
         label: "Schemes List",
         link: "/schemes/schemeslist",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Fee Distribution Setting",
+        link: "/schemes/fee-distribution",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Fee Setting",
+        link: "/schemes/fee-setting",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Transaction Routing",
+        link: "/schemes/transaction-routing",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Transaction Limit Settings",
+        link: "/schemes/transaction-limit",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Service Charge Setting",
+        link: "/schemes/service-charge",
         icon: userCreationSvg,
       },
     ],
@@ -247,4 +357,85 @@ export const sidebarData = [
       },
     ],
   },
+  {
+    label: "Notification",
+    icon: schemesSvg,
+    initiallyOpened: false,
+    links: [
+      {
+        label: "Alert Type",
+        link: "/notification/alert-type",
+        icon: userCreationSvg,
+      },
+      {
+        label: "SMS Template",
+        link: "/notification/sms-template",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Send SMS",
+        link: "/notification/send-sms",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Send Mail",
+        link: "/notification/send-mail",
+        icon: userCreationSvg,
+      },
+    ],
+  },
+  {
+    label: "My Account",
+    icon: managementSvg,
+    initiallyOpened: false,
+    links: [
+      { label: "Profile", link: "/account/profile", icon: userCreationSvg },
+      {
+        label: "Design Receipts",
+        link: "/account/design-receipts",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Design Documents",
+        link: "/account/design-documents",
+        icon: userCreationSvg,
+      },
+    ],
+  },
+  {
+    label: "Support Centre",
+    icon: schemesSvg,
+    initiallyOpened: false,
+    links: [
+      {
+        label: "Ticket Management",
+        link: "/support/ticket-management",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Contact Us",
+        link: "/support/contact-us",
+        icon: userCreationSvg,
+      },
+    ],
+  },
+  {
+    label: "Website Settings",
+    icon: schemesSvg,
+    initiallyOpened: false,
+    links: [
+      { label: "Brandings", link: "/website/brandings", icon: userCreationSvg },
+      {
+        label: "Website Settings",
+        link: "/website/settings",
+        icon: userCreationSvg,
+      },
+      {
+        label: "News Update",
+        link: "/website/news-update",
+        icon: userCreationSvg,
+      },
+    ],
+  },
+  { label: "Logs", icon: DashboardSvg, initiallyOpened: false, link: "/logs" },
 ];
