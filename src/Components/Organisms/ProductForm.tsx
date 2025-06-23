@@ -8,25 +8,24 @@ import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import {
+  handleProductFormSubmit,
   initialValues,
+  MASTER_KEY,
+  MASTER_URL,
   ProductFormType,
+  transformProductToFormData,
   validationSchema,
 } from "../../Config/Master/ProductConfig";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import { fetchProductById } from "../../Redux/Features/Masters/ProductMaster/thunks";
-import {
-  handleProductFormSubmit,
-  transformProductToFormData,
-} from "../../Redux/Features/Masters/ProductMaster/utils";
-import { clearSelectedProduct } from "../../Redux/Features/Masters/ProductMaster/slice";
+import { useAppDispatch } from "../../Redux/hooks";
 import { booleanSelectData } from "../../Utils/utils";
+import { toast } from "react-toastify";
+import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 
 const ProductForm = ({ mode }: { mode: string }) => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedProduct } = useAppSelector((state) => state.masters.product);
 
   const [formData, setFormData] = useState<ProductFormType>(initialValues);
 
@@ -35,24 +34,29 @@ const ProductForm = ({ mode }: { mode: string }) => {
   };
 
   useEffect(() => {
-    if (mode === "edit" && id) {
-      dispatch(fetchProductById(id));
-    }
+    const fetchAndSet = async () => {
+      if (mode === "edit" && id) {
+        try {
+          const data = await dispatch(
+            fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
+          ).unwrap();
+
+          setFormData(transformProductToFormData(data));
+        } catch (err: any) {
+          toast.error(err);
+        }
+      }
+    };
+
+    fetchAndSet();
 
     return () => {
       // Only clear form and selected product on unmount in "edit" mode
       if (mode === "edit") {
         setFormData(initialValues); // Reset form data on unmount
-        dispatch(clearSelectedProduct()); // Reset selected product in the store
       }
     };
-  }, [id, dispatch, mode]);
-
-  useEffect(() => {
-    if (selectedProduct && mode === "edit") {
-      setFormData(transformProductToFormData(selectedProduct));
-    }
-  }, [selectedProduct, mode]);
+  }, [dispatch, id, mode]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
-import { fetchSubProductsByProductId } from "../../Redux/Features/Masters/SubProductMaster/thunks";
-import { fetchDropDownForProducts } from "../../Redux/Features/Masters/ProductMaster/thunks";
 import { toast } from "react-toastify";
+import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
+import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 interface UseProductSubProductProps {
   selectedProductId?: string;
   selectedSubProductId?: string;
@@ -27,7 +27,11 @@ export const useProductSubProduct = ({
     const fetchProductList = async () => {
       setLoadingProductList(true);
       try {
-        const result = await dispatch(fetchDropDownForProducts()).unwrap();
+        const result = await dispatch(
+          fetchMasterDropdown({
+            url: `${API_ENDPOINTS?.MASTER?.PRODUCTS}/dropdown/active`,
+          })
+        ).unwrap();
 
         const filteredData = (result || [])?.map((item: any) => ({
           label: item.productName,
@@ -55,7 +59,9 @@ export const useProductSubProduct = ({
       setLoadingSubProductList(true);
       try {
         const result = await dispatch(
-          fetchSubProductsByProductId(selectedProductId)
+          fetchMasterDropdown({
+            url: `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}/dropdown/${selectedProductId}`,
+          })
         ).unwrap();
 
         const filteredData = (result || [])?.map((item: any) => ({

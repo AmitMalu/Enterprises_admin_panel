@@ -1,29 +1,35 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { EditIcon, EyeIcon } from "../../assets/Icons";
-import { headers, ProductTableType } from "../../Config/Master/ProductConfig";
+import { headers, MASTER_KEY, MASTER_URL, ProductTableType, transformProductToTableType } from "../../Config/Master/ProductConfig";
 import { useNavigate } from "react-router-dom";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import { fetchProduct } from "../../Redux/Features/Masters/ProductMaster/thunks";
-import { transformProductToTableType } from "../../Redux/Features/Masters/ProductMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
-import {
-  resetAllStates,
-  setCurrentPage,
-  setLoaded,
-  setPageSize,
-} from "../../Redux/Features/Masters/ProductMaster/slice";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
+import {
+  resetMaster,
+  setLoaded,
+  setPagination,
+} from "../../Redux/Features/Masters/MastersSlice";
+import { fetchMasterList } from "../../Redux/Features/Masters/MastersThunk";
 
 const ProductMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { products, loading, pagination, loaded } = useAppSelector(
-    (state) => state.masters.product
-  );
+
+  const products = useAppSelector((state) => state.master[MASTER_KEY] || []);
+  const meta = useAppSelector((state) => state.master.meta[MASTER_KEY]);
+  const pagination = meta?.pagination || {
+    pageSize: 5,
+    currentPage: 1,
+    totalPages: 0,
+    totalElements: 0,
+  };
+  const loading = meta?.loading || false;
+  const loaded = meta?.loaded || false;
 
   const pageSize = pagination.pageSize;
   const currentPage = pagination.currentPage;
@@ -31,7 +37,6 @@ const ProductMaster = () => {
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
-
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
@@ -50,22 +55,38 @@ const ProductMaster = () => {
 
   const setPage = (page: number) => {
     if (page !== currentPage) {
-      dispatch(setCurrentPage(page));
-      dispatch(setLoaded(false));
+      dispatch(
+        setPagination({
+          key: MASTER_KEY,
+          pagination: {
+            ...pagination,
+            currentPage: page,
+          },
+        })
+      );
+      dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
     }
   };
 
   const handleFilterSubmit = (key: string, value: any) => {
-    dispatch(setCurrentPage(1));
-    dispatch(setPageSize(5));
+    dispatch(
+      setPagination({
+        key: MASTER_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+      })
+    );
+    dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
     setSubmittedFilter({ key, value });
-    dispatch(setLoaded(false));
   };
 
   const OnPageSizeChange = (size: number) => {
-    dispatch(setLoaded(false));
-    dispatch(setCurrentPage(1));
-    dispatch(setPageSize(size));
+    dispatch(
+      setPagination({
+        key: MASTER_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: size },
+      })
+    );
+    dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
   };
 
   const handleEdit = (id: string) => {
@@ -77,7 +98,7 @@ const ProductMaster = () => {
   };
 
   const handleRefresh = () => {
-    dispatch(resetAllStates());
+    dispatch(resetMaster(MASTER_KEY));
     setFilterValues({});
     setFilterVisible(false);
     setSubmittedFilter(null);
@@ -103,7 +124,9 @@ const ProductMaster = () => {
   useEffect(() => {
     if (!loaded) {
       dispatch(
-        fetchProduct({
+        fetchMasterList({
+          key: MASTER_KEY,
+          url: MASTER_URL,
           page: currentPage,
           size: pageSize,
           filter: submittedFilter,
