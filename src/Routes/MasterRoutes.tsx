@@ -1,6 +1,5 @@
 import { Route } from "react-router-dom";
 import {
-  ApiMaster,
   BankMaster,
   BusinessMaster,
   CountryMaster,
@@ -11,11 +10,9 @@ import {
   ProductMaster,
   ProfileMaster,
   RegistrationMaster,
-  ServiceConfigurationMaster,
   SubOperatorMaster,
   SubProductMaster,
-  SystemConfigurationMaster,
-  TaxMaster,
+  PincodeMaster,
   TicketMaster,
   UserConfigurationMaster,
   VendorMaster,
@@ -88,14 +85,8 @@ export const MasterRoutes = (
       path="/master/user-configuration"
       element={<UserConfigurationMaster />}
     />
-    <Route
-      path="/master/system-configuration"
-      element={<SystemConfigurationMaster />}
-    />
     <Route path="/master/wallet" element={<WalletMaster />} />
-    <Route path="/master/tax" element={<TaxMaster />} />
-    <Route path="/master/api" element={<ApiMaster />} />
-    <Route path="/master/service" element={<ServiceConfigurationMaster />} />
+    <Route path="/master/pincode" element={<PincodeMaster />} />
     <Route path="/master/ticket" element={<TicketMaster />} />
     <Route path="/master/profile" element={<ProfileMaster />} />
     <Route path="/master/kyc" element={<KycMaster />} />

@@ -5,7 +5,6 @@ export { default as UserManagement } from "./UserManagement";
 export { default as AddManageUser } from "./AddManageUser";
 export { default as SearchUser } from "./SearchUser";
 export { default as BulkUsers } from "./BulkUsers";
-export { default as TenantWebsiteCustomization } from "./TenantWebsiteCustomization";
 export { default as KycApprovedSummary } from "./KycApprovedSummary";
 export { default as PendingKyc } from "./PendingKyc";
 export { default as ViewUser } from "./ViewUser";

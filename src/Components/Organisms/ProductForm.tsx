@@ -8,21 +8,24 @@ import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import {
-  handleProductFormSubmit,
   initialValues,
   MASTER_KEY,
   MASTER_URL,
   ProductFormType,
+  transformFormToCreateProductPayload,
+  transformFormToUpdateProductPayload,
   transformProductToFormData,
   validationSchema,
 } from "../../Config/Master/ProductConfig";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import { useAppDispatch } from "../../Redux/hooks";
-import { booleanSelectData } from "../../Utils/utils";
+import { booleanSelectData, handleMasterFormSubmit } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 
-const ProductForm = ({ mode }: { mode: string }) => {
+type ProductFormProps = { mode: "add" | "edit" };
+
+const ProductForm = ({ mode }: ProductFormProps) => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -30,7 +33,20 @@ const ProductForm = ({ mode }: { mode: string }) => {
   const [formData, setFormData] = useState<ProductFormType>(initialValues);
 
   const handleSubmit = (values: ProductFormType) => {
-    handleProductFormSubmit(mode, id, values, dispatch, navigate, setFormData);
+    handleMasterFormSubmit({
+      mode,
+      id,
+      values,
+      dispatch,
+      navigate,
+      resetFormData: () => setFormData(initialValues),
+      masterKey: MASTER_KEY,
+      masterUrl: MASTER_URL,
+      transformCreatePayload: transformFormToCreateProductPayload,
+      transformUpdatePayload: transformFormToUpdateProductPayload,
+      successNavigatePath: "/master/product",
+      entityName: "Product",
+    });
   };
 
   useEffect(() => {

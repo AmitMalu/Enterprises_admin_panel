@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../Store/store";
 
 type Pagination = {
   totalPages: number;
@@ -34,6 +35,22 @@ const getDefaultMeta = (): MasterMeta => ({
     currentPage: 1,
   },
 });
+
+export const makeSelectMasterData = (key: string) =>
+  createSelector(
+    (state: RootState) => state.master[key],
+    (data) => {
+      if (Array.isArray(data)) return [...data]; // clone array
+      if (typeof data === "object" && data !== null) return { ...data }; // clone object
+      return data ?? []; // fallback for undefined/null
+    }
+  );
+
+export const makeSelectMasterMeta = (key: string) =>
+  createSelector(
+    (state: RootState) => state.master.meta[key],
+    (meta) => ({ ...meta }) // shallow clone to break reference
+  );
 
 // --- Slice ---
 const masterSlice = createSlice({

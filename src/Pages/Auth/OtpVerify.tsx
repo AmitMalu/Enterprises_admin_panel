@@ -61,6 +61,9 @@ const OtpVerify: React.FC = () => {
         });
       } else if (otpFor === "login") {
         sessionStorage.setItem("justLoggedIn", "true");
+        if (username) {
+          localStorage.setItem("username", username);
+        }
         sessionStorage.removeItem("otpFor");
         sessionStorage.removeItem("otp-username");
         navigate("/");

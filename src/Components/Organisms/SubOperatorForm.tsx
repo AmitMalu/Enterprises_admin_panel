@@ -5,66 +5,75 @@ import { Form, Formik, FormikProps } from "formik";
 import * as Yup from "yup";
 import {
   initialValues,
+  MASTER_KEY,
+  MASTER_URL,
   SubOperatorFormType,
+  transformFormToCreateSubOperatorPayload,
+  transformFormToUpdateSubOperatorPayload,
+  transformSubOperatorToFormData,
   validationSchema,
 } from "../../Config/Master/SubOperatorConfig";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
-import { booleanSelectData } from "../../Utils/utils";
+import { booleanSelectData, handleMasterFormSubmit } from "../../Utils/utils";
 import ButtonComponent from "../Atoms/ButtonComponent";
-import {
-  handleSubOperatorFormSubmit,
-  transformSubOperatorToFormData,
-} from "../../Redux/Features/Masters/SubOperatorMaster/utils";
-import { clearSelectedSubOperator } from "../../Redux/Features/Masters/SubOperatorMaster/slice";
-import { fetchSubOperatorById } from "../../Redux/Features/Masters/SubOperatorMaster/thunks";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { useAppDispatch } from "../../Redux/hooks";
 import { useOperatorSubOperator } from "../../Utils/hooks/useOperatorSubOperator";
+import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import { toast } from "react-toastify";
 
-const SubOperatorForm = ({ mode }: { mode: string }) => {
+type ProductFormProps = { mode: "add" | "edit" };
+
+const SubOperatorForm = ({ mode }: ProductFormProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedOperator } = useAppSelector(
-    (state) => state.masters.operator
-  );
 
   const [formData, setFormData] = useState<SubOperatorFormType>(initialValues);
 
   const handleSubmit = (values: SubOperatorFormType) => {
-    handleSubOperatorFormSubmit(
+    handleMasterFormSubmit({
       mode,
       id,
       values,
       dispatch,
       navigate,
-      setFormData
-    );
+      resetFormData: () => setFormData(initialValues),
+      masterKey: MASTER_KEY,
+      masterUrl: MASTER_URL,
+      transformCreatePayload: transformFormToCreateSubOperatorPayload,
+      transformUpdatePayload: transformFormToUpdateSubOperatorPayload,
+      successNavigatePath: "/master/sub-operator",
+      entityName: "Sub-Operator",
+    });
   };
 
-  // Fetch Data by Id when Edit
   useEffect(() => {
-    if (mode === "edit" && id) {
-      dispatch(fetchSubOperatorById(id));
-    }
+    const fetchAndSet = async () => {
+      if (mode === "edit" && id) {
+        try {
+          const data = await dispatch(
+            fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
+          ).unwrap();
 
-    return () => {
-      // Only clear form and selected Operator on unmount in "edit" mode
-      if (mode === "edit") {
-        setFormData(initialValues); // Reset form data on unmount
-        dispatch(clearSelectedSubOperator()); // Reset selected Operator in the store
+          setFormData(transformSubOperatorToFormData(data));
+        } catch (err: any) {
+          toast.error(err);
+        }
       }
     };
-  }, [id, dispatch, mode]);
 
-  // Set data to the form when Edit Mode
-  useEffect(() => {
-    if (selectedOperator && mode === "edit") {
-      setFormData(transformSubOperatorToFormData(selectedOperator));
-    }
-  }, [selectedOperator, mode]);
+    fetchAndSet();
+
+    return () => {
+      // Only clear form and selected product on unmount in "edit" mode
+      if (mode === "edit") {
+        setFormData(initialValues); // Reset form data on unmount
+      }
+    };
+  }, [dispatch, id, mode]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">

@@ -5,33 +5,45 @@ import { useNavigate } from "react-router-dom";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import { fetchVendor } from "../../Redux/Features/Masters/VendorMaster/thunks";
 import { toast } from "react-toastify";
-import { mapToVendorTableType } from "../../Redux/Features/Masters/VendorMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
-import { headers, VendorTableType } from "../../Config/Master/VendorConfig";
 import {
-  resetAllStates,
-  setCurrentPage,
-  setLoaded,
-  setPageSize,
-} from "../../Redux/Features/Masters/VendorMaster/slice";
+  headers,
+  mapToVendorTableType,
+  MASTER_KEY,
+  MASTER_URL,
+  VendorTableType,
+} from "../../Config/Master/VendorConfig";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
+import {
+  makeSelectMasterData,
+  makeSelectMasterMeta,
+  resetMaster,
+  setLoaded,
+  setPagination,
+} from "../../Redux/Features/Masters/MastersSlice";
+import { fetchMasterList } from "../../Redux/Features/Masters/MastersThunk";
 
 const VendorMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, vendors, pagination, loaded } = useAppSelector(
-    (state) => state.masters.vendor
-  );
 
+  const vendors = useAppSelector(makeSelectMasterData(MASTER_KEY));
+  const meta = useAppSelector(makeSelectMasterMeta(MASTER_KEY));
+  const pagination = meta?.pagination || {
+    pageSize: 5,
+    currentPage: 1,
+    totalPages: 0,
+    totalElements: 0,
+  };
+  const loading = meta?.loading || false;
+  const loaded = meta?.loaded || false;
   const currentPage = pagination?.currentPage;
   const pageSize = pagination.pageSize;
 
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
-
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
@@ -48,22 +60,38 @@ const VendorMaster = () => {
 
   const setPage = (page: number) => {
     if (page !== currentPage) {
-      dispatch(setCurrentPage(page));
-      dispatch(setLoaded(false));
+      dispatch(
+        setPagination({
+          key: MASTER_KEY,
+          pagination: {
+            ...pagination,
+            currentPage: page,
+          },
+        })
+      );
+      dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
     }
   };
 
   const handleFilterSubmit = (key: string, value: any) => {
-    dispatch(setCurrentPage(1));
-    dispatch(setPageSize(5));
+    dispatch(
+      setPagination({
+        key: MASTER_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+      })
+    );
+    dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
     setSubmittedFilter({ key, value });
-    dispatch(setLoaded(false));
   };
 
   const OnPageSizeChange = (size: number) => {
-    dispatch(setLoaded(false));
-    dispatch(setCurrentPage(1));
-    dispatch(setPageSize(size));
+    dispatch(
+      setPagination({
+        key: MASTER_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: size },
+      })
+    );
+    dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
   };
 
   const handleEdit = (id: any) => {
@@ -75,7 +103,7 @@ const VendorMaster = () => {
   };
 
   const handleRefresh = () => {
-    dispatch(resetAllStates());
+    dispatch(resetMaster(MASTER_KEY));
     setFilterValues({});
     setFilterVisible(false);
     setSubmittedFilter(null);
@@ -101,7 +129,9 @@ const VendorMaster = () => {
   useEffect(() => {
     if (!loaded) {
       dispatch(
-        fetchVendor({
+        fetchMasterList({
+          key: MASTER_KEY,
+          url: MASTER_URL,
           page: currentPage,
           size: pageSize,
           filter: submittedFilter,
@@ -136,7 +166,9 @@ const VendorMaster = () => {
       ) : (
         <GenericMasterTable<VendorTableType>
           data={transformedData}
-          headers={headers}
+          headers={headers.filter((h) =>
+            visibleColumns.includes(h.key as string)
+          )}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2">

@@ -2,13 +2,6 @@ import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
 import { GenericTableHeader } from "../../Utils/utils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
-import { toast } from "react-toastify";
-import { NavigateFunction } from "react-router-dom";
-import {
-  createMasterItem,
-  updateMasterItem,
-} from "../../Redux/Features/Masters/MastersThunk";
-import { AppDispatch } from "../../Redux/Store/store";
 
 export const MASTER_KEY = "products";
 export const MASTER_URL = API_ENDPOINTS.MASTER.PRODUCTS; // Replace with actual URL or API_ENDPOINTS.MASTER.PRODUCTS
@@ -285,44 +278,45 @@ export const transformFormToUpdateProductPayload = (
   };
 };
 
-export const handleProductFormSubmit = async (
-  mode: string,
-  id: string | undefined,
-  values: ProductFormType,
-  dispatch: AppDispatch,
-  navigate: NavigateFunction,
-  resetFormData: (form: ProductFormType) => void
-) => {
-  if (mode === "edit" && id) {
-    const payload = transformFormToUpdateProductPayload(values);
-    try {
-      const res = await dispatch(
-        updateMasterItem({
-          key: MASTER_KEY,
-          url: MASTER_URL,
-          id,
-          data: payload,
-        })
-      ).unwrap();
-      toast.success(res.message || "Product updated successfully");
-      resetFormData(initialValues);
-      navigate("/master/product");
-    } catch (err: any) {
-      console.error("Update product failed:", err);
-      toast.error(err || "Failed to update product");
-    }
-  } else {
-    const payload = transformFormToCreateProductPayload(values);
-    try {
-      const res = await dispatch(
-        createMasterItem({ key: MASTER_KEY, url: MASTER_URL, data: payload })
-      ).unwrap();
-      toast.success(res.message || "Product created successfully");
-      resetFormData(initialValues);
-      navigate("/master/product");
-    } catch (err: any) {
-      console.error("Create product failed:", err);
-      toast.error(err || "Failed to create product");
-    }
-  }
-};
+
+// export const handleProductFormSubmit = async (
+//   mode: string,
+//   id: string | undefined,
+//   values: ProductFormType,
+//   dispatch: AppDispatch,
+//   navigate: NavigateFunction,
+//   resetFormData: (form: ProductFormType) => void
+// ) => {
+//   if (mode === "edit" && id) {
+//     const payload = transformFormToUpdateProductPayload(values);
+//     try {
+//       const res = await dispatch(
+//         updateMasterItem({
+//           key: MASTER_KEY,
+//           url: MASTER_URL,
+//           id,
+//           data: payload,
+//         })
+//       ).unwrap();
+//       toast.success(res.message || "Product updated successfully");
+//       resetFormData(initialValues);
+//       navigate("/master/product");
+//     } catch (err: any) {
+//       console.error("Update product failed:", err);
+//       toast.error(err || "Failed to update product");
+//     }
+//   } else {
+//     const payload = transformFormToCreateProductPayload(values);
+//     try {
+//       const res = await dispatch(
+//         createMasterItem({ key: MASTER_KEY, url: MASTER_URL, data: payload })
+//       ).unwrap();
+//       toast.success(res.message || "Product created successfully");
+//       resetFormData(initialValues);
+//       navigate("/master/product");
+//     } catch (err: any) {
+//       console.error("Create product failed:", err);
+//       toast.error(err || "Failed to create product");
+//     }
+//   }
+// };

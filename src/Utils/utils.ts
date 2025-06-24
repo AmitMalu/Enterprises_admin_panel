@@ -1,7 +1,12 @@
 import { toast } from "react-toastify";
-import { persistor } from "../Redux/Store/store";
+import { AppDispatch, persistor } from "../Redux/Store/store";
 import moment from "moment";
 import * as Papa from "papaparse";
+import { NavigateFunction } from "react-router-dom";
+import {
+  createMasterItem,
+  updateMasterItem,
+} from "../Redux/Features/Masters/MastersThunk";
 
 export const persistOtpSession = (username: string, otpFor: string) => {
   sessionStorage.setItem("otp-username", username);
@@ -98,11 +103,6 @@ export type GenericTableHeader<T> = {
   searchable?: boolean; // optionally override with this
 };
 
-/**
- * Exports flat array of objects to CSV and triggers browser download
- * @param data Array of flat objects to export
- * @param filename Name of the CSV file to download
- */
 export function exportToCsv<T extends Record<string, any>>(
   data: T[],
   filename: string
@@ -124,3 +124,84 @@ export function exportToCsv<T extends Record<string, any>>(
   link.click();
   document.body.removeChild(link);
 }
+
+// Masters form submit Handler
+type TransformPayloadFn<T> = (data: T) => Record<string, any>;
+export interface HandleMasterFormSubmitProps<T> {
+  mode: "add" | "edit";
+  id?: string;
+  values: T;
+  dispatch: AppDispatch;
+  navigate: NavigateFunction;
+  resetFormData: () => void;
+  masterKey: string;
+  masterUrl: string;
+  transformCreatePayload: TransformPayloadFn<T>;
+  transformUpdatePayload: TransformPayloadFn<T>;
+  successNavigatePath: string;
+  entityName: string;
+}
+
+export const handleMasterFormSubmit = async <T>({
+  mode,
+  id,
+  values,
+  dispatch,
+  navigate,
+  resetFormData,
+  masterKey,
+  masterUrl,
+  transformCreatePayload,
+  transformUpdatePayload,
+  successNavigatePath,
+  entityName = "Item",
+}: HandleMasterFormSubmitProps<T>) => {
+  try {
+    const payload =
+      mode === "edit" && id
+        ? transformUpdatePayload(values)
+        : transformCreatePayload(values);
+
+    const thunk =
+      mode === "edit" && id
+        ? updateMasterItem({
+            key: masterKey,
+            url: masterUrl,
+            id,
+            data: payload,
+          })
+        : createMasterItem({ key: masterKey, url: masterUrl, data: payload });
+
+    const res = await dispatch(thunk).unwrap();
+
+    toast.success(
+      res.message ||
+        `${entityName} ${mode === "edit" ? "updated" : "created"} successfully`
+    );
+
+    // if (mode === "edit" && id) {
+    //   const payload = transformUpdatePayload(values);
+    //   const res = await dispatch(
+    //     updateMasterItem({ key: masterKey, url: masterUrl, id, data: payload })
+    //   ).unwrap();
+    //   toast.success(res.message || successMessages.update);
+    // } else {
+    //   const payload = transformCreatePayload(values);
+    //   const res = await dispatch(
+    //     createMasterItem({ key: masterKey, url: masterUrl, data: payload })
+    //   ).unwrap();
+    //   toast.success(res.message || successMessages.create);
+    // }
+
+    resetFormData();
+    navigate(successNavigatePath);
+  } catch (err: any) {
+    console.error(
+      `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`,
+      err
+    );
+    toast.error(
+      err || `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`
+    );
+  }
+};

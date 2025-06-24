@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { EditIcon, EyeIcon } from "../../assets/Icons";
-import { headers, MASTER_KEY, MASTER_URL, ProductTableType, transformProductToTableType } from "../../Config/Master/ProductConfig";
+import {
+  headers,
+  MASTER_KEY,
+  MASTER_URL,
+  ProductTableType,
+  transformProductToTableType,
+} from "../../Config/Master/ProductConfig";
 import { useNavigate } from "react-router-dom";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
@@ -10,6 +16,8 @@ import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import {
+  makeSelectMasterData,
+  makeSelectMasterMeta,
   resetMaster,
   setLoaded,
   setPagination,
@@ -20,8 +28,8 @@ const ProductMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const products = useAppSelector((state) => state.master[MASTER_KEY] || []);
-  const meta = useAppSelector((state) => state.master.meta[MASTER_KEY]);
+  const products = useAppSelector(makeSelectMasterData(MASTER_KEY));
+  const meta = useAppSelector(makeSelectMasterMeta(MASTER_KEY));
   const pagination = meta?.pagination || {
     pageSize: 5,
     currentPage: 1,

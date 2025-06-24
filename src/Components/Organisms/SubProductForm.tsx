@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
@@ -10,62 +10,71 @@ import FormikTextInputComponent from "../../Components/Molecules/FormikTextInput
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import {
   initialValues,
+  MASTER_KEY,
+  MASTER_URL,
   SubProductFormType,
+  transformFormToCreateSubProductPayload,
+  transformFormToUpdateSubProductPayload,
+  transformSubProductToFormData,
   validationSchema,
 } from "../../Config/Master/SubProductConfig";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import { fetchSubProductById } from "../../Redux/Features/Masters/SubProductMaster/thunks";
-import { clearSelectedSubProduct } from "../../Redux/Features/Masters/SubProductMaster/slice";
-import {
-  handleSubProductFormSubmit,
-  transformSubProductToFormData,
-} from "../../Redux/Features/Masters/SubProductMaster/utils";
-import { booleanSelectData } from "../../Utils/utils";
+import { useAppDispatch } from "../../Redux/hooks";
+import { booleanSelectData, handleMasterFormSubmit } from "../../Utils/utils";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
+import { toast } from "react-toastify";
+import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 
-const SubProductForm = ({ mode }: { mode: string }) => {
+type SubProductFormProps = { mode: "add" | "edit" };
+
+const SubProductForm = ({ mode }: SubProductFormProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedSubProduct } = useAppSelector(
-    (state) => state.masters.subProduct
-  );
-  const [formData, setFormData] = useState<SubProductFormType>(initialValues);
 
+  const [formData, setFormData] = useState<SubProductFormType>(initialValues);
   const { productDropdownData, loadingProductList } = useProductSubProduct({});
 
   const handleSubmit = (values: SubProductFormType) => {
-    handleSubProductFormSubmit(
+    handleMasterFormSubmit({
       mode,
       id,
       values,
       dispatch,
       navigate,
-      setFormData
-    );
+      resetFormData: () => setFormData(initialValues),
+      masterKey: MASTER_KEY,
+      masterUrl: MASTER_URL,
+      transformCreatePayload: transformFormToCreateSubProductPayload,
+      transformUpdatePayload: transformFormToUpdateSubProductPayload,
+      successNavigatePath: "/master/sub-product",
+      entityName: "sub Products",
+    });
   };
 
-  // Fetch Data by Id when Edit
   useEffect(() => {
-    if (mode === "edit" && id) {
-      dispatch(fetchSubProductById(id));
-    }
+    const fetchAndSet = async () => {
+      if (mode === "edit" && id) {
+        try {
+          const data = await dispatch(
+            fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
+          ).unwrap();
+
+          setFormData(transformSubProductToFormData(data));
+        } catch (err: any) {
+          toast.error(err);
+        }
+      }
+    };
+
+    fetchAndSet();
 
     return () => {
       // Only clear form and selected product on unmount in "edit" mode
       if (mode === "edit") {
         setFormData(initialValues); // Reset form data on unmount
-        dispatch(clearSelectedSubProduct()); // Reset selected product in the store
       }
     };
-  }, [id, dispatch, mode]);
-
-  // Set data to the form when Edit Mode
-  useEffect(() => {
-    if (selectedSubProduct && mode === "edit") {
-      setFormData(transformSubProductToFormData(selectedSubProduct));
-    }
-  }, [selectedSubProduct, mode]);
+  }, [dispatch, id, mode]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">

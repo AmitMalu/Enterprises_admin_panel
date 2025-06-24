@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
@@ -10,56 +10,75 @@ import FormikTextInputComponent from "../../Components/Molecules/FormikTextInput
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import {
   initialValues,
+  MASTER_KEY,
+  MASTER_URL,
+  transformFormToCreateVendorPayload,
+  transformFormToUpdateVendorPayload,
+  transformVendorToFormData,
   validationSchema,
   VendorFormType,
 } from "../../Config/Master/VendorConfig";
 import {
   booleanSelectData,
+  handleMasterFormSubmit,
   prioritySelectDataInNumbers,
   pubPvtSelectData,
 } from "../../Utils/utils";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import {
-  handleVendorFormSubmit,
-  transformVendorToFormData,
-} from "../../Redux/Features/Masters/VendorMaster/utils";
-import { fetchVendorById } from "../../Redux/Features/Masters/VendorMaster/thunks";
-import { clearSelectedVendor } from "../../Redux/Features/Masters/VendorMaster/slice";
+import { useAppDispatch } from "../../Redux/hooks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
+import { toast } from "react-toastify";
+import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 
-const VendorForm = ({ mode }: { mode: string }) => {
+type ProductFormProps = { mode: "add" | "edit" };
+
+const VendorForm = ({ mode }: ProductFormProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedVendor } = useAppSelector((state) => state.masters.vendor);
 
   const [formData, setFormData] = useState<VendorFormType>(initialValues);
 
   const handleSubmit = (values: VendorFormType) => {
-    handleVendorFormSubmit(mode, id, values, dispatch, navigate, setFormData);
+    handleMasterFormSubmit({
+      mode,
+      id,
+      values,
+      dispatch,
+      navigate,
+      resetFormData: () => setFormData(initialValues),
+      masterKey: MASTER_KEY,
+      masterUrl: MASTER_URL,
+      transformCreatePayload: transformFormToCreateVendorPayload,
+      transformUpdatePayload: transformFormToUpdateVendorPayload,
+      successNavigatePath: "/master/vendor",
+      entityName: "Vendor",
+    });
   };
 
-  // Fetch Data by Id when Edit
   useEffect(() => {
-    if (mode === "edit" && id) {
-      dispatch(fetchVendorById(id));
-    }
+    const fetchAndSet = async () => {
+      if (mode === "edit" && id) {
+        try {
+          const data = await dispatch(
+            fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
+          ).unwrap();
 
-    return () => {
-      // Only clear form and selected Operator on unmount in "edit" mode
-      if (mode === "edit") {
-        setFormData(initialValues); // Reset form data on unmount
-        dispatch(clearSelectedVendor()); // Reset selected Operator in the store
+          setFormData(transformVendorToFormData(data));
+        } catch (err: any) {
+          toast.error(err);
+        }
       }
     };
-  }, [id, dispatch, mode]);
 
-  // Set data to the form when Edit Mode
-  useEffect(() => {
-    if (selectedVendor && mode === "edit") {
-      setFormData(transformVendorToFormData(selectedVendor));
-    }
-  }, [selectedVendor, mode]);
+    fetchAndSet();
+
+    return () => {
+      // Only clear form and selected product on unmount in "edit" mode
+      if (mode === "edit") {
+        setFormData(initialValues); // Reset form data on unmount
+      }
+    };
+  }, [dispatch, id, mode]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
