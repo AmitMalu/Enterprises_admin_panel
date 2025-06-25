@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
-import { fetchDropDownForOperators } from "../../Redux/Features/Masters/OperatorMaster/thunks";
-import { fetchSubOperatorByOperatorCode } from "../../Redux/Features/Masters/SubOperatorMaster/thunks";
+import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
+import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 
 interface UseOperatorSubOperatorProps {
   selectedOperatorCode?: string;
@@ -27,7 +27,11 @@ export const useOperatorSubOperator = ({
     const fetchOperatorList = async () => {
       setLoadingOperatorList(true);
       try {
-        const result = await dispatch(fetchDropDownForOperators()).unwrap();
+        const result = await dispatch(
+          fetchMasterDropdown({
+            url: `${API_ENDPOINTS?.MASTER?.OPERATOR}/active`,
+          })
+        ).unwrap();
 
         const filteredData = (result || [])?.map((item: any) => ({
           label: item.operatorName,
@@ -55,7 +59,9 @@ export const useOperatorSubOperator = ({
       setLoadingSubOperatorList(true);
       try {
         const result = await dispatch(
-          fetchSubOperatorByOperatorCode(selectedOperatorCode)
+             fetchMasterDropdown({
+            url: `${API_ENDPOINTS?.MASTER?.SUB_OPERATOR}/${selectedOperatorCode}`,
+          })
         ).unwrap();
 
         const filteredData = (result || [])?.map((item: any) => ({

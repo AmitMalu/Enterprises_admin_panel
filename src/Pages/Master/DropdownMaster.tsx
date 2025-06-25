@@ -1,33 +1,29 @@
 import { useNavigate } from "react-router-dom";
-import { EditIcon, EyeIcon } from "../../assets/Icons";
+import { EyeIcon } from "../../assets/Icons";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
-import { DropdownTableType, headers } from "../../Config/Master/DropdownConfig";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import { useEffect, useState } from "react";
-import { mapToDropdownTableType } from "../../Redux/Features/Masters/DropdownMaster/utils";
 import {
-  resetAllStates,
-  setCurrentPage,
-  setLoaded,
-  setPageSize,
-} from "../../Redux/Features/Masters/DropdownMaster/slice";
+  DropdownTableType,
+  headers,
+  mapToDropdownTableType,
+  MASTER_KEY,
+  MASTER_URL,
+} from "../../Config/Master/DropdownConfig";
+import { useAppDispatch } from "../../Redux/hooks";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
-import { fetchDropdownList } from "../../Redux/Features/Masters/DropdownMaster/thunks";
+import {
+  resetMaster,
+  setPagination,
+} from "../../Redux/Features/Masters/MastersSlice";
+import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 
 const DropdownMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, dropdownMasterList, pagination, loaded } = useAppSelector(
-    (state) => state.masters.dropdown
-  );
-
-  const currentPage = pagination.currentPage;
-  const pageSize = pagination.pageSize;
-
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
@@ -39,49 +35,39 @@ const DropdownMaster = () => {
     value: any;
   } | null>(null);
 
-  const transformedData: DropdownTableType[] = dropdownMasterList?.map(
-    mapToDropdownTableType
-  );
-
-  const handleFilterChange = (key: string, value: any) => {
-    setFilterValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const setPage = (page: number) => {
-    if (page !== currentPage) {
-      dispatch(setCurrentPage(page));
-      dispatch(setLoaded(false));
-    }
-  };
-
-  const handleFilterSubmit = (key: string, value: any) => {
-    dispatch(setCurrentPage(1));
-    dispatch(setPageSize(5));
-    setSubmittedFilter({ key, value });
-    dispatch(setLoaded(false));
-  };
-
-  const OnPageSizeChange = (size: number) => {
-    dispatch(setLoaded(false));
-    dispatch(setCurrentPage(1));
-    dispatch(setPageSize(size));
-  };
-
-  const handleEdit = (id: any) => {
-    // navigate(`/master/dropdown/edit/${id}`, { state: id });
-  };
+  const { data, loading, error, pagination, setPage, setPageSize } =
+    useFetchMasterList<DropdownTableType>({
+      key: MASTER_KEY,
+      url: MASTER_URL,
+      transformDataFn: mapToDropdownTableType,
+      filter: submittedFilter,
+      refreshKey,
+    });
 
   const handleAdd = () => {
     navigate("/master/dropdown/add");
   };
 
-  const handleRefresh = () => {
-    dispatch(resetAllStates());
-    setFilterValues({});
-    setFilterVisible(false);
-    setSubmittedFilter(null);
-    setVisibleColumns(headers.map((h) => h.key as string));
-    setRefreshKey((prev) => prev + 1);
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: MASTER_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+      })
+    );
+    setSubmittedFilter({ key, value });
+  };
+
+  const handleExportClick = () => {
+    if (!data || data.length === 0) {
+      toast.warning("No data available to export.");
+      return;
+    }
+    exportToCsv(data, "dropdown-master");
   };
 
   const handleToggleColumn = (key: string) => {
@@ -90,27 +76,14 @@ const DropdownMaster = () => {
     );
   };
 
-  const handleExportClick = () => {
-    if (!transformedData || transformedData.length === 0) {
-      toast.warning("No data available to export.");
-      return;
-    }
-
-    exportToCsv(transformedData, "dropdown-master");
+  const handleRefresh = () => {
+    dispatch(resetMaster(MASTER_KEY));
+    setFilterValues({});
+    setSubmittedFilter(null);
+    setVisibleColumns(headers.map((h) => h.key as string));
+    setRefreshKey((prev) => prev + 1);
+    setFilterVisible(false);
   };
-
-  useEffect(() => {
-    dispatch(
-      fetchDropdownList({
-        page: currentPage,
-        size: pageSize,
-        filter: submittedFilter,
-      })
-    )
-      .unwrap()
-      .then()
-      .catch((err) => toast.error(err));
-  }, [currentPage, pageSize, loaded, submittedFilter, refreshKey]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -134,21 +107,15 @@ const DropdownMaster = () => {
         <ShimmerTableRows rowCount={6} columnCount={headers.length} />
       ) : (
         <GenericMasterTable<DropdownTableType>
-          data={transformedData}
+          data={data}
           headers={headers.filter((h) =>
             visibleColumns.includes(h.key as string)
           )}
           renderExtraHeader={() => <></>} // empty header for action column/>
-          renderExtraRowCell={(item) => (
+          renderExtraRowCell={() => (
             <div className="flex justify-center gap-2">
               <span className="cursor-pointer">
                 <EyeIcon />
-              </span>
-              <span
-                onClick={() => handleEdit(item?.masterId ?? "")}
-                className="cursor-pointer"
-              >
-                <EditIcon />
               </span>
             </div>
           )}
@@ -156,8 +123,8 @@ const DropdownMaster = () => {
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={setPage}
-          onPageSizeChange={OnPageSizeChange}
-          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          pageSize={pagination.pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
           filterVisible={filterVisible}

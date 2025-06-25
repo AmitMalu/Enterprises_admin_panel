@@ -65,21 +65,14 @@ export const MasterRoutes = (
       path="/master/vendor/edit/:id"
       element={<VendorForm mode="edit" />}
     />
-    <Route path="/master/bank" element={<BankMaster />} />
-    <Route path="/master/bank/add" element={<BankMasterForm mode="add" />} />
+    <Route path="/master/banks" element={<BankMaster />} />
+    <Route path="/master/banks/add" element={<BankMasterForm mode="add" />} />
     <Route
-      path="/master/bank/edit/:id"
+      path="/master/banks/edit/:id"
       element={<BankMasterForm mode="edit" />}
     />
     <Route path="/master/dropdown" element={<DropdownMaster />} />
-    <Route
-      path="/master/dropdown/add"
-      element={<DropdownMasterForm mode="add" />}
-    />
-    <Route
-      path="/master/dropdown/edit"
-      element={<DropdownMasterForm mode="edit" />}
-    />
+    <Route path="/master/dropdown/add" element={<DropdownMasterForm />} />
     <Route path="/master/country" element={<CountryMaster />} />
     <Route
       path="/master/user-configuration"

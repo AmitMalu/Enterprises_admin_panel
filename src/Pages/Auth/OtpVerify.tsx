@@ -96,6 +96,7 @@ const OtpVerify: React.FC = () => {
       <div className="pl-4 mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-[#BF0204]">
         Please Enter Your OTP
       </div>
+
       <form onSubmit={handleOTPSubmit}>
         <div className="flex justify-center items-center ">
           <TextInputComponent

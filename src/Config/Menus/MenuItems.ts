@@ -41,7 +41,7 @@ export const sidebarData = [
       },
       {
         label: "Bank Master",
-        link: "/master/bank",
+        link: "/master/banks",
         icon: userCreationSvg,
       },
       {

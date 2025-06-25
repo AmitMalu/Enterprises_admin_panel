@@ -18,5 +18,6 @@ export const API_ENDPOINTS = {
     VENDOR: "api/vendors",
     SUB_OPERATOR: "api/sub-operators",
     DROPDOWN_MASTER: "api/master",
+    BANK_MASTER: "api/banks",
   },
 };

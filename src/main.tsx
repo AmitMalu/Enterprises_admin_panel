@@ -11,7 +11,7 @@ import ErrorFallback from "./Utils/ErrorFallback.tsx";
 import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  // <StrictMode>
     <ErrorBoundary
       fallbackRender={ErrorFallback}
       onReset={() => (window.location.href = "/login")}
@@ -24,5 +24,5 @@ createRoot(document.getElementById("root")!).render(
         </Provider>
       </MantineProvider>
     </ErrorBoundary>
-  </StrictMode>
+  // </StrictMode>
 );

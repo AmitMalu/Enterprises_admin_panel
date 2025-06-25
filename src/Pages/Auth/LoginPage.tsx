@@ -6,12 +6,12 @@ import {
   LockIconSvg,
   UsernameSvg,
 } from "../../assets/Icons/Svgs";
-import { useFormik } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { persistOtpSession } from "../../Utils/utils";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { login } from "../../Redux/Features/Auth/Thunk";
 import {
@@ -19,6 +19,7 @@ import {
   usernamePhoneEmailValidation,
 } from "../../Utils/ValidationUtils";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 
 const validationSchema = Yup.object().shape({
   username: usernamePhoneEmailValidation,
@@ -29,40 +30,33 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Formik setup
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-    },
-    validationSchema,
-    onSubmit: (values) => {
-      handleLogin(values);
-    },
-  });
-
   const handleForgetPassword = () => {
     sessionStorage.setItem("from-login-forget", "true");
     navigate("/forget-password");
   };
 
-  const handleLogin = async (values: {
+  const handleSubmit = useThrottledFormSubmit<{
     username: string;
     password: string;
-  }) => {
-    try {
-      const result = await dispatch(
-        login({ userName: values.username, password: values.password })
-      ).unwrap();
-      toast.success(result.message);
-      persistOtpSession(values.username, "login"); //set both values in Session storage
-      navigate("/otp-verify", {
-        state: { username: values.username, otpFor: "login" },
-      });
-    } catch (error) {
-      toast.error((error as string) || "Login failed");
-    }
-  };
+  }>((values) => {
+    const handleAsync = async () => {
+      try {
+        const result = await dispatch(
+          login({ userName: values.username, password: values.password })
+        ).unwrap();
+
+        toast.success(result.message);
+        persistOtpSession(values.username, "login");
+        navigate("/otp-verify", {
+          state: { username: values.username, otpFor: "login" },
+        });
+      } catch (error) {
+        toast.error((error as string) || "Login failed");
+      }
+    };
+
+    handleAsync();
+  });
 
   useEffect(() => {
     sessionStorage.removeItem("from-login-forget"); // Remove stale flag
@@ -78,54 +72,67 @@ const LoginPage: React.FC = () => {
         Login to Your Account
       </h2>
 
-      <form onSubmit={formik.handleSubmit}>
+      <Formik
+        enableReinitialize
+        initialValues={{
+          username: "",
+          password: "",
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {(formik) => (
+          <Form>
+            {/* Username */}
+            <TextInputComponent
+              type="text"
+              className="mb-4"
+              name="username"
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              placeholder="Username"
+              required
+              error={formik.touched.username && formik.errors.username}
+              maxLength={51}
+              leftSection={<UsernameSvg />}
+              leftSectionWidth={36}
+            />
 
-        {/* Username */}
-        <TextInputComponent
-          type="text"
-          className="mb-4"
-          name="username"
-          value={formik.values.username}
-          onChange={formik.handleChange}
-          placeholder="Username"
-          required
-          error={formik.touched.username && formik.errors.username}
-          maxLength={51}
-          leftSection={<UsernameSvg />}
-          leftSectionWidth={36}
-        />
+            {/* Password */}
+            <TextInputComponent
+              type="password"
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              placeholder="Password"
+              required
+              leftSection={<LockIconSvg />}
+              leftSectionWidth={36}
+              rightSectionWidth={48}
+              error={
+                formik.touched.password
+                  ? formik.errors.password || false
+                  : false
+              }
+              maxLength={51}
+            />
 
-        {/* Password */}
-        <TextInputComponent
-          type="password"
-          name="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          placeholder="Password"
-          required
-          leftSection={<LockIconSvg />}
-          leftSectionWidth={36}
-          rightSectionWidth={48}
-          error={
-            formik.touched.password ? formik.errors.password || false : false
-          }
-          maxLength={51}
-        />
-
-        {/* Login Button */}
-        <div className="flex justify-center items-center mt-5">
-          <ButtonComponent
-            fullWidth
-            size="md"
-            bgColor="#DB2729"
-            textColor="#fff"
-            radius={8}
-            type="submit"
-          >
-            LOGIN NOW
-          </ButtonComponent>
-        </div>
-      </form>
+            {/* Login Button */}
+            <div className="flex justify-center items-center mt-5">
+              <ButtonComponent
+                fullWidth
+                size="md"
+                bgColor="#DB2729"
+                textColor="#fff"
+                radius={8}
+                type="submit"
+              >
+                LOGIN NOW
+              </ButtonComponent>
+            </div>
+          </Form>
+        )}
+      </Formik>
 
       {/* Forgot Password? */}
       <div

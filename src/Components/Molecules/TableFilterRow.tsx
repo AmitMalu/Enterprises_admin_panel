@@ -1,11 +1,10 @@
 import { Table } from "@mantine/core";
 import {
-  booleanSelectData,
   booleanSelectData2,
   GenericTableHeader,
 } from "../../Utils/utils";
 import SelectComponent from "../Atoms/SelectComponent";
-import { DateInput, DatePickerInput } from "@mantine/dates";
+import { DatePickerInput } from "@mantine/dates";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import moment from "moment";
 import {
@@ -38,7 +37,7 @@ const TableFilterRow = <T,>({
               <SelectComponent
                 name={String(key)}
                 value={value}
-                allowDeselect
+                allowDeselect={true}
                 onChange={(val) => {
                   if (val !== null) {
                     onFilterChange?.(String(key), val ?? "");

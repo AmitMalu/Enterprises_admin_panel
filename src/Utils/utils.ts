@@ -128,7 +128,7 @@ export function exportToCsv<T extends Record<string, any>>(
 // Masters form submit Handler
 type TransformPayloadFn<T> = (data: T) => Record<string, any>;
 export interface HandleMasterFormSubmitProps<T> {
-  mode: "add" | "edit";
+  mode?: "add" | "edit";
   id?: string;
   values: T;
   dispatch: AppDispatch;
@@ -143,7 +143,7 @@ export interface HandleMasterFormSubmitProps<T> {
 }
 
 export const handleMasterFormSubmit = async <T>({
-  mode,
+  mode = "add",
   id,
   values,
   dispatch,
@@ -178,20 +178,6 @@ export const handleMasterFormSubmit = async <T>({
       res.message ||
         `${entityName} ${mode === "edit" ? "updated" : "created"} successfully`
     );
-
-    // if (mode === "edit" && id) {
-    //   const payload = transformUpdatePayload(values);
-    //   const res = await dispatch(
-    //     updateMasterItem({ key: masterKey, url: masterUrl, id, data: payload })
-    //   ).unwrap();
-    //   toast.success(res.message || successMessages.update);
-    // } else {
-    //   const payload = transformCreatePayload(values);
-    //   const res = await dispatch(
-    //     createMasterItem({ key: masterKey, url: masterUrl, data: payload })
-    //   ).unwrap();
-    //   toast.success(res.message || successMessages.create);
-    // }
 
     resetFormData();
     navigate(successNavigatePath);

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { useAppDispatch } from "../../Redux/hooks";
 import {
   headers,
   mapToSubOperatorTableType,
@@ -16,31 +16,14 @@ import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { EditIcon, EyeIcon } from "../../assets/Icons";
 import {
-  makeSelectMasterData,
-  makeSelectMasterMeta,
   resetMaster,
-  setLoaded,
   setPagination,
 } from "../../Redux/Features/Masters/MastersSlice";
-import { fetchMasterList } from "../../Redux/Features/Masters/MastersThunk";
+import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 
 const SubOperatorMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const subOperators = useAppSelector(makeSelectMasterData(MASTER_KEY));
-  const meta = useAppSelector(makeSelectMasterMeta(MASTER_KEY));
-  const pagination = meta?.pagination || {
-    pageSize: 5,
-    currentPage: 1,
-    totalPages: 0,
-    totalElements: 0,
-  };
-  const loading = meta?.loading || false;
-  const loaded = meta?.loaded || false;
-
-  const pageSize = pagination.pageSize;
-  const currentPage = pagination.currentPage;
-
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
@@ -52,49 +35,14 @@ const SubOperatorMaster = () => {
     value: any;
   } | null>(null);
 
-  const transformedData: SubOperatorTableType[] = subOperators?.map(
-    mapToSubOperatorTableType
-  );
-
-  const handleFilterChange = (key: string, value: any) => {
-    setFilterValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const setPage = (page: number) => {
-    if (page !== currentPage) {
-      dispatch(
-        setPagination({
-          key: MASTER_KEY,
-          pagination: {
-            ...pagination,
-            currentPage: page,
-          },
-        })
-      );
-      dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
-    }
-  };
-
-  const handleFilterSubmit = (key: string, value: any) => {
-    dispatch(
-      setPagination({
-        key: MASTER_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
-      })
-    );
-    dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
-    setSubmittedFilter({ key, value });
-  };
-
-  const OnPageSizeChange = (size: number) => {
-    dispatch(
-      setPagination({
-        key: MASTER_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: size },
-      })
-    );
-    dispatch(setLoaded({ key: MASTER_KEY, loaded: false }));
-  };
+  const { data, loading, error, pagination, setPage, setPageSize } =
+    useFetchMasterList<SubOperatorTableType>({
+      key: MASTER_KEY,
+      url: MASTER_URL,
+      transformDataFn: mapToSubOperatorTableType,
+      filter: submittedFilter,
+      refreshKey,
+    });
 
   const handleEdit = (id: any) => {
     navigate(`/master/sub-operator/edit/${id}`, { state: id });
@@ -104,13 +52,26 @@ const SubOperatorMaster = () => {
     navigate("/master/sub-operator/add");
   };
 
-  const handleRefresh = () => {
-    dispatch(resetMaster(MASTER_KEY));
-    setFilterValues({});
-    setFilterVisible(false);
-    setSubmittedFilter(null);
-    setVisibleColumns(headers.map((h) => h.key as string));
-    setRefreshKey((prev) => prev + 1);
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: MASTER_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+      })
+    );
+    setSubmittedFilter({ key, value });
+  };
+
+  const handleExportClick = () => {
+    if (!data || data.length === 0) {
+      toast.warning("No data available to export.");
+      return;
+    }
+    exportToCsv(data, "sub-operator-master");
   };
 
   const handleToggleColumn = (key: string) => {
@@ -119,31 +80,14 @@ const SubOperatorMaster = () => {
     );
   };
 
-  const handleExportClick = () => {
-    if (!transformedData || transformedData.length === 0) {
-      toast.warning("No data available to export.");
-      return;
-    }
-
-    exportToCsv(transformedData, "sub-operator-master");
+  const handleRefresh = () => {
+    dispatch(resetMaster(MASTER_KEY));
+    setFilterValues({});
+    setSubmittedFilter(null);
+    setVisibleColumns(headers.map((h) => h.key as string));
+    setRefreshKey((prev) => prev + 1);
+    setFilterVisible(false);
   };
-
-  useEffect(() => {
-    if (!loaded) {
-      dispatch(
-        fetchMasterList({
-          key: MASTER_KEY,
-          url: MASTER_URL,
-          page: currentPage,
-          size: pageSize,
-          filter: submittedFilter,
-        })
-      )
-        .unwrap()
-        .then()
-        .catch((err) => toast.error(err));
-    }
-  }, [currentPage, pageSize, loaded, submittedFilter, refreshKey]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -167,7 +111,7 @@ const SubOperatorMaster = () => {
         <ShimmerTableRows rowCount={6} columnCount={headers.length} />
       ) : (
         <GenericMasterTable<SubOperatorTableType>
-          data={transformedData}
+          data={data}
           headers={headers.filter((h) =>
             visibleColumns.includes(h.key as string)
           )}
@@ -189,8 +133,8 @@ const SubOperatorMaster = () => {
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={setPage}
-          onPageSizeChange={OnPageSizeChange}
-          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          pageSize={pagination.pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
           filterVisible={filterVisible}

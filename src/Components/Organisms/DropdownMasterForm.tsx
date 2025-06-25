@@ -5,55 +5,47 @@ import BreadCrumb from "../Molecules/BreadCrumb";
 import {
   DropdownFormType,
   initialValues,
+  MASTER_KEY,
+  MASTER_URL,
+  transformFormToCreateDropdownPayload,
+  transformFormToUpdateDropdownPayload,
   validationSchema,
 } from "../../Config/Master/DropdownConfig";
 import { Grid } from "@mantine/core";
 import * as Yup from "yup";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import { handleDropdownFormSubmit } from "../../Redux/Features/Masters/DropdownMaster/utils";
+import { useAppDispatch } from "../../Redux/hooks";
+import { handleMasterFormSubmit } from "../../Utils/utils";
 
-const DropdownMasterForm = ({ mode }: { mode: "add" | "edit" }) => {
+const DropdownMasterForm = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedDropdownMaster } = useAppSelector(
-    (state) => state.masters.dropdown
-  );
+
   const [formData, setFormData] = useState<DropdownFormType>(initialValues);
 
   const handleSubmit = (values: DropdownFormType) => {
-    handleDropdownFormSubmit(mode, id, values, dispatch, navigate, setFormData);
+    handleMasterFormSubmit({
+      id,
+      values,
+      dispatch,
+      navigate,
+      resetFormData: () => setFormData(initialValues),
+      masterKey: MASTER_KEY,
+      masterUrl: MASTER_URL,
+      transformCreatePayload: transformFormToCreateDropdownPayload,
+      transformUpdatePayload: transformFormToUpdateDropdownPayload,
+      successNavigatePath: "/master/dropdown",
+      entityName: "Master",
+    });
   };
-
-  // Fetch Data by Id when Edit
-  // useEffect(() => {
-  //   if (mode === "edit" && id) {
-  //     dispatch(fetchSubProductById(id));
-  //   }
-
-  //   return () => {
-  //     // Only clear form and selected product on unmount in "edit" mode
-  //     if (mode === "edit") {
-  //       setFormData(initialValues); // Reset form data on unmount
-  //       dispatch(clearSelectedSubProduct()); // Reset selected product in the store
-  //     }
-  //   };
-  // }, [id, dispatch, mode]);
-
-  // Set data to the form when Edit Mode
-  // useEffect(() => {
-  //   if (selectedSubProduct && mode === "edit") {
-  //     setFormData(transformSubProductToFormData(selectedSubProduct));
-  //   }
-  // }, [selectedSubProduct, mode]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
       <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Dropdown Master Form" : "Dropdown Master Form"}
+        {"Dropdown Master Form"}
       </TextComponent>
 
       {/* Sub Heading */}
@@ -67,9 +59,9 @@ const DropdownMasterForm = ({ mode }: { mode: "add" | "edit" }) => {
       >
         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
           <Grid gutter="lg">
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+            <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
               <FormikTextInputComponent
-                name="masterName"
+                name="imMasterName"
                 label="Master Name"
                 placeholder="Enter Master Name"
                 withAsterisk
@@ -78,9 +70,9 @@ const DropdownMasterForm = ({ mode }: { mode: "add" | "edit" }) => {
               />
             </Grid.Col>
 
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+            <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
               <FormikTextInputComponent
-                name="subMasterName"
+                name="imSubMasterName"
                 label="Sub Master Name"
                 placeholder="Enter Sub Master Name"
                 withAsterisk

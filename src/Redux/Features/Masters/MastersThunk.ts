@@ -42,10 +42,9 @@ export const fetchMasterList = createAsyncThunk(
     { key, url, page = 1, size = 10, filter }: FetchMasterListParams,
     { rejectWithValue, dispatch }
   ) => {
-    dispatch(setLoading({ key, loading: true }));
-    dispatch(setLoaded({ key, loaded: false }));
-    dispatch(setError({ key, error: null }));
-
+    // dispatch(setLoading({ key, loading: true }));
+    // dispatch(setLoaded({ key, loaded: false }));
+    // dispatch(setError({ key, error: null }));
     try {
       const params = new URLSearchParams();
       params.append("page", String(page - 1)); // 0 - based
@@ -62,7 +61,7 @@ export const fetchMasterList = createAsyncThunk(
           responseData.data;
 
         // Set data and meta in store
-        dispatch(setData({ key, value: content }));
+        // dispatch(setData({ key, value: content }));
         dispatch(
           setPagination({
             key,
@@ -74,9 +73,8 @@ export const fetchMasterList = createAsyncThunk(
             },
           })
         );
-        dispatch(setLoaded({ key, loaded: true }));
-        dispatch(setLoading({ key, loading: false }));
-
+        // dispatch(setLoaded({ key, loaded: true }));
+        // dispatch(setLoading({ key, loading: false }));
         return content;
       } else {
         throw new Error(responseData?.message || "Fetch failed");
@@ -84,10 +82,9 @@ export const fetchMasterList = createAsyncThunk(
     } catch (error: any) {
       const errMsg =
         error?.response?.data?.message || error.message || "Failed to fetch";
-
-      dispatch(setError({ key, error: errMsg }));
-      dispatch(setLoading({ key, loading: false }));
-      dispatch(setLoaded({ key, loaded: false }));
+      // dispatch(setError({ key, error: errMsg }));
+      // dispatch(setLoading({ key, loading: false }));
+      // dispatch(setLoaded({ key, loaded: false }));
 
       return rejectWithValue(errMsg);
     }
@@ -100,19 +97,19 @@ export const fetchMasterById = createAsyncThunk(
     { key, endpoint, id }: FetchMasterByIdParams,
     { dispatch, rejectWithValue }
   ) => {
-    dispatch(setLoading({ key, loading: true }));
+    // dispatch(setLoading({ key, loading: true }));
     try {
       const response = await axiosInstance.get(`${endpoint}/${id}`);
       const responseData = response?.data;
 
       if (responseData && responseData.statusCode === 200) {
-        dispatch(setData({ key: `${key}Selected`, value: responseData.data }));
-        dispatch(setError({ key, error: null }));
+        // dispatch(setData({ key: `${key}Selected`, value: responseData.data }));
+        // dispatch(setError({ key, error: null }));
         return responseData.data;
       } else {
         const message =
           responseData?.message || `No ${key} found for ID: ${id}`;
-        dispatch(setError({ key, error: message }));
+        // dispatch(setError({ key, error: message }));
         return rejectWithValue(message);
       }
     } catch (error: any) {
@@ -120,10 +117,8 @@ export const fetchMasterById = createAsyncThunk(
         error.response?.data?.message ||
         error.message ||
         `Failed to fetch ${key} by ID`;
-      dispatch(setError({ key, error: message }));
+      // dispatch(setError({ key, error: message }));
       return rejectWithValue(message);
-    } finally {
-      dispatch(setLoading({ key, loading: false }));
     }
   }
 );
@@ -134,26 +129,30 @@ export const createMasterItem = createAsyncThunk(
     { key, url, data }: CreateMasterParams<any>,
     { dispatch, rejectWithValue }
   ) => {
-    dispatch(setLoading({ key, loading: true }));
-    dispatch(setError({ key, error: null }));
-    dispatch(setLoaded({ key, loaded: false }));
+    // dispatch(setLoading({ key, loading: true }));
+    // dispatch(setError({ key, error: null }));
+    // dispatch(setLoaded({ key, loaded: false }));
 
     try {
       const response = await axiosInstance.post(url, data);
       const responseData = response?.data;
 
       if (responseData?.statusCode === 201) {
-        dispatch(setLoading({ key, loading: false }));
-        dispatch(setLoaded({ key, loaded: false }));
+        // dispatch(setLoading({ key, loading: false }));
+        // dispatch(setLoaded({ key, loaded: false }));
         return responseData;
       } else {
-        throw new Error(responseData?.message || "Failed to create item");
+        throw new Error(
+          responseData?.message || `Failed to create ${key} Master`
+        );
       }
     } catch (error: any) {
       const errMsg =
-        error?.response?.data?.message || error.message || "Failed to create";
-      dispatch(setLoading({ key, loading: false }));
-      dispatch(setError({ key, error: errMsg }));
+        error?.response?.data?.message ||
+        error.message ||
+        `Failed to create ${key} Master`;
+      // dispatch(setLoading({ key, loading: false }));
+      // dispatch(setError({ key, error: errMsg }));
       return rejectWithValue(errMsg);
     }
   }
@@ -165,26 +164,30 @@ export const updateMasterItem = createAsyncThunk(
     { key, url, id, data }: UpdateMasterParams<any>,
     { dispatch, rejectWithValue }
   ) => {
-    dispatch(setLoading({ key, loading: true }));
-    dispatch(setError({ key, error: null }));
-    dispatch(setLoaded({ key, loaded: false }));
+    // dispatch(setLoading({ key, loading: true }));
+    // dispatch(setError({ key, error: null }));
+    // dispatch(setLoaded({ key, loaded: false }));
 
     try {
       const response = await axiosInstance.put(`${url}/${id}`, data);
       const responseData = response?.data;
 
       if (responseData?.statusCode === 200) {
-        dispatch(setLoading({ key, loading: false }));
-        dispatch(setLoaded({ key, loaded: false }));
+        // dispatch(setLoading({ key, loading: false }));
+        // dispatch(setLoaded({ key, loaded: false }));
         return responseData;
       } else {
-        throw new Error(responseData?.message || "Failed to update item");
+        throw new Error(
+          responseData?.message || `Failed to create ${key} Master`
+        );
       }
     } catch (error: any) {
       const errMsg =
-        error?.response?.data?.message || error.message || "Failed to update";
-      dispatch(setLoading({ key, loading: false }));
-      dispatch(setError({ key, error: errMsg }));
+        error?.response?.data?.message ||
+        error.message ||
+        `Failed to create ${key} Master`;
+      // dispatch(setLoading({ key, loading: false }));
+      // dispatch(setError({ key, error: errMsg }));
       return rejectWithValue(errMsg);
     }
   }
@@ -200,7 +203,7 @@ export const fetchMasterDropdown = createAsyncThunk(
       if (responseData?.statusCode === 200) {
         return responseData.data;
       } else {
-        throw new Error(responseData?.message || "Failed to fetch dropdown");
+        throw new Error(responseData?.message || "Failed to fetch data");
       }
     } catch (error: any) {
       return rejectWithValue(
