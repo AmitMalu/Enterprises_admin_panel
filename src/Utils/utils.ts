@@ -100,7 +100,9 @@ export type GenericTableHeader<T> = {
   key: keyof T;
   label?: string;
   filterType?: "text" | "boolean" | "date" | "none";
+  filterOptions?: { label: string; value: any }[]; 
   searchable?: boolean; // optionally override with this
+  renderType?: "link" | "custom"; //
 };
 
 export function exportToCsv<T extends Record<string, any>>(

@@ -27,19 +27,53 @@ const TableBody = <T,>({
           {renderExtraRowCell && (
             <Table.Td>{renderExtraRowCell(item, index)}</Table.Td>
           )}
-          {headers.map(({ key }) => (
-            <Table.Td key={String(key)} style={ellipsisCellStyle}>
-              <Tooltip
-                arrowPosition="side"
-                arrowSize={5}
-                position="top-start"
-                label={String(item[key])}
-                withArrow
-              >
-                <span>{String(item[key])}</span>
-              </Tooltip>
-            </Table.Td>
-          ))}
+          {headers.map(({ key, renderType }) => {
+            const cellData = item[key];
+            const isEmpty =
+              cellData === undefined || cellData === null || cellData === "";
+            const displayValue = isEmpty ? "-" : String(cellData);
+
+            if (isEmpty) {
+              return (
+                <Table.Td key={String(key)} style={ellipsisCellStyle}>
+                  {displayValue}
+                </Table.Td>
+              );
+            }
+
+            return (
+              <Table.Td key={String(key)} style={ellipsisCellStyle}>
+                {renderType === "link" && typeof cellData === "string" ? (
+                  <a
+                    href={cellData}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    <Tooltip
+                      arrowPosition="side"
+                      arrowSize={5}
+                      position="top-start"
+                      label={displayValue}
+                      withArrow
+                    >
+                      <span>{displayValue}</span>
+                    </Tooltip>
+                  </a>
+                ) : (
+                  <Tooltip
+                    arrowPosition="side"
+                    arrowSize={5}
+                    position="top-start"
+                    label={displayValue}
+                    withArrow
+                  >
+                    <span>{displayValue}</span>
+                  </Tooltip>
+                )}
+              </Table.Td>
+            );
+          })}
         </Table.Tr>
       ))}
     </>

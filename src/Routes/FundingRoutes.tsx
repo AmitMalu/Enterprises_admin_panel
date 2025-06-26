@@ -16,10 +16,10 @@ export const FundingRoutes = (
       path="/funding/pre-funding-authorization"
       element={<PreFundingAuth />}
     />
-    <Route path="/prefunding/add" element={<PrefundingForm mode="add" />} />
+    <Route path="/prefunding/add" element={<PrefundingForm />} />
     <Route
       path="/prefunding/edit/:id"
-      element={<PrefundingForm mode="edit" />}
+      element={<PrefundingForm />}
     />
     <Route path="/funding/credit-debit" element={<CreditDebit />} />
     <Route path="/funding/manage-payment" element={<ManagePayment />} />

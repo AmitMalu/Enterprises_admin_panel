@@ -1,8 +1,7 @@
 import { Table, Tooltip } from "@mantine/core";
-import React from "react";
 import { EditIcon, EyeIcon } from "../../assets/Icons";
 import { ellipsisCellStyle } from "../../Utils/utils";
-import { PrefundingType } from "../../Config/Funding/fundingConfig";
+import { PrefundingType } from "../../Config/Funding/preFundingConfig";
 
 const PreFundingTable = ({
   data,

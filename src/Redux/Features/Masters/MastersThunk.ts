@@ -1,9 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  setData,
-  setError,
-  setLoaded,
-  setLoading,
   setPagination,
 } from "./MastersSlice";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
@@ -95,7 +91,7 @@ export const fetchMasterById = createAsyncThunk(
   "masters/fetchMasterById",
   async (
     { key, endpoint, id }: FetchMasterByIdParams,
-    { dispatch, rejectWithValue }
+    { rejectWithValue }
   ) => {
     // dispatch(setLoading({ key, loading: true }));
     try {
@@ -127,7 +123,7 @@ export const createMasterItem = createAsyncThunk(
   "masters/createMasterItem",
   async (
     { key, url, data }: CreateMasterParams<any>,
-    { dispatch, rejectWithValue }
+    { rejectWithValue }
   ) => {
     // dispatch(setLoading({ key, loading: true }));
     // dispatch(setError({ key, error: null }));
@@ -162,7 +158,7 @@ export const updateMasterItem = createAsyncThunk(
   "masters/updateMasterItem",
   async (
     { key, url, id, data }: UpdateMasterParams<any>,
-    { dispatch, rejectWithValue }
+    { rejectWithValue }
   ) => {
     // dispatch(setLoading({ key, loading: true }));
     // dispatch(setError({ key, error: null }));

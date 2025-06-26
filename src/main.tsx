@@ -12,17 +12,17 @@ import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
-    <ErrorBoundary
-      fallbackRender={ErrorFallback}
-      onReset={() => (window.location.href = "/login")}
-    >
-      <MantineProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <App />
-          </PersistGate>
-        </Provider>
-      </MantineProvider>
-    </ErrorBoundary>
+  <ErrorBoundary
+    fallbackRender={ErrorFallback}
+    onReset={() => (window.location.href = "/login")}
+  >
+    <MantineProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </MantineProvider>
+  </ErrorBoundary>
   // </StrictMode>
 );

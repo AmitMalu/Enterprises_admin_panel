@@ -20,4 +20,7 @@ export const API_ENDPOINTS = {
     DROPDOWN_MASTER: "api/master",
     BANK_MASTER: "api/banks",
   },
+  FUNDING : {
+    PREFUNDING : "api/prefund"
+  }
 };
