@@ -56,7 +56,7 @@ const LoginPage: React.FC = () => {
     };
 
     handleAsync();
-  });
+  }, 5000);
 
   useEffect(() => {
     sessionStorage.removeItem("from-login-forget"); // Remove stale flag

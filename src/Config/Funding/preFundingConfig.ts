@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
-import moment from "moment";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 import { GenericTableHeader } from "../../Utils/utils";
 
@@ -82,33 +81,3 @@ export const headers: GenericTableHeader<PrefundingTableType>[] = [
   },
 ];
 
-export const data: PrefundingTableType[] = [
-  {
-    id: "1",
-    paymentMode: "Cash",
-    bankTranId: "TX1001",
-    depositAmount: "1000",
-    bankAccountNumber: "AXIS-12345",
-    depositDate: moment().format("2024-12-18"),
-    depositImage: "",
-    // partnerName: "ABC Corp",
-    requestedBy: "JohnDoe",
-    ipAddress: "192.168.0.1",
-    mobileNumber: "9876543210",
-    status: "Pending",
-  },
-  {
-    id: "2",
-    paymentMode: "Cash",
-    bankTranId: "TX1001",
-    depositAmount: "1000",
-    bankAccountNumber: "AXIS-12345",
-    depositDate: moment().format("2024-12-18"),
-    depositImage: "",
-    // partnerName: "ABC Corp",
-    requestedBy: "JohnDoe",
-    ipAddress: "192.168.0.1",
-    mobileNumber: "9876543210",
-    status: "Approved",
-  },
-];

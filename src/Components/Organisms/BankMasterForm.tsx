@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
@@ -9,7 +9,7 @@ import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import { useAppDispatch } from "../../Redux/hooks";
-import { booleanSelectData, handleMasterFormSubmit } from "../../Utils/utils";
+import { booleanSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import {
@@ -22,8 +22,7 @@ import {
   transformFormToUpdateBankMasterPayload,
   validationSchema,
 } from "../../Config/Master/BankMasterConfig";
-import throttle from "lodash.throttle";
-import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 
 type BankMasterFormProps = { mode: "add" | "edit" };
 
@@ -33,27 +32,28 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<BankMasterFormType>(initialValues);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = useThrottledFormSubmit<BankMasterFormType>((values) => {
-    handleMasterFormSubmit({
-      mode,
-      id,
-      values,
-      dispatch,
-      navigate,
-      resetFormData: () => setFormData(initialValues),
-      masterKey: MASTER_KEY,
-      masterUrl: MASTER_URL,
-      transformCreatePayload: transformFormToCreateBankMasterPayload,
-      transformUpdatePayload: transformFormToUpdateBankMasterPayload,
-      successNavigatePath: "/master/banks",
-      entityName: "Bank",
-    });
+  const handleSubmit = useThrottleMasterFormSubmit<BankMasterFormType>({
+    mode,
+    id,
+    dispatch,
+    navigate,
+    resetFormData: () => setFormData(initialValues),
+    masterKey: MASTER_KEY,
+    masterUrl: MASTER_URL,
+    transformCreatePayload: transformFormToCreateBankMasterPayload,
+    transformUpdatePayload: transformFormToUpdateBankMasterPayload,
+    successNavigatePath: "/master/banks",
+    entityName: "Bank",
   });
-  
+
   useEffect(() => {
     const fetchAndSet = async () => {
       if (mode === "edit" && id) {
+        setLoading(true);
+        setFetchError(null);
         try {
           const data = await dispatch(
             fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
@@ -62,6 +62,13 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
           setFormData(transformBankListToFormData(data));
         } catch (err: any) {
           toast.error(err);
+          setFetchError(err);
+          setTimeout(() => {
+            navigate("/master/banks");
+          }, 2000);
+        }
+        finally {
+          setLoading(false);
         }
       }
     };
@@ -180,7 +187,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
           </Grid>
 
           <div className="flex justify-end mt-4">
-            <ButtonComponent
+            {!loading && !fetchError && <ButtonComponent
               fullWidth={false}
               radius={6}
               borderColor="#fff"
@@ -191,7 +198,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
               style={{ padding: "10px 30px" }}
             >
               SUBMIT
-            </ButtonComponent>
+            </ButtonComponent>}
           </div>
         </Form>
       </Formik>

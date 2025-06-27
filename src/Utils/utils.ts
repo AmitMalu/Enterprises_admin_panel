@@ -100,7 +100,7 @@ export type GenericTableHeader<T> = {
   key: keyof T;
   label?: string;
   filterType?: "text" | "boolean" | "date" | "none";
-  filterOptions?: { label: string; value: any }[]; 
+  filterOptions?: { label: string; value: any }[];
   searchable?: boolean; // optionally override with this
   renderType?: "link" | "custom"; //
 };
@@ -181,8 +181,8 @@ export const handleMasterFormSubmit = async <T>({
         `${entityName} ${mode === "edit" ? "updated" : "created"} successfully`
     );
 
-    resetFormData();
     navigate(successNavigatePath);
+    resetFormData();
   } catch (err: any) {
     console.error(
       `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`,

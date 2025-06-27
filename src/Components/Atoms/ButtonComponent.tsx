@@ -53,11 +53,18 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
   ) => {
     const isStringChild = typeof children === "string";
 
-    // Memoize the throttled version of onClick
     const throttledOnClick = useMemo(() => {
       if (!onClick) return undefined;
-      return throttle(onClick, throttleMs, { trailing: false });
-    }, [onClick, throttleMs]);
+
+      // Create a throttled wrapper only once per component lifetime
+      const throttled = throttle(() => {
+        onClick();
+      }, throttleMs, { trailing: false });
+
+      // Cleanup on unmount
+      return throttled;
+      // Note: DO NOT include `onClick` in dependencies
+    }, [throttleMs]);
 
     return (
       <Button

@@ -1,16 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { EyeIcon } from "../../assets/Icons";
+import { EditIcon, EyeIcon } from "../../assets/Icons";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import {
-  DropdownTableType,
   headers,
-  mapToDropdownTableType,
+  MainMasterTableType,
   MASTER_KEY,
   MASTER_URL,
-} from "../../Config/Master/DropdownConfig";
+} from "../../Config/Master/MainMasterConfig";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -21,7 +20,7 @@ import {
 } from "../../Redux/Features/Masters/MastersSlice";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 
-const DropdownMaster = () => {
+const MainMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [filterVisible, setFilterVisible] = useState(false);
@@ -35,17 +34,20 @@ const DropdownMaster = () => {
     value: any;
   } | null>(null);
 
-  const { data, loading, error, pagination, setPage, setPageSize } =
-    useFetchMasterList<DropdownTableType>({
+  const { data, loading, pagination, setPage, setPageSize } =
+    useFetchMasterList<MainMasterTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
-      transformDataFn: mapToDropdownTableType,
       filter: submittedFilter,
       refreshKey,
     });
 
   const handleAdd = () => {
-    navigate("/master/dropdown/add");
+    navigate("/master/main/add");
+  };
+
+  const handleEdit = (id: string) => {
+    navigate(`/master/main/edit/${id}`, { state: id });
   };
 
   const handleFilterChange = (key: string, value: any) => {
@@ -67,7 +69,7 @@ const DropdownMaster = () => {
       toast.warning("No data available to export.");
       return;
     }
-    exportToCsv(data, "dropdown-master");
+    exportToCsv(data, "main-master");
   };
 
   const handleToggleColumn = (key: string) => {
@@ -88,11 +90,11 @@ const DropdownMaster = () => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
-        Dropdown Master
+        Main Master
       </TextComponent>
 
       <GenericMasterToolbar
-        addButtonText="Add Dropdown"
+        addButtonText="Add Master"
         onAdd={handleAdd}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
@@ -106,7 +108,7 @@ const DropdownMaster = () => {
         // Render shimmer
         <ShimmerTableRows rowCount={6} columnCount={headers.length} />
       ) : (
-        <GenericMasterTable<DropdownTableType>
+        <GenericMasterTable<MainMasterTableType>
           data={data}
           headers={headers.filter((h) =>
             visibleColumns.includes(h.key as string)
@@ -117,6 +119,12 @@ const DropdownMaster = () => {
               <span className="cursor-pointer">
                 <EyeIcon />
               </span>
+              {/* <span   No Edit For Master
+                onClick={() => handleEdit(String(item?.imMasterId ?? ""))}
+                className="cursor-pointer"
+              >
+                <EditIcon />
+              </span> */}
             </div>
           )}
           pagination
@@ -137,4 +145,4 @@ const DropdownMaster = () => {
   );
 };
 
-export default DropdownMaster;
+export default MainMaster;

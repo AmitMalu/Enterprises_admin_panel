@@ -19,10 +19,11 @@ import {
   validationSchema,
 } from "../../Config/Master/SubProductConfig";
 import { useAppDispatch } from "../../Redux/hooks";
-import { booleanSelectData, handleMasterFormSubmit } from "../../Utils/utils";
+import { booleanSelectData } from "../../Utils/utils";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 
 type SubProductFormProps = { mode: "add" | "edit" };
 
@@ -33,27 +34,28 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
 
   const [formData, setFormData] = useState<SubProductFormType>(initialValues);
   const { productDropdownData, loadingProductList } = useProductSubProduct({});
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = (values: SubProductFormType) => {
-    handleMasterFormSubmit({
-      mode,
-      id,
-      values,
-      dispatch,
-      navigate,
-      resetFormData: () => setFormData(initialValues),
-      masterKey: MASTER_KEY,
-      masterUrl: MASTER_URL,
-      transformCreatePayload: transformFormToCreateSubProductPayload,
-      transformUpdatePayload: transformFormToUpdateSubProductPayload,
-      successNavigatePath: "/master/sub-product",
-      entityName: "sub Products",
-    });
-  };
+  const handleSubmit = useThrottleMasterFormSubmit<SubProductFormType>({
+    mode,
+    id,
+    dispatch,
+    navigate,
+    resetFormData: () => setFormData(initialValues),
+    masterKey: MASTER_KEY,
+    masterUrl: MASTER_URL,
+    transformCreatePayload: transformFormToCreateSubProductPayload,
+    transformUpdatePayload: transformFormToUpdateSubProductPayload,
+    successNavigatePath: "/master/sub-product",
+    entityName: "sub Products",
+  });
 
   useEffect(() => {
     const fetchAndSet = async () => {
       if (mode === "edit" && id) {
+        setLoading(true);
+        setFetchError(null);
         try {
           const data = await dispatch(
             fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
@@ -62,6 +64,13 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
           setFormData(transformSubProductToFormData(data));
         } catch (err: any) {
           toast.error(err);
+          setFetchError(err);
+          setTimeout(() => {
+            navigate("/master/sub-product");
+          }, 2000);
+        }
+        finally {
+          setLoading(false);
         }
       }
     };
@@ -150,16 +159,18 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
               />
             </Grid.Col>
 
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikSelectComponent
-                name="isActive"
-                label="Is Active"
-                placeholder="Select"
-                withAsterisk
-                allowDeselect={false}
-                data={booleanSelectData}
-              />
-            </Grid.Col>
+            {mode === "edit" &&
+              <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                <FormikSelectComponent
+                  name="isActive"
+                  label="Is Active"
+                  placeholder="Select"
+                  withAsterisk
+                  allowDeselect={false}
+                  data={booleanSelectData}
+                />
+              </Grid.Col>
+            }
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikSelectComponent
@@ -174,7 +185,7 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
           </Grid>
 
           <div className="flex justify-end mt-4">
-            <ButtonComponent
+            {!loading && !fetchError && <ButtonComponent
               fullWidth={false}
               radius={6}
               borderColor="#fff"
@@ -185,7 +196,7 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
               style={{ padding: "10px 30px" }}
             >
               SUBMIT
-            </ButtonComponent>
+            </ButtonComponent>}
           </div>
         </Form>
       </Formik>

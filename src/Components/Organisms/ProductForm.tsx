@@ -19,9 +19,10 @@ import {
 } from "../../Config/Master/ProductConfig";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import { useAppDispatch } from "../../Redux/hooks";
-import { booleanSelectData, handleMasterFormSubmit } from "../../Utils/utils";
+import { booleanSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 
 type ProductFormProps = { mode: "add" | "edit" };
 
@@ -31,27 +32,28 @@ const ProductForm = ({ mode }: ProductFormProps) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<ProductFormType>(initialValues);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = (values: ProductFormType) => {
-    handleMasterFormSubmit({
-      mode,
-      id,
-      values,
-      dispatch,
-      navigate,
-      resetFormData: () => setFormData(initialValues),
-      masterKey: MASTER_KEY,
-      masterUrl: MASTER_URL,
-      transformCreatePayload: transformFormToCreateProductPayload,
-      transformUpdatePayload: transformFormToUpdateProductPayload,
-      successNavigatePath: "/master/product",
-      entityName: "Product",
-    });
-  };
+  const handleSubmit = useThrottleMasterFormSubmit<ProductFormType>({
+    mode,
+    id,
+    dispatch,
+    navigate,
+    resetFormData: () => setFormData(initialValues),
+    masterKey: MASTER_KEY,
+    masterUrl: MASTER_URL,
+    transformCreatePayload: transformFormToCreateProductPayload,
+    transformUpdatePayload: transformFormToUpdateProductPayload,
+    successNavigatePath: "/master/product",
+    entityName: "Product",
+  });
 
   useEffect(() => {
     const fetchAndSet = async () => {
       if (mode === "edit" && id) {
+        setLoading(true);
+        setFetchError(null);
         try {
           const data = await dispatch(
             fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
@@ -60,6 +62,13 @@ const ProductForm = ({ mode }: ProductFormProps) => {
           setFormData(transformProductToFormData(data));
         } catch (err: any) {
           toast.error(err);
+          setFetchError(err);
+          setTimeout(() => {
+            navigate("/master/product");
+          }, 2000);
+        }
+        finally {
+          setLoading(false);
         }
       }
     };
@@ -221,29 +230,34 @@ const ProductForm = ({ mode }: ProductFormProps) => {
               />
             </Grid.Col>
 
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikSelectComponent
-                name="blocked"
-                label="Blocked"
-                placeholder="Select"
-                withAsterisk
-                data={booleanSelectData}
-              />
-            </Grid.Col>
+            {mode === "edit" && (
+              <>
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikSelectComponent
+                    name="blocked"
+                    label="Blocked"
+                    placeholder="Select"
+                    withAsterisk
+                    data={booleanSelectData}
+                  />
+                </Grid.Col>
 
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikSelectComponent
-                name="active"
-                label="Active"
-                placeholder="Select"
-                withAsterisk
-                data={booleanSelectData}
-              />
-            </Grid.Col>
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikSelectComponent
+                    name="active"
+                    label="Active"
+                    placeholder="Select"
+                    withAsterisk
+                    data={booleanSelectData}
+                  />
+                </Grid.Col>
+              </>
+            )}
+
           </Grid>
 
           <div className="flex justify-end mt-4">
-            <ButtonComponent
+            {!loading && !fetchError && <ButtonComponent
               fullWidth={false}
               radius={6}
               borderColor="#fff"
@@ -254,7 +268,7 @@ const ProductForm = ({ mode }: ProductFormProps) => {
               style={{ padding: "10px 30px" }}
             >
               SUBMIT
-            </ButtonComponent>
+            </ButtonComponent>}
           </div>
         </Form>
       </Formik>

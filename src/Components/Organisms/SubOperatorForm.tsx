@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
@@ -17,12 +17,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
-import { booleanSelectData, handleMasterFormSubmit } from "../../Utils/utils";
+import { booleanSelectData } from "../../Utils/utils";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useOperatorSubOperator } from "../../Utils/hooks/useOperatorSubOperator";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
+import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 
 type ProductFormProps = { mode: "add" | "edit" };
 
@@ -32,27 +33,30 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<SubOperatorFormType>(initialValues);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = (values: SubOperatorFormType) => {
-    handleMasterFormSubmit({
-      mode,
-      id,
-      values,
-      dispatch,
-      navigate,
-      resetFormData: () => setFormData(initialValues),
-      masterKey: MASTER_KEY,
-      masterUrl: MASTER_URL,
-      transformCreatePayload: transformFormToCreateSubOperatorPayload,
-      transformUpdatePayload: transformFormToUpdateSubOperatorPayload,
-      successNavigatePath: "/master/sub-operator",
-      entityName: "Sub-Operator",
-    });
-  };
+  const handleSubmit = useThrottleMasterFormSubmit<SubOperatorFormType>({
+    mode,
+    id,
+    dispatch,
+    navigate,
+    resetFormData: () => setFormData(initialValues),
+    masterKey: MASTER_KEY,
+    masterUrl: MASTER_URL,
+    transformCreatePayload: transformFormToCreateSubOperatorPayload,
+    transformUpdatePayload: transformFormToUpdateSubOperatorPayload,
+    successNavigatePath: "/master/sub-operator",
+    entityName: "Sub-Operator",
+  });
+
+
 
   useEffect(() => {
     const fetchAndSet = async () => {
       if (mode === "edit" && id) {
+        setLoading(true);
+        setFetchError(null);
         try {
           const data = await dispatch(
             fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
@@ -61,6 +65,13 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
           setFormData(transformSubOperatorToFormData(data));
         } catch (err: any) {
           toast.error(err);
+          setFetchError(err);
+          setTimeout(() => {
+            navigate("/master/sub-operator");
+          }, 2000);
+        }
+        finally {
+          setLoading(false);
         }
       }
     };
@@ -148,7 +159,7 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
               </Grid>
 
               <div className="flex justify-end mt-4">
-                <ButtonComponent
+                {!loading && !fetchError && <ButtonComponent
                   fullWidth={false}
                   radius={6}
                   borderColor="#fff"
@@ -159,7 +170,7 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
                   style={{ padding: "10px 30px" }}
                 >
                   SUBMIT
-                </ButtonComponent>
+                </ButtonComponent>}
               </div>
             </Form>
           );

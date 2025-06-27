@@ -132,8 +132,8 @@ export const validationSchema: Record<keyof ProductFormType, Yup.AnySchema> = {
   // subProducts: textField("Sub Products", 50, false),
   productGroup: textField("Product Group", 50, true),
   clusterMode: Yup.boolean().required("ClusterMode is required"),
-  blocked: Yup.boolean().required("Blocked is required"),
-  active: Yup.boolean().required("Active is required"),
+  blocked: Yup.boolean().required("Blocked is required").default(false),
+  active: Yup.boolean().required("Active is required").default(false),
 };
 
 export const headers: GenericTableHeader<ProductTableType>[] = [

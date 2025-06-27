@@ -4,7 +4,7 @@ export { default as OperatorMaster } from "./OperatorMaster";
 export { default as SubOperatorMaster } from "./SubOperatorMaster";
 export { default as VendorMaster } from "./VendorMaster";
 export { default as BankMaster } from "./BankMaster";
-export { default as DropdownMaster } from "./DropdownMaster";
+export { default as MainMaster } from "./MainMaster";
 export { default as UserConfigurationMaster } from "./UserConfigurationMaster";
 export { default as CountryMaster } from "./CountryMaster";
 export { default as WalletMaster } from "./WalletMaster";

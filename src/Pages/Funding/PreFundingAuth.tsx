@@ -1,7 +1,6 @@
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { useNavigate } from "react-router-dom";
 import {
-  data,
   FUNDING_KEY,
   FUNDING_URL,
   headers,
@@ -129,9 +128,6 @@ const PreFundingAuth = () => {
           })
         ).unwrap();
 
-        // const transformed = transformDataFn
-        //   ? response.map(transformDataFn)
-        //   : response;
         setData(response);
       } catch (err: any) {
         toast.error(err);

@@ -20,7 +20,6 @@ import {
 } from "../../Config/Master/VendorConfig";
 import {
   booleanSelectData,
-  handleMasterFormSubmit,
   prioritySelectDataInNumbers,
   pubPvtSelectData,
 } from "../../Utils/utils";
@@ -28,6 +27,7 @@ import { useAppDispatch } from "../../Redux/hooks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 
 type ProductFormProps = { mode: "add" | "edit" };
 
@@ -37,27 +37,28 @@ const VendorForm = ({ mode }: ProductFormProps) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<VendorFormType>(initialValues);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = (values: VendorFormType) => {
-    handleMasterFormSubmit({
-      mode,
-      id,
-      values,
-      dispatch,
-      navigate,
-      resetFormData: () => setFormData(initialValues),
-      masterKey: MASTER_KEY,
-      masterUrl: MASTER_URL,
-      transformCreatePayload: transformFormToCreateVendorPayload,
-      transformUpdatePayload: transformFormToUpdateVendorPayload,
-      successNavigatePath: "/master/vendor",
-      entityName: "Vendor",
-    });
-  };
+  const handleSubmit = useThrottleMasterFormSubmit<VendorFormType>({
+    mode,
+    id,
+    dispatch,
+    navigate,
+    resetFormData: () => setFormData(initialValues),
+    masterKey: MASTER_KEY,
+    masterUrl: MASTER_URL,
+    transformCreatePayload: transformFormToCreateVendorPayload,
+    transformUpdatePayload: transformFormToUpdateVendorPayload,
+    successNavigatePath: "/master/vendor",
+    entityName: "Vendor",
+  });
 
   useEffect(() => {
     const fetchAndSet = async () => {
       if (mode === "edit" && id) {
+        setLoading(true);
+        setFetchError(null);
         try {
           const data = await dispatch(
             fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
@@ -66,6 +67,13 @@ const VendorForm = ({ mode }: ProductFormProps) => {
           setFormData(transformVendorToFormData(data));
         } catch (err: any) {
           toast.error(err);
+          setFetchError(err);
+          setTimeout(() => {
+            navigate("/master/vendor");
+          }, 2000);
+        }
+        finally {
+          setLoading(false);
         }
       }
     };
@@ -237,7 +245,7 @@ const VendorForm = ({ mode }: ProductFormProps) => {
               </Grid>
 
               <div className="flex justify-end mt-4">
-                <ButtonComponent
+                {!loading && !fetchError && <ButtonComponent
                   fullWidth={false}
                   radius={6}
                   borderColor="#fff"
@@ -248,7 +256,7 @@ const VendorForm = ({ mode }: ProductFormProps) => {
                   style={{ padding: "10px 30px" }}
                 >
                   SUBMIT
-                </ButtonComponent>
+                </ButtonComponent>}
               </div>
             </Form>
           );

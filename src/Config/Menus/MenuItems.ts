@@ -45,8 +45,8 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "Dropdown Master",
-        link: "/master/dropdown",
+        label: "Main Master",
+        link: "/master/main",
         icon: userCreationSvg,
       },
       {

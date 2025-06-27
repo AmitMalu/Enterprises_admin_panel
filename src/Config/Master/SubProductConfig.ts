@@ -54,7 +54,7 @@ export const validationSchema: Record<keyof SubProductFormType, Yup.AnySchema> =
     productId: textField("Product", 50, true),
     walletType: textField("Wallet Type", 50, true),
     isSettlement: Yup.boolean().required("Is Settlement is Required"),
-    isActive: Yup.boolean().required("Is Active is required"),
+    isActive: Yup.boolean().required("Is Active is required").default(true),
     enabled: Yup.boolean().required("Enabled is required"),
   };
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   FUNDING_KEY,
   FUNDING_URL,
@@ -13,7 +13,6 @@ import { Form, Formik } from "formik";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import { Grid } from "@mantine/core";
-import FormikFileInput from "../Molecules/FormikFileInput";
 import * as Yup from "yup";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { toast } from "react-toastify";
@@ -66,9 +65,6 @@ const PrefundingForm = () => {
           navigate("/funding/pre-funding-authorization");
         }, 2000);
       });
-    // .finally(() => {
-    //   setIsSubmitting(false);
-    // });
   }, 3000);
 
   useEffect(() => {
@@ -187,16 +183,6 @@ const PrefundingForm = () => {
                 size="sm"
               />
             </Grid.Col>
-
-            {/* <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="partnerName"
-                type="text"
-                label="Partner Name"
-                placeholder="Enter Partner Name"
-                disabled={readOnly}
-              />
-            </Grid.Col> */}
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
