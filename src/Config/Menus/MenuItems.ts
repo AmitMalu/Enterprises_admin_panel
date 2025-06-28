@@ -50,6 +50,11 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
+        label: "Sub Master",
+        link: "/master/sub-master",
+        icon: userCreationSvg,
+      },
+      {
         label: "User Configuration",
         link: "/master/user-configuration",
         icon: userCreationSvg,

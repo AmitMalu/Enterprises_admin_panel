@@ -3,7 +3,7 @@ import { textField } from "../../Utils/ValidationUtils";
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
-export const MASTER_KEY = "dropdowns";
+export const MASTER_KEY = "main-master";
 export const MASTER_URL = API_ENDPOINTS.MASTER.MAIN_MASTER;
 
 export interface MainMasterFormType {
