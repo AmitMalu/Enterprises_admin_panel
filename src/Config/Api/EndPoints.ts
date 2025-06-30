@@ -20,7 +20,10 @@ export const API_ENDPOINTS = {
     BANK_MASTER: "api/banks",
     MAIN_MASTER: "api/master",
   },
-  FUNDING : {
-    PREFUNDING : "api/prefund"
-  }
+  FUNDING: {
+    PREFUNDING: "api/prefund",
+  },
+  SCHEMES: {
+    SCHEME_LIST: "api/scheme",
+  },
 };

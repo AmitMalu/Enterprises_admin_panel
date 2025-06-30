@@ -59,6 +59,7 @@ const GenericMasterTable = <T,>({
   filterValues,
   onFilterSubmit,
 }: GenericMasterTableProps<T>) => {
+
   return (
     <Table.ScrollContainer minWidth={600} className="mt-4">
       <Table
@@ -77,9 +78,10 @@ const GenericMasterTable = <T,>({
             {renderExtraHeader && extraColumnPosition === "left" ? (
               <Table.Th>{renderExtraHeader()}</Table.Th>
             ) : null}
-            {headers.map(({ key, label }) => (
-              <Table.Th key={String(key)}>{label || ""}</Table.Th>
-            ))}
+            {
+              headers.map(({ key, label }) => (
+                <Table.Th key={String(key)}>{label || ""}</Table.Th>
+              ))}
             {/* Left Extra Header */}
             {renderExtraHeader && extraColumnPosition === "right" ? (
               <Table.Th>{renderExtraHeader()}</Table.Th>
