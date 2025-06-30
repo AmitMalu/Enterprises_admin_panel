@@ -83,10 +83,10 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
         const fetchMasterList = async () => {
             try {
                 const data = await dispatch(
-                    fetchMasterDropdown({ url: MASTER_URL })
+                    fetchMasterDropdown({ url: `${MASTER_URL}/dropdown` })
                 ).unwrap();
 
-                const formattedData: { label: string; value: string }[] = (data?.content as MasterDropdownItem[])?.map((item: MasterDropdownItem) => ({
+                const formattedData: { label: string; value: string }[] = (data as MasterDropdownItem[])?.map((item: MasterDropdownItem) => ({
                     label: String(item.imMasterName),
                     value: String(item.imMasterId)
                 }));
