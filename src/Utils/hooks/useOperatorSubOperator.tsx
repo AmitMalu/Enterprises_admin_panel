@@ -20,12 +20,15 @@ export const useOperatorSubOperator = ({
   const [subOperatorDropdownData, setSubOperatorDropdownData] = useState([]);
   const [loadingOperatorList, setLoadingOperatorList] = useState(false);
   const [loadingSubOperatorList, setLoadingSubOperatorList] = useState(false);
+  const [operatorError, setOperatorError] = useState<string | null>(null);
+  const [subOperatorError, setSubOperatorError] = useState<string | null>(null);
   const [subOperatorKey, setSubOperatorKey] = useState(Date.now());
 
   // Fetch operator list (always)
   useEffect(() => {
     const fetchOperatorList = async () => {
       setLoadingOperatorList(true);
+      setOperatorError(null)
       try {
         const result = await dispatch(
           fetchMasterDropdown({
@@ -35,13 +38,15 @@ export const useOperatorSubOperator = ({
 
         const filteredData = (result || [])?.map((item: any) => ({
           label: item.operatorName,
-          value: String(item.operatorCode),
+          value: String(item.operatorId),     // dropdown binds to operatorId
+          code: String(item.operatorCode),
         }));
 
         setOperatorDropdownData(filteredData);
       } catch (err: any) {
         console.error("Failed to fetch Operator list", err);
         toast.error(err);
+        setOperatorError(err)
         setOperatorDropdownData([]);
       } finally {
         setLoadingOperatorList(false);
@@ -57,9 +62,10 @@ export const useOperatorSubOperator = ({
 
     const fetchSubOperatorList = async () => {
       setLoadingSubOperatorList(true);
+      setSubOperatorError(null)
       try {
         const result = await dispatch(
-             fetchMasterDropdown({
+          fetchMasterDropdown({
             url: `${API_ENDPOINTS?.MASTER?.SUB_OPERATOR}/${selectedOperatorCode}`,
           })
         ).unwrap();
@@ -75,6 +81,7 @@ export const useOperatorSubOperator = ({
       } catch (err: any) {
         console.error("Failed to fetch sub-Operator list", err);
         toast.error(err);
+        setSubOperatorError(err)
         setSubOperatorDropdownData([]);
         if (onSubOperatorReset) onSubOperatorReset();
       } finally {
@@ -90,6 +97,7 @@ export const useOperatorSubOperator = ({
     loadingOperatorList,
     subOperatorDropdownData,
     loadingSubOperatorList,
+    operatorSubOperatorError: operatorError || subOperatorError,
     subOperatorKey,
   };
 };

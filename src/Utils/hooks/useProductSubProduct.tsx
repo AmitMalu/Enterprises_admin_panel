@@ -22,10 +22,16 @@ export const useProductSubProduct = ({
   const [loadingSubProductList, setLoadingSubProductList] = useState(false);
   const [subProductKey, setSubProductKey] = useState(Date.now());
 
+  const [productError, setProductError] = useState<string | null>(null);
+  const [subProductError, setSubProductError] = useState<string | null>(null);
+
+
   // Fetch product list (always)
   useEffect(() => {
     const fetchProductList = async () => {
       setLoadingProductList(true);
+      setProductError(null);
+
       try {
         const result = await dispatch(
           fetchMasterDropdown({
@@ -42,6 +48,8 @@ export const useProductSubProduct = ({
       } catch (err: any) {
         console.error("Failed to fetch product list", err);
         toast.error(err);
+        setProductError(err);
+
         setProductDropdownData([]);
       } finally {
         setLoadingProductList(false);
@@ -57,6 +65,8 @@ export const useProductSubProduct = ({
 
     const fetchSubProductList = async () => {
       setLoadingSubProductList(true);
+      setSubProductError(null);
+
       try {
         const result = await dispatch(
           fetchMasterDropdown({
@@ -74,6 +84,8 @@ export const useProductSubProduct = ({
         setSubProductKey(Date.now());
       } catch (err: any) {
         console.error("Failed to fetch sub-product list", err);
+        setSubProductError(err);
+
         toast.error(err);
         setSubProductDropdownData([]);
         if (onSubProductReset) onSubProductReset();
@@ -91,5 +103,6 @@ export const useProductSubProduct = ({
     subProductDropdownData,
     loadingSubProductList,
     subProductKey,
+    productSubproductError: productError || subProductError, // <- combined error
   };
 };

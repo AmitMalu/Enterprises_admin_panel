@@ -43,7 +43,8 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
     navigate,
     resetFormData: () => setFormData(initialValues),
     masterKey: MASTER_KEY,
-    masterUrl: MASTER_URL,
+    addUrl: MASTER_URL,
+    updateUrl: MASTER_URL,
     transformCreatePayload: transformFormToCreateSubOperatorPayload,
     transformUpdatePayload: transformFormToUpdateSubOperatorPayload,
     successNavigatePath: "/master/sub-operator",
@@ -107,6 +108,12 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
           const { operatorDropdownData, loadingOperatorList } =
             useOperatorSubOperator({});
 
+          type OperatorDropdownItem = { label: string; value: string; code: string };
+          const dropdownDataWithCodeAsValue = (operatorDropdownData as OperatorDropdownItem[] | undefined)?.map(item => ({
+            label: item.label,
+            value: item.code, // override
+          }));
+
           return (
             <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
               <Grid gutter="lg">
@@ -129,7 +136,7 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
                     placeholder="Select Operator"
                     withAsterisk
                     required
-                    data={operatorDropdownData}
+                    data={dropdownDataWithCodeAsValue}
                     disabled={loadingOperatorList}
                   />
                 </Grid.Col>

@@ -10,6 +10,7 @@ const TableBody = <T,>({
   headers: GenericTableHeader<T>[];
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
 }) => {
+  
   if (!data?.length) {
     return (
       <Table.Tr>

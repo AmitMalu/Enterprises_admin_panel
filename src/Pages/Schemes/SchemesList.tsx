@@ -40,10 +40,18 @@ const SchemesList = () => {
   } | null>(null);
 
   const handleEdit = (id: any) => {
-    // navigate(`/schemes/edit/${id}`, { state: id });
+    navigate(`/schemes/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
+    navigate("/schemes/add");
+  };
+
+  const handleSetting = (id: any) => {
+    // navigate(`/schemes/edit/${id}`, { state: id });
+  };
+
+  const handleDelete = (id: any) => {
     // navigate("/schemes/add/");
   };
 
@@ -168,9 +176,7 @@ const SchemesList = () => {
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2 ">
               <span
-                onClick={() =>
-                  navigate(`/schemes/setting/${item.id}`, { state: item })
-                }
+                onClick={() => handleSetting(item.id)}
                 className="cursor-pointer"
               >
                 <SettingIcon2 />
@@ -178,10 +184,15 @@ const SchemesList = () => {
               <span className="cursor-pointer">
                 <EyeIcon2 />
               </span>
-              <span className="cursor-pointer">
+              <span
+                onClick={() => handleDelete(item.id)}
+                className="cursor-pointer">
                 <DeleteIcon />
               </span>
-              <span className="cursor-pointer">
+              <span
+                onClick={() => handleEdit(item.id)}
+                className="cursor-pointer"
+              >
                 <EditIcon2 />
               </span>
             </div>

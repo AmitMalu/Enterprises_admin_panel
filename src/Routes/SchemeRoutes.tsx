@@ -8,11 +8,14 @@ import {
   TransactionLimitSetting,
   TransactionRouting,
 } from "../Pages/Schemes";
+import SchemesFormPage from "../Components/Organisms/SchemesFormPage";
 
 export const SchemesRoutes = (
   <>
     <Route path="/schemes/schemeslist" element={<SchemesList />} />
-    <Route path="/schemes/setting/:schemeId" element={<SchemeSettingsPage />} />
+    <Route path="/schemes/add" element={<SchemesFormPage mode="add" />} />
+    <Route path="/schemes/edit/:id" element={<SchemesFormPage mode="edit" />} />
+    <Route path="/schemes/setting/:id" element={<SchemeSettingsPage />} />
 
     <Route
       path="/schemes/fee-distribution"

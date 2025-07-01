@@ -12,6 +12,9 @@ export interface SchemesListFormType {
   schemeCode: string;
   productId: string;
   subProductId: string;
+  operatorId: string;
+  vendorId: string;
+  schemeHierarchySelectionId: string;
 }
 
 export interface SchemesListTableType {
@@ -20,6 +23,17 @@ export interface SchemesListTableType {
   schemeCode: string;
   productName: string;
   subProductName: string;
+  operatorName: string;
+  vendorName: string;
+  schemeCombinationHashCode: string;
+}
+
+export interface SchemeListCreatePayload extends SchemesListFormType {
+  createdBy: string;
+}
+
+export interface SchemeListUpdatePayload extends SchemesListFormType {
+  editedBy: string;
 }
 
 export const initialValues: SchemesListFormType = {
@@ -27,16 +41,22 @@ export const initialValues: SchemesListFormType = {
   schemeCode: "",
   productId: "",
   subProductId: "",
+  operatorId: "",
+  vendorId: "",
+  schemeHierarchySelectionId: "",
 };
 
 export const validationSchema: Record<
   keyof SchemesListFormType,
   Yup.AnySchema
 > = {
-  schemeName: textField("Scheme Name", 150, false, true),
-  schemeCode: textField("Scheme Code", 150, false, true),
-  productId: textField("Product", 150, false, true),
-  subProductId: textField("sub Product", 150, false, true),
+  schemeName: textField("Scheme Name", 150, true, true),
+  schemeCode: textField("Scheme Code", 150, true, true),
+  productId: textField("Product", 150, true, true),
+  subProductId: textField("sub Product", 150, true, true),
+  operatorId: textField("Operator", 150, false, true),
+  vendorId: textField("Vendor", 150, false, true),
+  schemeHierarchySelectionId: textField("Scheme Hierarchy", 150, false, true),
 };
 
 export const headers: GenericTableHeader<SchemesListTableType>[] = [
@@ -45,7 +65,32 @@ export const headers: GenericTableHeader<SchemesListTableType>[] = [
   { key: "schemeCode", label: "Scheme Code" },
   { key: "productName", label: "Product" },
   { key: "subProductName", label: "Sub Product" },
+  { key: "operatorName", label: "Operator Name" },
+  { key: "vendorName", label: "Vendor Name" },
+  { key: "schemeCombinationHashCode", label: "Scheme HashCode" },
 ];
+
+// Transform form data to Create payload
+export const transformFormToCreateSchemesPayload = (
+  formData: SchemesListFormType
+): SchemeListCreatePayload => ({
+  ...formData,
+  createdBy: localStorage.getItem("username") || "system",
+});
+
+// Transform form data to Update payload
+export const transformFormToUpdateSchemesPayload = (
+  formData: SchemesListFormType
+): SchemeListUpdatePayload => ({
+  schemeName: formData.schemeName,
+  schemeCode: formData.schemeCode,
+  productId: formData.operatorId,
+  subProductId: formData.subProductId,
+  operatorId: formData.productId,
+  vendorId: formData.operatorId,
+  schemeHierarchySelectionId: formData.schemeHierarchySelectionId,
+  editedBy: localStorage.getItem("username") || "system",
+});
 
 export type slabStructureType = {
   slabStart: string;
