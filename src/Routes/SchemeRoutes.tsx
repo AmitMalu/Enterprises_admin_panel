@@ -3,12 +3,16 @@ import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
 import {
   FeeDistributionSetting,
   FeeSetting,
+  SchemeAllocation,
+  SchemeHierarchy,
+  SchemeRate,
   SchemesList,
   ServiceChargeSetting,
   TransactionLimitSetting,
   TransactionRouting,
 } from "../Pages/Schemes";
 import SchemesFormPage from "../Components/Organisms/SchemesFormPage";
+import SchemeHierarchyForm from "../Components/Organisms/SchemeHierarchyForm";
 
 export const SchemesRoutes = (
   <>
@@ -16,6 +20,13 @@ export const SchemesRoutes = (
     <Route path="/schemes/add" element={<SchemesFormPage mode="add" />} />
     <Route path="/schemes/edit/:id" element={<SchemesFormPage mode="edit" />} />
     <Route path="/schemes/setting/:id" element={<SchemeSettingsPage />} />
+
+    <Route path="/schemes/hierarchy" element={<SchemeHierarchy />} />
+    <Route path="/schemes/hierarchy/edit/:id" element={<SchemeHierarchyForm mode="edit" />} />
+    <Route path="/schemes/hierarchy/add" element={<SchemeHierarchyForm mode="add" />} />
+
+    <Route path="/schemes/rate" element={<SchemeRate />} />
+    <Route path="/schemes/allocation" element={<SchemeAllocation />} />
 
     <Route
       path="/schemes/fee-distribution"

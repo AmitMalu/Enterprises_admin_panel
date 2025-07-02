@@ -6,6 +6,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { useCallback, useEffect, useState } from "react";
 import { fetchMasterList } from "../../Redux/Features/Masters/MastersThunk";
+import { toast } from "react-toastify";
 
 type FilterType = { key: string; value: any } | null;
 
@@ -85,6 +86,7 @@ export function useFetchMasterList<T>({
       setData(transformed);
     } catch (err: any) {
       setError(err);
+      toast.error(err);
     } finally {
       setLoading(false);
     }

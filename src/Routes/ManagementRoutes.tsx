@@ -4,7 +4,6 @@ import {
   ActivationUser,
   AddManageUser,
   BlockUser,
-  BulkUsers,
   KycApprovedSummary,
   PendingKyc,
   PendingUser,
@@ -15,6 +14,7 @@ import {
   UserMapping,
   ViewUser,
 } from "../Pages/Management";
+import OnboardedUsers from "../Pages/Management/OnboardedUsers";
 
 export const ManagementRoutes = (
   <>
@@ -25,7 +25,7 @@ export const ManagementRoutes = (
     <Route path="/management/user-management" element={<UserManagement />} />
     <Route path="/management/add-manage-user" element={<AddManageUser />} />
     <Route path="/management/search-user" element={<SearchUser />} />
-    <Route path="/management/bulk-users" element={<BulkUsers />} />
+    <Route path="/management/user/onboarded" element={<OnboardedUsers />} />
     <Route path="/management/kyc-approved" element={<KycApprovedSummary />} />
     <Route path="/management/kyc-pending" element={<PendingKyc />} />
     <Route path="/management/view-user" element={<ViewUser />} />

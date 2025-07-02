@@ -48,7 +48,7 @@ const SchemesList = () => {
   };
 
   const handleSetting = (id: any) => {
-    // navigate(`/schemes/edit/${id}`, { state: id });
+    navigate(`/schemes/setting/${id}`, { state: id });
   };
 
   const handleDelete = (id: any) => {
