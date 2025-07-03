@@ -10,7 +10,6 @@ import {
   PendingUser,
   SearchUser,
   SettlementBank,
-  TenantWebsiteCustomization,
   UserCreation,
   UserManagement,
   UserMapping,
@@ -27,10 +26,6 @@ export const ManagementRoutes = (
     <Route path="/management/add-manage-user" element={<AddManageUser />} />
     <Route path="/management/search-user" element={<SearchUser />} />
     <Route path="/management/bulk-users" element={<BulkUsers />} />
-    <Route
-      path="/management/tenant-customization"
-      element={<TenantWebsiteCustomization />}
-    />
     <Route path="/management/kyc-approved" element={<KycApprovedSummary />} />
     <Route path="/management/kyc-pending" element={<PendingKyc />} />
     <Route path="/management/view-user" element={<ViewUser />} />

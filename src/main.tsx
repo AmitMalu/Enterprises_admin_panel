@@ -11,18 +11,18 @@ import ErrorFallback from "./Utils/ErrorFallback.tsx";
 import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ErrorBoundary
-      fallbackRender={ErrorFallback}
-      onReset={() => (window.location.href = "/login")}
-    >
-      <MantineProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <App />
-          </PersistGate>
-        </Provider>
-      </MantineProvider>
-    </ErrorBoundary>
-  </StrictMode>
+  // <StrictMode>
+  <ErrorBoundary
+    fallbackRender={ErrorFallback}
+    onReset={() => (window.location.href = "/login")}
+  >
+    <MantineProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </MantineProvider>
+  </ErrorBoundary>
+  // </StrictMode>
 );

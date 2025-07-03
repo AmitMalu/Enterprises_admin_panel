@@ -7,6 +7,13 @@ import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { logoutUser } from "../../Utils/utils";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import * as Yup from "yup";
+import { Form, Formik } from "formik";
+
+const validationSchema = Yup.object({
+  otp: Yup.string().length(6, "OTP must be 6 digits").required("OTP is required"),
+})
 
 const OtpVerify: React.FC = () => {
   const screenSize = useScreenSize();
@@ -29,10 +36,10 @@ const OtpVerify: React.FC = () => {
     screenSize === "sm"
       ? "sm"
       : screenSize === "md" || screenSize === "lg"
-      ? "md"
-      : screenSize === "xl"
-      ? "lg"
-      : "xl";
+        ? "md"
+        : screenSize === "xl"
+          ? "lg"
+          : "xl";
 
   const handleResendOtp = async (): Promise<void> => {
     try {
@@ -43,32 +50,36 @@ const OtpVerify: React.FC = () => {
     }
   };
 
-  const handleOTPSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    e.preventDefault(); // Prevent default form submission
-    setHasSubmitted(true); // Set submitted state to true
-    if (Otp.length < 6) return;
+  const handleOTPSubmit = useThrottledFormSubmit((values: { otp: string }) => {
+    setHasSubmitted(true);
+    if (values.otp.length < 6) return;
 
-    try {
-      const result = await dispatch(
-        otpVerify({ userName: username, otp: Otp })
-      ).unwrap();
-      toast.success(result.message);
-      if (otpFor === "forgetPassword") {
-        navigate("/set-password", {
-          state: { username: username }, // Pass username to Set Password page);
-        });
-      } else if (otpFor === "login") {
-        sessionStorage.setItem("justLoggedIn", "true");
-        sessionStorage.removeItem("otpFor");
-        sessionStorage.removeItem("otp-username");
-        navigate("/");
+    const handleAsync = async () => {
+      try {
+        const result = await dispatch(
+          otpVerify({ userName: username, otp: values.otp })
+        ).unwrap();
+        toast.success(result.message);
+        if (otpFor === "forgetPassword") {
+          navigate("/set-password", {
+            state: { username: username }, // Pass username to Set Password page);
+          });
+        } else if (otpFor === "login") {
+          sessionStorage.setItem("justLoggedIn", "true");
+          if (username) {
+            localStorage.setItem("username", username);
+          }
+          sessionStorage.removeItem("otpFor");
+          sessionStorage.removeItem("otp-username");
+          navigate("/");
+        }
+      } catch (error: any) {
+        toast.error(error.message || "OTP verification failed");
       }
-    } catch (error: any) {
-      toast.error(error.message || "OTP verification failed");
     }
-  };
+
+    handleAsync();
+  }, 5000)
 
   useEffect(() => {
     const resolvedUsername =
@@ -93,40 +104,58 @@ const OtpVerify: React.FC = () => {
       <div className="pl-4 mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-[#BF0204]">
         Please Enter Your OTP
       </div>
-      <form onSubmit={handleOTPSubmit}>
-        <div className="flex justify-center items-center ">
-          <TextInputComponent
-            name="otp"
-            value={Otp}
-            onChange={(e) => setOtp(e.target.value)} // Update OTP state on change
-            oneTimeCode
-            size={pinSize}
-            length={6}
-            error={hasSubmitted && Otp.length < 6} // Show error only after submission attempt
-            type="number"
-          />
-        </div>
 
-        <div
-          onClick={handleResendOtp}
-          className="pl-4 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl cursor-pointer text-[#BF0204] text-center py-6"
-        >
-          Resend OTP
-        </div>
+      <Formik
+        enableReinitialize
+        validateOnBlur={false}
+        initialValues={{ otp: "" }}
+        validationSchema={validationSchema}
+        onSubmit={handleOTPSubmit}
+      >
+        {({ values, handleChange, touched, errors, submitCount }) => (
+          <Form>
+            <div className="flex justify-center items-center ">
+              <TextInputComponent
+                name="otp"
+                value={values.otp}
+                onChange={handleChange}
+                oneTimeCode
+                size={pinSize}
+                length={6}
+                error={!!errors.otp && submitCount > 0 ? errors.otp : undefined} // Show error only after submission attempt
+                type="text"
+              />
+            </div>
 
-        <div className="flex justify-center items-center">
-          <ButtonComponent
-            fullWidth
-            size="md"
-            bgColor="#DB2729"
-            textColor="#fff"
-            radius={12}
-            type="submit"
-          >
-            VERIFY
-          </ButtonComponent>
-        </div>
-      </form>
+            <div
+              className="pl-4 py-4 text-center"
+            >
+              <ButtonComponent
+                onClick={handleResendOtp}
+                textColor="#BF0204"
+                fontSize="14"
+                font="poppins"
+                throttleMs={10000}
+              >
+                Resend OTP
+              </ButtonComponent>
+            </div>
+
+            <div className="flex justify-center items-center">
+              <ButtonComponent
+                fullWidth
+                size="md"
+                bgColor="#DB2729"
+                textColor="#fff"
+                radius={12}
+                type="submit"
+              >
+                VERIFY
+              </ButtonComponent>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

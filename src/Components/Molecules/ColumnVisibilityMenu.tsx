@@ -24,6 +24,7 @@ const ColumnVisibilityMenu: React.FC<ColumnVisibilityMenuProps> = ({
           borderColor="#CACACA"
           fontSize="16"
           bgColor="#ffffff"
+          throttleMs={0}
           leftIcon={<ColIcon />}
         >
           Cols

@@ -41,17 +41,17 @@ export const sidebarData = [
       },
       {
         label: "Bank Master",
-        link: "/master/bank",
+        link: "/master/banks",
         icon: userCreationSvg,
       },
       {
-        label: "Dropdown Master",
-        link: "/master/dropdown",
+        label: "Main Master",
+        link: "/master/main",
         icon: userCreationSvg,
       },
       {
-        label: "Country Master",
-        link: "/master/country",
+        label: "Sub Master",
+        link: "/master/sub-master",
         icon: userCreationSvg,
       },
       {
@@ -60,28 +60,13 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "System Configuration",
-        link: "/master/system-configuration",
-        icon: userCreationSvg,
-      },
-      {
         label: "Wallet Master",
         link: "/master/wallet",
         icon: userCreationSvg,
       },
       {
-        label: "Tax Master",
-        link: "/master/tax",
-        icon: userCreationSvg,
-      },
-      {
-        label: "API Master",
-        link: "/master/api",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Service Configuration",
-        link: "/master/service",
+        label: "Pincode Master",
+        link: "/master/pincode",
         icon: userCreationSvg,
       },
       {
@@ -112,6 +97,43 @@ export const sidebarData = [
       {
         label: "Payment Master",
         link: "/master/payment",
+        icon: userCreationSvg,
+      },
+    ],
+  },
+  {
+    label: "Schemes",
+    icon: schemesSvg,
+    initiallyOpened: false,
+    links: [
+      {
+        label: "Schemes List",
+        link: "/schemes/schemeslist",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Fee Distribution Setting",
+        link: "/schemes/fee-distribution",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Fee Setting",
+        link: "/schemes/fee-setting",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Transaction Routing",
+        link: "/schemes/transaction-routing",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Transaction Limit Settings",
+        link: "/schemes/transaction-limit",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Service Charge Setting",
+        link: "/schemes/service-charge",
         icon: userCreationSvg,
       },
     ],
@@ -199,11 +221,6 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "Tenant Website Customizing",
-        link: "/management/tenant-customization",
-        icon: userCreationSvg,
-      },
-      {
         label: "KYC Approved Summary",
         link: "/management/kyc-approved",
         icon: userCreationSvg,
@@ -231,43 +248,6 @@ export const sidebarData = [
       {
         label: "User Mapping",
         link: "/management/user-mapping",
-        icon: userCreationSvg,
-      },
-    ],
-  },
-  {
-    label: "Schemes",
-    icon: schemesSvg,
-    initiallyOpened: false,
-    links: [
-      {
-        label: "Schemes List",
-        link: "/schemes/schemeslist",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Fee Distribution Setting",
-        link: "/schemes/fee-distribution",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Fee Setting",
-        link: "/schemes/fee-setting",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Transaction Routing",
-        link: "/schemes/transaction-routing",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Transaction Limit Settings",
-        link: "/schemes/transaction-limit",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Service Charge Setting",
-        link: "/schemes/service-charge",
         icon: userCreationSvg,
       },
     ],
@@ -370,6 +350,11 @@ export const sidebarData = [
       {
         label: "SMS Template",
         link: "/notification/sms-template",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Email Report",
+        link: "/notification/email-report",
         icon: userCreationSvg,
       },
       {

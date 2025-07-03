@@ -1,37 +1,32 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { EditIcon, EyeIcon } from "../../assets/Icons";
 import { useNavigate } from "react-router-dom";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
-import { fetchVendor } from "../../Redux/Features/Masters/VendorMaster/thunks";
+import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
-import { mapToVendorTableType } from "../../Redux/Features/Masters/VendorMaster/utils";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
-import { headers, VendorTableType } from "../../Config/Master/VendorConfig";
 import {
-  resetAllStates,
-  setCurrentPage,
-  setLoaded,
-  setPageSize,
-} from "../../Redux/Features/Masters/VendorMaster/slice";
+  headers,
+  mapToVendorTableType,
+  MASTER_KEY,
+  MASTER_URL,
+  VendorTableType,
+} from "../../Config/Master/VendorConfig";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
+import {
+  resetMaster,
+  setPagination,
+} from "../../Redux/Features/Masters/MastersSlice";
+import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 
 const VendorMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { loading, vendors, pagination, loaded } = useAppSelector(
-    (state) => state.masters.vendor
-  );
-
-  const currentPage = pagination?.currentPage;
-  const pageSize = pagination.pageSize;
-
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
-
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
@@ -40,31 +35,14 @@ const VendorMaster = () => {
     value: any;
   } | null>(null);
 
-  const transformedData: VendorTableType[] = vendors?.map(mapToVendorTableType);
-
-  const handleFilterChange = (key: string, value: any) => {
-    setFilterValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const setPage = (page: number) => {
-    if (page !== currentPage) {
-      dispatch(setCurrentPage(page));
-      dispatch(setLoaded(false));
-    }
-  };
-
-  const handleFilterSubmit = (key: string, value: any) => {
-    dispatch(setCurrentPage(1));
-    dispatch(setPageSize(5));
-    setSubmittedFilter({ key, value });
-    dispatch(setLoaded(false));
-  };
-
-  const OnPageSizeChange = (size: number) => {
-    dispatch(setLoaded(false));
-    dispatch(setCurrentPage(1));
-    dispatch(setPageSize(size));
-  };
+  const { data, loading, pagination, setPage, setPageSize } =
+    useFetchMasterList<VendorTableType>({
+      key: MASTER_KEY,
+      url: MASTER_URL,
+      transformDataFn: mapToVendorTableType,
+      filter: submittedFilter,
+      refreshKey,
+    });
 
   const handleEdit = (id: any) => {
     navigate(`/master/vendor/edit/${id}`, { state: id });
@@ -73,14 +51,26 @@ const VendorMaster = () => {
   const handleAdd = () => {
     navigate("/master/vendor/add");
   };
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
 
-  const handleRefresh = () => {
-    dispatch(resetAllStates());
-    setFilterValues({});
-    setFilterVisible(false);
-    setSubmittedFilter(null);
-    setVisibleColumns(headers.map((h) => h.key as string));
-    setRefreshKey((prev) => prev + 1);
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: MASTER_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+      })
+    );
+    setSubmittedFilter({ key, value });
+  };
+
+  const handleExportClick = () => {
+    if (!data || data.length === 0) {
+      toast.warning("No data available to export.");
+      return;
+    }
+    exportToCsv(data, "vendor-master");
   };
 
   const handleToggleColumn = (key: string) => {
@@ -89,29 +79,14 @@ const VendorMaster = () => {
     );
   };
 
-  const handleExportClick = () => {
-    if (!transformedData || transformedData.length === 0) {
-      toast.warning("No data available to export.");
-      return;
-    }
-
-    exportToCsv(transformedData, "vendor-master");
+  const handleRefresh = () => {
+    dispatch(resetMaster(MASTER_KEY));
+    setFilterValues({});
+    setSubmittedFilter(null);
+    setVisibleColumns(headers.map((h) => h.key as string));
+    setRefreshKey((prev) => prev + 1);
+    setFilterVisible(false);
   };
-
-  useEffect(() => {
-    if (!loaded) {
-      dispatch(
-        fetchVendor({
-          page: currentPage,
-          size: pageSize,
-          filter: submittedFilter,
-        })
-      )
-        .unwrap()
-        .then()
-        .catch((err) => toast.error(err));
-    }
-  }, [currentPage, pageSize, loaded, submittedFilter, refreshKey]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -135,8 +110,10 @@ const VendorMaster = () => {
         <ShimmerTableRows rowCount={6} columnCount={headers.length} />
       ) : (
         <GenericMasterTable<VendorTableType>
-          data={transformedData}
-          headers={headers}
+          data={data}
+          headers={headers.filter((h) =>
+            visibleColumns.includes(h.key as string)
+          )}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2">
@@ -155,8 +132,8 @@ const VendorMaster = () => {
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={setPage}
-          onPageSizeChange={OnPageSizeChange}
-          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          pageSize={pagination.pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
           filterVisible={filterVisible}

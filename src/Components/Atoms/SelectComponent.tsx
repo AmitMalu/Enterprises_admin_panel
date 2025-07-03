@@ -7,6 +7,8 @@ interface SelectComponentProps {
   label?: string;
   name: string;
   placeholder?: string;
+  clearable?: boolean;
+  nothingFoundMessage?: string;
   value: string | null;
   onChange: (value: string | null) => void;
   error?: string | boolean;
@@ -18,17 +20,19 @@ interface SelectComponentProps {
   data: { value: string; label: string }[];
   onBlur?: () => void;
   className?: string;
-  allowDeselect? : boolean
-  searchable? : boolean
+  allowDeselect?: boolean;
+  searchable?: boolean;
 }
 
 const SelectComponent: React.FC<SelectComponentProps> = ({
   label,
   name,
   placeholder,
+  nothingFoundMessage = "Nothing found...",
   value,
   onChange,
   error,
+  clearable = false,
   required = false,
   radius,
   size,
@@ -61,6 +65,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         label={label}
         placeholder={placeholder}
         value={value}
+        nothingFoundMessage={nothingFoundMessage}
         allowDeselect={allowDeselect}
         onChange={onChange}
         onBlur={onBlur}
@@ -71,6 +76,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         withAsterisk={withAsterisk}
         disabled={disabled}
         data={data}
+        clearable={clearable}
         searchable={searchable}
         styles={{
           input: {

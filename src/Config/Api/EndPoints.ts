@@ -17,6 +17,10 @@ export const API_ENDPOINTS = {
     OPERATOR: "api/operators",
     VENDOR: "api/vendors",
     SUB_OPERATOR: "api/sub-operators",
-    DROPDOWN_MASTER: "api/master",
+    BANK_MASTER: "api/banks",
+    MAIN_MASTER: "api/master",
   },
+  FUNDING : {
+    PREFUNDING : "api/prefund"
+  }
 };

@@ -1,39 +1,113 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { initialValues, PrefundingType, validationSchema } from "../../Config/Funding/fundingConfig";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  FUNDING_KEY,
+  FUNDING_URL,
+  initialValues,
+  PrefundingFormType,
+  validationSchema,
+} from "../../Config/Funding/preFundingConfig";
 import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import { Grid } from "@mantine/core";
-import FormikFileInput from "../Molecules/FormikFileInput";
-import * as Yup from 'yup'
+import * as Yup from "yup";
+import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { toast } from "react-toastify";
+import { useAppDispatch } from "../../Redux/hooks";
+import FormikSelectComponent from "../Molecules/FormikSelectComponent";
+import {
+  fetchFundingById,
+  submitFundRequest,
+} from "../../Redux/Features/Fundings/thunks";
 
-const PrefundingForm = ({ mode }: { mode: string }) => {
-  
+const PrefundingForm = () => {
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const { id } = useParams();
-  const location = useLocation();
-  const [formData, setFormData] = useState<PrefundingType>(initialValues);
+  const [formData, setFormData] = useState<PrefundingFormType>(initialValues);
+  const [selectedAction, setSelectedAction] = useState<
+    "APPROVED" | "REJECTED" | null
+  >(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isActionDisabled, setIsActionDisabled] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = (values: PrefundingType) => {
-    console.log("Submitted values:", values);
-    // Add API call here
-  };
+  const handleSubmit = useThrottledFormSubmit<any>((values) => {
+    if (isSubmitting) return;
+
+    if (!selectedAction) {
+      toast.error("Please select APPROVE or REJECT.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const payload = {
+      approveOrRejectHierarchyId: "IM-AD-024",
+      fundRequestId: id,
+      status: selectedAction,
+    };
+
+    dispatch(submitFundRequest(payload))
+      .unwrap()
+      .then(() => {
+        toast.success(`Fund request ${selectedAction} successfully`);
+        navigate("/funding/pre-funding-authorization");
+      })
+      .catch((err: any) => {
+        toast.error(err || "Action failed");
+        setTimeout(() => {
+          navigate("/funding/pre-funding-authorization");
+        }, 2000);
+      });
+  }, 3000);
 
   useEffect(() => {
-    if (mode === "edit") {
-      if (location.state) {
-        setFormData(location.state);
+    const fetchAndSet = async () => {
+      if (id) {
+        setLoading(true);
+        setFetchError(null);
+        try {
+          const data = await dispatch(
+            fetchFundingById({ key: FUNDING_KEY, endpoint: FUNDING_URL, id })
+          ).unwrap();
+
+          if (data.status !== "PENDING") {
+            setIsActionDisabled(true);
+          }
+          setFormData(data);
+        } catch (err: any) {
+          const errorMessage = err || "Something went wrong";
+          toast.error(errorMessage);
+          setFetchError(errorMessage);
+          setTimeout(() => {
+            navigate("/funding/pre-funding-authorization");
+          }, 2000);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
-  }, [id, location.state, mode]);
+    };
+
+    fetchAndSet();
+
+    return () => {
+      // Only clear form and selected product on unmount in "edit" mode
+      setFormData(initialValues); // Reset form data on unmount
+    };
+  }, [dispatch, id]);
+
+  const readOnly = true;
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
       <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Prefunding Form" : "Prefunding Form"}
+        {"Prefunding Form"}
       </TextComponent>
 
       {/* Sub Heading */}
@@ -49,34 +123,31 @@ const PrefundingForm = ({ mode }: { mode: string }) => {
           <Grid gutter="lg">
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="depositType"
+                name="paymentMode"
                 label="Deposit Type"
                 placeholder="Enter Deposit Type"
-                withAsterisk
                 required
-                maxLength={51}
+                disabled={readOnly}
                 allowSpecialChar={false}
               />
             </Grid.Col>
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="transactionId"
+                name="bankTranId"
                 label="Transaction Id"
                 placeholder="Enter Transaction Id"
-                withAsterisk
-                maxLength={51}
+                disabled={readOnly}
                 allowSpecialChar={false}
               />
             </Grid.Col>
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="amount"
+                name="depositAmount"
                 label="Amount"
                 placeholder="Enter Amount"
-                withAsterisk
                 capitalize
-                maxLength={3}
+                disabled={readOnly}
                 allowNumber={false}
                 allowSpecialChar={false}
               />
@@ -84,11 +155,10 @@ const PrefundingForm = ({ mode }: { mode: string }) => {
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="bankAccount"
+                name="bankAccountNumber"
                 label="Bank Account"
                 placeholder="Type BankAccount"
-                withAsterisk
-                maxLength={51}
+                disabled={readOnly}
                 allowSpecialChar={false}
               />
             </Grid.Col>
@@ -98,29 +168,19 @@ const PrefundingForm = ({ mode }: { mode: string }) => {
                 name="depositDate"
                 type="date"
                 label="Date of Deposit"
+                disabled={readOnly}
                 placeholder="Select Deposit Date"
-                withAsterisk
-              />
-            </Grid.Col>
-
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikFileInput
-                name="depositSlip"
-                label="Deposit Slip"
-                placeholder="Add Deposit Slip"
-                withAsterisk
-                accept="image/png, image/jpeg, application/pdf"
-                size="sm"
               />
             </Grid.Col>
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="partnerName"
-                type="text"
-                label="Partner Name"
-                placeholder="Enter Partner Name"
-                withAsterisk
+                name="depositImage"
+                label="Deposit Slip"
+                disabled={readOnly}
+                placeholder="Add Deposit Slip"
+                accept="image/png, image/jpeg, application/pdf"
+                size="sm"
               />
             </Grid.Col>
 
@@ -130,57 +190,81 @@ const PrefundingForm = ({ mode }: { mode: string }) => {
                 type="text"
                 label="Requested By"
                 placeholder="Requested By"
-                withAsterisk
+                disabled={readOnly}
               />
             </Grid.Col>
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="clientIp"
+                name="ipAddress"
                 type="text"
                 label="Client IP"
                 placeholder="Enter Client IP"
-                withAsterisk
+                disabled={readOnly}
               />
             </Grid.Col>
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="partnerMobileNumber"
+                name="mobileNumber"
                 type="text"
                 label="Partner MobileNumber"
                 placeholder="Enter Partner Number"
                 allowSpecialChar={false}
                 allowCharacter={false}
-                withAsterisk
+                disabled={readOnly}
               />
             </Grid.Col>
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="requestStatus"
-                type="text"
+              <FormikSelectComponent
+                name="status"
                 label="Request Status"
+                allowDeselect={true}
                 placeholder="Enter Request Status"
-                withAsterisk
+                disabled={readOnly}
+                data={[
+                  { label: "PENDING", value: "PENDING" },
+                  { label: "APPROVED", value: "APPROVED" },
+                  { label: "REJECTED", value: "REJECTED" },
+                ]}
               />
             </Grid.Col>
           </Grid>
 
-          <div className="flex justify-end mt-4">
-            <ButtonComponent
-              fullWidth={false}
-              radius={6}
-              borderColor="#fff"
-              variant="filled"
-              type="submit"
-              bgColor="#C30305"
-              textColor="#FFFFFF"
-              style={{ padding: "10px 30px" }}
-            >
-              SUBMIT
-            </ButtonComponent>
-          </div>
+          {!loading && !fetchError && (
+            <div className="flex justify-center mt-8 gap-4">
+              <ButtonComponent
+                fullWidth={false}
+                radius={6}
+                borderColor="#fff"
+                variant="filled"
+                type="submit"
+                disabled={isSubmitting || isActionDisabled}
+                bgColor="#C30305"
+                textColor="#FFFFFF"
+                style={{ padding: "10px 30px" }}
+                onClick={() => setSelectedAction("REJECTED")}
+              >
+                REJECT
+              </ButtonComponent>
+
+              <ButtonComponent
+                fullWidth={false}
+                radius={6}
+                borderColor="#fff"
+                variant="filled"
+                type="submit"
+                bgColor="#C30305"
+                disabled={isSubmitting || isActionDisabled}
+                textColor="#FFFFFF"
+                style={{ padding: "10px 30px" }}
+                onClick={() => setSelectedAction("APPROVED")}
+              >
+                APPROVED
+              </ButtonComponent>
+            </div>
+          )}
         </Form>
       </Formik>
     </div>

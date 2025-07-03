@@ -8,56 +8,81 @@ import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { useAppDispatch } from "../../Redux/hooks";
 import {
   initialValues,
+  MASTER_KEY,
+  MASTER_URL,
   OperatorFormType,
+  transformFormToCreateOperatorPayload,
+  transformFormToUpdateOperatorPayload,
+  transformOperatorToFormData,
   validationSchema,
 } from "../../Config/Master/OperatorConfig";
-import {
-  handleOperatorFormSubmit,
-  transformOperatorToFormData,
-} from "../../Redux/Features/Masters/OperatorMaster/utils";
-import { clearSelectedOperator } from "../../Redux/Features/Masters/OperatorMaster/slice";
-import { fetchOperatorById } from "../../Redux/Features/Masters/OperatorMaster/thunks";
 import { booleanSelectData } from "../../Utils/utils";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
+import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import { toast } from "react-toastify";
+import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 
-const OperatorForm = ({ mode }: { mode: string }) => {
+type OperatorFormProps = { mode: "add" | "edit" };
+
+const OperatorForm = ({ mode }: OperatorFormProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedOperator } = useAppSelector(
-    (state) => state.masters.operator
-  );
 
   const [formData, setFormData] = useState<OperatorFormType>(initialValues);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = (values: OperatorFormType) => {
-    handleOperatorFormSubmit(mode, id, values, dispatch, navigate, setFormData);
-  };
+  const handleSubmit = useThrottleMasterFormSubmit<OperatorFormType>({
+    mode,
+    id,
+    dispatch,
+    navigate,
+    resetFormData: () => setFormData(initialValues),
+    masterKey: MASTER_KEY,
+    masterUrl: MASTER_URL,
+    transformCreatePayload: transformFormToCreateOperatorPayload,
+    transformUpdatePayload: transformFormToUpdateOperatorPayload,
+    successNavigatePath: "/master/operator",
+    entityName: "Operators",
+  });
 
-  // Fetch Data by Id when Edit
   useEffect(() => {
-    if (mode === "edit" && id) {
-      dispatch(fetchOperatorById(id));
-    }
+    const fetchAndSet = async () => {
+      if (mode === "edit" && id) {
+        setLoading(true);
+        setFetchError(null);
+        try {
+          const data = await dispatch(
+            fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
+          ).unwrap();
 
-    return () => {
-      // Only clear form and selected Operator on unmount in "edit" mode
-      if (mode === "edit") {
-        setFormData(initialValues); // Reset form data on unmount
-        dispatch(clearSelectedOperator()); // Reset selected Operator in the store
+          setFormData(transformOperatorToFormData(data));
+        } catch (err: any) {
+          toast.error(err);
+          setFetchError(err);
+          setTimeout(() => {
+            navigate("/master/operator");
+          }, 2000);
+        }
+        finally {
+          setLoading(false);
+        }
       }
     };
-  }, [id, dispatch, mode]);
 
-  // Set data to the form when Edit Mode
-  useEffect(() => {
-    if (selectedOperator && mode === "edit") {
-      setFormData(transformOperatorToFormData(selectedOperator));
-    }
-  }, [selectedOperator, mode]);
+    fetchAndSet();
+
+    return () => {
+      // Only clear form and selected product on unmount in "edit" mode
+      if (mode === "edit") {
+        setFormData(initialValues); // Reset form data on unmount
+      }
+    };
+  }, [dispatch, id, mode]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
@@ -187,20 +212,21 @@ const OperatorForm = ({ mode }: { mode: string }) => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikSelectComponent
-                    name="isActive"
-                    label="Is Active"
-                    allowDeselect={false}
-                    placeholder="Select Is Active"
-                    withAsterisk
-                    data={booleanSelectData}
-                  />
-                </Grid.Col>
+                {mode === "edit" &&
+                  <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                    <FormikSelectComponent
+                      name="isActive"
+                      label="Is Active"
+                      allowDeselect={false}
+                      placeholder="Select Is Active"
+                      withAsterisk
+                      data={booleanSelectData}
+                    />
+                  </Grid.Col>}
               </Grid>
 
               <div className="flex justify-end mt-4">
-                <ButtonComponent
+                {!loading && !fetchError && <ButtonComponent
                   fullWidth={false}
                   radius={6}
                   borderColor="#fff"
@@ -211,7 +237,7 @@ const OperatorForm = ({ mode }: { mode: string }) => {
                   style={{ padding: "10px 30px" }}
                 >
                   SUBMIT
-                </ButtonComponent>
+                </ButtonComponent>}
               </div>
             </Form>
           );

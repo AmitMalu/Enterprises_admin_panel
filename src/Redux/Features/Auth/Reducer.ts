@@ -46,11 +46,6 @@ const authReducer = createSlice({
         state.error = null;
 
         if (otpFor === "login") {
-          const username = action?.meta?.arg?.username;
-          if (username) {
-            state.user = username;
-            localStorage.setItem("username", username);
-          }
           localStorage.setItem("token", token);
         }
       })

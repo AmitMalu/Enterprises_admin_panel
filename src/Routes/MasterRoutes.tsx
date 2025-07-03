@@ -1,21 +1,17 @@
 import { Route } from "react-router-dom";
 import {
-  ApiMaster,
   BankMaster,
   BusinessMaster,
   CountryMaster,
-  DropdownMaster,
   KycMaster,
   OperatorMaster,
   PaymentMaster,
   ProductMaster,
   ProfileMaster,
   RegistrationMaster,
-  ServiceConfigurationMaster,
   SubOperatorMaster,
   SubProductMaster,
-  SystemConfigurationMaster,
-  TaxMaster,
+  PincodeMaster,
   TicketMaster,
   UserConfigurationMaster,
   VendorMaster,
@@ -27,7 +23,10 @@ import OperatorForm from "../Components/Organisms/OperatorForm";
 import ProductForm from "../Components/Organisms/ProductForm";
 import SubOperatorForm from "../Components/Organisms/SubOperatorForm";
 import BankMasterForm from "../Components/Organisms/BankMasterForm";
-import DropdownMasterForm from "../Components/Organisms/DropdownMasterForm";
+import MainMaster from "../Pages/Master/MainMaster";
+import MainMasterForm from "../Components/Organisms/MainMasterForm";
+import SubMaster from "../Pages/Master/SubMaster";
+import SubMasterForm from "../Components/Organisms/SubMasterForm";
 
 export const MasterRoutes = (
   <>
@@ -68,34 +67,26 @@ export const MasterRoutes = (
       path="/master/vendor/edit/:id"
       element={<VendorForm mode="edit" />}
     />
-    <Route path="/master/bank" element={<BankMaster />} />
-    <Route path="/master/bank/add" element={<BankMasterForm mode="add" />} />
+    <Route path="/master/banks" element={<BankMaster />} />
+    <Route path="/master/banks/add" element={<BankMasterForm mode="add" />} />
     <Route
-      path="/master/bank/edit/:id"
+      path="/master/banks/edit/:id"
       element={<BankMasterForm mode="edit" />}
     />
-    <Route path="/master/dropdown" element={<DropdownMaster />} />
-    <Route
-      path="/master/dropdown/add"
-      element={<DropdownMasterForm mode="add" />}
-    />
-    <Route
-      path="/master/dropdown/edit"
-      element={<DropdownMasterForm mode="edit" />}
-    />
+    <Route path="/master/main" element={<MainMaster />} />
+    <Route path="/master/main/add" element={<MainMasterForm mode="add" />} />
+    {/* <Route path="/master/main/edit/:id" element={<MainMasterForm mode="edit" />} /> */}
+
+    <Route path="/master/sub-master" element={<SubMaster />} />
+    <Route path="/master/sub-master/add" element={<SubMasterForm mode="add" />} />
+    {/* <Route path="/master/sub-master/edit/:id" element={<MainMasterForm mode="edit" />} /> */}
     <Route path="/master/country" element={<CountryMaster />} />
     <Route
       path="/master/user-configuration"
       element={<UserConfigurationMaster />}
     />
-    <Route
-      path="/master/system-configuration"
-      element={<SystemConfigurationMaster />}
-    />
     <Route path="/master/wallet" element={<WalletMaster />} />
-    <Route path="/master/tax" element={<TaxMaster />} />
-    <Route path="/master/api" element={<ApiMaster />} />
-    <Route path="/master/service" element={<ServiceConfigurationMaster />} />
+    <Route path="/master/pincode" element={<PincodeMaster />} />
     <Route path="/master/ticket" element={<TicketMaster />} />
     <Route path="/master/profile" element={<ProfileMaster />} />
     <Route path="/master/kyc" element={<KycMaster />} />

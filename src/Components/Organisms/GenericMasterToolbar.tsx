@@ -11,7 +11,7 @@ import { GenericTableHeader } from "../../Utils/utils";
 import ColumnVisibilityMenu from "../Molecules/ColumnVisibilityMenu";
 
 type GenericMasterToolbarProps = {
-  addButtonText: string;
+  addButtonText?: string;
   onAdd?: () => void;
   onExport?: () => void;
   onFilter?: () => void;
@@ -36,18 +36,20 @@ const GenericMasterToolbar = ({
       <div className="flex justify-between mt-2">
         {/* Add Button */}
         <div className="flex items-end">
-          <ButtonComponent
-            style={{ padding: "4px 8px", height: 32, margin: 0 }}
-            radius={1}
-            onClick={onAdd}
-            textColor="#fff"
-            fontSize="14"
-            bgColor="#BF0204"
-            borderColor="#FFFFFF"
-            leftIcon={<AddIconSvg />}
-          >
-            {addButtonText}
-          </ButtonComponent>
+          {addButtonText && (
+            <ButtonComponent
+              style={{ padding: "4px 8px", height: 32, margin: 0 }}
+              radius={1}
+              onClick={onAdd}
+              textColor="#fff"
+              fontSize="14"
+              bgColor="#BF0204"
+              borderColor="#FFFFFF"
+              leftIcon={<AddIconSvg />}
+            >
+              {addButtonText}
+            </ButtonComponent>
+          )}
         </div>
 
         {/*Table Controls */}
@@ -59,6 +61,7 @@ const GenericMasterToolbar = ({
             textColor="#000000"
             borderColor="#CACACA"
             fontSize="16"
+            throttleMs={0}
             bgColor="#ffffff"
             onClick={onFilter}
             leftIcon={<FilterIcon />}
@@ -73,6 +76,7 @@ const GenericMasterToolbar = ({
             textColor="#000000"
             borderColor="#CACACA"
             fontSize="16"
+            throttleMs={5000}
             bgColor="#ffffff"
             onClick={onExport}
             leftIcon={<DownloadIcon />}
@@ -94,6 +98,7 @@ const GenericMasterToolbar = ({
             textColor="#000000"
             bgColor="#ffffff"
             fontSize="16"
+            throttleMs={5000}
             borderColor="#CACACA"
             leftIcon={<RefreshIcon />}
             onClick={onRefresh}

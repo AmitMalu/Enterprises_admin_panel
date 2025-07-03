@@ -1,6 +1,10 @@
 import * as Yup from "yup";
 import { textField, websiteValidation } from "../../Utils/ValidationUtils";
-import { GenericTableHeader } from "../../Utils/utils";
+import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
+import { API_ENDPOINTS } from "../Api/EndPoints";
+
+export const MASTER_KEY = "vendor";
+export const MASTER_URL = API_ENDPOINTS.MASTER.VENDOR; 
 
 export type VendorFormType = {
   vendorName: string;
@@ -15,7 +19,6 @@ export type VendorFormType = {
   logo?: string;
   parameter?: string;
 };
-
 export interface VendorTableType extends VendorFormType {
   id: string;
   productCode: string;
@@ -25,6 +28,36 @@ export interface VendorTableType extends VendorFormType {
   editedBy?: string;
   editedOn?: string;
 }
+
+export interface CreateVendorPayload extends VendorFormType {
+  vendorAccount: {
+    transactionRateType: "Slab";
+    transactionRate: 6.5;
+    accVerificationCharges: 17.0;
+    apiCharges: 9.0;
+    bankCharges: 17.0;
+    gst: 19.0;
+  };
+  createdBy: string;
+}
+
+export interface UpdateVendorPayload extends VendorFormType {
+  vendorAccount: {
+    transactionRateType: "Slab";
+    transactionRate: 6.5;
+    accVerificationCharges: 17.0;
+    apiCharges: 9.0;
+    bankCharges: 17.0;
+    gst: 19.0;
+  };
+  editedBy: string;
+}
+
+export type FetchVendorParams = {
+  page: number;
+  size: number;
+  filter?: { key: string; value: string | boolean } | null;
+};
 
 export const initialValues: VendorFormType = {
   vendorName: "",
@@ -45,7 +78,7 @@ export const validationSchema: Record<keyof VendorFormType, Yup.AnySchema> = {
   vendorCode: textField("Vendor Code", 50, true),
   productId: textField("Product Id", 20, true),
   subProductId: textField("Sub Product Id", 20, true),
-  modesSupported: textField("Mode Supported", 50, true),
+  modesSupported: textField("Mode Supported", 50, true, true),
   priority: textField("Priority", 50, true),
   isActive: Yup.boolean().required("Is Active is required"),
   bankType: textField("BankType", 50, true),
@@ -71,39 +104,78 @@ export const headers: GenericTableHeader<VendorTableType>[] = [
   { key: "editedBy", label: "Edited By", filterType: "text" },
 ];
 
-// export const data: VendorType[] = [
-//   {
-//     id: "201",
-//     productId: "PID-001",
-//     productName: "TravelCard",
-//     vendorName: "Vendor One",
-//     vendorCode: "V001",
-//     subProductId: "SPID-01",
-//     subProductCode: "CARD-T001",
-//     modesSupported: "Online, NFC",
-//     priority: "High",
-//     isActive: true,
-//     blanks: "abc",
-//     createdOn: moment().format("2024-09-23"),
-//     createdBy: "Admin",
-//     editedOn: moment().format("2025-01-22"),
-//     editedBy: "Editor1",
-//   },
-//   {
-//     id: "202",
-//     productId: "PID-002",
-//     productName: "GiftCard",
-//     vendorName: "Vendor Two",
-//     vendorCode: "V002",
-//     subProductId: "SPID-02",
-//     subProductCode: "CARD-G002",
-//     modesSupported: "Online",
-//     priority: "Medium",
-//     isActive: false,
-//     blanks: "",
-//     createdOn: moment().format("2024-02-15"),
-//     createdBy: "System",
-//     editedOn: moment().format("2024-04-20"),
-//     editedBy: "Editor2",
-//   },
-// ];
+export const mapToVendorTableType = (
+  raw: Record<string, any>
+): VendorTableType => {
+  return {
+    id: raw.id ?? "",
+    vendorName: raw.vendorName ?? "",
+    vendorCode: raw.vendorCode ?? "",
+    productId: raw.productId ?? "",
+    productCode: raw.productCode ?? "",
+    subProductId: raw.subProductId ?? "",
+    subProductCode: raw.subProductCode ?? "",
+    modesSupported: raw.modesSupported ?? "",
+    priority: String(raw.priority) ?? "1",
+    isActive: !!raw.isActive,
+    bankType: raw.bankType ?? "public",
+    website: raw.website ?? "",
+    logo: raw.logo ?? "",
+    parameter: raw.parameter ?? "",
+    createdBy: raw.createdBy ?? "",
+    createdOn: formatDateTime(raw.createdOn) ?? "",
+    editedBy: raw.editedBy ?? "",
+    editedOn: formatDateTime(raw.editedOn) ?? "",
+  };
+};
+
+// Convert API response to Formik-compatible form data
+export const transformVendorToFormData = (
+  raw: Record<string, any>
+): VendorFormType => ({
+  vendorName: raw.vendorName ?? "",
+  vendorCode: raw.vendorCode ?? "",
+  productId: raw.productId ?? "",
+  subProductId: raw.subProductId ?? "",
+  modesSupported: raw.modesSupported ?? "",
+  priority: String(raw.priority) ?? "1",
+  isActive: !!raw.isActive,
+  bankType: raw.bankType ?? "public",
+  website: raw.website ?? "",
+  logo: raw.logo ?? "",
+  parameter: raw.parameter ?? "",
+});
+
+// Transform form data to Create payload
+export const transformFormToCreateVendorPayload = (
+  formData: VendorFormType
+): CreateVendorPayload => ({
+  ...formData,
+  vendorAccount: {
+    transactionRateType: "Slab",
+    transactionRate: 6.5,
+    accVerificationCharges: 17.0,
+    apiCharges: 9.0,
+    bankCharges: 17.0,
+    gst: 19.0,
+  },
+  priority: Number(formData.priority) ?? 1,
+  createdBy: localStorage.getItem("username") || "system",
+});
+
+// Transform form data to Update payload
+export const transformFormToUpdateVendorPayload = (
+  formData: VendorFormType
+): UpdateVendorPayload => ({
+  ...formData,
+  vendorAccount: {
+    transactionRateType: "Slab",
+    transactionRate: 6.5,
+    accVerificationCharges: 17.0,
+    apiCharges: 9.0,
+    bankCharges: 17.0,
+    gst: 19.0,
+  },
+  priority: Number(formData.priority) ?? 1,
+  editedBy: localStorage.getItem("username") || "system",
+});

@@ -1,5 +1,6 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useMemo } from "react";
 import { Button } from "@mantine/core";
+import throttle from "lodash.throttle";
 
 interface ButtonComponentProps {
   onClick?: () => void;
@@ -20,6 +21,7 @@ interface ButtonComponentProps {
   style?: React.CSSProperties; // Add this line for custom inline styles
   font?: string;
   fontSize?: string;
+  throttleMs?: number; // Add optional throttle delay (ms)
   fw?: string;
 }
 
@@ -44,17 +46,31 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
       font = "",
       fw = "500",
       fontSize = "",
+      throttleMs = 1000, // default 1 second throttle
       style = {}, // Default empty object for custom inline styles
     },
     ref
   ) => {
     const isStringChild = typeof children === "string";
 
+    const throttledOnClick = useMemo(() => {
+      if (!onClick) return undefined;
+
+      // Create a throttled wrapper only once per component lifetime
+      const throttled = throttle(() => {
+        onClick();
+      }, throttleMs, { trailing: false });
+
+      // Cleanup on unmount
+      return throttled;
+      // Note: DO NOT include `onClick` in dependencies
+    }, [throttleMs]);
+
     return (
       <Button
         ref={ref} // ← critical for positioning
         type={type}
-        onClick={onClick}
+        onClick={throttledOnClick}
         variant={variant}
         leftSection={leftIcon}
         rightSection={rightIcon}
