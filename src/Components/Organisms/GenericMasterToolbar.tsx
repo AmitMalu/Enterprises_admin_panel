@@ -1,69 +1,38 @@
+import { Checkbox, Menu, ScrollArea } from "@mantine/core";
 import {
   AddIconSvg,
   ColIcon,
   DownloadIcon,
-  DropDownArrowIcon,
   FilterIcon,
-  GridIcon,
   RefreshIcon,
-  SettingIcon,
 } from "../../assets/Icons";
 import ButtonComponent from "../Atoms/ButtonComponent";
-import TextInputComponent from "../Atoms/TextInputComponent";
+import { GenericTableHeader } from "../../Utils/utils";
+import ColumnVisibilityMenu from "../Molecules/ColumnVisibilityMenu";
 
 type GenericMasterToolbarProps = {
   addButtonText: string;
   onAdd?: () => void;
-  onSearchChange?: (value: string) => void;
-  searchValue?: string;
   onExport?: () => void;
   onFilter?: () => void;
   onRefresh?: () => void;
-  onGridView?: () => void;
-  onColumnView?: () => void;
-  onSettings?: () => void;
+  onColumnChange?: (key: string) => void;
+  headers?: GenericTableHeader<any>[];
+  visibleColumns?: string[];
 };
 
 const GenericMasterToolbar = ({
   addButtonText,
   onAdd,
-  onSearchChange,
-  searchValue = "",
   onExport,
   onFilter,
   onRefresh,
-  onGridView,
-  onColumnView,
-  onSettings,
+  onColumnChange,
+  headers,
+  visibleColumns,
 }: GenericMasterToolbarProps) => {
   return (
     <>
-      {/* Refresh Icon and Search */}
-      <div className="flex justify-end items-center gap-2 mt-2">
-        {/* Refresh Icon */}
-        <ButtonComponent
-          style={{ height: 40, width: 10, paddingLeft: "28px" }}
-          radius={1}
-          textColor="#000000"
-          bgColor="#ffffff"
-          borderColor="#CACACA"
-          leftIcon={<RefreshIcon />}
-          onClick={onRefresh}
-        >
-          <></>
-        </ButtonComponent>
-
-        {/* Search Input */}
-        <TextInputComponent
-          size="md"
-          type="text"
-          placeholder="Search"
-          name="search"
-          value={searchValue}
-          onChange={(e) => onSearchChange?.(e.target.value)}
-        />
-      </div>
-
       <div className="flex justify-between mt-2">
         {/* Add Button */}
         <ButtonComponent
@@ -106,43 +75,24 @@ const GenericMasterToolbar = ({
             Export
           </ButtonComponent>
 
-          {/* Grid Icon  */}
+          {/* Col Icon */}
+          <ColumnVisibilityMenu
+            headers={headers || []}
+            visibleColumns={visibleColumns || []}
+            onToggleColumn={onColumnChange ?? (() => {})}
+          />
+
+          {/* Refresh Icon */}
           <ButtonComponent
             style={{ height: 36, width: 10, paddingLeft: "28px" }}
             radius={1}
             textColor="#000000"
-            borderColor="#CACACA"
             bgColor="#ffffff"
-            onClick={onGridView}
-            leftIcon={<GridIcon />}
+            borderColor="#CACACA"
+            leftIcon={<RefreshIcon />}
+            onClick={onRefresh}
           >
             <></>
-          </ButtonComponent>
-
-          {/* Col Icon */}
-          <ButtonComponent
-            style={{ padding: "5px 10px", height: 36 }}
-            radius={1}
-            textColor="#000000"
-            borderColor="#CACACA"
-            bgColor="#ffffff"
-            onClick={onColumnView}
-            leftIcon={<ColIcon />}
-          >
-            Cols
-          </ButtonComponent>
-
-          {/* Setting Icon */}
-          <ButtonComponent
-            style={{ height: 36, padding: "5px" }}
-            radius={1}
-            textColor="#000000"
-            borderColor="#CACACA"
-            bgColor="#ffffff"
-            onClick={onSettings}
-            leftIcon={<SettingIcon />}
-          >
-            <DropDownArrowIcon />
           </ButtonComponent>
         </div>
       </div>

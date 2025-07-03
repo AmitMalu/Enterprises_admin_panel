@@ -12,6 +12,7 @@ interface TextInputComponentProps {
   value: string;
   oneTimeCode?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   error?: string | boolean;
   required?: boolean;
   maxLength?: number;
@@ -40,6 +41,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
   placeholder,
   value,
   onChange,
+  onKeyDown,
   error,
   required = false,
   maxLength,
@@ -114,6 +116,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     placeholder,
     value,
     onChange: handleChange,
+    onKeyDown,
     onFocus: () => setIsFocused(true),
     onBlur: () => setIsFocused(false),
     error: typeof error === "string" ? true : !!error,

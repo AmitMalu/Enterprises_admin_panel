@@ -84,7 +84,7 @@ export type FieldNames = keyof typeof masterInitialValues;
 
 export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   //common fields
-  parentAccount: textField("Parent Account", 50, true),
+  parentAccount: textField("Parent Account", 50, true, true),
   title: textField("Title", 50, true),
   prefix: prefixValidation,
   name: textField("Name", 50, true),

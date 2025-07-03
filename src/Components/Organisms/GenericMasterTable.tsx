@@ -1,17 +1,42 @@
-import { Table, Tooltip } from "@mantine/core";
+import { Table } from "@mantine/core";
 import React from "react";
-import { ellipsisCellStyle } from "../../Utils/utils";
+import { GenericTableHeader } from "../../Utils/utils";
+import TableFilterRow from "../Molecules/TableFilterRow";
+import TableBody from "./TableBody";
+import TableFooter from "./TableFooter";
 
-type Header<T> = {
-  key: keyof T;
-  label?: string; // Optional to allow blank header (e.g., for actions)
+const thStyle = {
+  backgroundColor: "#BF0204",
+  color: "white",
+  textAlign: "center" as const,
+  padding: "6px 12px",
+  fontWeight: 600,
+  fontSize: 14,
+  whiteSpace: "nowrap", // prevent wrapping
+};
+const tdStyle = {
+  textAlign: "center" as const,
+  fontSize: 14,
+  padding: "4px",
 };
 
 type GenericMasterTableProps<T> = {
   data: T[];
-  headers: Header<T>[];
+  headers: GenericTableHeader<T>[];
   renderExtraHeader?: () => React.ReactNode;
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
+  pagination?: boolean;
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  pageSize?: number;
+  onPageSizeChange?: (size: number) => void;
+  pageSizeOptions?: { label: string; value: string }[];
+  message?: string;
+  filterVisible?: boolean;
+  onFilterChange?: (key: string, value: any) => void;
+  filterValues?: Record<string, any>;
+  onFilterSubmit?: (key: string, value: any) => void;
 };
 
 const GenericMasterTable = <T,>({
@@ -19,6 +44,18 @@ const GenericMasterTable = <T,>({
   headers,
   renderExtraHeader,
   renderExtraRowCell,
+  currentPage,
+  totalPages,
+  onPageChange,
+  pagination = false,
+  pageSize = 5,
+  onPageSizeChange,
+  pageSizeOptions,
+  message,
+  filterVisible = false,
+  onFilterChange,
+  filterValues,
+  onFilterSubmit,
 }: GenericMasterTableProps<T>) => {
   return (
     <Table.ScrollContainer minWidth={1600} className="mt-4">
@@ -28,20 +65,8 @@ const GenericMasterTable = <T,>({
         highlightOnHover
         style={{ borderRadius: 8, overflow: "hidden" }}
         styles={{
-          th: {
-            backgroundColor: "#BF0204",
-            color: "white",
-            textAlign: "center",
-            padding: "6px 12px",
-            fontWeight: 600,
-            fontSize: 14,
-            whiteSpace: "nowrap", // prevent wrapping
-          },
-          td: {
-            textAlign: "center",
-            fontSize: 14,
-            padding: "4px",
-          },
+          th: thStyle,
+          td: tdStyle,
         }}
       >
         <Table.Thead>
@@ -54,35 +79,37 @@ const GenericMasterTable = <T,>({
         </Table.Thead>
 
         <Table.Tbody>
-          {data?.length > 0 ? (
-            data.map((item, index) => (
-              <Table.Tr key={index}>
-                {renderExtraRowCell && (
-                  <Table.Td>{renderExtraRowCell(item, index)}</Table.Td>
-                )}
-                {headers.map(({ key }) => (
-                  <Table.Td key={String(key)} style={ellipsisCellStyle}>
-                    <Tooltip
-                      arrowPosition="side"
-                      arrowSize={5}
-                      position="top-start"
-                      label={String(item[key])}
-                      withArrow
-                    >
-                      <span>{String(item[key])}</span>
-                    </Tooltip>
-                  </Table.Td>
-                ))}
-              </Table.Tr>
-            ))
-          ) : (
-            <Table.Tr>
-              <Table.Td colSpan={headers.length + (renderExtraRowCell ? 1 : 0)}>
-                No data available
-              </Table.Td>
-            </Table.Tr>
+          {/* Filter Row */}
+          {filterVisible && (
+            <TableFilterRow
+              headers={headers}
+              filterValues={filterValues || []}
+              onFilterChange={onFilterChange}
+              onFilterSubmit={onFilterSubmit}
+              renderExtraRowCell={renderExtraRowCell}
+            />
           )}
+
+          <TableBody
+            data={data}
+            headers={headers}
+            renderExtraRowCell={renderExtraRowCell}
+          />
         </Table.Tbody>
+
+        {pagination && data?.length > 0 && (
+          <TableFooter
+            headersLength={headers.length}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+            pageSize={pageSize}
+            onPageSizeChange={onPageSizeChange}
+            pageSizeOptions={pageSizeOptions}
+            message={message}
+            renderExtraRowCell={!!renderExtraRowCell}
+          />
+        )}
       </Table>
     </Table.ScrollContainer>
   );

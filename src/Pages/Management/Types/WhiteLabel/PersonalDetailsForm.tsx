@@ -4,12 +4,9 @@ import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
 import FormikSwitchComponent from "../../../../Components/Molecules/FormikSwitchComponent";
 import FormikSelectComponent from "../../../../Components/Molecules/FormikSelectComponent";
+import { booleanSelectData } from "../../../../Utils/utils";
 
 const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
-  const booleanSelectData = [
-    { label: "Yes", value: "true" },
-    { label: "No", value: "false" },
-  ];
 
   return (
     <>

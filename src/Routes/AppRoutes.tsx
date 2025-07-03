@@ -13,11 +13,12 @@ import PreFundingAuth from "../Pages/Funding/PreFundingAuth";
 import PrefundingForm from "../Components/Organisms/PrefundingForm";
 import SchemesList from "../Pages/Schemes/SchemesList";
 import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
-import { OperatorMaster, ProductMaster, SubProductMaster, VendorMaster } from "../Pages/Master";
+import { OperatorMaster, ProductMaster, SubOperatorMaster, SubProductMaster, VendorMaster } from "../Pages/Master";
 import SubProductForm from "../Components/Organisms/SubProductForm";
 import VendorForm from "../Components/Organisms/VendorForm";
 import OperatorForm from "../Components/Organisms/OperatorForm";
 import ProductForm from "../Components/Organisms/ProductForm";
+import SubOperatorForm from "../Components/Organisms/SubOperatorForm";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
@@ -72,6 +73,18 @@ const AppRoutes = () => {
             <Route
               path="/master/operator-master/edit/:id"
               element={<OperatorForm mode="edit" />}
+            />
+            <Route
+              path="/master/sub-operator-master"
+              element={<SubOperatorMaster />}
+            />
+            <Route
+              path="/master/sub-operator-master/add"
+              element={<SubOperatorForm mode="add" />}
+            />
+            <Route
+              path="/master/sub-operator-master/edit/:id"
+              element={<SubOperatorForm mode="edit" />}
             />
 
             <Route path="/master/vendor-master" element={<VendorMaster />} />

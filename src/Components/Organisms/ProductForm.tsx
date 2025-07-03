@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
@@ -7,34 +7,53 @@ import * as Yup from "yup";
 import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
-import FormikSwitchComponent from "../../Components/Molecules/FormikSwitchComponent";
 import {
   initialValues,
+  ProductFormType,
   ProductType,
   validationSchema,
 } from "../../Config/Master/ProductConfig";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { fetchProductById } from "../../Redux/Features/Masters/ProductMaster/thunks";
+import {
+  handleProductFormSubmit,
+  transformProductToFormData,
+} from "../../Redux/Features/Masters/ProductMaster/utils";
+import { clearSelectedProduct } from "../../Redux/Features/Masters/ProductMaster/slice";
+import { booleanSelectData } from "../../Utils/utils";
 
 const ProductForm = ({ mode }: { mode: string }) => {
-  const { id } = useParams();
-  const location = useLocation();
-  const [formData, setFormData] = useState<ProductType>(initialValues);
-  const booleanSelectData = [
-    { label: "Yes", value: "true" },
-    { label: "No", value: "false" },
-  ];
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { selectedProduct } = useAppSelector((state) => state.masters.product);
 
-  const handleSubmit = (values: ProductType) => {
-    console.log("Submitted values:", values);
+  const [formData, setFormData] = useState<ProductFormType>(initialValues);
+
+  const handleSubmit = (values: ProductFormType) => {
+    handleProductFormSubmit(mode, id, values, dispatch, navigate, setFormData);
   };
 
   useEffect(() => {
-    if (mode === "edit") {
-      if (location.state) {
-        setFormData(location.state);
-      }
+    if (mode === "edit" && id) {
+      dispatch(fetchProductById(id));
     }
-  }, [id, location.state, mode]);
+
+    return () => {
+      // Only clear form and selected product on unmount in "edit" mode
+      if (mode === "edit") {
+        setFormData(initialValues); // Reset form data on unmount
+        dispatch(clearSelectedProduct()); // Reset selected product in the store
+      }
+    };
+  }, [id, dispatch, mode]);
+
+  useEffect(() => {
+    if (selectedProduct && mode === "edit") {
+      setFormData(transformProductToFormData(selectedProduct));
+    }
+  }, [selectedProduct, mode]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
@@ -53,17 +72,6 @@ const ProductForm = ({ mode }: { mode: string }) => {
       >
         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
           <Grid gutter="lg">
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="id"
-                label="Id"
-                disabled={mode === "edit" ? true : false}
-                placeholder="Enter ID"
-                withAsterisk
-                maxLength={50}
-              />
-            </Grid.Col>
-
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
                 name="name"
@@ -105,12 +113,12 @@ const ProductForm = ({ mode }: { mode: string }) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
+              <FormikSelectComponent
                 name="hasCharges"
                 label="Has Charges"
-                placeholder="Enter Charges Info"
+                placeholder="Select"
                 withAsterisk
-                maxLength={20}
+                data={booleanSelectData}
               />
             </Grid.Col>
 
@@ -165,32 +173,12 @@ const ProductForm = ({ mode }: { mode: string }) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
+              <FormikSelectComponent
                 name="reverseTx"
                 label="Reverse Tx"
-                placeholder="Enter Reverse Tx"
+                placeholder="Select Reverse Tx"
                 withAsterisk
-                maxLength={20}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="walletType"
-                label="Wallet Type"
-                placeholder="Enter Wallet Type"
-                withAsterisk
-                maxLength={30}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="subProducts"
-                label="Sub Products"
-                placeholder="Enter Sub Products"
-                withAsterisk
-                maxLength={50}
+                data={booleanSelectData}
               />
             </Grid.Col>
 
@@ -205,12 +193,12 @@ const ProductForm = ({ mode }: { mode: string }) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
+              <FormikSelectComponent
                 name="clusterMode"
                 label="Cluster Mode"
-                placeholder="Enter Cluster Mode"
+                placeholder="Select Cluster Mode"
                 withAsterisk
-                maxLength={30}
+                data={booleanSelectData}
               />
             </Grid.Col>
 

@@ -11,15 +11,15 @@ export const login = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.LOGIN,
-        payload, // No body, since we are sending query params
+        payload, // Sending payload as body
       );
       
-      if (response.data.statusCode == 200) {
-        return response.data;
+      if (response?.data?.statusCode == 200) {
+        return response?.data;
 
       } else {
         // If not 200, treat as failure
-        return rejectWithValue(response.data.message || "Login failed");
+        return rejectWithValue(response?.data?.message || "Login failed");
       }
     } catch (error: any) {
       return rejectWithValue(
@@ -38,14 +38,13 @@ export const otpVerify = createAsyncThunk(
         null, // No body, since we are sending query params
         {
           params: payload,
-          timeout: 10000, // 10 seconds timeout
         }
       );
-      if (response.data.statusCode == 200) {
-        return response.data;
+      if (response?.data?.statusCode == 200) {
+        return response?.data;
       } else {
         return rejectWithValue(
-          response.data.message || "OTP verification failed"
+          response?.data?.message || "OTP verification failed"
         );
       }
     } catch (error: any) {
@@ -67,7 +66,6 @@ export const resendOtp = createAsyncThunk(
         null, // No body, since we are sending query params
         {
           params: payload,
-          timeout: 10000, // 10 seconds timeout
         }
       );
       if (response.data.statusCode == 200) {
@@ -92,7 +90,6 @@ export const forgetPassword = createAsyncThunk(
         null, // No body, since we are sending query params
         {
           params: payload,
-          timeout: 10000, // 10 seconds timeout
         }
       );
       if (response.data.statusCode == 200) {

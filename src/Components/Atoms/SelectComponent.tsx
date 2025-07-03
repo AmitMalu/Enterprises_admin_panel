@@ -7,7 +7,7 @@ interface SelectComponentProps {
   label?: string;
   name: string;
   placeholder?: string;
-  value: string;
+  value: string | null;
   onChange: (value: string | null) => void;
   error?: string | boolean;
   required?: boolean;

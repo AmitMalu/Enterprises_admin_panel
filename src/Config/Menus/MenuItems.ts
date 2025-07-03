@@ -30,6 +30,11 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
+        label: "Sub-Operator Master",
+        link: "/master/sub-operator-master",
+        icon: userCreationSvg,
+      },
+      {
         label: "Vendor Master",
         link: "/master/vendor-master",
         icon: userCreationSvg,
