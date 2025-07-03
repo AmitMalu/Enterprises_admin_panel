@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { SubOperatorMasterState } from "./types";
 import {
-  createOperator,
-  fetchOperator,
-  fetchOperatorById,
-  updateOperator,
+  createSubOperator,
+  fetchSubOperator,
+  fetchSubOperatorById,
+  updateSubOperator,
 } from "./thunks";
-import { OperatorMasterState } from "./types";
 
-const initialState: OperatorMasterState = {
-  operators: [],
-  selectedOperator: null,
+const initialState: SubOperatorMasterState = {
+  subOperators: [],
+  selectedSubOperator: null,
   pagination: {
     totalPages: 0,
     totalElements: 0,
@@ -21,12 +21,12 @@ const initialState: OperatorMasterState = {
   loaded: false,
 };
 
-const operatorMasterSlice = createSlice({
+const subOperatorMasterSlice = createSlice({
   name: "operatorMaster",
   initialState,
   reducers: {
-    clearSelectedOperator(state) {
-      state.selectedOperator = null;
+    clearSelectedSubOperator(state) {
+      state.selectedSubOperator = null;
     },
     setCurrentPage(state, action: PayloadAction<number>) {
       state.pagination.currentPage = action.payload;
@@ -34,18 +34,33 @@ const operatorMasterSlice = createSlice({
     setPageSize(state, action: PayloadAction<number>) {
       state.pagination.pageSize = action.payload;
     },
+    setLoaded(state, action: PayloadAction<boolean>) {
+      state.loaded = action.payload;
+    },
+    resetAllStates(state) {
+      state.selectedSubOperator = null;
+      state.pagination = {
+        totalPages: 0,
+        totalElements: 0,
+        pageSize: 5,
+        currentPage: 1,
+      };
+      state.loading = false;
+      state.error = null;
+      state.loaded = false;
+    },
   },
   extraReducers: (builder) => {
     builder
 
-      // fetchOperator
-      .addCase(fetchOperator.pending, (state) => {
+      // fetchSubOperator
+      .addCase(fetchSubOperator.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchOperator.fulfilled, (state, action) => {
+      .addCase(fetchSubOperator.fulfilled, (state, action) => {
         const { content, totalPages, totalElements, size, number } =
           action.payload.data;
-        state.operators = content;
+        state.subOperators = content;
         state.pagination = {
           totalPages,
           totalElements,
@@ -56,32 +71,32 @@ const operatorMasterSlice = createSlice({
         state.loaded = true;
         state.error = null;
       })
-      .addCase(fetchOperator.rejected, (state, action) => {
-        state.operators = [];
+      .addCase(fetchSubOperator.rejected, (state, action) => {
+        state.subOperators = [];
         state.loading = false;
         state.error = action.payload as string;
       })
 
-      // fetchOperatorById
-      .addCase(fetchOperatorById.pending, (state) => {
+      // fetchSubOperatorById
+      .addCase(fetchSubOperatorById.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchOperatorById.fulfilled, (state, action) => {
-        state.selectedOperator = action.payload.data;
+      .addCase(fetchSubOperatorById.fulfilled, (state, action) => {
+        state.selectedSubOperator = action.payload.data;
         state.loading = false;
         state.error = null;
       })
-      .addCase(fetchOperatorById.rejected, (state, action) => {
-        state.selectedOperator = null;
+      .addCase(fetchSubOperatorById.rejected, (state, action) => {
+        state.selectedSubOperator = null;
         state.loading = false;
         state.error = action.payload as string;
       })
 
       // Update Operator
-      .addCase(updateOperator.pending, (state) => {
+      .addCase(updateSubOperator.pending, (state) => {
         state.loading = true;
       })
-      .addCase(updateOperator.fulfilled, (state) => {
+      .addCase(updateSubOperator.fulfilled, (state) => {
         // const updated = action?.payload?.data;
         // const index = state.operators.findIndex((p) => p.id === updated?.id);
         // if (index !== -1) {
@@ -90,26 +105,32 @@ const operatorMasterSlice = createSlice({
         state.loading = false;
         state.error = null;
       })
-      .addCase(updateOperator.rejected, (state, action) => {
+      .addCase(updateSubOperator.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
 
       // Create Operator
-      .addCase(createOperator.pending, (state) => {
+      .addCase(createSubOperator.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createOperator.fulfilled, (state) => {
+      .addCase(createSubOperator.fulfilled, (state) => {
         // state.operators.push(action.payload.data);
         state.loading = false;
       })
-      .addCase(createOperator.rejected, (state, action) => {
+      .addCase(createSubOperator.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
   },
 });
 
-export const { clearSelectedOperator, setCurrentPage, setPageSize } =
-  operatorMasterSlice.actions;
-export default operatorMasterSlice.reducer;
+export const {
+  clearSelectedSubOperator,
+  setCurrentPage,
+  setPageSize,
+  resetAllStates,
+  setLoaded,
+} = subOperatorMasterSlice.actions;
+
+export default subOperatorMasterSlice.reducer;

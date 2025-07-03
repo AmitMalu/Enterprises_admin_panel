@@ -13,7 +13,6 @@ import {
   SubProductFormType,
   validationSchema,
 } from "../../Config/Master/SubProductConfig";
-import { fetchDropDownForProducts } from "../../Redux/Features/Masters/ProductMaster/thunks";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { fetchSubProductById } from "../../Redux/Features/Masters/SubProductMaster/thunks";
 import { clearSelectedSubProduct } from "../../Redux/Features/Masters/SubProductMaster/slice";

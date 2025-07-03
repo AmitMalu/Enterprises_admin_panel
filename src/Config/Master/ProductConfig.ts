@@ -2,9 +2,9 @@ import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
 import { GenericTableHeader } from "../../Utils/utils";
 export interface ProductFormType {
-  name: "";
-  productCode: "";
-  productCodeForScheme: "";
+  name: string;
+  productCode: string;
+  productCodeForScheme: string;
   isShow: false;
   hasCharges: false;
   isCommissions: false;
@@ -15,7 +15,7 @@ export interface ProductFormType {
   reverseTx: false;
   // walletType: "",
   // subProducts: "",
-  productGroup: "";
+  productGroup: string;
   clusterMode: false;
   blocked: false;
   active: false;
@@ -70,7 +70,7 @@ export const validationSchema: Record<keyof ProductFormType, Yup.AnySchema> = {
 };
 
 export const headers: GenericTableHeader<ProductTableType>[] = [
-  { key: "id", label: "Id", filterType: "text", searchable : true },
+  { key: "id", label: "Id", filterType: "text", searchable: true },
   { key: "name", label: "Name", filterType: "text" },
   { key: "productCode", label: "Product Code", filterType: "text" },
   {

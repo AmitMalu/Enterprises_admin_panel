@@ -140,7 +140,7 @@ export const handleProductFormSubmit = async (
       const res = await dispatch(updateProduct({ id, data: payload })).unwrap();
       toast.success(res.message || "Product updated successfully");
       resetFormData(initialValues);
-      navigate("/master/product-master");
+      navigate("/master/product");
     } catch (err: any) {
       console.error("Update product failed:", err);
       toast.error(err || "Failed to update product");
@@ -151,7 +151,7 @@ export const handleProductFormSubmit = async (
       const res = await dispatch(createProduct(payload)).unwrap();
       toast.success(res.message || "Product created successfully");
       resetFormData(initialValues);
-      navigate("/master/product-master");
+      navigate("/master/product");
     } catch (err: any) {
       console.error("Create product failed:", err);
       toast.error(err || "Failed to create product");

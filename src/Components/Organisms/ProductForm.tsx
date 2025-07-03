@@ -10,7 +10,6 @@ import FormikTextInputComponent from "../../Components/Molecules/FormikTextInput
 import {
   initialValues,
   ProductFormType,
-  ProductType,
   validationSchema,
 } from "../../Config/Master/ProductConfig";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";

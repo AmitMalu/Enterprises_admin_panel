@@ -1,32 +1,26 @@
 import { NavigateFunction } from "react-router-dom";
-import {
-  initialValues,
-  OperatorFormType,
-  OperatorTableType,
-} from "../../../../Config/Master/OperatorConfig";
 import { formatDateTime } from "../../../../Utils/utils";
 import { AppDispatch } from "../../../Store/store";
-import { CreateOperatorPayload, UpdateOperatorPayload } from "./types";
-import { createOperator, updateOperator } from "./thunks";
 import { toast } from "react-toastify";
+import {
+  initialValues,
+  SubOperatorFormType,
+  SubOperatorTableType,
+} from "../../../../Config/Master/SubOperatorConfig";
+import { CreateSubOperatorPayload, UpdateSubOperatorPayload } from "./types";
+import { createSubOperator, updateSubOperator } from "./thunks";
 
 // Convert raw API response to OperatorTableType (for table display)
-export const mapToOperatorTableType = (
+export const mapToSubOperatorTableType = (
   raw: Record<string, any>
-): OperatorTableType => {
+): SubOperatorTableType => {
   return {
     id: raw.id ?? "",
-    operatorCategory: raw.operatorCategory ?? "",
+    subOperatorName: raw.subOperatorName ?? "",
     operatorCode: raw.operatorCode ?? "",
-    operatorName: raw.operatorName ?? "",
     operatorAlias: raw.operatorAlias ?? "",
-    alias: raw.alias ?? "",
-    productCode: raw.productCode ?? "",
-    productId: raw.productId ?? "",
-    subProductCode: raw.subProductCode ?? "",
-    subProductId: raw.subProductId ?? "",
-    cardBinNo: raw.cardBinNo ?? "",
-    isActive: !!raw.isActive,
+    category: raw.category ?? "",
+    isBlocked: !!raw.isBlocked,
     createdBy: raw.createdBy ?? "",
     createdOn: formatDateTime(raw.createdOn) ?? "",
     editedBy: raw.editedBy ?? "",
@@ -35,67 +29,62 @@ export const mapToOperatorTableType = (
 };
 
 // Convert API response to Formik-compatible form data
-export const transformOperatorToFormData = (
+export const transformSubOperatorToFormData = (
   raw: Record<string, any>
-): OperatorFormType => ({
-  operatorCategory: raw.operatorCategory ?? "",
+): SubOperatorFormType => ({
+  subOperatorName: raw.subOperatorName ?? "",
   operatorCode: raw.operatorCode ?? "",
-  operatorName: raw.operatorName ?? "",
-  operatorAlias: raw.operatorAlias ?? "",
-  alias: raw.alias ?? "",
-  productId: String(raw.productId),
-  subProductId: String(raw.subProductId),
-  cardBinNo: raw.cardBinNo ?? "",
-  isActive: !!raw.isActive,
+  category: raw.category ?? "",
+  isBlocked: raw.isBlocked ?? false,
 });
 
 // Transform form data to Create payload
-export const transformFormToCreateOperatorPayload = (
-  formData: OperatorFormType
-): CreateOperatorPayload => ({
+export const transformFormToCreateSubOperatorPayload = (
+  formData: SubOperatorFormType
+): CreateSubOperatorPayload => ({
   ...formData,
   createdBy: localStorage.getItem("username") || "system",
 });
 
 // Transform form data to Update payload
-export const transformFormToUpdateOperatorPayload = (
-  formData: OperatorFormType
-): UpdateOperatorPayload => ({
+export const transformFormToUpdateSubOperatorPayload = (
+  formData: SubOperatorFormType
+): UpdateSubOperatorPayload => ({
   ...formData,
   editedBy: localStorage.getItem("username") || "system",
 });
 
-export const handleOperatorFormSubmit = async (
+export const handleSubOperatorFormSubmit = async (
   mode: string,
   id: string | undefined,
-  values: OperatorFormType,
+  values: SubOperatorFormType,
   dispatch: AppDispatch,
   navigate: NavigateFunction,
-  resetFormData: (form: OperatorFormType) => void
+  resetFormData: (form: SubOperatorFormType) => void
 ) => {
   if (mode === "edit" && id) {
-    const payload = transformFormToUpdateOperatorPayload(values);
     try {
+      const payload = transformFormToUpdateSubOperatorPayload(values);
       const res = await dispatch(
-        updateOperator({ id, data: payload })
+        updateSubOperator({ id, data: payload })
       ).unwrap();
-      toast.success(res.message || "Operator updated successfully");
+      toast.success(res.message || "Sub Operator updated successfully");
       resetFormData(initialValues);
-      navigate("/master/operator-master");
+      navigate("/master/sub-operator");
     } catch (err: any) {
-      toast.error(err || "Failed to update operator");
-      console.error("Update Operator failed:", err);
+      toast.error(err || "Failed to update Sub Operator");
+      console.error("Update Sub Operator failed:", err);
     }
   } else {
-    const payload = transformFormToCreateOperatorPayload(values);
     try {
-      const res = await dispatch(createOperator(payload)).unwrap();
-      toast.success(res.message || "Operator created successfully");
+      const payload = transformFormToCreateSubOperatorPayload(values);
+      const res = await dispatch(createSubOperator(payload)).unwrap();
+      toast.success(res.message || "Sub Operator created successfully");
       resetFormData(initialValues);
-      navigate("/master/operator-master");
+      navigate("/master/sub-operator");
     } catch (err: any) {
-      toast.error(err || "Failed to create operator");
-      console.error("Create Operator failed:", err);
+      toast.error(err || "Failed to create Sub Operator");
+      console.error("Create Sub Operator failed:", err);
     }
   }
 };

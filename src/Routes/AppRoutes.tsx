@@ -1,24 +1,20 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthLayout from "../Components/Layout/AuthLayout";
 import MainLayout from "../Components/Layout/MainLayout";
-import LoginPage from "../Pages/Auth/LoginPage";
-import OtpVerify from "../Pages/Auth/OtpVerify";
-import ForgetPassword from "../Pages/Auth/ForgetPassword";
-import SetPassword from "../Pages/Auth/SetPassword";
-import UserCreation from "../Pages/Management/UserCreation";
-import UserFormPage from "../Components/Organisms/UserFormPage";
 import ProtectedRoutes from "./ProtectedRoutes";
-import PreFundingAuth from "../Pages/Funding/PreFundingAuth";
-import PrefundingForm from "../Components/Organisms/PrefundingForm";
-import SchemesList from "../Pages/Schemes/SchemesList";
-import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
-import { OperatorMaster, ProductMaster, SubOperatorMaster, SubProductMaster, VendorMaster } from "../Pages/Master";
-import SubProductForm from "../Components/Organisms/SubProductForm";
-import VendorForm from "../Components/Organisms/VendorForm";
-import OperatorForm from "../Components/Organisms/OperatorForm";
-import ProductForm from "../Components/Organisms/ProductForm";
-import SubOperatorForm from "../Components/Organisms/SubOperatorForm";
+import { ReportRoutes } from "./ReportRoutes";
+import { AuthRoutes } from "./AuthRoutes";
+import { MasterRoutes } from "./MasterRoutes";
+import { FundingRoutes } from "./FundingRoutes";
+import { ManagementRoutes } from "./ManagementRoutes";
+import { SchemesRoutes } from "./SchemeRoutes";
+import { NotificationRoutes } from "./NotificationRoutes";
+import { SupportRoutes } from "./SupportRoutes";
+import { WebSettingRoutes } from "./WebSettingRoutes";
+import { MyAccountRoutes } from "./MyAccountRoutes";
+import { NotFoundRoute } from "./NotFoundRoute";
+import { LogsRoute } from "./LogsRoute";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
@@ -27,108 +23,29 @@ const AppRoutes = () => {
   return (
     <Suspense fallback={<div>Loading..</div>}>
       <Routes>
-        {/* Auth Routes with AuthLayout */}
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/otp-verify" element={<OtpVerify />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/set-password" element={<SetPassword />} />
-        </Route>
+        {/*AuthLayout */}
+        <Route element={<AuthLayout />}>{AuthRoutes}</Route>
 
-        {/* protected Routes with MainLayout */}
+        {/* ProtectedRoutes */}
+        {/* check if User has token? if yes ? render MainLayout : loginPage */}
         <Route element={<ProtectedRoutes />}>
-          {/* check if User has token? if yes ? render MainLayout : loginPage */}
           <Route element={<MainLayout />}>
+            {/* MainLayout  */}
             <Route path="/" element={<HomePage />} />
-            <Route path="/master/product-master" element={<ProductMaster />} />
-            <Route
-              path="/master/product-master/add"
-              element={<ProductForm mode="add" />}
-            />
-            <Route
-              path="/master/product-master/edit/:id"
-              element={<ProductForm mode="edit" />}
-            />
-            <Route
-              path="/master/sub-product-master"
-              element={<SubProductMaster />}
-            />
-            <Route
-              path="/master/sub-product-master/add"
-              element={<SubProductForm mode="add" />}
-            />
-            <Route
-              path="/master/sub-product-master/edit/:id"
-              element={<SubProductForm mode="edit" />}
-            />
-
-            <Route
-              path="/master/operator-master"
-              element={<OperatorMaster />}
-            />
-            <Route
-              path="/master/operator-master/add"
-              element={<OperatorForm mode="add" />}
-            />
-            <Route
-              path="/master/operator-master/edit/:id"
-              element={<OperatorForm mode="edit" />}
-            />
-            <Route
-              path="/master/sub-operator-master"
-              element={<SubOperatorMaster />}
-            />
-            <Route
-              path="/master/sub-operator-master/add"
-              element={<SubOperatorForm mode="add" />}
-            />
-            <Route
-              path="/master/sub-operator-master/edit/:id"
-              element={<SubOperatorForm mode="edit" />}
-            />
-
-            <Route path="/master/vendor-master" element={<VendorMaster />} />
-            <Route
-              path="/master/vendor-master/add"
-              element={<VendorForm mode="add" />}
-            />
-            <Route
-              path="/master/vendor-master/edit/:id"
-              element={<VendorForm mode="edit" />}
-            />
-
-            <Route
-              path="/funding/pre-funding-authorization"
-              element={<PreFundingAuth />}
-            />
-            <Route
-              path="/prefunding/add"
-              element={<PrefundingForm mode="add" />}
-            />
-            <Route
-              path="/prefunding/edit/:id"
-              element={<PrefundingForm mode="edit" />}
-            />
-
-            <Route
-              path="/management/user-creation"
-              element={<UserCreation />}
-            />
-            <Route
-              path="/management/user/create/:type"
-              element={<UserFormPage />}
-            />
-            <Route path="/schemes/schemeslist" element={<SchemesList />} />
-
-            <Route
-              path="/schemes/setting/:schemeId"
-              element={<SchemeSettingsPage />}
-            />
+            {MasterRoutes}
+            {FundingRoutes}
+            {ManagementRoutes}
+            {SchemesRoutes}
+            {ReportRoutes}
+            {NotificationRoutes}
+            {SupportRoutes}
+            {WebSettingRoutes}
+            {MyAccountRoutes}
+            {LogsRoute}
           </Route>
         </Route>
-
         {/* Redirect all unknown routes */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        {NotFoundRoute}
       </Routes>
     </Suspense>
   );

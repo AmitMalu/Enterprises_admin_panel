@@ -12,7 +12,7 @@ import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { usernamePhoneEmailValidation } from "../../Utils/ValidationUtils";
 
 const validationSchema = Yup.object().shape({
-  username: usernamePhoneEmailValidation
+  username: usernamePhoneEmailValidation,
 });
 
 const ForgetPassword: React.FC = () => {
@@ -32,7 +32,9 @@ const ForgetPassword: React.FC = () => {
 
   const handleForgetPassword = async (values: { username: string }) => {
     try {
-      const result = await dispatch(forgetPassword(values)).unwrap();
+      const result = await dispatch(
+        forgetPassword({ userName: values.username })
+      ).unwrap();
       toast.success(result.message);
       sessionStorage.removeItem("from-login-forget");
       persistOtpSession(values.username, "forgetPassword"); //set both values in Session storage

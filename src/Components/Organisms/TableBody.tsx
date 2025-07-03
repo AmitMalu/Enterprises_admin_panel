@@ -10,7 +10,7 @@ const TableBody = <T,>({
   headers: GenericTableHeader<T>[];
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
 }) => {
-  if (!data.length) {
+  if (!data?.length) {
     return (
       <Table.Tr>
         <Table.Td colSpan={headers.length + (renderExtraRowCell ? 1 : 0)}>
