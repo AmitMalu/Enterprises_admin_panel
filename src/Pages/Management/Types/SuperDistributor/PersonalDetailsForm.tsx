@@ -1,4 +1,3 @@
-import React from "react";
 import { FormikProps } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
@@ -15,7 +14,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             withAsterisk
             required
             maxLength={51}
-            allowSpecialChar={false}
+            allowSpecialChar={true}
           />
         </Grid.Col>
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>

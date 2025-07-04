@@ -7,6 +7,9 @@ import { textField } from "../../Utils/ValidationUtils";
 export const SCHEMES_KEY = "schemes";
 export const SCHEMES_URL = API_ENDPOINTS.SCHEMES.SCHEME_LIST;
 
+export const SCHEME_RATE_KEY = "schemeRate";
+export const SCHEME_RATE_URL = API_ENDPOINTS.SCHEMES.SCHEME_RATE;
+
 export interface SchemesListFormType {
   schemeName: string;
   schemeCode: string;
@@ -92,17 +95,21 @@ export const transformFormToUpdateSchemesPayload = (
   editedBy: localStorage.getItem("username") || "system",
 });
 
-export type slabStructureType = {
+export type SlabStructureTableType = {
   slabStart: string;
   slabEnd: string;
   rateType: string;
   gross: string;
   im: string;
-  r: string;
-  new: string;
+  enterprise?: string;
+  whitelabel?: string;
+  superDistributor?: string;
+  partner?: string;
+  distributor?: string;
+  retailer?: string;
 };
 
-export const slabStructureData: slabStructureType[] = [
+export const slabStructureData: any[] = [
   {
     slabStart: moment().format("YYYY-MM-DD"),
     slabEnd: moment().add(1, "year").format("YYYY-MM-DD"),
@@ -141,12 +148,12 @@ export const slabStructureData: slabStructureType[] = [
   },
 ];
 
-export const AMAXdata: slabStructureType[] = [];
+export const AMAXdata: SlabStructureTableType[] = [];
 
-export const AMAX2data: slabStructureType[] = [];
+export const AMAX2data: SlabStructureTableType[] = [];
 
 export const slabStructureHeaders: {
-  key: keyof slabStructureType;
+  key: keyof SlabStructureTableType;
   label: string;
 }[] = [
   { key: "slabStart", label: "Slab Start" },
@@ -154,6 +161,22 @@ export const slabStructureHeaders: {
   { key: "rateType", label: "Rate Type" },
   { key: "gross", label: "Gross" },
   { key: "im", label: "IM" },
-  { key: "r", label: "R" },
-  { key: "new", label: "New" },
+  { key: "enterprise", label: "Enterprise" },
+  { key: "whitelabel", label: "WL" },
+  { key: "superDistributor", label: "SD" },
+  { key: "partner", label: "PT" },
+  { key: "distributor", label: "DT" },
+  { key: "retailer", label: "RT" },
 ];
+
+export const getFilteredSlabHeaders = (slabs: any[]) => {
+  return slabStructureHeaders.filter(
+    ({ key }) =>
+      // Always include these base fields
+      ["slabStart", "slabEnd", "rateType", "gross", "im"].includes(
+        key as string
+      ) ||
+      // Include only if any slab has a non-null, non-undefined value
+      slabs.some((slab) => slab[key] !== null && slab[key] !== undefined)
+  );
+};

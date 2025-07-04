@@ -7,6 +7,7 @@ import {
   createMasterItem,
   updateMasterItem,
 } from "../Redux/Features/Masters/MastersThunk";
+import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 
 export const persistOtpSession = (username: string, otpFor: string) => {
   sessionStorage.setItem("otp-username", username);
@@ -43,6 +44,18 @@ export function checkTokenValidity(token: string | null) {
 
   return isTokenValid;
 }
+
+export const setLoginData = (dispatch: any, payload: any) => {
+  const { token, ...rest } = payload;
+
+  // Save to localStorage
+  localStorage.setItem("token", token);
+  localStorage.setItem("userInfo", JSON.stringify(rest));
+
+  // Dispatch Redux state updates
+  dispatch(setToken(token));
+  dispatch(setUserInfo({ userInfo: rest }));
+};
 
 // utils/getIpAddress.ts
 export async function getIpAddress(): Promise<string> {

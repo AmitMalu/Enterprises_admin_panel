@@ -155,6 +155,8 @@ const PreFundingAuth = () => {
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         visibleColumns={visibleColumns}
+        loading={loading}
+        error={error ? error.toString() : null}
       />
 
       {/* PreFunding Table */}

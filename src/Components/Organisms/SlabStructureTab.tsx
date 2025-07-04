@@ -1,33 +1,62 @@
-import React from "react";
-import SlabStructureTable from "./SlabStructureTable";
 import {
-  AMAX2data,
-  AMAXdata,
-  slabStructureData,
-  slabStructureHeaders,
-  slabStructureType,
+  getFilteredSlabHeaders,
+  SlabStructureTableType,
 } from "../../Config/Schemes/SchemesConfig";
+import GenericMasterTable from "./GenericMasterTable";
+import TextComponent from "../Atoms/TextComponent";
+import CenteredMessage from "../Molecules/CenteredMessage";
+import ShimmerTableRows from "../Atoms/ShimmerTableRows";
+import { Skeleton } from "@mantine/core";
 
-const SlabStructureTab = () => {
+const SlabStructureTab = ({ data, loading }: { data: any; loading: boolean }) => {
+
+  if (loading) {
+    return (
+      <>
+        {[1, 2, 3].map((_, index) => (
+          <div key={index} className="flex flex-col mt-2">
+            <Skeleton height={30} width="40%" />
+            <ShimmerTableRows mt={2} rowCount={3} columnCount={8} />
+          </div>
+        ))}
+      </>
+    );
+  }
+
+  if (!data?.operators?.length) {
+    return <CenteredMessage message="No operator data available." />;
+  }
+
   return (
     <>
-      <SlabStructureTable<slabStructureType>
-        label="Slab Structure Scheme"
-        data={slabStructureData}
-        headers={slabStructureHeaders}
-      />
+      {data?.operators?.map((operator: any) => {
+        const headers = getFilteredSlabHeaders(operator.slabs);
 
-      <SlabStructureTable<slabStructureType>
-        label="Slab Structure AMAX Table "
-        data={AMAXdata}
-        headers={slabStructureHeaders}
-      />
+        return (
+          <div key={operator?.operatorCode} className="mb-6">
+            {/* Operator Heading */}
+            <TextComponent
+              color="#1D1F2C"
+              fontFamily="Inter"
+              fontWeight={500}
+              fontSize={18}
+            >
+              {operator.operatorName}
+            </TextComponent>
 
-      <SlabStructureTable<slabStructureType>
-        label="Slab Structure AMAX Table 2"
-        data={AMAX2data}
-        headers={slabStructureHeaders}
-      />
+            {/* Operator Table */}
+            {operator.slabs?.length > 0 ? (
+              <GenericMasterTable<SlabStructureTableType>
+                data={operator.slabs}
+                headers={headers}
+                mt={2}
+              />
+            ) : (
+              <CenteredMessage message="No slabs defined for this operator." />
+            )}
+          </div>
+        )
+      })}
     </>
   );
 };

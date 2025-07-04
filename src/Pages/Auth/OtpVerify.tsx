@@ -5,7 +5,7 @@ import { otpVerify, resendOtp } from "../../Redux/Features/Auth/Thunk";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
-import { logoutUser } from "../../Utils/utils";
+import { logoutUser, setLoginData } from "../../Utils/utils";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import * as Yup from "yup";
@@ -65,6 +65,7 @@ const OtpVerify: React.FC = () => {
             state: { username: username }, // Pass username to Set Password page);
           });
         } else if (otpFor === "login") {
+          setLoginData(dispatch, result.data); 
           sessionStorage.setItem("justLoggedIn", "true");
           if (username) {
             localStorage.setItem("username", username);

@@ -171,8 +171,8 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "User Management",
-        link: "/management/user-management",
+        label: "User Configuration",
+        link: "/management/user-configuration",
         icon: userCreationSvg,
       },
       {

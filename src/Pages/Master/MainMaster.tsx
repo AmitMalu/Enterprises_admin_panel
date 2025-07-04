@@ -34,7 +34,7 @@ const MainMaster = () => {
     value: any;
   } | null>(null);
 
-  const { data, loading, pagination, setPage, setPageSize } =
+  const { data, loading, error, pagination, setPage, setPageSize } =
     useFetchMasterList<MainMasterTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
@@ -102,6 +102,8 @@ const MainMaster = () => {
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={headers}
         visibleColumns={visibleColumns}
+        loading={loading}
+        error={error ? error.toString() : null}
       />
 
       {loading ? (

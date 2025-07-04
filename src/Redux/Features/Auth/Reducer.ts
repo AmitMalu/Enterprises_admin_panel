@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState } from "./Types";
 import {
   forgetPassword,
@@ -10,7 +10,7 @@ import {
 
 const initialState: AuthState = {
   loading: false,
-  user: null,
+  userInfo: {},
   error: null,
   token: null,
 };
@@ -18,7 +18,14 @@ const initialState: AuthState = {
 const authReducer = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setUserInfo: (state, action: PayloadAction<{ userInfo: any }>) => {
+      state.userInfo = action.payload.userInfo;
+    },
+    setToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -37,17 +44,9 @@ const authReducer = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(otpVerify.fulfilled, (state, action) => {
-        const { token } = action.payload.data;
-        const otpFor = sessionStorage.getItem("otpFor");
-
-        state.token = token;
+      .addCase(otpVerify.fulfilled, (state) => {
         state.loading = false;
         state.error = null;
-
-        if (otpFor === "login") {
-          localStorage.setItem("token", token);
-        }
       })
       .addCase(otpVerify.rejected, (state, action) => {
         state.loading = false;
@@ -92,4 +91,5 @@ const authReducer = createSlice({
   },
 });
 
+export const { setUserInfo, setToken } = authReducer.actions;
 export default authReducer.reducer;

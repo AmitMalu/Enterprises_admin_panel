@@ -26,6 +26,7 @@ type GenericMasterTableProps<T> = {
   renderExtraHeader?: () => React.ReactNode;
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
   extraColumnPosition?: "left" | "right";
+  mt?: number | string;
   pagination?: boolean;
   currentPage?: number;
   totalPages?: number;
@@ -49,6 +50,7 @@ const GenericMasterTable = <T,>({
   currentPage,
   totalPages,
   onPageChange,
+  mt = 4,
   pagination = false,
   pageSize = 5,
   onPageSizeChange,
@@ -61,7 +63,7 @@ const GenericMasterTable = <T,>({
 }: GenericMasterTableProps<T>) => {
 
   return (
-    <Table.ScrollContainer minWidth={600} className="mt-4">
+    <Table.ScrollContainer minWidth={600} className={`mt-${mt}`}>
       <Table
         withColumnBorders
         striped
