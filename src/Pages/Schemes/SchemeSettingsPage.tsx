@@ -7,10 +7,22 @@ import { DeactivateIcon } from "../../assets/Icons";
 import { Grid, Tabs } from "@mantine/core";
 import SchemeConfigurationForm from "../../Components/Organisms/SchemeConfigurationForm";
 import SlabStructureTab from "../../Components/Organisms/SlabStructureTab";
-import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
-import { SCHEME_RATE_KEY, SCHEME_RATE_URL } from "../../Config/Schemes/SchemesConfig";
+import { fetchSchemeById, fetchSchemeByIdPost } from "../../Redux/Features/Schemes/thunks";
+import { SCHEME_RATE_KEY, SCHEME_RATE_URL, SlabStructureTableType } from "../../Config/Schemes/SchemesConfig";
 import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
+
+interface OperatorData {
+  operatorCode: string;
+  operatorName: string;
+  slabs: SlabStructureTableType[];
+}
+
+interface SchemeDetails {
+  schemeName: string;
+  schemeCode: string;
+  operators: OperatorData[];
+}
 
 const SchemeSettingsPage = () => {
 
@@ -20,10 +32,94 @@ const SchemeSettingsPage = () => {
   const { schemeCode, schemeName } = location.state || {};
 
   const [activeTab, setActiveTab] = useState<"slab" | "product">("slab");
-  const [schemeDetails, setSchemeDetails] = useState(null);
+  const [schemeDetails, setSchemeDetails] = useState<SchemeDetails | null>(null);
+  const [editableRows, setEditableRows] = useState<OperatorData[]>([]);
+  const [updatedOperators, setUpdatedOperators] = useState<OperatorData[]>([]);
+
+  console.log(updatedOperators, "updatedRows");
+
   const [productDetails, setProductDetails] = useState(null);
   const [loadingScheme, setLoadingScheme] = useState(false);
   const [loadingProduct, setLoadingProduct] = useState(false);
+
+  const handleRowChange = (
+    operatorCode: string,
+    slabId: number | string,
+    key: keyof SlabStructureTableType,
+    value: any
+  ) => {
+    /* ---------- 1. update live UI copy ---------- */
+    setEditableRows(prev =>
+      prev.map(op =>
+        op.operatorCode !== operatorCode
+          ? op
+          : {
+            ...op,
+            slabs: op.slabs.map(s =>
+              s.id === slabId ? { ...s, [key]: value } : s
+            ),
+          }
+      )
+    );
+
+    /* ---------- 2. build / merge diff ---------- */
+    setUpdatedOperators(prev => {
+      // find existing operator entry (if any)
+      const opIdx = prev.findIndex(op => op.operatorCode === operatorCode);
+      const opEntry: OperatorData =
+        opIdx !== -1
+          ? { ...prev[opIdx] }
+          : {
+            operatorCode,
+            operatorName:
+              schemeDetails?.operators?.find(o => o.operatorCode === operatorCode)
+                ?.operatorName || "",
+            slabs: [],
+          };
+
+      // find existing diff for this slab (if any)
+      const slabIdx = opEntry.slabs.findIndex(s => s.id === slabId);
+      const baseSlab =
+        slabIdx !== -1
+          ? opEntry.slabs[slabIdx]                // ← already‑edited version
+          : schemeDetails?.operators              // else fall back to original
+            ?.find(o => o.operatorCode === operatorCode)
+            ?.slabs.find(s => s.id === slabId) || { id: slabId } as any;
+
+      const updatedSlab = { ...baseSlab, [key]: value };
+
+      // Check if slab is now identical to original
+      const original = schemeDetails?.operators
+        ?.find(o => o.operatorCode === operatorCode)
+        ?.slabs.find(s => s.id === slabId);
+
+      const isSameAsOriginal =
+        original && JSON.stringify(original) === JSON.stringify(updatedSlab);
+
+      /* -- insert, update, or remove in opEntry.slabs -- */
+      if (isSameAsOriginal) {
+        // remove diff if slab reverted
+        if (slabIdx !== -1) opEntry.slabs.splice(slabIdx, 1);
+      } else {
+        // upsert diff
+        if (slabIdx !== -1) opEntry.slabs[slabIdx] = updatedSlab;
+        else opEntry.slabs.push(updatedSlab);
+      }
+
+      // build new updatedOperators array
+      const next = [...prev];
+      if (opEntry.slabs.length === 0) {
+        // no diffs left for this operator → remove operator entry
+        if (opIdx !== -1) next.splice(opIdx, 1);
+      } else if (opIdx !== -1) {
+        next[opIdx] = opEntry;
+      } else {
+        next.push(opEntry);
+      }
+
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (!schemeCode) return;
@@ -49,25 +145,32 @@ const SchemeSettingsPage = () => {
     schemeRates()
   }, [schemeCode])
 
+  useEffect(() => {
+    if (schemeDetails?.operators?.length) {
+      // Deep clone to preserve immutability
+      setEditableRows(JSON.parse(JSON.stringify(schemeDetails.operators)));
+    }
+  }, [schemeDetails]);
+
   // Lazy load product tab
-  // useEffect(() => {
-  //   if (activeTab === "product" && !productDetails) {
-  //     const fetchProductDetails = async () => {
-  //       setLoadingProduct(true);
-  //       try {
-  //         const res = await dispatch(
-  //           fetchSchemeById({ key: "product", endpoint: `/scheme/product-details`, id: schemeCode })
-  //         ).unwrap();
-  //         setProductDetails(res.data);
-  //       } catch (err) {
-  //         toast.error("Failed to load product details");
-  //       } finally {
-  //         setLoadingProduct(false);
-  //       }
-  //     };
-  //     fetchProductDetails();
-  //   }
-  // }, [activeTab]);
+  useEffect(() => {
+    if (activeTab === "product" && !productDetails) {
+      const fetchProductDetails = async () => {
+        setLoadingProduct(true);
+        try {
+          const res = await dispatch(
+            fetchSchemeByIdPost({ key: "product", endpoint: `${SCHEME_RATE_URL}/get-product-details-by`, id: schemeCode })
+          ).unwrap();
+          setProductDetails(res.data);
+        } catch (err) {
+          toast.error("Failed to load product details");
+        } finally {
+          setLoadingProduct(false);
+        }
+      };
+      fetchProductDetails();
+    }
+  }, [activeTab]);
 
 
   return (
@@ -145,7 +248,10 @@ const SchemeSettingsPage = () => {
             </Tabs.List>
 
             <Tabs.Panel value="slab" pt="xs">
-              <SlabStructureTab data={schemeDetails} loading={loadingScheme} />
+              <SlabStructureTab
+                data={editableRows}
+                loading={loadingScheme}
+                onDataChange={handleRowChange} />
             </Tabs.Panel>
 
             <Tabs.Panel value="product" pt="xs">

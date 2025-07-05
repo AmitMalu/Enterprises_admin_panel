@@ -8,7 +8,18 @@ import CenteredMessage from "../Molecules/CenteredMessage";
 import ShimmerTableRows from "../Atoms/ShimmerTableRows";
 import { Skeleton } from "@mantine/core";
 
-const SlabStructureTab = ({ data, loading }: { data: any; loading: boolean }) => {
+interface SlabStructureTabProps {
+  data: any[];
+  loading: boolean;
+  onDataChange?: (
+    operatorCode: string,
+    slabId: number | string,
+    key: keyof SlabStructureTableType,
+    value: any
+  ) => void;
+}
+
+const SlabStructureTab = ({ data, loading, onDataChange }: SlabStructureTabProps) => {
 
   if (loading) {
     return (
@@ -23,13 +34,13 @@ const SlabStructureTab = ({ data, loading }: { data: any; loading: boolean }) =>
     );
   }
 
-  if (!data?.operators?.length) {
+  if (!data?.length) {
     return <CenteredMessage message="No operator data available." />;
   }
 
   return (
     <>
-      {data?.operators?.map((operator: any) => {
+      {data?.map((operator, operatorIndex) => {
         const headers = getFilteredSlabHeaders(operator.slabs);
 
         return (
@@ -49,6 +60,15 @@ const SlabStructureTab = ({ data, loading }: { data: any; loading: boolean }) =>
               <GenericMasterTable<SlabStructureTableType>
                 data={operator.slabs}
                 headers={headers}
+                editable={true}
+                onDataChange={(rowIndex, key, value) =>
+                  onDataChange?.(
+                    operator.operatorCode,
+                    operator.slabs[rowIndex].id,
+                    key,
+                    value
+                  )
+                }
                 mt={2}
               />
             ) : (

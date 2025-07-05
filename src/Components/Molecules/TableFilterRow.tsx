@@ -8,6 +8,7 @@ import {
   LeftDateArrowSvgIcon,
   RightDateArrowSvgIcon,
 } from "../../assets/Icons";
+import CustomDatePicker from "../Atoms/CustomDatePicker";
 
 const TableFilterRow = <T,>({
   headers,
@@ -42,7 +43,7 @@ const TableFilterRow = <T,>({
                       onFilterSubmit?.(String(key), val ?? "");
                     }
                   }}
-                  data={filterOptions ?? booleanSelectData2} // ✅ Use custom options if provided
+                  data={filterOptions ?? booleanSelectData2}
                   placeholder="Select"
                   size="xs"
                 />
@@ -51,9 +52,8 @@ const TableFilterRow = <T,>({
           case "date":
             return (
               <Table.Td key={String(key)}>
-                <DatePickerInput
+                <CustomDatePicker
                   value={value ? moment(value, "DD-MM-YYYY").toDate() : null}
-                  valueFormat="DD/MM/YYYY"
                   onChange={(val) => {
                     if (val) {
                       const formatted = moment(val).format("DD-MM-YYYY");
@@ -63,32 +63,6 @@ const TableFilterRow = <T,>({
                       onFilterChange?.(String(key), null);
                       onFilterSubmit?.(String(key), "");
                     }
-                  }}
-                  nextIcon={<RightDateArrowSvgIcon />}
-                  previousIcon={<LeftDateArrowSvgIcon />}
-                  size="xs"
-                  placeholder="Pick date"
-                  classNames={{
-                    levelsGroup: "w-full ",
-                    calendarHeader: "flex items-center justify-between gap-3",
-                    calendarHeaderLevel: "font-[600] text-[16px] ",
-                    month:
-                      "flex items-center justify-center flex-col gap-2 w-full",
-                    monthThead: "flex items-center justify-center w-full",
-                    monthTbody:
-                      "flex items-center justify-center w-full flex-col gap-2",
-                    weekdaysRow: "flex items-center justify-between w-full",
-                    monthsListRow:
-                      "flex items-center justify-between w-full gap-3",
-                    weekday: "text-primaryColor",
-                    monthRow: "flex items-center justify-between w-full gap-3",
-                    monthCell: "w-full text-center ",
-                    monthsList: "w-full",
-                    monthsListControl: "text-textColor font-[400] text-[18px]",
-                    yearsListRow:
-                      "flex items-center justify-between w-full gap-3",
-                    yearsListControl: "text-textColor font-[400] text-[18px]",
-                    day: "font-[500] text-[14px] w-[30px] text-center ",
                   }}
                 />
               </Table.Td>

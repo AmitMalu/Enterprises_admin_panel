@@ -83,6 +83,30 @@ export const fetchSchemeById = createAsyncThunk(
   }
 );
 
+export const fetchSchemeByIdPost = createAsyncThunk(
+  "schemes/fetchSchemeByIdPost",
+  async ({ key, endpoint, id }: FetchSchemeByIdParams, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(`${endpoint}/${id}`);
+      const responseData = response?.data;
+
+      if (responseData && responseData.statusCode === 200) {
+        return responseData.data;
+      } else {
+        const message =
+          responseData?.message || `No ${key} found for ID: ${id}`;
+        return rejectWithValue(message);
+      }
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        `Failed to fetch ${key} by ID`;
+      return rejectWithValue(message);
+    }
+  }
+);
+
 // export const submitFundRequest = createAsyncThunk(
 //   "fundings/submitFundRequest",
 //   async (payload: any, { rejectWithValue }) => {

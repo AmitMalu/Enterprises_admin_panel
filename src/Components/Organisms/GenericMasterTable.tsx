@@ -39,6 +39,12 @@ type GenericMasterTableProps<T> = {
   onFilterChange?: (key: string, value: any) => void;
   filterValues?: Record<string, any>;
   onFilterSubmit?: (key: string, value: any) => void;
+
+  editable?: boolean;
+  onDataChange?: (rowIndex: number, key: keyof T, value: any) => void;
+  onSubmitAll?: (updatedRows: T[]) => void;
+  showAddRow?: boolean;
+  onAddRow?: () => void;
 };
 
 const GenericMasterTable = <T,>({
@@ -60,6 +66,13 @@ const GenericMasterTable = <T,>({
   onFilterChange,
   filterValues,
   onFilterSubmit,
+
+  editable = false,
+  onDataChange,
+  onSubmitAll,
+  showAddRow = false,
+  onAddRow,
+
 }: GenericMasterTableProps<T>) => {
 
   return (
@@ -107,6 +120,8 @@ const GenericMasterTable = <T,>({
             data={data}
             headers={headers}
             renderExtraRowCell={renderExtraRowCell}
+            editable={editable}
+            onChange={onDataChange}
           />
         </Table.Tbody>
 

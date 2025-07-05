@@ -96,6 +96,7 @@ export const transformFormToUpdateSchemesPayload = (
 });
 
 export type SlabStructureTableType = {
+  id?: string | number;
   slabStart: string;
   slabEnd: string;
   rateType: string;
@@ -107,6 +108,7 @@ export type SlabStructureTableType = {
   partner?: string;
   distributor?: string;
   retailer?: string;
+  [key: string]: any;
 };
 
 export const slabStructureData: any[] = [
@@ -152,22 +154,28 @@ export const AMAXdata: SlabStructureTableType[] = [];
 
 export const AMAX2data: SlabStructureTableType[] = [];
 
-export const slabStructureHeaders: {
-  key: keyof SlabStructureTableType;
-  label: string;
-}[] = [
-  { key: "slabStart", label: "Slab Start" },
-  { key: "slabEnd", label: "Slab End" },
-  { key: "rateType", label: "Rate Type" },
-  { key: "gross", label: "Gross" },
-  { key: "im", label: "IM" },
-  { key: "enterprise", label: "Enterprise" },
-  { key: "whitelabel", label: "WL" },
-  { key: "superDistributor", label: "SD" },
-  { key: "partner", label: "PT" },
-  { key: "distributor", label: "DT" },
-  { key: "retailer", label: "RT" },
-];
+export const slabStructureHeaders: GenericTableHeader<SlabStructureTableType>[] =
+  [
+    { key: "slabStart", label: "Slab Start" },
+    { key: "slabEnd", label: "Slab End" },
+    {
+      key: "rateType",
+      label: "Rate Type",
+      filterType: "boolean",
+      filterOptions: [
+        { label: "PERCENTAGE", value: "PERCENTAGE" },
+        { label: "FLAT", value: "FLAT" },
+      ],
+    },
+    { key: "gross", label: "Gross" },
+    { key: "im", label: "IM" },
+    { key: "enterprise", label: "Enterprise" },
+    { key: "whitelabel", label: "WL" },
+    { key: "superDistributor", label: "SD" },
+    { key: "partner", label: "PT" },
+    { key: "distributor", label: "DT" },
+    { key: "retailer", label: "RT" },
+  ];
 
 export const getFilteredSlabHeaders = (slabs: any[]) => {
   return slabStructureHeaders.filter(
