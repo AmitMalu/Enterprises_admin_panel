@@ -1,7 +1,7 @@
 import moment from "moment";
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
-import { GenericTableHeader } from "../../Utils/utils";
+import { GenericTableHeader, GenericVerticalHeader } from "../../Utils/utils";
 import { textField } from "../../Utils/ValidationUtils";
 
 export const SCHEMES_KEY = "schemes";
@@ -149,6 +149,55 @@ export const slabStructureData: any[] = [
     new: "NA",
   },
 ];
+export interface SchemeDetails {
+  schemeName: string;
+  schemeCode: string;
+  operators: OperatorSlabData[];
+}
+export interface SlabPayload {
+  schemeCode: string;
+  schemeName: string;
+  operators: {
+    operatorCode: string;
+    operatorName: string;
+    slabs: (SlabStructureTableType & { editedBy: string })[];
+  }[];
+}
+
+export interface OperatorSlabData {
+  operatorCode: string;
+  operatorName: string;
+  slabs: SlabStructureTableType[];
+}
+
+export const buildSlabPayload = (
+  schemeCode: string,
+  schemeName: string,
+  operators: OperatorSlabData[]
+) => {
+  const editedBy = localStorage.getItem("username") || "system";
+
+  return {
+    schemeCode,
+    schemeName,
+    operators: operators.map((op) => ({
+      operatorCode: op.operatorCode,
+      operatorName: op.operatorName,
+      slabs: op.slabs.map((slab: any) => {
+        const isTempId =
+          (typeof slab.id === "string" && slab.id.startsWith("new-")) ||
+          /^\d{13,}$/.test(slab.id); // Detects Date.now()-based or new- prefixed IDs
+
+        return {
+          ...slab,
+          id: isTempId ? null : slab.id,
+          editedBy,
+          ...(isTempId && { createdBy: editedBy }),
+        };
+      }),
+    })),
+  };
+};
 
 export const AMAXdata: SlabStructureTableType[] = [];
 
@@ -188,3 +237,42 @@ export const getFilteredSlabHeaders = (slabs: any[]) => {
       slabs.some((slab) => slab[key] !== null && slab[key] !== undefined)
   );
 };
+
+export const makeBlankSlab = (
+  headers: GenericTableHeader<SlabStructureTableType>[]
+): SlabStructureTableType => {
+  const blankRow: SlabStructureTableType = {
+    id: `new-${Date.now()}`, // Easier to recognize in the payload
+    slabStart: "",
+    slabEnd: "",
+    rateType: "FLAT", // default
+    gross: "0",
+    im: "0",
+  };
+
+  headers.forEach(({ key }) => {
+    const keyStr = key as string;
+
+    if (keyStr in blankRow) {
+      return; // already set above
+    }
+
+    blankRow[keyStr] = ""; // default for dynamic fields
+  });
+
+  return blankRow;
+};
+
+export const productHeaders: GenericVerticalHeader<Record<string, any>>[] = [
+  { key: "productName", label: "Product Name" },
+  { key: "productCode", label: "Product Code" },
+  { key: "productCodeForScheme", label: "Scheme Product Code" },
+  { key: "transactionType", label: "Transaction Type" },
+  { key: "isSettlement", label: "Is Settlement" },
+  { key: "sgst", label: "SGST (%)" },
+  { key: "tds", label: "TDS (%)" },
+  { key: "createdAt", label: "Created At" },
+  { key: "createdBy", label: "Created By" },
+  { key: "editedAt", label: "Edited At" },
+  { key: "editedBy", label: "Edited By" },
+];

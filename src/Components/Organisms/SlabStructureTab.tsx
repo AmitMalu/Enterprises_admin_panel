@@ -17,9 +17,11 @@ interface SlabStructureTabProps {
     key: keyof SlabStructureTableType,
     value: any
   ) => void;
+  showAddRow?: boolean;
+  onAddRow?: (operatorCode: string) => void;
 }
 
-const SlabStructureTab = ({ data, loading, onDataChange }: SlabStructureTabProps) => {
+const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow }: SlabStructureTabProps) => {
 
   if (loading) {
     return (
@@ -58,7 +60,7 @@ const SlabStructureTab = ({ data, loading, onDataChange }: SlabStructureTabProps
             {/* Operator Table */}
             {operator.slabs?.length > 0 ? (
               <GenericMasterTable<SlabStructureTableType>
-                data={operator.slabs}
+                data={operator?.slabs}
                 headers={headers}
                 editable={true}
                 onDataChange={(rowIndex, key, value) =>
@@ -69,6 +71,8 @@ const SlabStructureTab = ({ data, loading, onDataChange }: SlabStructureTabProps
                     value
                   )
                 }
+                showAddRow={showAddRow}
+                onAddRow={() => onAddRow?.(operator.operatorCode)}
                 mt={2}
               />
             ) : (

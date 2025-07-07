@@ -1,28 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { DeactivateIcon } from "../../assets/Icons";
-import { Grid, Tabs } from "@mantine/core";
+import { Grid, Tabs, Tooltip } from "@mantine/core";
 import SchemeConfigurationForm from "../../Components/Organisms/SchemeConfigurationForm";
 import SlabStructureTab from "../../Components/Organisms/SlabStructureTab";
 import { fetchSchemeById, fetchSchemeByIdPost } from "../../Redux/Features/Schemes/thunks";
-import { SCHEME_RATE_KEY, SCHEME_RATE_URL, SlabStructureTableType } from "../../Config/Schemes/SchemesConfig";
+import { buildSlabPayload, getFilteredSlabHeaders, makeBlankSlab, productHeaders, SCHEME_RATE_KEY, SCHEME_RATE_URL, SchemeDetails, SCHEMES_URL, SlabPayload, SlabStructureTableType } from "../../Config/Schemes/SchemesConfig";
 import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
-
-interface OperatorData {
-  operatorCode: string;
-  operatorName: string;
-  slabs: SlabStructureTableType[];
-}
-
-interface SchemeDetails {
-  schemeName: string;
-  schemeCode: string;
-  operators: OperatorData[];
-}
+import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import { OperatorSlabData } from "../../Config/Schemes/SchemesConfig";
+import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
+import VerticalKeyValueTable from "../../Components/Organisms/VerticalKeyValueTable";
 
 const SchemeSettingsPage = () => {
 
@@ -33,12 +25,13 @@ const SchemeSettingsPage = () => {
 
   const [activeTab, setActiveTab] = useState<"slab" | "product">("slab");
   const [schemeDetails, setSchemeDetails] = useState<SchemeDetails | null>(null);
-  const [editableRows, setEditableRows] = useState<OperatorData[]>([]);
-  const [updatedOperators, setUpdatedOperators] = useState<OperatorData[]>([]);
+  const [editableRows, setEditableRows] = useState<OperatorSlabData[]>([]);
+  const [updatedOperators, setUpdatedOperators] = useState<OperatorSlabData[]>([]);
+  const updatedOperatorsRef = useRef(updatedOperators);
+  const [isSchemeActive, setIsSchemeActive] = useState<boolean | null>(false);
+  const isSchemeActiveRef = useRef(isSchemeActive);
 
-  console.log(updatedOperators, "updatedRows");
-
-  const [productDetails, setProductDetails] = useState(null);
+  const [productDetails, setProductDetails] = useState<Record<string, any> | null>(null);
   const [loadingScheme, setLoadingScheme] = useState(false);
   const [loadingProduct, setLoadingProduct] = useState(false);
 
@@ -66,7 +59,7 @@ const SchemeSettingsPage = () => {
     setUpdatedOperators(prev => {
       // find existing operator entry (if any)
       const opIdx = prev.findIndex(op => op.operatorCode === operatorCode);
-      const opEntry: OperatorData =
+      const opEntry: OperatorSlabData =
         opIdx !== -1
           ? { ...prev[opIdx] }
           : {
@@ -121,6 +114,107 @@ const SchemeSettingsPage = () => {
     });
   };
 
+  const toggleSchemeStatus = async () => {
+    if (!schemeCode) {
+      toast.error("Scheme code is required to toggle status");
+      return;
+    }
+    const nextStatus = !isSchemeActiveRef.current;
+
+    try {
+      setLoadingScheme(true);
+      const response = await dispatch(
+        updateMasterItem({
+          key: "schemeStatus",
+          url: `${SCHEMES_URL}`,
+          id: `${schemeCode}/status?isActive=${nextStatus}`,
+        })
+      ).unwrap();
+
+      if (response.statusCode === 200) {
+        toast.success(response.message || "Scheme status updated successfully");
+        setIsSchemeActive(nextStatus); // update local status
+      } else {
+        toast.error(response.message || "Failed to update Scheme status");
+      }
+    } catch (error: any) {
+      toast.error(error || "An error occurred while updating scheme status");
+    } finally {
+      setLoadingScheme(false);
+    }
+  }
+
+  const handleSubmit = useThrottleMasterFormSubmit<SlabPayload>({
+    mode: "edit",
+    dispatch,
+    navigate,
+    masterKey: SCHEME_RATE_KEY,
+    addUrl: `${SCHEME_RATE_URL}/save`,
+    updateUrl: `${SCHEME_RATE_URL}/update-slabs`,
+    successNavigatePath: "/schemes/schemeslist",
+    entityName: "SchemeRate",
+    delay: 5000,
+  });
+
+  const handleSave = () => {
+    const currentOperators = updatedOperatorsRef.current;
+
+    if (currentOperators.length === 0) {
+      toast.info("No changes to save");
+      return;
+    }
+
+    const payload = buildSlabPayload(schemeCode, schemeName, currentOperators);
+
+    handleSubmit(payload);
+  }
+
+  const handleAddRow = (operatorCode: string) => {
+    const operatorIdx = editableRows.findIndex(
+      (op) => op.operatorCode === operatorCode
+    );
+
+    if (operatorIdx === -1) return;
+
+    const operator = editableRows[operatorIdx];
+    const headers = getFilteredSlabHeaders(operator.slabs);
+    const newSlab = makeBlankSlab(headers);
+
+    // Add slab to editableRows
+    const updatedEditable = [...editableRows];
+    updatedEditable[operatorIdx] = {
+      ...operator,
+      slabs: [...operator.slabs, newSlab],
+    };
+    setEditableRows(updatedEditable);
+
+    // Add slab to updatedOperators
+    const updatedDiff = [...updatedOperators];
+    const diffIndex = updatedDiff.findIndex(
+      (op) => op.operatorCode === operatorCode
+    );
+
+    if (diffIndex !== -1) {
+      updatedDiff[diffIndex].slabs.push(newSlab);
+    } else {
+      updatedDiff.push({
+        operatorCode,
+        operatorName: operator.operatorName,
+        slabs: [newSlab],
+      });
+    }
+
+    setUpdatedOperators(updatedDiff);
+  };
+
+  useEffect(() => {
+    updatedOperatorsRef.current = updatedOperators;
+  }, [updatedOperators]);
+
+  useEffect(() => {
+    isSchemeActiveRef.current = isSchemeActive;
+  }, [isSchemeActive]);
+
   useEffect(() => {
     if (!schemeCode) return;
 
@@ -131,11 +225,12 @@ const SchemeSettingsPage = () => {
           fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}`, id: schemeCode })
         ).unwrap();
         setSchemeDetails(data);
+        setIsSchemeActive(false);
 
       } catch (err: any) {
         toast.error(err);
         setTimeout(() => {
-          // navigate("/schemes/schemeslist");
+          navigate("/schemes/schemeslist");
         }, 2000);
       }
       finally {
@@ -154,23 +249,29 @@ const SchemeSettingsPage = () => {
 
   // Lazy load product tab
   useEffect(() => {
-    if (activeTab === "product" && !productDetails) {
+    if (activeTab === "product" && schemeCode && !productDetails) {
       const fetchProductDetails = async () => {
         setLoadingProduct(true);
         try {
           const res = await dispatch(
-            fetchSchemeByIdPost({ key: "product", endpoint: `${SCHEME_RATE_URL}/get-product-details-by`, id: schemeCode })
+            fetchSchemeByIdPost({
+              key: "product",
+              endpoint: `${SCHEME_RATE_URL}/get-product-details-by`,
+              id: schemeCode,
+            })
           ).unwrap();
-          setProductDetails(res.data);
+
+          setProductDetails(res);
         } catch (err) {
           toast.error("Failed to load product details");
         } finally {
           setLoadingProduct(false);
         }
       };
+
       fetchProductDetails();
     }
-  }, [activeTab]);
+  }, [activeTab, schemeCode, productDetails]);
 
 
   return (
@@ -199,18 +300,21 @@ const SchemeSettingsPage = () => {
 
         {/* Button */}
         <div className="flex items-end">
-          <ButtonComponent
-            style={{ padding: "5px 10px", height: 40 }}
-            radius={8}
-            font="Inter"
-            textColor="#fff"
-            bgColor="#CA4343"
-            fontSize="14"
-            leftIcon={<DeactivateIcon />}
-            disabled={!!loadingScheme}
-          >
-            Deactivate
-          </ButtonComponent>
+          <Tooltip label={isSchemeActive ? "Click to Deactivate Scheme" : "Click to Activate Scheme"}>
+            <ButtonComponent
+              style={{ padding: "5px 10px", height: 40 }}
+              radius={8}
+              onClick={toggleSchemeStatus}
+              font="Inter"
+              textColor="#fff"
+              bgColor={isSchemeActive ? "#BF0204" : "#28a745"}
+              fontSize="14"
+              leftIcon={isSchemeActive ? <DeactivateIcon /> : null}
+              disabled={!!loadingScheme}
+            >
+              {isSchemeActive ? "Deactivate" : "Activate"}
+            </ButtonComponent>
+          </Tooltip>
         </div>
       </div>
 
@@ -244,18 +348,23 @@ const SchemeSettingsPage = () => {
               >
                 Slab Structure
               </Tabs.Tab>
-              <Tabs.Tab value="product">Product Details</Tabs.Tab>
+              <Tabs.Tab value="product">
+                Product Details
+              </Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value="slab" pt="xs">
               <SlabStructureTab
                 data={editableRows}
                 loading={loadingScheme}
-                onDataChange={handleRowChange} />
+                onDataChange={handleRowChange}
+                showAddRow={true}
+                onAddRow={handleAddRow}
+              />
             </Tabs.Panel>
 
             <Tabs.Panel value="product" pt="xs">
-              Product Details Content Here
+              <VerticalKeyValueTable loading={loadingProduct} data={productDetails || {}} headers={productHeaders} />
             </Tabs.Panel>
           </Tabs>
         </Grid.Col>
@@ -264,6 +373,14 @@ const SchemeSettingsPage = () => {
         <Grid.Col span={{ base: 12, md: 3.5, lg: 3.5 }}>
           <SchemeConfigurationForm />
         </Grid.Col>
+
+        {updatedOperators.length !== 0 && (
+          <div className="absolute bottom-0 right-0 p-4">
+            <ButtonComponent onClick={handleSave} bgColor="#BF0204" textColor="#fff" radius={8} font="Inter" fontSize="14">
+              Save Changes
+            </ButtonComponent>
+          </div>
+        )}
       </Grid>
     </div>
   );

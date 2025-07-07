@@ -42,7 +42,6 @@ type GenericMasterTableProps<T> = {
 
   editable?: boolean;
   onDataChange?: (rowIndex: number, key: keyof T, value: any) => void;
-  onSubmitAll?: (updatedRows: T[]) => void;
   showAddRow?: boolean;
   onAddRow?: () => void;
 };
@@ -69,7 +68,6 @@ const GenericMasterTable = <T,>({
 
   editable = false,
   onDataChange,
-  onSubmitAll,
   showAddRow = false,
   onAddRow,
 
@@ -122,6 +120,8 @@ const GenericMasterTable = <T,>({
             renderExtraRowCell={renderExtraRowCell}
             editable={editable}
             onChange={onDataChange}
+            showAddRow={showAddRow}
+            onAddRow={onAddRow}
           />
         </Table.Tbody>
 

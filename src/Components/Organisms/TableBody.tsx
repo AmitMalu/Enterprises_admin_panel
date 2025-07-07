@@ -4,19 +4,24 @@ import SelectComponent from "../Atoms/SelectComponent";
 import moment from "moment";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import CustomDatePicker from "../Atoms/CustomDatePicker";
+import { AddIconButton } from "../../assets/Icons";
 
 const TableBody = <T,>({
   data,
   headers,
   renderExtraRowCell,
   editable,
-  onChange
+  onChange,
+  showAddRow = false,
+  onAddRow,
 }: {
   data: T[];
   headers: GenericTableHeader<T>[];
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
   editable?: boolean;
   onChange?: (rowIndex: number, key: keyof T, value: any) => void;
+  showAddRow?: boolean;
+  onAddRow?: () => void;
 }) => {
 
   if (!data?.length) {
@@ -110,7 +115,6 @@ const TableBody = <T,>({
             }
 
             return (
-
               <Table.Td key={String(key)} style={ellipsisCellStyle}>
                 {isEmpty ? (
                   displayValue
@@ -135,6 +139,21 @@ const TableBody = <T,>({
           })}
         </Table.Tr>
       ))}
+      {showAddRow && (
+        <Table.Tr>
+          <Table.Td
+            colSpan={headers.length + (renderExtraRowCell ? 1 : 0)}
+          >
+            <div
+              className="flex items-center justify-center cursor-pointer p-2"
+              onClick={onAddRow}
+            >
+              <AddIconButton
+              />
+            </div>
+          </Table.Td>
+        </Table.Tr>
+      )}
     </>
   );
 };
