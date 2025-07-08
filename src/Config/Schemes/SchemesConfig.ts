@@ -26,7 +26,7 @@ export interface SchemesListTableType {
   schemeCode: string;
   productName: string;
   subProductName: string;
-  operatorName: string;
+  // operatorName: string;
   vendorName: string;
   schemeCombinationHashCode: string;
 }
@@ -68,7 +68,7 @@ export const headers: GenericTableHeader<SchemesListTableType>[] = [
   { key: "schemeCode", label: "Scheme Code" },
   { key: "productName", label: "Product" },
   { key: "subProductName", label: "Sub Product" },
-  { key: "operatorName", label: "Operator Name" },
+  // { key: "operatorName", label: "Operator Name" },
   { key: "vendorName", label: "Vendor Name" },
   { key: "schemeCombinationHashCode", label: "Scheme HashCode" },
 ];
@@ -150,6 +150,8 @@ export const slabStructureData: any[] = [
   },
 ];
 export interface SchemeDetails {
+  isActive: boolean;
+  tdsRate: number | string;
   schemeName: string;
   schemeCode: string;
   operators: OperatorSlabData[];
@@ -217,13 +219,13 @@ export const slabStructureHeaders: GenericTableHeader<SlabStructureTableType>[] 
       ],
     },
     { key: "gross", label: "Gross" },
-    { key: "im", label: "IM" },
-    { key: "enterprise", label: "Enterprise" },
-    { key: "whitelabel", label: "WL" },
-    { key: "superDistributor", label: "SD" },
-    { key: "partner", label: "PT" },
-    { key: "distributor", label: "DT" },
-    { key: "retailer", label: "RT" },
+    { key: "im", label: "IM", showCalculatedBelow: true },
+    { key: "enterprise", label: "Enterprise", showCalculatedBelow: true },
+    { key: "whitelabel", label: "WL", showCalculatedBelow: true },
+    { key: "superDistributor", label: "SD", showCalculatedBelow: true },
+    { key: "partner", label: "PT", showCalculatedBelow: true },
+    { key: "distributor", label: "DT", showCalculatedBelow: true },
+    { key: "retailer", label: "RT", showCalculatedBelow: true },
   ];
 
 export const getFilteredSlabHeaders = (slabs: any[]) => {
@@ -276,3 +278,16 @@ export const productHeaders: GenericVerticalHeader<Record<string, any>>[] = [
   { key: "editedAt", label: "Edited At" },
   { key: "editedBy", label: "Edited By" },
 ];
+
+export const calculateCommission = (val: any, tds: number | string): string => {
+  const input = parseFloat(val);
+  const tdsNum = typeof tds === "number" ? tds : parseFloat(tds as string);
+  if (isNaN(input) || isNaN(tdsNum)) return "";
+
+  const finalValue = input - (input * tdsNum) / 100;
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2,
+  }).format(finalValue);
+};

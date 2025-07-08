@@ -122,7 +122,6 @@ const SchemeSettingsPage = () => {
     const nextStatus = !isSchemeActiveRef.current;
 
     try {
-      setLoadingScheme(true);
       const response = await dispatch(
         updateMasterItem({
           key: "schemeStatus",
@@ -139,8 +138,6 @@ const SchemeSettingsPage = () => {
       }
     } catch (error: any) {
       toast.error(error || "An error occurred while updating scheme status");
-    } finally {
-      setLoadingScheme(false);
     }
   }
 
@@ -225,7 +222,7 @@ const SchemeSettingsPage = () => {
           fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}`, id: schemeCode })
         ).unwrap();
         setSchemeDetails(data);
-        setIsSchemeActive(false);
+        setIsSchemeActive(data.isActive);
 
       } catch (err: any) {
         toast.error(err);
@@ -356,10 +353,12 @@ const SchemeSettingsPage = () => {
             <Tabs.Panel value="slab" pt="xs">
               <SlabStructureTab
                 data={editableRows}
+                tdsRate={schemeDetails?.tdsRate || 0}
                 loading={loadingScheme}
                 onDataChange={handleRowChange}
-                showAddRow={true}
+                showAddRow={!isSchemeActive}
                 onAddRow={handleAddRow}
+                isSchemeActive={!isSchemeActive}
               />
             </Tabs.Panel>
 

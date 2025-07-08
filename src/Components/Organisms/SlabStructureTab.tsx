@@ -15,13 +15,15 @@ interface SlabStructureTabProps {
     operatorCode: string,
     slabId: number | string,
     key: keyof SlabStructureTableType,
-    value: any
+    value: any,
   ) => void;
+  isSchemeActive?: boolean;
   showAddRow?: boolean;
   onAddRow?: (operatorCode: string) => void;
+  tdsRate?: number | string;
 }
 
-const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow }: SlabStructureTabProps) => {
+const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, isSchemeActive, tdsRate }: SlabStructureTabProps) => {
 
   if (loading) {
     return (
@@ -62,7 +64,8 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow }:
               <GenericMasterTable<SlabStructureTableType>
                 data={operator?.slabs}
                 headers={headers}
-                editable={true}
+                tdsRate={tdsRate}
+                editable={!!isSchemeActive}
                 onDataChange={(rowIndex, key, value) =>
                   onDataChange?.(
                     operator.operatorCode,

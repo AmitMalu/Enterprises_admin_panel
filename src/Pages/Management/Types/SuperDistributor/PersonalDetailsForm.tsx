@@ -1,8 +1,25 @@
 import { FormikProps } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
+import { useEffect, useState } from "react";
 
 const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
+
+  const [isReadOnly, setIsReadOnly] = useState(false);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("userInfo");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      const hierarchyId = parsedUser?.hierarchyId;
+
+      if (hierarchyId) {
+        formik.setFieldValue("parentAccount", hierarchyId);
+        setIsReadOnly(true);
+      }
+    }
+  }, []);
+
   return (
     <>
       <Grid gutter="lg">
@@ -15,6 +32,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             required
             maxLength={51}
             allowSpecialChar={true}
+            disabled={isReadOnly}
           />
         </Grid.Col>
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>

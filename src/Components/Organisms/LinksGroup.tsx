@@ -8,10 +8,11 @@ import {
 } from "@mantine/core";
 import React from "react";
 import { IconChevronRight } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   setActiveMenu,
   setActiveSubMenu,
+  setMenuOpen,
 } from "../../Redux/Features/Menu/MenuReducer";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 
@@ -32,51 +33,54 @@ const LinksGroup: React.FC<linksGroupProps> = ({
 }: linksGroupProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const hasLinks = Array.isArray(links);
-  const { activeMenu, activeSubMenu, openedMenu } = useAppSelector(
+  const location = useLocation();
+  const pathname = location.pathname;
+
+  const { openedMenu } = useAppSelector(
     (state) => state.menu
   );
+  const hasLinks = Array.isArray(links);
+  const isOpened = openedMenu === label;
 
-  const isActiveMenu = label === activeMenu;
-  const isOpened = label === openedMenu;
+  const isActiveMenu = hasLinks
+    ? links.some((l) => pathname.startsWith(l.link))
+    : link && pathname.startsWith(link);
 
   const handleClick = () => {
-    dispatch(setActiveMenu(label)); // also toggles openedMenu inside reducer
-
+    dispatch(setMenuOpen(label)); // also toggles openedMenu inside reducer
     if (!hasLinks && link) {
-      dispatch(setActiveSubMenu(null)); // Clear submenu selection
+      // dispatch(setActiveSubMenu(null)); // Clear submenu selection
       navigate(link); // navigate directly if no submenu
     }
   };
 
   const items = hasLinks
     ? links.map((link) => {
-        const isActive = link.label === activeSubMenu;
-        return (
-          <Tooltip.Floating
-            label={link.label}
-            position="top-end"
-            disabled={link.label.length <= 25} // how only when long
+      const isActive = pathname.startsWith(link.link);
+      return (
+        <Tooltip.Floating
+          label={link.label}
+          position="top-end"
+          disabled={link.label.length <= 25} // how only when long
+          key={link.label}
+        >
+          <a
             key={link.label}
-          >
-            <a
-              key={link.label}
-              onClick={() => {
-                dispatch(setActiveSubMenu(link.label));
-                navigate(link.link); // no <a> tag used
-              }}
-              className={`flex items-center gap-2 cursor-pointer text-[12px] font-poppins font-normal px-4 py-1 rounded-xl ${
-                isActive ? "text-submenuActive" : "text-black"
+            onClick={() => {
+              // dispatch(setActiveSubMenu(link.label));
+              navigate(link.link); // no <a> tag used
+            }}
+            className={`flex items-center gap-2 cursor-pointer text-[12px] font-poppins font-normal px-4 py-1 rounded-xl ${isActive ? "text-submenuActive" : "text-black"
               } bg-submenuBg`}
-            >
-              {link.icon && <link.icon />}
-              <span className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px]">
-                {link.label}
-              </span>
-            </a>
-          </Tooltip.Floating>
-        );
-      })
+          >
+            {link.icon && <link.icon />}
+            <span className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px]">
+              {link.label}
+            </span>
+          </a>
+        </Tooltip.Floating>
+      );
+    })
     : null;
 
   return (
@@ -85,14 +89,28 @@ const LinksGroup: React.FC<linksGroupProps> = ({
         className={`rounded-xl w-full text-left transition`}
         onClick={handleClick}
         style={{
-          backgroundColor: isOpened ? "#BDC4C3" : "transparent",
+          backgroundColor: hasLinks
+            ? isOpened
+              ? "#BDC4C3"
+              : "transparent"
+            : pathname.startsWith(link ?? "")
+              ? "#BDC4C3"
+              : "transparent",
           padding: "4px 8px",
         }}
       >
         <Group justify="space-between" gap="sm">
           <Box className="flex items-center">
             <Icon />
-            <Box className="ml-4 text-[16px] font-poppins font-normal leading-[27px] text-black">
+            <Box
+              className="ml-4 text-[16px] font-poppins font-normal leading-[27px]"
+              style={{
+                color:
+                  !hasLinks && pathname === link
+                    ? "#c30000"
+                    : "#1D1F2C",
+              }}
+            >
               {label}
             </Box>
           </Box>
@@ -105,8 +123,9 @@ const LinksGroup: React.FC<linksGroupProps> = ({
           )}
         </Group>
       </UnstyledButton>
+
       {hasLinks ? (
-        <Collapse in={isOpened}>
+        <Collapse in={!!isOpened}>
           <Box className="flex flex-col">{items}</Box>
         </Collapse>
       ) : null}

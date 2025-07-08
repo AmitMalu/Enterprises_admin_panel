@@ -116,6 +116,7 @@ export type GenericTableHeader<T> = {
   filterOptions?: { label: string; value: any }[];
   searchable?: boolean; // optionally override with this
   renderType?: "link" | "custom"; //
+  showCalculatedBelow?: boolean;
 };
 
 export function exportToCsv<T extends Record<string, any>>(

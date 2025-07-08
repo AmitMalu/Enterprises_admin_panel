@@ -82,11 +82,6 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "Schemes Rate",
-        link: "/schemes/rate",
-        icon: userCreationSvg,
-      },
-      {
         label: "Schemes Allocation",
         link: "/schemes/allocation",
         icon: userCreationSvg,

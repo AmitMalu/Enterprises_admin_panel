@@ -44,6 +44,8 @@ type GenericMasterTableProps<T> = {
   onDataChange?: (rowIndex: number, key: keyof T, value: any) => void;
   showAddRow?: boolean;
   onAddRow?: () => void;
+  isSchemeActive?: React.MutableRefObject<boolean>;
+  tdsRate?: number | string; // Optional prop for TDS rate
 };
 
 const GenericMasterTable = <T,>({
@@ -70,7 +72,7 @@ const GenericMasterTable = <T,>({
   onDataChange,
   showAddRow = false,
   onAddRow,
-
+  tdsRate = 0, // Default TDS rate if not provided
 }: GenericMasterTableProps<T>) => {
 
   return (
@@ -116,6 +118,7 @@ const GenericMasterTable = <T,>({
 
           <TableBody
             data={data}
+            tdsRate={tdsRate}
             headers={headers}
             renderExtraRowCell={renderExtraRowCell}
             editable={editable}
