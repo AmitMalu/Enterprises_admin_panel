@@ -2,16 +2,13 @@ import {
   Box,
   Collapse,
   Group,
-  ScrollArea,
   Tooltip,
   UnstyledButton,
 } from "@mantine/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { IconChevronRight } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  setActiveMenu,
-  setActiveSubMenu,
   setMenuOpen,
 } from "../../Redux/Features/Menu/MenuReducer";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
@@ -29,34 +26,27 @@ const LinksGroup: React.FC<linksGroupProps> = ({
   label,
   links,
   link,
-  initiallyOpened,
 }: linksGroupProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const pathname = location.pathname;
+  const { pathname } = useLocation();
+  const { openedMenu } = useAppSelector((state) => state.menu); //Open close menu state using redux
 
-  const { openedMenu } = useAppSelector(
-    (state) => state.menu
-  );
   const hasLinks = Array.isArray(links);
-  const isOpened = openedMenu === label;
-
-  const isActiveMenu = hasLinks
-    ? links.some((l) => pathname.startsWith(l.link))
-    : link && pathname.startsWith(link);
+  const isOpened = openedMenu === label; // Check if the current menu is opened
+  const isDirectMenuActive = !hasLinks && pathname === link; // Check if the current menu is a direct link and active
 
   const handleClick = () => {
-    dispatch(setMenuOpen(label)); // also toggles openedMenu inside reducer
+    dispatch(setMenuOpen(hasLinks ? label : "")); // Toggle the menu open state
     if (!hasLinks && link) {
-      // dispatch(setActiveSubMenu(null)); // Clear submenu selection
-      navigate(link); // navigate directly if no submenu
+      navigate(link); // Navigate to the link if it's a direct link
     }
   };
 
+  // Generate menu items if links are provided
   const items = hasLinks
     ? links.map((link) => {
-      const isActive = pathname.startsWith(link.link);
+      const isActive = pathname.startsWith(link.link); // Check if the current path starts with the link's path
       return (
         <Tooltip.Floating
           label={link.label}
@@ -65,13 +55,10 @@ const LinksGroup: React.FC<linksGroupProps> = ({
           key={link.label}
         >
           <a
+            onClick={() => navigate(link.link)}
             key={link.label}
-            onClick={() => {
-              // dispatch(setActiveSubMenu(link.label));
-              navigate(link.link); // no <a> tag used
-            }}
-            className={`flex items-center gap-2 cursor-pointer text-[12px] font-poppins font-normal px-4 py-1 rounded-xl ${isActive ? "text-submenuActive" : "text-black"
-              } bg-submenuBg`}
+            className={`flex items-center gap-2 cursor-pointer text-[12px] bg-submenuBg font-poppins 
+              font-normal px-4 py-1 rounded-xl ${isActive ? "text-submenuActive" : "text-black"} `}
           >
             {link.icon && <link.icon />}
             <span className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px]">
@@ -83,17 +70,26 @@ const LinksGroup: React.FC<linksGroupProps> = ({
     })
     : null;
 
+  useEffect(() => {
+    if (
+      hasLinks &&
+      !isOpened && // Only if not already opened
+      links?.some((l) => pathname.startsWith(l.link))
+    ) {
+      dispatch(setMenuOpen(label));
+    }
+    // Only on initial mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <UnstyledButton
-        className={`rounded-xl w-full text-left transition`}
         onClick={handleClick}
+        className={`rounded-xl w-full text-left transition`}
         style={{
-          backgroundColor: hasLinks
-            ? isOpened
-              ? "#BDC4C3"
-              : "transparent"
-            : pathname.startsWith(link ?? "")
+          backgroundColor:
+            isOpened
               ? "#BDC4C3"
               : "transparent",
           padding: "4px 8px",
@@ -103,13 +99,9 @@ const LinksGroup: React.FC<linksGroupProps> = ({
           <Box className="flex items-center">
             <Icon />
             <Box
-              className="ml-4 text-[16px] font-poppins font-normal leading-[27px]"
-              style={{
-                color:
-                  !hasLinks && pathname === link
-                    ? "#c30000"
-                    : "#1D1F2C",
-              }}
+              className={`ml-4 text-[16px] font-poppins font-normal leading-[27px] ${isDirectMenuActive ?
+                "text-[#c30000]" : "text-[#1D1F2C]"
+                }`}
             >
               {label}
             </Box>
@@ -118,17 +110,18 @@ const LinksGroup: React.FC<linksGroupProps> = ({
             <IconChevronRight
               stroke={1.5}
               size={16}
-              style={{ transform: isOpened ? "rotate(-90deg)" : "none" }}
+              className={`transition-transform ${isOpened ? "rotate-[-90deg]" : "rotate-0"}`}
             />
           )}
         </Group>
-      </UnstyledButton>
+      </UnstyledButton >
 
-      {hasLinks ? (
-        <Collapse in={!!isOpened}>
-          <Box className="flex flex-col">{items}</Box>
-        </Collapse>
-      ) : null}
+      {
+        hasLinks ? (
+          <Collapse in={!!isOpened} >
+            <Box className="flex flex-col">{items}</Box>
+          </Collapse >
+        ) : null}
     </>
   );
 };

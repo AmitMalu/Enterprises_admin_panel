@@ -9,8 +9,8 @@ const Sidebar: React.FC = () => {
     <LinksGroup
       {...item}
       key={item.label}
-      initiallyOpened={item.initiallyOpened}
       link={item?.link}
+      initiallyOpened={item.initiallyOpened}
     />
   ));
 
