@@ -71,10 +71,10 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     (screenSize === "sm" || screenSize === "md" || screenSize === "lg"
       ? "sm"
       : screenSize === "xl" || screenSize === "2xl"
-      ? "md"
-      : screenSize === "3xl"
-      ? "lg"
-      : "xl");
+        ? "md"
+        : screenSize === "3xl"
+          ? "lg"
+          : "xl");
 
   const defaultRadius = radius || (screenSize === "3xl" ? "md" : "sm");
 

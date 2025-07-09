@@ -5,10 +5,12 @@ import {
   DownloadIcon,
   FilterIcon,
   RefreshIcon,
+  SearchIcon,
 } from "../../assets/Icons";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import { GenericTableHeader } from "../../Utils/utils";
 import ColumnVisibilityMenu from "../Molecules/ColumnVisibilityMenu";
+import TextInputComponent from "../Atoms/TextInputComponent";
 
 type GenericMasterToolbarProps = {
   addButtonText?: string;
@@ -21,6 +23,9 @@ type GenericMasterToolbarProps = {
   visibleColumns?: string[];
   loading?: boolean;
   error?: null | string;
+  onSearch?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  searchValue?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
 const GenericMasterToolbar = ({
@@ -28,6 +33,9 @@ const GenericMasterToolbar = ({
   onAdd,
   onExport,
   onFilter,
+  onSearch,
+  searchValue,
+  onKeyDown,
   onRefresh,
   onColumnChange,
   headers,
@@ -60,8 +68,20 @@ const GenericMasterToolbar = ({
 
         {/*Table Controls */}
         <div>
+          {/* Search Bar */}
+          {onSearch && (
+            <TextInputComponent
+              className="inline-block h-[40px] w-[250px] "
+              name="search"
+              size="sm"
+              value={searchValue || ""}
+              placeholder="Search..."
+              onChange={onSearch}
+            />
+          )}
+
           {/* Filter Icon */}
-          <ButtonComponent
+          {onFilter && <ButtonComponent
             style={{ padding: "4px 8px", height: 32 }}
             radius={1}
             textColor="#000000"
@@ -74,7 +94,7 @@ const GenericMasterToolbar = ({
             disabled={!!loading || !!error}
           >
             Filter
-          </ButtonComponent>
+          </ButtonComponent>}
 
           {/* Download Icon */}
           <ButtonComponent

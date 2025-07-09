@@ -51,8 +51,15 @@ export const fetchMasterList = createAsyncThunk(
       const responseData = response?.data;
 
       if (responseData.statusCode === 200) {
-        const { content, totalPages, totalElements, size, number } =
-          responseData.data;
+        const {
+          content,
+          totalPages,
+          totalElements,
+          size,
+          pageSize,
+          pageNumber,
+          number,
+        } = responseData.data;
 
         // Set data and meta in store
         // dispatch(setData({ key, value: content }));
@@ -62,8 +69,8 @@ export const fetchMasterList = createAsyncThunk(
             pagination: {
               totalPages,
               totalElements,
-              pageSize: size,
-              currentPage: number + 1,
+              pageSize: size ?? pageSize,
+              currentPage: number + 1 || pageNumber + 1,
             },
           })
         );
