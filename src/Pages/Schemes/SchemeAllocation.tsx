@@ -33,7 +33,7 @@ const SchemeAllocation = () => {
     const [error, setError] = useState<string | null>(null);
 
     const [search, setSearch] = useState("")
-    const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
+    const [debouncedSearchValue, setDebouncedSearchValue] = useState<string | null>("");
 
     const [refreshKey, setRefreshKey] = useState(0);
     const [visibleColumns, setVisibleColumns] = useState<string[]>(
@@ -48,7 +48,7 @@ const SchemeAllocation = () => {
         () =>
             debounce((val: string) => {
                 setDebouncedSearchValue(val); // store it here
-            }, 1000),
+            }, 500),
         []
     );
 
@@ -82,11 +82,14 @@ const SchemeAllocation = () => {
     };
 
     const handleExportClick = () => {
-        if (!data || data.length === 0) {
-            toast.warning("No data available to export.");
-            return;
-        }
-        exportToCsv(data, "Retailers List");
+        setData((current) => {
+            if (!current || current.length === 0) {
+                toast.warning("No data available to export.");
+                return current;
+            }
+            exportToCsv(current, "Schemes Allocation");
+            return current
+        })
     };
 
     const handleToggleColumn = (key: string) => {
@@ -128,9 +131,7 @@ const SchemeAllocation = () => {
             }
         };
 
-        if (debouncedSearchValue) {
-            fetchData();
-        }
+        fetchData();
     }, [currentPage, pageSize, refreshKey, debouncedSearchValue]);
 
     useEffect(() => {

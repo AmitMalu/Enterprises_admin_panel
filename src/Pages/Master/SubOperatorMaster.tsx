@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
 import {
@@ -30,6 +30,8 @@ const SubOperatorMaster = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
+  const dataRef = useRef<SubOperatorTableType[] | null>(null);
+
   const [submittedFilter, setSubmittedFilter] = useState<{
     key: string;
     value: any;
@@ -67,11 +69,12 @@ const SubOperatorMaster = () => {
   };
 
   const handleExportClick = () => {
-    if (!data || data.length === 0) {
+    const currentData = dataRef.current;
+    if (!currentData || currentData.length === 0) {
       toast.warning("No data available to export.");
       return;
     }
-    exportToCsv(data, "sub-operator-master");
+    exportToCsv(currentData, "sub-operator-master");
   };
 
   const handleToggleColumn = (key: string) => {
@@ -88,6 +91,10 @@ const SubOperatorMaster = () => {
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">

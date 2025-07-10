@@ -89,12 +89,15 @@ const PreFundingAuth = () => {
     setSubmittedFilter({ key, value });
   };
 
-  const handleExportClick = () => {
-    if (!data || data.length === 0) {
-      toast.warning("No data available to export.");
-      return;
-    }
-    exportToCsv(data, "Prefunding");
+   const handleExportClick = () => {
+    setData((current) => {
+      if (!current || current.length === 0) {
+        toast.warning("No data available to export.");
+        return current;
+      }
+      exportToCsv(current, "Schemes");
+      return current
+    })
   };
 
   const handleToggleColumn = (key: string) => {

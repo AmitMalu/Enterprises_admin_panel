@@ -23,16 +23,18 @@ interface SelectComponentProps {
   className?: string;
   allowDeselect?: boolean;
   searchable?: boolean;
+  rightSection?: React.ReactNode;
 }
 
 const SelectComponent: React.FC<SelectComponentProps> = ({
   label,
   name,
   placeholder,
-  nothingFoundMessage = "Nothing found...",
+  nothingFoundMessage,
   value,
   onChange,
   error,
+  rightSection,
   clearable = false,
   required = false,
   radius,
@@ -81,6 +83,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         data={data}
         clearable={clearable}
         searchable={searchable}
+        rightSection={rightSection} 
         styles={{
           input: {
             color: "#282828",

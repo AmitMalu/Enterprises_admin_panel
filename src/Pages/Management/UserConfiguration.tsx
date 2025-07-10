@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { headers, KEY, URL, UserConfigTableType } from "../../Config/Management/UserConfigurationConfig";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { toast } from "react-toastify";
@@ -23,6 +23,8 @@ const UserConfiguration = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
+  const dataRef = useRef<UserConfigTableType[] | null>(null);
+
   const [submittedFilter, setSubmittedFilter] = useState<{
     key: string;
     value: any;
@@ -59,12 +61,14 @@ const UserConfiguration = () => {
   };
 
   const handleExportClick = () => {
-    if (!data || data.length === 0) {
+    const currentData = dataRef.current;
+    if (!currentData || currentData.length === 0) {
       toast.warning("No data available to export.");
       return;
     }
-    exportToCsv(data, "User Configuration")
-  }
+    exportToCsv(currentData, "User Configuration");
+  };
+
 
   const handleToggleColumn = (key: string) => {
     setVisibleColumns((prev) =>
@@ -80,6 +84,11 @@ const UserConfiguration = () => {
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
+
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">

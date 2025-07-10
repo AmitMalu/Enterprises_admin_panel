@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { EditIcon2, EyeIcon2 } from "../../assets/Icons";
 import { useAppDispatch } from "../../Redux/hooks";
@@ -22,6 +22,8 @@ const SchemeHierarchy = () => {
     const [visibleColumns, setVisibleColumns] = useState<string[]>(
         headers.map((h) => h.key as string)
     );
+    const dataRef = useRef<SchemesHierarchyTableType[] | null>(null);
+
     const [submittedFilter, setSubmittedFilter] = useState<{
         key: string;
         value: any;
@@ -59,11 +61,12 @@ const SchemeHierarchy = () => {
     };
 
     const handleExportClick = () => {
-        if (!data || data.length === 0) {
+        const currentData = dataRef.current;
+        if (!currentData || currentData.length === 0) {
             toast.warning("No data available to export.");
             return;
         }
-        exportToCsv(data, "SCHEMES HEIRARCHY");
+        exportToCsv(currentData, "SCHEMES HEIRARCHY");
     };
 
     const handleToggleColumn = (key: string) => {
@@ -80,6 +83,10 @@ const SchemeHierarchy = () => {
         setRefreshKey((prev) => prev + 1);
         setFilterVisible(false);
     };
+
+    useEffect(() => {
+        dataRef.current = data;
+    }, [data]);
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">

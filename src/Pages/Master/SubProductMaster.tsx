@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EditIcon, EyeIcon } from "../../assets/Icons";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import {
@@ -30,6 +30,8 @@ const SubProductMaster = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
+  const dataRef = useRef<SubProductTableType[] | null>(null);
+
   const [submittedFilter, setSubmittedFilter] = useState<{
     key: string;
     value: any;
@@ -66,11 +68,12 @@ const SubProductMaster = () => {
   };
 
   const handleExportClick = () => {
-    if (!data || data.length === 0) {
+    const currentData = dataRef.current;
+    if (!currentData || currentData.length === 0) {
       toast.warning("No data available to export.");
       return;
     }
-    exportToCsv(data, "sub-product-master");
+    exportToCsv(currentData, "sub-product-master");
   };
 
   const handleToggleColumn = (key: string) => {
@@ -87,6 +90,10 @@ const SubProductMaster = () => {
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">

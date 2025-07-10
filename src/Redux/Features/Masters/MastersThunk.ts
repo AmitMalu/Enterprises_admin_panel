@@ -132,7 +132,10 @@ export const createMasterItem = createAsyncThunk(
       const response = await axiosInstance.post(url, data);
       const responseData = response?.data;
 
-      if (responseData?.statusCode === 201) {
+      if (
+        responseData?.statusCode === 201 ||
+        responseData?.statusCode === 200
+      ) {
         // dispatch(setLoading({ key, loading: false }));
         // dispatch(setLoaded({ key, loaded: false }));
         return responseData;
@@ -191,9 +194,21 @@ export const updateMasterItem = createAsyncThunk(
 
 export const fetchMasterDropdown = createAsyncThunk(
   "masters/fetchDropdown",
-  async ({ url }: { url: string }, { rejectWithValue }) => {
+  async (
+    {
+      url,
+      method = "GET",
+    }: { url: string; method?: "GET" | "POST" | "PUT" | "DELETE" },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await axiosInstance.get(url);
+      let response;
+      if (method === "POST") {
+        response = await axiosInstance.post(url);
+      } else {
+        response = await axiosInstance.get(url); // Default to GET
+      }
+
       const responseData = response?.data;
 
       if (responseData?.statusCode === 200) {

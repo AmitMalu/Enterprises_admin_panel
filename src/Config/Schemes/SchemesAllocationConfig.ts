@@ -31,3 +31,38 @@ export const headers: GenericTableHeader<SchemesAllocationTableType>[] = [
   { key: "createdDate", label: "Created Date", searchable: false },
   { key: "lastLoginDate", label: "Last Login Date", searchable: false },
 ];
+
+export const transformSchemeAllocationPayload = ({
+  hierarchyId,
+  modifiedSchemes,
+  schemeOptions,
+}: {
+  hierarchyId: string | undefined;
+  modifiedSchemes: Record<string, string>;
+  schemeOptions: Record<string, SchemeOption[]>;
+}) => {
+  const codes = Object.entries(modifiedSchemes).map(
+    ([subProductCode, schemeId]) => {
+      if (schemeId === "No scheme assigned") {
+        return {
+          subProductCode,
+          schemeCode: "No scheme assigned",
+        };
+      }
+
+      const matchedScheme = schemeOptions[subProductCode]?.find(
+        (scheme) => String(scheme.schemeId) === schemeId
+      );
+
+      return {
+        subProductCode,
+        schemeCode: matchedScheme?.schemeCode || "",
+      };
+    }
+  );
+
+  return {
+    hierarchyId,
+    codes: codes.filter((c) => c.schemeCode),
+  };
+};

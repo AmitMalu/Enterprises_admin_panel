@@ -11,7 +11,7 @@ import {
   MASTER_URL,
 } from "../../Config/Master/MainMasterConfig";
 import { useAppDispatch } from "../../Redux/hooks";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import {
@@ -29,6 +29,8 @@ const MainMaster = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
+  const dataRef = useRef<MainMasterTableType[] | null>(null);
+
   const [submittedFilter, setSubmittedFilter] = useState<{
     key: string;
     value: any;
@@ -65,12 +67,14 @@ const MainMaster = () => {
   };
 
   const handleExportClick = () => {
-    if (!data || data.length === 0) {
+    const currentData = dataRef.current;
+    if (!currentData || currentData.length === 0) {
       toast.warning("No data available to export.");
       return;
     }
-    exportToCsv(data, "main-master");
+    exportToCsv(currentData, "main-master");
   };
+
 
   const handleToggleColumn = (key: string) => {
     setVisibleColumns((prev) =>
@@ -86,6 +90,10 @@ const MainMaster = () => {
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
