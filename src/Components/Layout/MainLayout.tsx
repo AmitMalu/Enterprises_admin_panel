@@ -9,11 +9,22 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { useEffect } from "react";
 import { logoutUser } from "../../Utils/utils";
+import { useAppDispatch } from "../../Redux/hooks";
+import { fetchWalletBalance } from "../../Redux/Features/Auth/Thunk";
 
 const MainLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  // Fetch Wallet Balance
+  useEffect(() => {
+    const id = JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId || ""
+    if (id) {
+      dispatch(fetchWalletBalance(id))
+    }
+  }, [])
 
   // Clear justLoggedIn if user navigates to any route other than "/"
   useEffect(() => {
@@ -55,7 +66,7 @@ const MainLayout: React.FC = () => {
       padding="xs"
     >
       <AppShell.Header style={{ backgroundColor: "#F8F8F8" }}>
-        <Group h="100%" px="md">
+        <Group justify="between" style={{ flexWrap: "nowrap", width: "100%" }} h="100%" px="md">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Navbar />
         </Group>

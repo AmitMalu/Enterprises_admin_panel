@@ -3,7 +3,14 @@ export interface AuthState {
   userInfo: any;
   error: string | null;
   token: string | null;
+  walletBalance: WalletBalance | null;
 }
+
+export type WalletBalance = {
+  postpaidBalance?: number;
+  prepaidBalance?: number;
+  [key: string]: any;
+};
 
 export interface loginPayload {
   userName: string | number;

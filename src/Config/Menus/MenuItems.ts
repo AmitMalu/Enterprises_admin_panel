@@ -54,11 +54,11 @@ export const sidebarData = [
         link: "/master/sub-master",
         icon: userCreationSvg,
       },
-      {
-        label: "User Configuration",
-        link: "/master/user-configuration",
-        icon: userCreationSvg,
-      },
+      // {
+      //   label: "User Configuration",
+      //   link: "/master/user-configuration",
+      //   icon: userCreationSvg,
+      // },
       {
         label: "Pincode Master",
         link: "/master/pincode",

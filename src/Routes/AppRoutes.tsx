@@ -15,6 +15,8 @@ import { WebSettingRoutes } from "./WebSettingRoutes";
 import { MyAccountRoutes } from "./MyAccountRoutes";
 import { NotFoundRoute } from "./NotFoundRoute";
 import { LogsRoute } from "./LogsRoute";
+import { ChangePassword } from "../Pages/Auth";
+import { Profile } from "../Pages/Account";
 
 // Lazy loaded pages
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
@@ -32,6 +34,8 @@ const AppRoutes = () => {
           <Route element={<MainLayout />}>
             {/* MainLayout  */}
             <Route path="/" element={<HomePage />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/change-password" element={<ChangePassword />} />
             {MasterRoutes}
             {FundingRoutes}
             {ManagementRoutes}
