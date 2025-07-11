@@ -1,5 +1,5 @@
 import { Table, Tooltip } from "@mantine/core";
-import { booleanSelectData2, ellipsisCellStyle, GenericTableHeader } from "../../Utils/utils";
+import { booleanSelectData2, ellipsisCellStyle, formatDateTime, GenericTableHeader } from "../../Utils/utils";
 import SelectComponent from "../Atoms/SelectComponent";
 import moment from "moment";
 import TextInputComponent from "../Atoms/TextInputComponent";
@@ -137,8 +137,22 @@ const TableBody = <T,>({
                       </Tooltip>
                     </a>
                   ) : (
-                    <Tooltip label={displayValue} withArrow>
-                      <span>{displayValue}</span>
+                    <Tooltip
+                      position="top-start"
+                      offset={{ mainAxis: -2, crossAxis: 50 }}
+                      style={{ fontSize: "12px" }}
+                      label={
+                        key === "createdOn" || key === "editedOn"
+                          ? formatDateTime(displayValue)
+                          : displayValue
+                      }
+                      withArrow
+                    >
+                      <span>
+                        {key === "createdOn" || key === "editedOn"
+                          ? formatDateTime(displayValue)
+                          : displayValue}
+                      </span>
                     </Tooltip>
                   )}
                 </Table.Td>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   UserConfig,
   UserType,
@@ -20,6 +20,7 @@ import FormSuccessModel from "../Atoms/FormSuccessModel";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate()
   const auth = useAppSelector((state) => state.auth);
   const { type } = useParams<{ type: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -58,8 +59,8 @@ const UserFormPage = () => {
             await handleFormSubmit({
               values,
               formikHelpers,
-              username: auth.user,
               userType,
+              navigate,
               dispatch,
               setShowSuccessModal,
               setActiveStep,

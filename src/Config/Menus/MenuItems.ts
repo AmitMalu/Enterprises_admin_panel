@@ -156,13 +156,13 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "Activation User",
-        link: "/management/user/activation",
+        label: "Onboarded Users",
+        link: "/management/user/onboarded",
         icon: userCreationSvg,
       },
       {
-        label: "Onboarded Users",
-        link: "/management/user/onboarded",
+        label: "Rejected User",
+        link: "/management/user/rejected",
         icon: userCreationSvg,
       },
       {
