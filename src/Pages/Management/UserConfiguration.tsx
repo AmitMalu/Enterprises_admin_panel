@@ -93,7 +93,7 @@ const UserConfiguration = () => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
-      <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
+      <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={600}>
         User Configuration
       </TextComponent>
 

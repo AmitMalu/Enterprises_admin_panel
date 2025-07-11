@@ -160,7 +160,7 @@ export const getValidationSchema = (
   return Yup.object().shape(shape);
 };
 
-interface SubmitHandlerArgs {
+export interface SubmitHandlerArgs {
   values: any;
   formikHelpers: import("formik").FormikHelpers<any>;
   userType: UserType;
@@ -211,7 +211,7 @@ export const handleFormSubmit = async ({
     setShowSuccessModal(true);
     setTimeout(() => {
       setShowSuccessModal(false);
-      navigate("/management/user/pending");
+      navigate("/management/user-creation");
     }, 2000);
     formikHelpers.resetForm();
     setActiveStep(0);

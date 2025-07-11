@@ -13,10 +13,12 @@ import {
   getValidationSchema,
   handleFormSubmit,
   masterInitialValues,
+  SubmitHandlerArgs,
 } from "../../Config/UserCreationConfig/MasterFormConfig";
 import { Form, Formik, FormikProps } from "formik";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import FormSuccessModel from "../Atoms/FormSuccessModel";
+import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
@@ -37,6 +39,10 @@ const UserFormPage = () => {
   const userType: UserType = type;
   const config = UserConfig[userType];
 
+  const throttledHandleSubmit = useThrottledFormSubmit((args: SubmitHandlerArgs) => {
+    handleFormSubmit(args);
+  }, 5000); // 3 seconds delay
+
   return (
     <div className="p-4 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Header Form Type */}
@@ -56,7 +62,7 @@ const UserFormPage = () => {
         validationSchema={getValidationSchema(userType, activeStep)}
         onSubmit={async (values, formikHelpers) => {
           if (activeStep === config.steps.length - 1) {
-            await handleFormSubmit({
+            throttledHandleSubmit({
               values,
               formikHelpers,
               userType,

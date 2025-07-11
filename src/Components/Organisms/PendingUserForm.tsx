@@ -46,7 +46,7 @@ const PendingUserForm = () => {
       .unwrap()
       .then(() => {
         toast.success(`User ${selectedAction} Successfully`);
-        navigate(`/management/user/${selectedAction === "APPROVED" ? "onboarded" : "rejected"}`);
+        navigate(`/management/user/pending`);
       })
       .catch((err: any) => {
         toast.error(err || "Action failed");
