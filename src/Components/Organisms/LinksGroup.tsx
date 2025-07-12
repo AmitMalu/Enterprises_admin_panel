@@ -58,10 +58,10 @@ const LinksGroup: React.FC<linksGroupProps> = ({
             onClick={() => navigate(link.link)}
             key={link.label}
             className={`flex items-center gap-2 cursor-pointer text-[12px] bg-submenuBg font-poppins 
-              font-normal px-4 py-1 rounded-xl ${isActive ? "text-submenuActive" : "text-black"} `}
+              font-normal px-4 py-1 rounded-xl ${isActive ? "text-submenuActive" : "text-black"}`}
           >
-            {link.icon && <link.icon />}
-            <span className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px]">
+            {link.icon && <link.icon width={16} height={16} />}
+            <span className={`${isActive ? "pl-2" : ""} transition-all duration-500 ease-in-out whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px]`}>
               {link.label}
             </span>
           </a>
@@ -86,7 +86,7 @@ const LinksGroup: React.FC<linksGroupProps> = ({
     <>
       <UnstyledButton
         onClick={handleClick}
-        className={`rounded-xl w-full text-left transition`}
+        className={`rounded-xl w-full text-left transition-all duration-300 ease-in-out`}
         style={{
           backgroundColor:
             isOpened
@@ -101,7 +101,7 @@ const LinksGroup: React.FC<linksGroupProps> = ({
             <Box
               className={`ml-4 text-[16px] font-poppins font-normal leading-[27px] ${isDirectMenuActive ?
                 "text-[#c30000]" : "text-[#1D1F2C]"
-                }`}
+                } ${isDirectMenuActive || isOpened ? "pl-2" : ""} transition-all duration-500 ease-in-out`}
             >
               {label}
             </Box>

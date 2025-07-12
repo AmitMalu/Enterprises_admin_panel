@@ -57,12 +57,12 @@ const PrefundingForm = () => {
       .unwrap()
       .then(() => {
         toast.success(`Fund request ${selectedAction} successfully`);
-        navigate("/funding/pre-funding-authorization");
+        navigate("/funding/authorization");
       })
       .catch((err: any) => {
         toast.error(err || "Action failed");
         setTimeout(() => {
-          navigate("/funding/pre-funding-authorization");
+          navigate("/funding/authorization");
         }, 2000);
       });
   }, 3000);
@@ -86,7 +86,7 @@ const PrefundingForm = () => {
           toast.error(errorMessage);
           setFetchError(errorMessage);
           setTimeout(() => {
-            navigate("/funding/pre-funding-authorization");
+            navigate("/funding/authorization");
           }, 2000);
         } finally {
           setLoading(false);

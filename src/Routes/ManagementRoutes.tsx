@@ -20,7 +20,7 @@ import PendingUserForm from "../Components/Organisms/PendingUserForm";
 
 export const ManagementRoutes = (
   <>
-    <Route path="/management/user-creation" element={<UserCreation />} />
+    <Route path="/management/user/create" element={<UserCreation />} />
     <Route path="/management/user/create/:type" element={<UserFormPage />} />
     <Route path="/management/user/pending" element={<PendingUser />} />
     <Route path="/management/user/pending/edit/:id" element={<PendingUserForm />} />

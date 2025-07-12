@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { DeleteIcon, EditIcon2, EyeIcon2, SettingIcon2 } from "../../assets/Icons";
+import { DeleteIcon, EditIcon, EditIcon2, EyeIcon2, SettingIcon2 } from "../../assets/Icons";
 import { headers, SCHEMES_KEY, SCHEMES_URL, SchemesListTableType } from "../../Config/Schemes/SchemesConfig";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
@@ -40,15 +40,15 @@ const SchemesList = () => {
   } | null>(null);
 
   const handleEdit = (id: any) => {
-    navigate(`/schemes/edit/${id}`, { state: id });
+    navigate(`/schemes/schemeslist/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/schemes/add");
+    navigate("/schemes/schemeslist/add");
   };
 
   const handleSetting = (item: any) => {
-    navigate(`/schemes/setting`, {
+    navigate(`/schemes/schemeslist/setting`, {
       state: {
         schemeCode: item.schemeCode,
         schemeName: item.schemeName,
@@ -57,7 +57,7 @@ const SchemesList = () => {
   };
 
   const handleDelete = (id: any) => {
-    // navigate("/schemes/add/");
+    // navigate("/schemes/schemeslist/add/");
   };
 
   const handleFilterChange = (key: string, value: any) => {
@@ -154,13 +154,13 @@ const SchemesList = () => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
-      <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
+      <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
         Schemes List
       </TextComponent>
 
       {/* Toolbar */}
       <GenericMasterToolbar
-        addButtonText="Add Schemes"
+        addButtonText="Add Scheme"
         onAdd={handleAdd}
         headers={headers}
         onRefresh={handleRefresh}
@@ -184,26 +184,26 @@ const SchemesList = () => {
           )}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
-            <div className="flex justify-center gap-2 ">
+            <div className="flex justify-center gap-2 min-w-10">
               <span
                 onClick={() => handleSetting(item)}
                 className="cursor-pointer"
               >
                 <SettingIcon2 />
               </span>
-              <span className="cursor-pointer">
+              {/* <span className="cursor-pointer">
                 <EyeIcon2 />
-              </span>
-              <span
+              </span> */}
+              {/* <span
                 onClick={() => handleDelete(item.id)}
                 className="cursor-pointer">
                 <DeleteIcon />
-              </span>
+              </span> */}
               <span
                 onClick={() => handleEdit(item.id)}
                 className="cursor-pointer"
               >
-                <EditIcon2 />
+                <EditIcon />
               </span>
             </div>
           )}

@@ -176,40 +176,29 @@ export const AppleSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   );
 };
 
-export const DashboardSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+export const DashboardSvg: React.FC<IconProps> = ({
+  width = 23,
+  height = 23,
+  color = "#FA3E3E",
+}) => {
   return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 21 21"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M18.5769 0.839844H2.42308C1.78044 0.839844 1.16412 1.09428 0.709703 1.54718C0.255288 2.00008 0 2.61435 0 3.25484V14.5248C0 15.1653 0.255288 15.7796 0.709703 16.2325C1.16412 16.6854 1.78044 16.9398 2.42308 16.9398H9.69231V18.5498H7.26923C7.05502 18.5498 6.84958 18.6347 6.69811 18.7856C6.54663 18.9366 6.46154 19.1413 6.46154 19.3548C6.46154 19.5683 6.54663 19.7731 6.69811 19.9241C6.84958 20.075 7.05502 20.1598 7.26923 20.1598H13.7308C13.945 20.1598 14.1504 20.075 14.3019 19.9241C14.4534 19.7731 14.5385 19.5683 14.5385 19.3548C14.5385 19.1413 14.4534 18.9366 14.3019 18.7856C14.1504 18.6347 13.945 18.5498 13.7308 18.5498H11.3077V16.9398H18.5769C19.2196 16.9398 19.8359 16.6854 20.2903 16.2325C20.7447 15.7796 21 15.1653 21 14.5248V3.25484C21 2.61435 20.7447 2.00008 20.2903 1.54718C19.8359 1.09428 19.2196 0.839844 18.5769 0.839844ZM2.42308 2.44984H18.5769C18.7911 2.44984 18.9966 2.53466 19.148 2.68562C19.2995 2.83659 19.3846 3.04134 19.3846 3.25484V14.5248H10.5H1.61538V3.25484C1.61538 3.04134 1.70048 2.83659 1.85195 2.68562C2.00342 2.53466 2.20886 2.44984 2.42308 2.44984ZM18.5769 15.3298H2.42308C2.20886 15.3298 2.00342 15.245 1.85195 15.0941C1.70048 14.9431 1.61538 14.7383 1.61538 14.5248H10.5H19.3846C19.3846 14.7383 19.2995 14.9431 19.148 15.0941C18.9966 15.245 18.7911 15.3298 18.5769 15.3298Z"
-        fill="#D82226"
-      />
-      <path
-        d="M14.7486 9.3328C14.783 9.31295 14.8115 9.2844 14.8314 9.25003C14.8512 9.21565 14.8617 9.17665 14.8617 9.13696V7.10222C14.8615 7.06617 14.8526 7.0307 14.8359 6.99875C14.8192 6.96681 14.7951 6.93932 14.7656 6.91858C14.7362 6.89784 14.7021 6.88445 14.6664 6.87952C14.6307 6.8746 14.5943 6.87828 14.5603 6.89026C13.9002 7.12381 13.3451 7.58508 12.9948 8.19116C12.6444 8.79724 12.5219 9.50837 12.649 10.1967C12.6556 10.2323 12.6707 10.2658 12.6929 10.2944C12.7152 10.3229 12.7439 10.3458 12.7768 10.3609C12.8065 10.3748 12.8388 10.3819 12.8715 10.3818C12.9112 10.3818 12.9502 10.3714 12.9846 10.3516L14.7486 9.3328ZM18.0939 8.20493C18.0914 8.19984 18.0889 8.19448 18.0857 8.18939C18.0826 8.1843 18.0801 8.18006 18.077 8.17554C17.8178 7.73293 17.4473 7.36579 17.0022 7.11058C16.5572 6.85537 16.0532 6.72096 15.5401 6.7207C15.4801 6.7207 15.4226 6.74452 15.3802 6.78692C15.3378 6.82932 15.314 6.88682 15.314 6.94679V9.54192L13.0861 10.8391C13.0602 10.8541 13.0376 10.874 13.0195 10.8978C13.0014 10.9216 12.9882 10.9487 12.9807 10.9776C12.9731 11.0065 12.9714 11.0366 12.9756 11.0662C12.9797 11.0958 12.9897 11.1242 13.005 11.1499C13.3318 11.7064 13.8328 12.1398 14.4305 12.3833C15.0283 12.6269 15.6896 12.667 16.3124 12.4975C16.9352 12.328 17.485 11.9583 17.8767 11.4454C18.2685 10.9325 18.4805 10.3051 18.4801 9.65977C18.4807 9.14942 18.3476 8.64782 18.0939 8.20493ZM15.7663 7.18304C16.1249 7.21605 16.4722 7.32648 16.784 7.50671C17.0958 7.68695 17.3648 7.93269 17.5724 8.22697L15.7663 9.27854V7.18304ZM15.5401 12.1467C15.1453 12.1457 14.7564 12.0512 14.4051 11.871C14.0538 11.6909 13.7502 11.4301 13.5192 11.1101L15.6506 9.86918L15.6569 9.86522L17.7988 8.6181C17.9736 8.99699 18.0503 9.41378 18.0217 9.83006C17.9931 10.2464 17.8602 10.6488 17.6353 11.0002C17.4103 11.3517 17.1005 11.6409 16.7343 11.8413C16.3682 12.0416 15.9575 12.1466 15.5401 12.1467Z"
-        fill="#D82226"
-      />
-      <path
-        d="M10.6617 12.0894H10.4033V6.97636C10.4033 6.90855 10.376 6.84353 10.3276 6.79558C10.2791 6.74764 10.2134 6.7207 10.1448 6.7207H8.33558C8.26703 6.7207 8.20129 6.74764 8.15282 6.79558C8.10435 6.84353 8.07712 6.90855 8.07712 6.97636V8.25462H6.52635C6.4578 8.25462 6.39206 8.28155 6.34359 8.3295C6.29512 8.37744 6.26789 8.44247 6.26789 8.51027V9.78853H4.97558C4.90703 9.78853 4.84129 9.81546 4.79282 9.86341C4.74435 9.91135 4.71712 9.97638 4.71712 10.0442V12.0894H4.45866C4.39011 12.0894 4.32437 12.1163 4.2759 12.1643C4.22743 12.2122 4.2002 12.2772 4.2002 12.3451C4.2002 12.4129 4.22743 12.4779 4.2759 12.5258C4.32437 12.5738 4.39011 12.6007 4.45866 12.6007H10.6617C10.7303 12.6007 10.796 12.5738 10.8445 12.5258C10.893 12.4779 10.9202 12.4129 10.9202 12.3451C10.9202 12.2772 10.893 12.2122 10.8445 12.1643C10.796 12.1163 10.7303 12.0894 10.6617 12.0894Z"
-        fill="#D82226"
-      />
-      <path
-        d="M9.2402 4.38588V5.87917C9.2402 5.92867 9.22123 5.97615 9.18748 6.01116C9.15372 6.04616 9.10794 6.06583 9.0602 6.06583C9.01246 6.06583 8.96668 6.04616 8.93292 6.01116C8.89917 5.97615 8.8802 5.92867 8.8802 5.87917V4.83643L7.02759 6.75787C7.01087 6.77523 6.99102 6.789 6.96917 6.79839C6.94732 6.80778 6.9239 6.81262 6.90024 6.81262C6.87659 6.81262 6.85316 6.80778 6.83131 6.79839C6.80946 6.789 6.78961 6.77523 6.77289 6.75787L6.00026 5.9564L4.50764 7.50452C4.47386 7.53954 4.42806 7.55922 4.38029 7.55922C4.33253 7.55922 4.28672 7.53954 4.25294 7.50452C4.21917 7.46949 4.2002 7.42199 4.2002 7.37245C4.2002 7.32292 4.21917 7.27542 4.25294 7.24039L5.87291 5.56044C5.88963 5.54309 5.90948 5.52932 5.93133 5.51993C5.95318 5.51053 5.97661 5.5057 6.00026 5.5057C6.02391 5.5057 6.04734 5.51053 6.06919 5.51993C6.09104 5.52932 6.11089 5.54309 6.12761 5.56044L6.90024 6.36192L8.62573 4.57254H7.62023C7.57249 4.57254 7.52671 4.55287 7.49295 4.51787C7.45919 4.48286 7.44023 4.43539 7.44023 4.38588C7.44023 4.33637 7.45919 4.2889 7.49295 4.25389C7.52671 4.21888 7.57249 4.19922 7.62023 4.19922H9.0602C9.10794 4.19922 9.15372 4.21888 9.18748 4.25389C9.22123 4.2889 9.2402 4.33637 9.2402 4.38588Z"
-        fill="#D82226"
-      />
+    <svg className="ml-[-4px]" color={color} height={height} width={width} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5" />
     </svg>
+
   );
 };
 
-export const fundingSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+export const fundingSvg: React.FC<React.SVGProps<SVGSVGElement>> = ({
+  width = 21,
+  height = 21,
+  color = "#fa3e3e"
+}) => {
   return (
     <svg
-      width="20"
-      height="20"
+      width={width}
+      height={height}
+      color={color}
       viewBox="0 0 19 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -226,11 +215,16 @@ export const fundingSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   );
 };
 
-export const managementSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+export const managementSvg: React.FC<React.SVGProps<SVGSVGElement>> = ({
+  width = 20,
+  height = 20,
+  color = "#fa3e3e"
+}) => {
   return (
     <svg
-      width="20"
-      height="20"
+      width={width}
+      height={height}
+      color={color}
       viewBox="0 0 22 19"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -261,11 +255,16 @@ export const managementSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   );
 };
 
-export const schemesSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+export const schemesSvg: React.FC<React.SVGProps<SVGSVGElement>> = ({
+  width = 21,
+  height = 21,
+  color = "#fa3e3e"
+}) => {
   return (
     <svg
-      width="20"
-      height="20"
+      width={width}
+      height={height}
+      color={color}
       viewBox="0 0 19 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -294,11 +293,16 @@ export const schemesSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   );
 };
 
-export const reportsSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+export const reportsSvg: React.FC<React.SVGProps<SVGSVGElement>> = ({
+  width = 20,
+  height = 20,
+  color = "#fa3e3e"
+}) => {
   return (
     <svg
-      width="20"
-      height="20"
+      width={width}
+      height={height}
+      color={color}
       viewBox="0 0 18 10"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -915,9 +919,9 @@ export const ExportIcon: React.FC<IconProps> = ({
 };
 
 export const SettingIcon2: React.FC<IconProps> = ({
-  width = 18,
-  height = 18,
-  color = "#A3A9B6",
+  width = 20,
+  height = 20,
+  color = "#000000",
 }) => {
   return (
     <svg
@@ -955,7 +959,7 @@ export const SettingIcon2: React.FC<IconProps> = ({
           height="16"
           rx="0"
           fill="url(#master_svg0_27_2297)"
-          fillOpacity="0.4000000059604645"
+          fillOpacity="0.7"
         />
       </g>
     </svg>
@@ -1298,4 +1302,63 @@ export const AddIconButton: React.FC<IconProps> = ({
   </svg>
 );
 
-export default AddIconButton;
+export const NotificationIcon: React.FC<IconProps> = ({
+  width = 24,
+  height = 24,
+  color = "#FA3E3E",
+}) => (
+  <svg className="ml-[-2px]" color={color} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width={width} height={height} fill="none" viewBox="0 0 24 24">
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.193-.538 1.193H5.538c-.538 0-.538-.6-.538-1.193 0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365Zm-8.134 5.368a8.458 8.458 0 0 1 2.252-5.714m14.016 5.714a8.458 8.458 0 0 0-2.252-5.714M8.54 17.901a3.48 3.48 0 0 0 6.92 0H8.54Z" />
+  </svg>
+)
+
+export const MenuSettingIcon: React.FC<IconProps> = ({
+  width = 22,
+  height = 24,
+  color = "#FA3E3E",
+}) => (
+  <svg aria-hidden="true" className="ml-[-2px]" color={color} xmlns="http://www.w3.org/2000/svg" width={width} height={height} fill="none" viewBox="0 0 24 24">
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z" />
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+  </svg>
+)
+
+export const SupportIcon: React.FC<IconProps> = ({
+  width = 22,
+  height = 24,
+  color = "#FA3E3E",
+}) => (
+  <svg color={color} className="ml-[-2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width={width} height={height} fill="none" viewBox="0 0 24 24">
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.079 6.839a3 3 0 0 0-4.255.1M13 20h1.083A3.916 3.916 0 0 0 18 16.083V9A6 6 0 1 0 6 9v7m7 4v-1a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1Zm-7-4v-6H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1Zm12-6h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1v-6Z" />
+  </svg>
+)
+
+export const LogsIcon: React.FC<IconProps> = ({
+  width = 24,
+  height = 24,
+  color = "#FA3E3E",
+}) => (
+  <svg className="ml-[-2px]" width={width} height={height} color={color} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.35709 16V5.78571c0-.43393.34822-.78571.77777-.78571H18.5793c.4296 0 .7778.35178.7778.78571V16M5.35709 16h-1c-.55229 0-1 .4477-1 1v1c0 .5523.44771 1 1 1H20.3571c.5523 0 1-.4477 1-1v-1c0-.5523-.4477-1-1-1h-1M5.35709 16H19.3571M9.35709 8l2.62501 2.5L9.35709 13m4.00001 0h2" />
+  </svg>
+)
+
+export const MyProfileIcon: React.FC<IconProps> = ({
+  width = 24,
+  height = 24,
+  color = "#FA3E3E",
+}) => (
+  <svg className="ml-[-2px]" width={width} height={height} color={color} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
+  </svg>
+)
+
+export const MastersIcon: React.FC<IconProps> = ({
+  width = 22,
+  height = 22,
+  color = "#FA3E3E",
+}) => (
+  <svg style={{marginLeft : "-2px"}} width={width} height={height} color={color} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="currentColor" d="M14.68 14.81a6.76 6.76 0 1 1 6.76-6.75a6.77 6.77 0 0 1-6.76 6.75Zm0-11.51a4.76 4.76 0 1 0 4.76 4.76a4.76 4.76 0 0 0-4.76-4.76Z" className="ml-[-2px] clr-i-outline clr-i-outline-path-1" /><path fill="currentColor" d="M16.42 31.68A2.14 2.14 0 0 1 15.8 30H4v-5.78a14.81 14.81 0 0 1 11.09-4.68h.72a2.2 2.2 0 0 1 .62-1.85l.12-.11c-.47 0-1-.06-1.46-.06A16.47 16.47 0 0 0 2.2 23.26a1 1 0 0 0-.2.6V30a2 2 0 0 0 2 2h12.7Z" className="clr-i-outline clr-i-outline-path-2" /><path fill="currentColor" d="M26.87 16.29a.37.37 0 0 1 .15 0a.42.42 0 0 0-.15 0Z" className="clr-i-outline clr-i-outline-path-3" /><path fill="currentColor" d="m33.68 23.32l-2-.61a7.21 7.21 0 0 0-.58-1.41l1-1.86A.38.38 0 0 0 32 19l-1.45-1.45a.36.36 0 0 0-.44-.07l-1.84 1a7.15 7.15 0 0 0-1.43-.61l-.61-2a.36.36 0 0 0-.36-.24h-2.05a.36.36 0 0 0-.35.26l-.61 2a7 7 0 0 0-1.44.6l-1.82-1a.35.35 0 0 0-.43.07L17.69 19a.38.38 0 0 0-.06.44l1 1.82a6.77 6.77 0 0 0-.63 1.43l-2 .6a.36.36 0 0 0-.26.35v2.05A.35.35 0 0 0 16 26l2 .61a7 7 0 0 0 .6 1.41l-1 1.91a.36.36 0 0 0 .06.43l1.45 1.45a.38.38 0 0 0 .44.07l1.87-1a7.09 7.09 0 0 0 1.4.57l.6 2a.38.38 0 0 0 .35.26h2.05a.37.37 0 0 0 .35-.26l.61-2.05a6.92 6.92 0 0 0 1.38-.57l1.89 1a.36.36 0 0 0 .43-.07L32 30.4a.35.35 0 0 0 0-.4l-1-1.88a7 7 0 0 0 .58-1.39l2-.61a.36.36 0 0 0 .26-.35v-2.1a.36.36 0 0 0-.16-.35ZM24.85 28a3.34 3.34 0 1 1 3.33-3.33A3.34 3.34 0 0 1 24.85 28Z" className="clr-i-outline clr-i-outline-path-4" /><path fill="none" d="M0 0h36v36H0z" />
+  </svg>
+)
+
