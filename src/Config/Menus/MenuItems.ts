@@ -50,6 +50,11 @@ export const sidebarData = [
         icon: MastersIcon,
       },
       {
+        label: "Bank Master",
+        link: "/master/bankmaster",
+        icon: MastersIcon,
+      },
+      {
         label: "Main Master",
         link: "/master/main",
         icon: MastersIcon,

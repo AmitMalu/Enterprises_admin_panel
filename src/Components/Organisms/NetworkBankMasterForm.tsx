@@ -13,30 +13,30 @@ import { booleanSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import {
-  BankMasterFormType,
+  NetworkBankMasterFormType,
   initialValues,
   MASTER_KEY,
   MASTER_URL,
   transformBankListToFormData,
-  transformFormToCreateBankMasterPayload,
-  transformFormToUpdateBankMasterPayload,
+  transformFormToCreateNetworkBankMasterPayload,
+  transformFormToUpdateNetworkBankMasterPayload,
   validationSchema,
 } from "../../Config/Master/NetworkBanksConfig";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import FormikFileInput from "../Molecules/FormikFileInput";
 
-type BankMasterFormProps = { mode: "add" | "edit" };
+type NetworkBankMasterFormProps = { mode: "add" | "edit" };
 
-const BankMasterForm = ({ mode }: BankMasterFormProps) => {
+const NetworkBankMasterForm = ({ mode }: NetworkBankMasterFormProps) => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<BankMasterFormType>(initialValues);
+  const [formData, setFormData] = useState<NetworkBankMasterFormType>(initialValues);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = useThrottleMasterFormSubmit<BankMasterFormType>({
+  const handleSubmit = useThrottleMasterFormSubmit<NetworkBankMasterFormType>({
     mode,
     id,
     useFormData: true,
@@ -46,8 +46,8 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
     masterKey: MASTER_KEY,
     addUrl: MASTER_URL,
     updateUrl: MASTER_URL,
-    transformCreatePayload: transformFormToCreateBankMasterPayload,
-    transformUpdatePayload: transformFormToUpdateBankMasterPayload,
+    transformCreatePayload: transformFormToCreateNetworkBankMasterPayload,
+    transformUpdatePayload: transformFormToUpdateNetworkBankMasterPayload,
     successNavigatePath: "/master/network-banks",
     entityName: "NetworkBank",
   });
@@ -91,11 +91,11 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
       <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Bank" : "Add Bank"}
+        {mode === "edit" ? "Edit Network Bank" : "Add Network Bank"}
       </TextComponent>
 
       {/* Sub Heading */}
-      <BreadCrumb type={"Bank"} text="Master" />
+      <BreadCrumb type={"Network Bank"} text="Master" />
 
       <Formik
         enableReinitialize
@@ -243,4 +243,4 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
   );
 };
 
-export default BankMasterForm;
+export default NetworkBankMasterForm;

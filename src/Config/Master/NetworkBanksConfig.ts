@@ -7,10 +7,10 @@ import {
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
-export const MASTER_KEY = "banks";
-export const MASTER_URL = API_ENDPOINTS.MASTER.BANK_MASTER;
+export const MASTER_KEY = "network-bank";
+export const MASTER_URL = API_ENDPOINTS.MASTER.NETWORK_BANK_MASTER;
 
-export interface BankMasterFormType {
+export interface NetworkBankMasterFormType {
   bankCode: string;
   bankName: string;
   bankCodeBI: string;
@@ -24,7 +24,7 @@ export interface BankMasterFormType {
   isBlocked?: boolean;
 }
 
-export interface BankMasterTableType extends BankMasterFormType {
+export interface NetworkBankMasterTableType extends NetworkBankMasterFormType {
   id: string | number;
   createdBy: string;
   createdOn?: string;
@@ -32,21 +32,21 @@ export interface BankMasterTableType extends BankMasterFormType {
   editedOn?: string;
 }
 
-export interface BankMasterCreatePayload extends BankMasterFormType {
+export interface NetworkBankMasterCreatePayload extends NetworkBankMasterFormType {
   createdBy: string;
 }
 
-export interface BankMasterUpdatePayload extends BankMasterFormType {
+export interface NetworkBankMasterUpdatePayload extends NetworkBankMasterFormType {
   editedBy: string;
 }
 
-export type FetchBankMasterListParams = {
+export type FetchNetworkBankMasterListParams = {
   page: number;
   size: number;
   filter?: { key: string; value: string | boolean } | null;
 };
 
-export const initialValues: BankMasterFormType = {
+export const initialValues: NetworkBankMasterFormType = {
   bankCode: "",
   bankName: "",
   bankCodeBI: "",
@@ -60,7 +60,7 @@ export const initialValues: BankMasterFormType = {
   isBlocked: false,
 };
 
-export const validationSchema: Record<keyof BankMasterFormType, Yup.AnySchema> =
+export const validationSchema: Record<keyof NetworkBankMasterFormType, Yup.AnySchema> =
   {
     bankCode: textField("Bank Code", 50, true, true),
     bankName: textField("Bank Name", 50, true, true),
@@ -75,7 +75,7 @@ export const validationSchema: Record<keyof BankMasterFormType, Yup.AnySchema> =
     isBlocked: Yup.boolean().default(false),
   };
 
-export const headers: GenericTableHeader<BankMasterTableType>[] = [
+export const headers: GenericTableHeader<NetworkBankMasterTableType>[] = [
   { key: "id", label: "ID", filterType: "text" },
   { key: "bankCode", label: "Bank Code", filterType: "text" },
   { key: "bankName", label: "Bank Name", filterType: "text" },
@@ -98,7 +98,7 @@ export const headers: GenericTableHeader<BankMasterTableType>[] = [
 
 export const transformToBankTableType = (
   raw: Record<string, any>
-): BankMasterTableType => {
+): NetworkBankMasterTableType => {
   return {
     id: raw.id ?? "",
     bankCode: raw.bankCode ?? "",
@@ -121,7 +121,7 @@ export const transformToBankTableType = (
 // Convert API response to Formik-compatible form data
 export const transformBankListToFormData = (
   raw: Record<string, any>
-): BankMasterFormType => ({
+): NetworkBankMasterFormType => ({
   bankCode: raw.bankCode ?? "",
   bankName: raw.bankName ?? "",
   bankCodeBI: raw.bankCodeBI ?? "",
@@ -137,7 +137,7 @@ export const transformBankListToFormData = (
 
 // shared function to build the payload object (not FormData)
 const getBankPayload = (
-  formData: BankMasterFormType,
+  formData: NetworkBankMasterFormType,
   mode: "add" | "edit"
 ): Record<string, any> => {
   const { logo, ...rest } = formData;
@@ -154,10 +154,10 @@ const getBankPayload = (
 
 // === Your two required functions ===
 
-export const transformFormToCreateBankMasterPayload = (
-  formData: BankMasterFormType
+export const transformFormToCreateNetworkBankMasterPayload = (
+  formData: NetworkBankMasterFormType
 ): Record<string, any> => getBankPayload(formData, "add");
 
-export const transformFormToUpdateBankMasterPayload = (
-  formData: BankMasterFormType
+export const transformFormToUpdateNetworkBankMasterPayload = (
+  formData: NetworkBankMasterFormType
 ): Record<string, any> => getBankPayload(formData, "edit");

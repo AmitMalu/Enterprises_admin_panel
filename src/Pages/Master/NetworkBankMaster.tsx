@@ -14,14 +14,14 @@ import {
 } from "../../Redux/Features/Masters/MastersSlice";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import {
-  BankMasterTableType,
+  NetworkBankMasterTableType,
   headers,
   MASTER_KEY,
   MASTER_URL,
   transformToBankTableType,
 } from "../../Config/Master/NetworkBanksConfig";
 
-const ProductMaster = () => {
+const NetworkBankMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [filterVisible, setFilterVisible] = useState(false);
@@ -30,7 +30,7 @@ const ProductMaster = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
-  const dataRef = useRef<BankMasterTableType[] | null>(null);
+  const dataRef = useRef<NetworkBankMasterTableType[] | null>(null);
 
   const [submittedFilter, setSubmittedFilter] = useState<{
     key: string;
@@ -38,7 +38,7 @@ const ProductMaster = () => {
   } | null>(null);
 
   const { data, loading, error, pagination, setPage, setPageSize } =
-    useFetchMasterList<BankMasterTableType>({
+    useFetchMasterList<NetworkBankMasterTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
       transformDataFn: transformToBankTableType,
@@ -120,7 +120,7 @@ const ProductMaster = () => {
         // Render shimmer
         <ShimmerTableRows rowCount={6} columnCount={headers.length} />
       ) : (
-        <GenericMasterTable<BankMasterTableType>
+        <GenericMasterTable<NetworkBankMasterTableType>
           data={data}
           headers={headers.filter((h) =>
             visibleColumns.includes(h.key as string)
@@ -157,4 +157,4 @@ const ProductMaster = () => {
   );
 };
 
-export default ProductMaster;
+export default NetworkBankMaster;
