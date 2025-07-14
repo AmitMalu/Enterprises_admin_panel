@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../../Components/Atoms/TextComponent";
-import BreadCrumb from "../../Components/Molecules/BreadCrumb";
+import TextComponent from "../Atoms/TextComponent";
+import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Grid } from "@mantine/core";
-import ButtonComponent from "../../Components/Atoms/ButtonComponent";
-import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
-import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
+import ButtonComponent from "../Atoms/ButtonComponent";
+import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
+import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { useAppDispatch } from "../../Redux/hooks";
 import { booleanSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
@@ -21,8 +21,9 @@ import {
   transformFormToCreateBankMasterPayload,
   transformFormToUpdateBankMasterPayload,
   validationSchema,
-} from "../../Config/Master/BankMasterConfig";
+} from "../../Config/Master/NetworkBanksConfig";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import FormikFileInput from "../Molecules/FormikFileInput";
 
 type BankMasterFormProps = { mode: "add" | "edit" };
 
@@ -38,6 +39,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
   const handleSubmit = useThrottleMasterFormSubmit<BankMasterFormType>({
     mode,
     id,
+    useFormData: true,
     dispatch,
     navigate,
     resetFormData: () => setFormData(initialValues),
@@ -46,9 +48,10 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
     updateUrl: MASTER_URL,
     transformCreatePayload: transformFormToCreateBankMasterPayload,
     transformUpdatePayload: transformFormToUpdateBankMasterPayload,
-    successNavigatePath: "/master/banks",
-    entityName: "Bank",
+    successNavigatePath: "/master/network-banks",
+    entityName: "NetworkBank",
   });
+
 
   useEffect(() => {
     const fetchAndSet = async () => {
@@ -65,7 +68,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
           toast.error(err);
           setFetchError(err);
           setTimeout(() => {
-            navigate("/master/banks");
+            navigate("/master/network-banks");
           }, 2000);
         }
         finally {
@@ -83,6 +86,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
       }
     };
   }, [dispatch, id, mode]);
+
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
@@ -123,12 +127,34 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
+                name="bankCodeBI"
+                label="Bank Code BI"
+                placeholder="Enter Bank Code BI"
+                withAsterisk
+                maxLength={30}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+              <FormikTextInputComponent
                 name="ifscCode"
                 label="IFSC Code"
                 placeholder="Enter IFSC Code"
                 withAsterisk
                 capitalize
                 maxLength={30}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+              <FormikTextInputComponent
+                name="maxAccountNoLength"
+                label="Max Account No Length"
+                placeholder="Enter Max Account No Length"
+                maxLength={30}
+                allowCharacter={false}
+                allowSpecialChar={false}
+                allowSpace={false}
               />
             </Grid.Col>
 
@@ -159,6 +185,16 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
                 placeholder="Select"
                 withAsterisk
                 data={booleanSelectData}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+              <FormikFileInput
+                name="logo"
+                label="Add Logo"
+                withAsterisk
+                placeholder="Select File"
+                accept="image/png, image/jpeg"
               />
             </Grid.Col>
 

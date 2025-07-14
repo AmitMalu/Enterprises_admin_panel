@@ -15,6 +15,7 @@ interface CreateMasterParams<T> {
   key: string;
   url: string;
   data: T;
+  useFormData?: boolean;
 }
 
 interface UpdateMasterParams<T> {
@@ -22,6 +23,7 @@ interface UpdateMasterParams<T> {
   url: string;
   id?: string;
   data?: T;
+  useFormData?: boolean;
   mode?: "POST" | "PUT";
 }
 
@@ -133,21 +135,23 @@ export const fetchMasterById = createAsyncThunk(
 
 export const createMasterItem = createAsyncThunk(
   "masters/createMasterItem",
-  async ({ key, url, data }: CreateMasterParams<any>, { rejectWithValue }) => {
+  async (
+    { key, url, data, useFormData = false }: CreateMasterParams<any>,
+    { rejectWithValue }
+  ) => {
     // dispatch(setLoading({ key, loading: true }));
     // dispatch(setError({ key, error: null }));
     // dispatch(setLoaded({ key, loaded: false }));
 
     try {
-      const response = await axiosInstance.post(url, data);
+      const response = await axiosInstance.post(url, data, {
+        headers: useFormData
+          ? { "Content-Type": "multipart/form-data" }
+          : undefined,
+      });
       const responseData = response?.data;
 
-      if (
-        responseData?.statusCode === 201 ||
-        responseData?.statusCode === 200
-      ) {
-        // dispatch(setLoading({ key, loading: false }));
-        // dispatch(setLoaded({ key, loaded: false }));
+      if ([200, 201].includes(responseData?.statusCode)) {
         return responseData;
       } else {
         throw new Error(
@@ -159,8 +163,6 @@ export const createMasterItem = createAsyncThunk(
         error?.response?.data?.message ||
         error.message ||
         `Failed to create ${key} Master`;
-      // dispatch(setLoading({ key, loading: false }));
-      // dispatch(setError({ key, error: errMsg }));
       return rejectWithValue(errMsg);
     }
   }
@@ -169,18 +171,25 @@ export const createMasterItem = createAsyncThunk(
 export const updateMasterItem = createAsyncThunk(
   "masters/updateMasterItem",
   async (
-    { key, url, id, data, mode = "PUT" }: UpdateMasterParams<any>,
+    {
+      key,
+      url,
+      id,
+      data,
+      mode = "PUT",
+      useFormData = false,
+    }: UpdateMasterParams<any>,
     { rejectWithValue }
   ) => {
     try {
       const endpoint = id ? `${url}/${id}` : url;
-      let response;
-
-      if (mode === "POST") {
-        response = await axiosInstance.post(endpoint, data ?? data);
-      } else {
-        response = await axiosInstance.put(endpoint, data ?? data); //default to put
-      }
+      const method = mode === "POST" ? "post" : "put";
+      const response = await axiosInstance[method](endpoint, data, {
+        headers: useFormData
+          ? { "Content-Type": "multipart/form-data" }
+          : undefined,
+      });
+      
       const responseData = response?.data;
 
       if (responseData?.statusCode === 200) {
