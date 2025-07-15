@@ -5,20 +5,19 @@ import {
   Tooltip,
   UnstyledButton,
 } from "@mantine/core";
-import React, { useEffect } from "react";
+import React from "react";
 import { IconChevronRight } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  setMenuOpen,
-} from "../../Redux/Features/Menu/MenuReducer";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 
 interface linksGroupProps {
   icon: React.FC<any>;
   label: string;
-  initiallyOpened: boolean;
+  initiallyOpened?: boolean;
   link?: string;
-  links?: { label: string; link: string; icon?: React.FC<any> }[];
+  links?: Array<Omit<linksGroupProps, "openMap" | "setOpenMap">>;
+  level?: number;
+  openMap: Record<string, { level: number }>;
+  setOpenMap: React.Dispatch<React.SetStateAction<Record<string, { level: number }>>>;
 }
 
 const LinksGroup: React.FC<linksGroupProps> = ({
@@ -26,87 +25,95 @@ const LinksGroup: React.FC<linksGroupProps> = ({
   label,
   links,
   link,
+  level = 1,
+  openMap,
+  setOpenMap,
 }: linksGroupProps) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { openedMenu } = useAppSelector((state) => state.menu); //Open close menu state using redux
 
-  const hasLinks = Array.isArray(links);
-  const isOpened = openedMenu === label; // Check if the current menu is opened
-  const isDirectMenuActive = !hasLinks && pathname === link; // Check if the current menu is a direct link and active
+  const hasChildren = Array.isArray(links);
+  const isActive = link
+    ? pathname === link || pathname.startsWith(`${link}/`)
+    : false;
 
-  const handleClick = () => {
-    dispatch(setMenuOpen(hasLinks ? label : "")); // Toggle the menu open state
-    if (!hasLinks && link) {
-      navigate(link); // Navigate to the link if it's a direct link
+  const isOpened = openMap[label]?.level === level;
+
+  const toggleOpen = () => {
+    if (hasChildren) {
+      setOpenMap((prev) => {
+        const newMap: Record<string, { level: number }> = {};
+        Object.entries(prev).forEach(([key, val]) => {
+          if (val.level !== level) {
+            newMap[key] = val;
+          }
+        });
+        if (!isOpened) {
+          newMap[label] = { level };
+        }
+        return newMap;
+      });
+    } else if (link) {
+      navigate(link);
     }
   };
 
-  // Generate menu items if links are provided
-  const items = hasLinks
-    ? links.map((link) => {
-      const isActive = pathname.startsWith(link.link); // Check if the current path starts with the link's path
-      return (
-        <Tooltip.Floating
-          label={link.label}
-          position="top-end"
-          disabled={link.label.length <= 25} // how only when long
-          key={link.label}
-        >
-          <a
-            onClick={() => navigate(link.link)}
-            key={link.label}
-            className={`flex items-center gap-2 cursor-pointer text-[12px] bg-submenuBg font-poppins 
-              font-normal px-4 py-1 rounded-xl ${isActive ? "text-submenuActive" : "text-black"}`}
-          >
-            {link.icon && <link.icon width={16} height={16} />}
-            <span className={`${isActive ? "pl-2" : ""} transition-all duration-500 ease-in-out whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px]`}>
-              {link.label}
-            </span>
-          </a>
-        </Tooltip.Floating>
+  React.useEffect(() => {
+    const shouldBeOpened =
+      hasChildren &&
+      links?.some((child) =>
+        child.link
+          ? pathname.startsWith(child.link)
+          : child.links?.some((sub) => pathname.startsWith(sub.link ?? ""))
       );
-    })
-    : null;
 
-  useEffect(() => {
-    if (
-      hasLinks &&
-      !isOpened && // Only if not already opened
-      links?.some((l) => pathname.startsWith(l.link))
-    ) {
-      dispatch(setMenuOpen(label));
+    if (shouldBeOpened) {
+      setOpenMap((prev) => ({
+        ...prev,
+        [label]: { level },
+      }));
     }
-    // Only on initial mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pathname]);
+
+
+  const paddingLeft = `${level * 8}px`;
+  const backgroundColor = isOpened ? "#BDC4C3" : "transparent";
+  const textColor = isActive ? "text-[#c30000]" : "text-[#1D1F2C]";
+  const fontSize = level === 1 ? "text-[14px]" : level === 2 ? "text-[13px]" : "text-[12px]";
+  const fontWeight = level === 1 ? "font-normal" : "font-normal";
+  const lineHeight = level === 1 ? "leading-[24px]" : level === 2 ? "leading-[21px]" : "leading-[19px]";
+
 
   return (
     <>
       <UnstyledButton
-        onClick={handleClick}
+        onClick={toggleOpen}
         className={`rounded-xl w-full text-left transition-all duration-300 ease-in-out`}
-        style={{
-          backgroundColor:
-            isOpened
-              ? "#BDC4C3"
-              : "transparent",
-          padding: "4px 8px",
-        }}
+        style={{ padding: "4px 8px", paddingLeft, backgroundColor }}
       >
         <Group justify="space-between" gap="sm">
+
           <Box className="flex items-center">
-            <Icon />
+            {Icon && (
+              <Icon
+                width={Math.max(24 - level * 2, 14)} // shrink size as depth increases
+                height={Math.max(24 - level * 2, 14)}
+              />
+            )}
             <Box
-              className={`ml-4 text-[16px] font-poppins font-normal leading-[27px] ${isDirectMenuActive ?
-                "text-[#c30000]" : "text-[#1D1F2C]"
-                } ${isDirectMenuActive || isOpened ? "pl-2" : ""} transition-all duration-500 ease-in-out`}
+              className={`${fontSize} ${fontWeight} ${lineHeight} pl-${isActive ? "4" : "2"} transition-all duration-300 ease-in-out font-poppins whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px] ${textColor}`}
             >
-              {label}
+              <Tooltip.Floating
+                label={label}
+                position="top-end"
+                disabled={label.length <= 18} // how only when long
+                key={label}
+              >
+                <span>{label}</span>
+              </Tooltip.Floating>
             </Box>
           </Box>
-          {hasLinks && (
+          {hasChildren && (
             <IconChevronRight
               stroke={1.5}
               size={16}
@@ -116,12 +123,16 @@ const LinksGroup: React.FC<linksGroupProps> = ({
         </Group>
       </UnstyledButton >
 
-      {
-        hasLinks ? (
-          <Collapse in={!!isOpened} >
-            <Box className="flex flex-col">{items}</Box>
-          </Collapse >
-        ) : null}
+      {hasChildren && (
+        <Collapse in={!!isOpened}>
+          <Box className="flex flex-col">
+            {links.map((child) => (
+              <LinksGroup key={child.label} {...child} level={level + 1} openMap={openMap}
+                setOpenMap={setOpenMap} />
+            ))}
+          </Box>
+        </Collapse>
+      )}
     </>
   );
 };
