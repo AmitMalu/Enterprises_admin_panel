@@ -96,6 +96,20 @@ export const booleanSelectData2 = [
   { label: "false", value: "false" },
 ];
 
+export const SelectRegionTypeData = [
+  { label: "State", value: "state" },
+  { label: "Union Territory", value: "union territory" },
+];
+
+export const SelectZoneData = [
+  { label: "Central", value: "Central" },
+  { label: "Eastern", value: "Eastern" },
+  { label: "Western", value: "Western" },
+  { label: "Northern", value: "Northern" },
+  { label: "Southern", value: "Southern" },
+  { label: "North-Eastern", value: "North-Eastern" },
+];
+
 export const prioritySelectDataInNumbers = [
   { label: "1 - Very High", value: "1" },
   { label: "2 - High", value: "2" },

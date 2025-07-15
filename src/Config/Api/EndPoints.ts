@@ -24,7 +24,11 @@ export const API_ENDPOINTS = {
     NETWORK_BANK_MASTER: "api/network-banks",
     BANK_MASTER: "api/im-bank",
     MAIN_MASTER: "api/master",
-    COUNTRY_MASTER : "api/country"
+    COUNTRY_MASTER: "api/country",
+    STATE_MASTER: "api/states",
+    DISTRICT_MASTER: "api/districts",
+    CITY_MASTER: "api/cities",
+    PINCODE_MASTER: "api/pincodes",
   },
   FUNDING: {
     PREFUNDING: "api/prefund",
