@@ -24,6 +24,7 @@ export const API_ENDPOINTS = {
     NETWORK_BANK_MASTER: "api/network-banks",
     BANK_MASTER: "api/im-bank",
     MAIN_MASTER: "api/master",
+    COUNTRY_MASTER : "api/country"
   },
   FUNDING: {
     PREFUNDING: "api/prefund",

@@ -79,14 +79,13 @@ export const ellipsisCellStyle = {
 export const formatDateTime = (dateString: string) => {
   if (!dateString) return "";
 
-  // Explicitly parse the known format
-  const parsed = moment(dateString, "DD-MM-YYYY HH:mm:ss", true);
+  const parsed = moment(dateString); // Automatically parses ISO strings
 
-  // Fallback in case it's a different format
   if (!parsed.isValid()) return dateString;
 
-  return parsed.format("DD-MM-YYYY HH:mm");
+  return parsed.format("DD-MM-YYYY HH:mm:ss");
 };
+
 export const booleanSelectData = [
   { label: "Yes", value: "true" },
   { label: "No", value: "false" },

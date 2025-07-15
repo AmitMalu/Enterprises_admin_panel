@@ -29,6 +29,7 @@ import MainMasterForm from "../Components/Organisms/MainMasterForm";
 import SubMaster from "../Pages/Master/SubMaster";
 import SubMasterForm from "../Components/Organisms/SubMasterForm";
 import BankMasterForm from "../Components/Organisms/BankMasterForm";
+import CountryMasterForm from "../Components/Organisms/CountryMasterForm";
 
 export const MasterRoutes = (
   <>
@@ -91,6 +92,8 @@ export const MasterRoutes = (
     <Route path="/master/sub-master/add" element={<SubMasterForm mode="add" />} />
     {/* <Route path="/master/sub-master/edit/:id" element={<MainMasterForm mode="edit" />} /> */}
     <Route path="/master/country" element={<CountryMaster />} />
+    <Route path="/master/country/add" element={<CountryMasterForm mode="add" />} />
+    <Route path="/master/country/edit/:id" element={<CountryMasterForm mode="edit" />} />
     <Route
       path="/master/user-configuration"
       element={<UserConfigurationMaster />}
