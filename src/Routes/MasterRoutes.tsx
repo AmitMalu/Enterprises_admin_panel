@@ -29,6 +29,9 @@ import MainMasterForm from "../Components/Organisms/MainMasterForm";
 import SubMaster from "../Pages/Master/SubMaster";
 import SubMasterForm from "../Components/Organisms/SubMasterForm";
 import BankMasterForm from "../Components/Organisms/BankMasterForm";
+import CountryMasterForm from "../Components/Organisms/CountryMasterForm";
+import StateMaster from "../Pages/Master/StateMaster";
+import StateMasterForm from "../Components/Organisms/StateMasterForm";
 
 export const MasterRoutes = (
   <>
@@ -91,6 +94,21 @@ export const MasterRoutes = (
     <Route path="/master/sub-master/add" element={<SubMasterForm mode="add" />} />
     {/* <Route path="/master/sub-master/edit/:id" element={<MainMasterForm mode="edit" />} /> */}
     <Route path="/master/country" element={<CountryMaster />} />
+    <Route path="/master/country/add" element={<CountryMasterForm mode="add" />} />
+    <Route path="/master/country/edit/:id" element={<CountryMasterForm mode="edit" />} />
+
+    <Route path="/master/state" element={<StateMaster />} />
+    <Route path="/master/state/add" element={<StateMasterForm mode="add" />} />
+    <Route path="/master/state/edit/:id" element={<StateMasterForm mode="edit" />} />
+
+    {/* <Route path="/master/district" element={<DistrictMaster />} />
+    <Route path="/master/district/add" element={<DistrictMasterForm mode="add" />} />
+    <Route path="/master/district/edit/:id" element={<DistrictMasterForm mode="edit" />} />
+
+    <Route path="/master/city" element={<CityMaster />} />
+    <Route path="/master/city/add" element={<CityMasterForm mode="add" />} />
+    <Route path="/master/city/edit/:id" element={<CityMasterForm mode="edit" />} /> */}
+
     <Route
       path="/master/user-configuration"
       element={<UserConfigurationMaster />}

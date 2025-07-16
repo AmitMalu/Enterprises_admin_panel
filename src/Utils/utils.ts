@@ -77,7 +77,13 @@ export const ellipsisCellStyle = {
 };
 
 export const formatDateTime = (dateString: string) => {
-  return dateString ? moment(dateString).format("DD-MM-YYYY HH:mm") : "";
+  if (!dateString) return "";
+
+  const parsed = moment(dateString); // Automatically parses ISO strings
+
+  if (!parsed.isValid()) return dateString;
+
+  return parsed.format("DD-MM-YYYY HH:mm:ss");
 };
 
 export const booleanSelectData = [
@@ -88,6 +94,20 @@ export const booleanSelectData = [
 export const booleanSelectData2 = [
   { label: "true", value: "true" },
   { label: "false", value: "false" },
+];
+
+export const SelectRegionTypeData = [
+  { label: "State", value: "state" },
+  { label: "Union Territory", value: "union territory" },
+];
+
+export const SelectZoneData = [
+  { label: "Central", value: "Central" },
+  { label: "Eastern", value: "Eastern" },
+  { label: "Western", value: "Western" },
+  { label: "Northern", value: "Northern" },
+  { label: "Southern", value: "Southern" },
+  { label: "North-Eastern", value: "North-Eastern" },
 ];
 
 export const prioritySelectDataInNumbers = [

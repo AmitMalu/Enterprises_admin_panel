@@ -101,7 +101,7 @@ const LinksGroup: React.FC<linksGroupProps> = ({
               />
             )}
             <Box
-              className={`${fontSize} ${fontWeight} ${lineHeight} pl-${isActive ? "4" : "2"} transition-all duration-300 ease-in-out font-poppins whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px] ${textColor}`}
+              className={`${fontSize} ${fontWeight} ${lineHeight} ${isActive ? "pl-4" : "pl-2"} transition-all duration-300 ease-in-out font-poppins whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px] ${textColor}`}
             >
               <Tooltip.Floating
                 label={label}
