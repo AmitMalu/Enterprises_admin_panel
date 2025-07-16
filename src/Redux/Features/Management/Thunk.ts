@@ -21,7 +21,7 @@ export const createUser = createAsyncThunk(
         },
       });
 
-      if (response.data.statusCode == 200) {
+      if (response.data.statusCode == 200 || response.data.statusCode == 201) {
         return response.data;
       } else {
         // If not 200, treat as failure

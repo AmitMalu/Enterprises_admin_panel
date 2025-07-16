@@ -16,6 +16,7 @@ interface UseMasterListProps<T> {
   transformDataFn?: (item: any) => T;
   filter: FilterType;
   refreshKey: number;
+  method?: "GET" | "POST";
 }
 
 export function useFetchMasterList<T>({
@@ -24,6 +25,7 @@ export function useFetchMasterList<T>({
   transformDataFn,
   filter,
   refreshKey,
+  method = "GET",
 }: UseMasterListProps<T>) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -77,6 +79,7 @@ export function useFetchMasterList<T>({
           page: pagination.currentPage,
           size: pagination.pageSize,
           filter,
+          method,
         })
       ).unwrap();
 

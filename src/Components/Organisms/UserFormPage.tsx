@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   UserConfig,
   UserType,
@@ -13,13 +13,16 @@ import {
   getValidationSchema,
   handleFormSubmit,
   masterInitialValues,
+  SubmitHandlerArgs,
 } from "../../Config/UserCreationConfig/MasterFormConfig";
 import { Form, Formik, FormikProps } from "formik";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import FormSuccessModel from "../Atoms/FormSuccessModel";
+import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate()
   const auth = useAppSelector((state) => state.auth);
   const { type } = useParams<{ type: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -35,6 +38,10 @@ const UserFormPage = () => {
 
   const userType: UserType = type;
   const config = UserConfig[userType];
+
+  const throttledHandleSubmit = useThrottledFormSubmit((args: SubmitHandlerArgs) => {
+    handleFormSubmit(args);
+  }, 5000); // 3 seconds delay
 
   return (
     <div className="p-4 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -55,11 +62,11 @@ const UserFormPage = () => {
         validationSchema={getValidationSchema(userType, activeStep)}
         onSubmit={async (values, formikHelpers) => {
           if (activeStep === config.steps.length - 1) {
-            await handleFormSubmit({
+            throttledHandleSubmit({
               values,
               formikHelpers,
-              username: auth.user,
               userType,
+              navigate,
               dispatch,
               setShowSuccessModal,
               setActiveStep,

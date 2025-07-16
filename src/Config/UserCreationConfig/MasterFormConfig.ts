@@ -160,11 +160,11 @@ export const getValidationSchema = (
   return Yup.object().shape(shape);
 };
 
-interface SubmitHandlerArgs {
+export interface SubmitHandlerArgs {
   values: any;
   formikHelpers: import("formik").FormikHelpers<any>;
-  username: UserType;
-  userType: string;
+  userType: UserType;
+  navigate: any;
   dispatch: any;
   setShowSuccessModal: (show: boolean) => void;
   setActiveStep: (step: number) => void;
@@ -173,23 +173,15 @@ interface SubmitHandlerArgs {
 export const handleFormSubmit = async ({
   values,
   formikHelpers,
-  username,
   userType,
+  navigate,
   dispatch,
   setShowSuccessModal,
   setActiveStep,
 }: SubmitHandlerArgs) => {
   // 1. Transforming form values to the payload structure
   const ip = await getIpAddress();
-  const payload = transformUserCreationPayload(
-    userType as UserType,
-    values,
-    username,
-    ip
-  );
-  // 2. Filter Empty or null values
-  // const cleanedPayload = cleanPayload(payload);
-  console.log("Payload to be Submit", payload);
+  const payload = transformUserCreationPayload(userType, values, ip);
 
   const formData = new FormData();
   formData.append("data", JSON.stringify(payload));
@@ -215,15 +207,11 @@ export const handleFormSubmit = async ({
       })
     ).unwrap();
 
-    // Show success message from API
     toast.success(result.message || "User created successfully");
-    // Reset form and go back to step 1
-    // On success, show the modal
     setShowSuccessModal(true);
-
-    // Auto-close after 2 seconds
     setTimeout(() => {
       setShowSuccessModal(false);
+      navigate("/management/user-creation");
     }, 2000);
     formikHelpers.resetForm();
     setActiveStep(0);
@@ -235,9 +223,10 @@ export const handleFormSubmit = async ({
 export function transformUserCreationPayload(
   userType: UserType,
   values: any,
-  createdBy?: string | null,
   ip?: string | null
 ) {
+  console.log(ip, "ip");
+
   // Base payload structure common to all user types except IM-Admin
   const basePayload = {
     parentAccount: values.parentAccount || "",
@@ -247,7 +236,7 @@ export function transformUserCreationPayload(
     dob: values.dob || "",
     mobileNumber: values.mobileNumber || "",
     emailId: values.emailId || "",
-    createdBy: createdBy || localStorage.getItem("username") || "",
+    createdBy: localStorage.getItem("username") || "",
     createdByIPAddress: ip || "",
     aadhaarNumber: values.adhaarNumber || "",
     panNumber: values.panNumber || "",
@@ -329,7 +318,7 @@ export function transformUserCreationPayload(
         emailId: values.emailId || "",
         userName: values.userName || "",
         password: values.password || "",
-        createdBy: createdBy || localStorage.getItem("username") || "",
+        createdBy: localStorage.getItem("username") || "",
         createdByIPAddress: ip || "",
       };
 

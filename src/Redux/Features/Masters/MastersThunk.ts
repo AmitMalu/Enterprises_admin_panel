@@ -8,6 +8,7 @@ type FetchMasterListParams = {
   page?: number;
   size?: number;
   filter?: { key: string; value: any } | null;
+  method?: "GET" | "POST";
 };
 
 interface CreateMasterParams<T> {
@@ -21,6 +22,7 @@ interface UpdateMasterParams<T> {
   url: string;
   id?: string;
   data?: T;
+  mode?: "POST" | "PUT";
 }
 
 export interface FetchMasterByIdParams {
@@ -33,12 +35,16 @@ export interface FetchMasterByIdParams {
 export const fetchMasterList = createAsyncThunk(
   "masters/fetchMasterList",
   async (
-    { key, url, page = 1, size = 10, filter }: FetchMasterListParams,
+    {
+      key,
+      url,
+      page = 1,
+      size = 10,
+      filter,
+      method = "GET",
+    }: FetchMasterListParams,
     { rejectWithValue, dispatch }
   ) => {
-    // dispatch(setLoading({ key, loading: true }));
-    // dispatch(setLoaded({ key, loaded: false }));
-    // dispatch(setError({ key, error: null }));
     try {
       const params = new URLSearchParams();
       params.append("page", String(page - 1)); // 0 - based
@@ -47,7 +53,17 @@ export const fetchMasterList = createAsyncThunk(
         params.append(filter.key, String(filter.value ?? ""));
       }
 
-      const response = await axiosInstance.get(`${url}?${params.toString()}`);
+      // ✅ Smart joiner: add `?` or `&` depending on presence of `?` in URL
+      const connector = url.includes("?") ? "&" : "?";
+      const finalUrl = `${url}${connector}${params.toString()}`;
+
+      let response;
+      if (method === "POST") {
+        response = await axiosInstance.post(finalUrl);
+      } else {
+        response = await axiosInstance.get(finalUrl); // Default to GET
+      }
+
       const responseData = response?.data;
 
       if (responseData.statusCode === 200) {
@@ -74,8 +90,6 @@ export const fetchMasterList = createAsyncThunk(
             },
           })
         );
-        // dispatch(setLoaded({ key, loaded: true }));
-        // dispatch(setLoading({ key, loading: false }));
         return content;
       } else {
         throw new Error(responseData?.message || "Fetch failed");
@@ -83,10 +97,6 @@ export const fetchMasterList = createAsyncThunk(
     } catch (error: any) {
       const errMsg =
         error?.response?.data?.message || error.message || "Failed to fetch";
-      // dispatch(setError({ key, error: errMsg }));
-      // dispatch(setLoading({ key, loading: false }));
-      // dispatch(setLoaded({ key, loaded: false }));
-
       return rejectWithValue(errMsg);
     }
   }
@@ -159,21 +169,21 @@ export const createMasterItem = createAsyncThunk(
 export const updateMasterItem = createAsyncThunk(
   "masters/updateMasterItem",
   async (
-    { key, url, id, data }: UpdateMasterParams<any>,
+    { key, url, id, data, mode = "PUT" }: UpdateMasterParams<any>,
     { rejectWithValue }
   ) => {
-    // dispatch(setLoading({ key, loading: true }));
-    // dispatch(setError({ key, error: null }));
-    // dispatch(setLoaded({ key, loaded: false }));
-
     try {
       const endpoint = id ? `${url}/${id}` : url;
-      const response = await axiosInstance.put(endpoint, data ?? data);
+      let response;
+
+      if (mode === "POST") {
+        response = await axiosInstance.post(endpoint, data ?? data);
+      } else {
+        response = await axiosInstance.put(endpoint, data ?? data); //default to put
+      }
       const responseData = response?.data;
 
       if (responseData?.statusCode === 200) {
-        // dispatch(setLoading({ key, loading: false }));
-        // dispatch(setLoaded({ key, loaded: false }));
         return responseData;
       } else {
         throw new Error(
@@ -185,8 +195,6 @@ export const updateMasterItem = createAsyncThunk(
         error?.response?.data?.message ||
         error.message ||
         `Failed to create ${key} Master`;
-      // dispatch(setLoading({ key, loading: false }));
-      // dispatch(setError({ key, error: errMsg }));
       return rejectWithValue(errMsg);
     }
   }

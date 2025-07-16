@@ -13,6 +13,7 @@ export const API_ENDPOINTS = {
     USER_CREATE: USER_FORM_ENDPOINTS,
     USER_CONFIGURATION: "api/user-config",
     MENU: "api/menus",
+    USER_AUTH: "api/onboarding",
   },
   MASTER: {
     PRODUCTS: "api/products",
