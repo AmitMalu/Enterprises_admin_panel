@@ -1,0 +1,108 @@
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "../../Redux/hooks";
+import { toast } from "react-toastify";
+import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
+import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
+interface UseProductSubProductProps {
+  selectedProductId?: string;
+  selectedSubProductId?: string;
+  onSubProductReset?: () => void;
+}
+
+export const useProductSubProduct = ({
+  selectedProductId,
+  selectedSubProductId,
+  onSubProductReset,
+}: UseProductSubProductProps) => {
+  const dispatch = useAppDispatch();
+
+  const [productDropdownData, setProductDropdownData] = useState([]);
+  const [subProductDropdownData, setSubProductDropdownData] = useState([]);
+  const [loadingProductList, setLoadingProductList] = useState(false);
+  const [loadingSubProductList, setLoadingSubProductList] = useState(false);
+  const [subProductKey, setSubProductKey] = useState(Date.now());
+
+  const [productError, setProductError] = useState<string | null>(null);
+  const [subProductError, setSubProductError] = useState<string | null>(null);
+
+
+  // Fetch product list (always)
+  useEffect(() => {
+    const fetchProductList = async () => {
+      setLoadingProductList(true);
+      setProductError(null);
+
+      try {
+        const result = await dispatch(
+          fetchMasterDropdown({
+            url: `${API_ENDPOINTS?.MASTER?.PRODUCTS}/dropdown/active`,
+          })
+        ).unwrap();
+
+        const filteredData = (result || [])?.map((item: any) => ({
+          label: item.productName,
+          value: String(item.id),
+        }));
+
+        setProductDropdownData(filteredData);
+      } catch (err: any) {
+        console.error("Failed to fetch product list", err);
+        toast.error(err);
+        setProductError(err);
+
+        setProductDropdownData([]);
+      } finally {
+        setLoadingProductList(false);
+      }
+    };
+
+    fetchProductList();
+  }, [dispatch]);
+
+  // Fetch sub-product list (only if productId is given)
+  useEffect(() => {
+    if (!selectedProductId) return;
+
+    const fetchSubProductList = async () => {
+      setLoadingSubProductList(true);
+      setSubProductError(null);
+
+      try {
+        const result = await dispatch(
+          fetchMasterDropdown({
+            url: `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}/dropdown/${selectedProductId}`,
+          })
+        ).unwrap();
+
+        const filteredData = (result || [])?.map((item: any) => ({
+          label: item.subProduct_name,
+          value: String(item.id),
+        }));
+
+        setSubProductDropdownData(filteredData);
+
+        setSubProductKey(Date.now());
+      } catch (err: any) {
+        console.error("Failed to fetch sub-product list", err);
+        setSubProductError(err);
+
+        toast.error(err);
+        setSubProductDropdownData([]);
+        if (onSubProductReset) onSubProductReset();
+      } finally {
+        setLoadingSubProductList(false);
+      }
+    };
+
+    fetchSubProductList();
+  }, [selectedProductId, dispatch]);
+
+  return {
+    productDropdownData,
+    loadingProductList,
+    subProductDropdownData,
+    loadingSubProductList,
+    subProductKey,
+    productSubproductError: productError || subProductError, // <- combined error
+  };
+};
