@@ -7,3 +7,4 @@ export { default as ServiceChargeSetting } from "./ServiceChargeSetting";
 export { default as SchemeHierarchy } from "./SchemeHierarchy";
 export { default as SchemeRate } from "./SchemeRate";
 export { default as SchemeAllocation } from "./SchemeAllocation";
+export { default as EditSchemeAllocation } from "./EditSchemeAllocation";

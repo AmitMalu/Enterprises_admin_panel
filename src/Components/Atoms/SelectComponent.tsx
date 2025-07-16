@@ -19,19 +19,22 @@ interface SelectComponentProps {
   disabled?: boolean;
   data: { value: string; label: string }[];
   onBlur?: () => void;
+  onFocus?: () => void;
   className?: string;
   allowDeselect?: boolean;
   searchable?: boolean;
+  rightSection?: React.ReactNode;
 }
 
 const SelectComponent: React.FC<SelectComponentProps> = ({
   label,
   name,
   placeholder,
-  nothingFoundMessage = "Nothing found...",
+  nothingFoundMessage,
   value,
   onChange,
   error,
+  rightSection,
   clearable = false,
   required = false,
   radius,
@@ -40,6 +43,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   disabled = false,
   data,
   onBlur,
+  onFocus,
   allowDeselect = false,
   searchable = true,
   className = "",
@@ -51,10 +55,10 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     (screenSize === "sm" || screenSize === "md" || screenSize === "lg"
       ? "sm"
       : screenSize === "xl" || screenSize === "2xl"
-      ? "md"
-      : screenSize === "3xl"
-      ? "lg"
-      : "xl");
+        ? "md"
+        : screenSize === "3xl"
+          ? "lg"
+          : "xl");
 
   const defaultRadius = radius || (screenSize === "3xl" ? "md" : "sm");
 
@@ -69,6 +73,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         allowDeselect={allowDeselect}
         onChange={onChange}
         onBlur={onBlur}
+        onFocus={onFocus}
         error={typeof error === "string" ? true : !!error}
         required={required}
         radius={defaultRadius}
@@ -78,6 +83,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         data={data}
         clearable={clearable}
         searchable={searchable}
+        rightSection={rightSection} 
         styles={{
           input: {
             color: "#282828",

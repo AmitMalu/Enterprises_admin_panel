@@ -5,7 +5,7 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import { useAppDispatch } from "../../Redux/hooks";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import {
@@ -24,6 +24,8 @@ const SubMaster = () => {
     const [visibleColumns, setVisibleColumns] = useState<string[]>(
         headers.map((h) => h.key as string)
     );
+    const dataRef = useRef<SubMasterTableType[] | null>(null);
+
     const [submittedFilter, setSubmittedFilter] = useState<{
         key: string;
         value: any;
@@ -60,11 +62,12 @@ const SubMaster = () => {
     };
 
     const handleExportClick = () => {
-        if (!data || data.length === 0) {
+        const currentData = dataRef.current;
+        if (!currentData || currentData.length === 0) {
             toast.warning("No data available to export.");
             return;
         }
-        exportToCsv(data, "sub-master");
+        exportToCsv(currentData, "sub-master");
     };
 
     const handleToggleColumn = (key: string) => {
@@ -81,6 +84,10 @@ const SubMaster = () => {
         setRefreshKey((prev) => prev + 1);
         setFilterVisible(false);
     };
+
+    useEffect(() => {
+        dataRef.current = data;
+    }, [data]);
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">

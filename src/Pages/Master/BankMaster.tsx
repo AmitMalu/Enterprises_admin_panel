@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { EditIcon, EyeIcon } from "../../assets/Icons";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +30,8 @@ const ProductMaster = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
+  const dataRef = useRef<BankMasterTableType[] | null>(null);
+
   const [submittedFilter, setSubmittedFilter] = useState<{
     key: string;
     value: any;
@@ -67,11 +69,12 @@ const ProductMaster = () => {
   };
 
   const handleExportClick = () => {
-    if (!data || data.length === 0) {
+    const currentData = dataRef.current;
+    if (!currentData || currentData.length === 0) {
       toast.warning("No data available to export.");
       return;
     }
-    exportToCsv(data, "bank-master");
+    exportToCsv(currentData, "bank-master");
   };
 
   const handleToggleColumn = (key: string) => {
@@ -88,6 +91,11 @@ const ProductMaster = () => {
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
+
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">

@@ -1,6 +1,7 @@
 import { Route } from "react-router-dom";
 import SchemeSettingsPage from "../Pages/Schemes/SchemeSettingsPage";
 import {
+  EditSchemeAllocation,
   FeeDistributionSetting,
   FeeSetting,
   SchemeAllocation,
@@ -27,6 +28,7 @@ export const SchemesRoutes = (
 
     <Route path="/schemes/rate" element={<SchemeRate />} />
     <Route path="/schemes/allocation" element={<SchemeAllocation />} />
+    <Route path="/schemes/allocation/edit/:id" element={<EditSchemeAllocation />} />
 
     <Route
       path="/schemes/fee-distribution"

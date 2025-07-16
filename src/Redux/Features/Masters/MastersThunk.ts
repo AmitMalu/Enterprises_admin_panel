@@ -51,8 +51,15 @@ export const fetchMasterList = createAsyncThunk(
       const responseData = response?.data;
 
       if (responseData.statusCode === 200) {
-        const { content, totalPages, totalElements, size, number } =
-          responseData.data;
+        const {
+          content,
+          totalPages,
+          totalElements,
+          size,
+          pageSize,
+          pageNumber,
+          number,
+        } = responseData.data;
 
         // Set data and meta in store
         // dispatch(setData({ key, value: content }));
@@ -62,8 +69,8 @@ export const fetchMasterList = createAsyncThunk(
             pagination: {
               totalPages,
               totalElements,
-              pageSize: size,
-              currentPage: number + 1,
+              pageSize: size ?? pageSize,
+              currentPage: number + 1 || pageNumber + 1,
             },
           })
         );
@@ -125,7 +132,10 @@ export const createMasterItem = createAsyncThunk(
       const response = await axiosInstance.post(url, data);
       const responseData = response?.data;
 
-      if (responseData?.statusCode === 201) {
+      if (
+        responseData?.statusCode === 201 ||
+        responseData?.statusCode === 200
+      ) {
         // dispatch(setLoading({ key, loading: false }));
         // dispatch(setLoaded({ key, loaded: false }));
         return responseData;
@@ -184,9 +194,21 @@ export const updateMasterItem = createAsyncThunk(
 
 export const fetchMasterDropdown = createAsyncThunk(
   "masters/fetchDropdown",
-  async ({ url }: { url: string }, { rejectWithValue }) => {
+  async (
+    {
+      url,
+      method = "GET",
+    }: { url: string; method?: "GET" | "POST" | "PUT" | "DELETE" },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await axiosInstance.get(url);
+      let response;
+      if (method === "POST") {
+        response = await axiosInstance.post(url);
+      } else {
+        response = await axiosInstance.get(url); // Default to GET
+      }
+
       const responseData = response?.data;
 
       if (responseData?.statusCode === 200) {
