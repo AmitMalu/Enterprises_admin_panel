@@ -69,11 +69,6 @@ export const sidebarData = [
         icon: MastersIcon,
         links: [
           {
-            label: "Pincode Master",
-            link: "/master/pincode",
-            icon: MastersIcon,
-          },
-          {
             label: "Country Master",
             link: "/master/country",
             icon: MastersIcon,
@@ -91,6 +86,11 @@ export const sidebarData = [
           {
             label: "City Master",
             link: "/master/city",
+            icon: MastersIcon,
+          },
+          {
+            label: "Pincode Master",
+            link: "/master/pincode",
             icon: MastersIcon,
           },
         ],

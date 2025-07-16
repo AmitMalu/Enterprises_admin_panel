@@ -4,7 +4,7 @@ import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from "yup";
-import { Grid } from "@mantine/core";
+import { Grid, Loader } from "@mantine/core";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
@@ -103,7 +103,7 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                 onSubmit={handleSubmit}
             >
                 {(formik: FormikProps<any>) => {
-                    const { countries, countryLoading } = useLocationDropdowns({});
+                    const { countries, countryLoading, countryError } = useLocationDropdowns({});
 
                     return (
                         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
@@ -129,7 +129,10 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                         required
                                         searchable
                                         data={countries}
-                                        disabled={!!countryLoading}
+                                        rightSection={
+                                            countryLoading ? <Loader size={16} /> : null
+                                        }
+                                        disabled={!!countryLoading || !!countryError}
                                     />
                                 </Grid.Col>
 

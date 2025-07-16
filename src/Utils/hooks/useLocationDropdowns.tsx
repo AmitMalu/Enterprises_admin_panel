@@ -1,16 +1,44 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
 import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 import { toast } from "react-toastify";
 
+// Hook to track previous value
+function usePrevious<T>(value: T) {
+    const ref = useRef<T>();
+    useEffect(() => {
+        ref.current = value;
+    }, [value]);
+    return ref.current;
+}
 interface LocationHookProps {
     countryId?: string | number;
     stateId?: string | number;
     districtId?: string | number;
+    cityId?: string | number;
+    onResetCountry?: () => void;
+    onResetState?: () => void;
+    onResetDistrict?: () => void;
+    onResetCity?: () => void;
+    getStates?: boolean;
+    getDistricts?: boolean;
+    getCities?: boolean;
 }
 
-export const useLocationDropdowns = ({ countryId, stateId, districtId }: LocationHookProps) => {
+export const useLocationDropdowns = ({
+    countryId,
+    stateId,
+    districtId,
+    cityId,
+    onResetCountry,
+    onResetState,
+    onResetDistrict,
+    onResetCity,
+    getStates = false,
+    getDistricts = false,
+    getCities = false
+}: LocationHookProps) => {
     const dispatch = useAppDispatch();
 
     // Data
@@ -31,10 +59,19 @@ export const useLocationDropdowns = ({ countryId, stateId, districtId }: Locatio
     const [districtError, setDistrictError] = useState("");
     const [cityError, setCityError] = useState("");
 
+    // Keys (for rerender)
+    const [countryKey, setCountryKey] = useState(0);
+    const [stateKey, setStateKey] = useState(0);
+    const [districtKey, setDistrictKey] = useState(0);
+    const [cityKey, setCityKey] = useState(0);
+
+    const prevCountryId = usePrevious(countryId);
+    const prevStateId = usePrevious(stateId);
+    const prevDistrictId = usePrevious(districtId);
+
     // =============================
     // Fetch Handlers (Memoized)
     // =============================
-
     const fetchCountries = useCallback(() => {
         setCountryLoading(true);
         setCountryError("");
@@ -47,8 +84,15 @@ export const useLocationDropdowns = ({ countryId, stateId, districtId }: Locatio
                     value: String(item.id),
                 }));
                 setCountries(formatted);
+                const isValid = formatted?.some((item: any) => item.value === String(countryId));
+
+                if (!isValid && countryId !== "") {
+                    onResetCountry?.();
+                    setCountryKey((k) => k + 1);
+                }
             })
             .catch((err: any) => {
+                onResetCountry?.();
                 toast.error(err)
                 setCountryError(err)
             })
@@ -56,7 +100,7 @@ export const useLocationDropdowns = ({ countryId, stateId, districtId }: Locatio
     }, [dispatch]);
 
     const fetchStates = useCallback(() => {
-        if (!countryId) return;
+        if (!countryId || countryId === "" || countryId === null || countryId === undefined) return;
         setStateLoading(true);
         setStateError("");
         dispatch(fetchMasterDropdown({ url: `${API_ENDPOINTS.MASTER.STATE_MASTER}/by-country/${countryId}` }))
@@ -67,16 +111,26 @@ export const useLocationDropdowns = ({ countryId, stateId, districtId }: Locatio
                     value: String(item.id),
                 }));
                 setStates(formatted);
+                setStateKey((k) => k + 1);
+
+                const isValid = formatted?.some((item: any) => item.value === String(stateId));
+
+                if (!isValid && stateId !== "") {
+                    onResetState?.();
+                    setStateKey((k) => k + 1);
+                }
             })
             .catch((err: any) => {
+                onResetState?.();
                 toast.error(err)
                 setStateError(err)
             })
             .finally(() => setStateLoading(false));
-    }, [countryId, dispatch]);
+    }, [countryId, stateId, dispatch]);
 
     const fetchDistricts = useCallback(() => {
-        if (!stateId) return;
+        if (!stateId || stateId === "" || stateId === null || stateId === undefined) return;
+
         setDistrictLoading(true);
         setDistrictError("");
         dispatch(fetchMasterDropdown({ url: `${API_ENDPOINTS.MASTER.DISTRICT_MASTER}/by-state/${stateId}` }))
@@ -87,16 +141,24 @@ export const useLocationDropdowns = ({ countryId, stateId, districtId }: Locatio
                     value: String(item.id),
                 }));
                 setDistricts(formatted);
+                setDistrictKey((k) => k + 1);
+
+                const isValid = formatted.some((item: any) => item.value === String(districtId));
+                if (!isValid && districtId) {
+                    onResetDistrict?.();
+                    setDistrictKey((k) => k + 1);
+                }
             })
             .catch((err: any) => {
+                onResetDistrict?.();
                 toast.error(err)
                 setDistrictError(err)
             })
             .finally(() => setDistrictLoading(false));
-    }, [stateId, dispatch]);
+    }, [stateId, districtId, dispatch]);
 
     const fetchCities = useCallback(() => {
-        if (!districtId) return;
+        if (!districtId || districtId === "" || districtId === null || districtId === undefined) return;
         setCityLoading(true);
         setCityError("");
         dispatch(fetchMasterDropdown({ url: `${API_ENDPOINTS.MASTER.CITY_MASTER}/by-district/${districtId}` }))
@@ -107,13 +169,20 @@ export const useLocationDropdowns = ({ countryId, stateId, districtId }: Locatio
                     value: String(item.id),
                 }));
                 setCities(formatted);
+                setCityKey((k) => k + 1);
+                const isValid = formatted.some((item: any) => item.value === String(cityId));
+                if (!isValid && cityId) {
+                    onResetCity?.();
+                    setCityKey((k) => k + 1);
+                }
             })
             .catch((err: any) => {
+                onResetCity?.();
                 toast.error(err)
                 setCityError(err)
             })
             .finally(() => setCityLoading(false));
-    }, [districtId, dispatch]);
+    }, [districtId, cityId, dispatch]);
 
     // =============================
     // Auto-fetching Logic
@@ -124,29 +193,23 @@ export const useLocationDropdowns = ({ countryId, stateId, districtId }: Locatio
     }, [fetchCountries]);
 
     useEffect(() => {
-        if (countryId) {
+        if (getStates && countryId && prevCountryId !== countryId) {
             fetchStates();
         }
-        // Reset downstream data
-        setStates([]);
-        setDistricts([]);
-        setCities([]);
-    }, [countryId, fetchStates]);
+    }, [countryId, prevCountryId, fetchStates]);
 
     useEffect(() => {
-        if (stateId) {
+        if (getDistricts && stateId && prevStateId !== stateId) {
             fetchDistricts();
         }
-        setDistricts([]);
-        setCities([]);
-    }, [stateId, fetchDistricts]);
+    }, [stateId, prevStateId, fetchDistricts]);
 
     useEffect(() => {
-        if (districtId) {
+        if (getCities && districtId && prevDistrictId !== districtId) {
             fetchCities();
         }
-        setCities([]);
-    }, [districtId, fetchCities]);
+    }, [districtId, prevDistrictId, fetchCities]);
+
 
     return {
         countries,
@@ -163,6 +226,11 @@ export const useLocationDropdowns = ({ countryId, stateId, districtId }: Locatio
         stateError,
         districtError,
         cityError,
+
+        countryKey,
+        stateKey,
+        districtKey,
+        cityKey,
 
         // Manual Refetchers
         refetchCountries: fetchCountries,

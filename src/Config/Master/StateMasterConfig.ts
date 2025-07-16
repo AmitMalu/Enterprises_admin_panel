@@ -116,8 +116,8 @@ export const transformStateListToFormData = (
   stateCode: raw.stateCode ?? "",
   zone: raw.zone ?? "",
   regionType: raw.regionType ?? "",
-  countryId: String(raw.countryId) ?? "",
-  blocked: raw.blocked ?? "",
+  countryId: raw.countryId != null ? String(raw.countryId) : "",
+  blocked: raw.blocked ?? false,
 });
 
 export const transformFormToCreateStateMasterPayload = (
