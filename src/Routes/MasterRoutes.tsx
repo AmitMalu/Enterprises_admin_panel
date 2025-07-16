@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 import {
-  NetworkBankMaster,
+  BankMaster,
   BusinessMaster,
   CountryMaster,
   KycMaster,
@@ -77,11 +77,11 @@ export const MasterRoutes = (
       path="/master/vendor/edit/:id"
       element={<VendorForm mode="edit" />}
     />
-    <Route path="/master/network-banks" element={<NetworkBankMaster />} />
-    <Route path="/master/network-banks/add" element={<NetworkBankMasterForm mode="add" />} />
+    <Route path="/master/banks" element={<BankMaster />} />
+    <Route path="/master/banks/add" element={<BankMasterForm mode="add" />} />
     <Route
-      path="/master/network-banks/edit/:id"
-      element={<NetworkBankMasterForm mode="edit" />}
+      path="/master/banks/edit/:id"
+      element={<BankMasterForm mode="edit" />}
     />
 
     <Route path="/master/bankmaster" element={<BankMaster />} />

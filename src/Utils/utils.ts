@@ -161,34 +161,11 @@ export function exportToCsv<T extends Record<string, any>>(
   document.body.removeChild(link);
 }
 
-export const toFormData = (obj: Record<string, any>): FormData => {
-  const formData = new FormData();
-
-  Object.entries(obj).forEach(([key, value]) => {
-    if (value === null || value === undefined) return;
-
-    if (value instanceof File) {
-      formData.append(key, value);
-    } else if (typeof value === "object") {
-      // Send objects (like bankData) as JSON blobs
-      const blob = new Blob([JSON.stringify(value)], {
-        type: "application/json",
-      });
-      formData.append(key, blob);
-    } else {
-      formData.append(key, value.toString());
-    }
-  });
-
-  return formData;
-};
-
 // Masters form submit Handler
 type TransformPayloadFn<T> = (data: T) => Record<string, any>;
 export interface HandleMasterFormSubmitProps<T> {
   mode?: "add" | "edit";
   id?: string;
-  useFormData?: boolean;
   values: T;
   dispatch: AppDispatch;
   navigate: NavigateFunction;
@@ -205,7 +182,6 @@ export interface HandleMasterFormSubmitProps<T> {
 export const handleMasterFormSubmit = async <T>({
   mode = "add",
   id,
-  useFormData = false,
   values,
   dispatch,
   navigate,
@@ -219,16 +195,12 @@ export const handleMasterFormSubmit = async <T>({
   entityName = "Item",
 }: HandleMasterFormSubmitProps<T>) => {
   try {
-    const rawPayload =
+    const payload =
       mode === "edit" && typeof transformUpdatePayload === "function"
         ? transformUpdatePayload(values)
         : mode === "add" && typeof transformCreatePayload === "function"
         ? transformCreatePayload(values)
         : values;
-
-    const payload = useFormData
-      ? toFormData(rawPayload as Record<string, any>)
-      : rawPayload;
 
     const url = mode === "edit" ? updateUrl : addUrl;
 
@@ -239,14 +211,8 @@ export const handleMasterFormSubmit = async <T>({
             url: url,
             ...(id ? { id } : {}),
             data: payload,
-            useFormData,
           })
-        : createMasterItem({
-            key: masterKey,
-            url: url,
-            data: payload,
-            useFormData,
-          });
+        : createMasterItem({ key: masterKey, url: url, data: payload });
 
     const res = await dispatch(thunk).unwrap();
 
@@ -280,10 +246,3 @@ export interface VerticalKeyValueTableProps<T extends Record<string, any>> {
   data: T;
   headers: GenericVerticalHeader<T>[]; // not just one header
 }
-
-export const isFile = (val: any): val is File =>
-  val &&
-  typeof val === "object" &&
-  typeof val.name === "string" &&
-  typeof val.size === "number" &&
-  typeof val.type === "string";
