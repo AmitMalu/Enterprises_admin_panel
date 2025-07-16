@@ -45,8 +45,8 @@ export const sidebarData = [
         icon: MastersIcon,
       },
       {
-        label: "Bank Master",
-        link: "/master/banks",
+        label: "Network Bank Master",
+        link: "/master/network-banks",
         icon: MastersIcon,
       },
       {
