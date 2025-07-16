@@ -129,14 +129,11 @@ export const fileValidation = (
     .test(
       "fileType",
       `Only ${allowedTypes.join(", ")} files are allowed`,
-      (value) => {
-        if (typeof value === "string") return true; // Allow URL (edit case)
-        return value instanceof File
-          ? allowedTypes.includes(value.type)
-          : false;
-      }
+      (value) =>
+        value instanceof File ? allowedTypes.includes(value.type) : false
     )
-    .test("fileSize", `File too large. Max ${maxSizedMB}MB`, (value) => {
-      if (typeof value === "string") return true; // Allow URL (edit case)
-      return value instanceof File && value.size <= maxSizedMB * 1024 * 1024;
-    });
+    .test(
+      "fileSize",
+      `File too large. Max ${maxSizedMB}MB`,
+      (value) => value instanceof File && value.size <= maxSizedMB * 1024 * 1024
+    );
