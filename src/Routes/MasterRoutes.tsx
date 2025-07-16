@@ -17,6 +17,11 @@ import {
   VendorMaster,
   WalletMaster,
   BankMaster,
+  MainMaster,
+  SubMaster,
+  StateMaster,
+  DistrictMaster,
+  CityMaster,
 } from "../Pages/Master";
 import SubProductForm from "../Components/Organisms/SubProductForm";
 import VendorForm from "../Components/Organisms/VendorForm";
@@ -24,14 +29,14 @@ import OperatorForm from "../Components/Organisms/OperatorForm";
 import ProductForm from "../Components/Organisms/ProductForm";
 import SubOperatorForm from "../Components/Organisms/SubOperatorForm";
 import NetworkBankMasterForm from "../Components/Organisms/NetworkBankMasterForm";
-import MainMaster from "../Pages/Master/MainMaster";
 import MainMasterForm from "../Components/Organisms/MainMasterForm";
-import SubMaster from "../Pages/Master/SubMaster";
 import SubMasterForm from "../Components/Organisms/SubMasterForm";
 import BankMasterForm from "../Components/Organisms/BankMasterForm";
 import CountryMasterForm from "../Components/Organisms/CountryMasterForm";
-import StateMaster from "../Pages/Master/StateMaster";
 import StateMasterForm from "../Components/Organisms/StateMasterForm";
+import DistrictMasterForm from "../Components/Organisms/DistrictMasterForm";
+import CityMasterForm from "../Components/Organisms/CityMasterForm";
+import PincodeMasterForm from "../Components/Organisms/PincodeMasterForm";
 
 export const MasterRoutes = (
   <>
@@ -101,20 +106,23 @@ export const MasterRoutes = (
     <Route path="/master/state/add" element={<StateMasterForm mode="add" />} />
     <Route path="/master/state/edit/:id" element={<StateMasterForm mode="edit" />} />
 
-    {/* <Route path="/master/district" element={<DistrictMaster />} />
+    <Route path="/master/district" element={<DistrictMaster />} />
     <Route path="/master/district/add" element={<DistrictMasterForm mode="add" />} />
     <Route path="/master/district/edit/:id" element={<DistrictMasterForm mode="edit" />} />
 
     <Route path="/master/city" element={<CityMaster />} />
     <Route path="/master/city/add" element={<CityMasterForm mode="add" />} />
-    <Route path="/master/city/edit/:id" element={<CityMasterForm mode="edit" />} /> */}
+    <Route path="/master/city/edit/:id" element={<CityMasterForm mode="edit" />} />
+
+    <Route path="/master/pincode" element={<PincodeMaster />} />
+    <Route path="/master/pincode/add" element={<PincodeMasterForm mode="add" />} />
+    <Route path="/master/pincode/edit/:id" element={<PincodeMasterForm mode="edit" />} />
 
     <Route
       path="/master/user-configuration"
       element={<UserConfigurationMaster />}
     />
     <Route path="/master/wallet" element={<WalletMaster />} />
-    <Route path="/master/pincode" element={<PincodeMaster />} />
     <Route path="/master/ticket" element={<TicketMaster />} />
     <Route path="/master/profile" element={<ProfileMaster />} />
     <Route path="/master/kyc" element={<KycMaster />} />
