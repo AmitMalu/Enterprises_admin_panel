@@ -21,7 +21,7 @@ import {
   transformToBankTableType,
 } from "../../Config/Master/BankMasterConfig";
 
-const ProductMaster = () => {
+const BankMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [filterVisible, setFilterVisible] = useState(false);
@@ -47,11 +47,11 @@ const ProductMaster = () => {
     });
 
   const handleEdit = (id: string) => {
-    navigate(`/master/banks/edit/${id}`, { state: id });
+    navigate(`/master/bankmaster/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/master/banks/add");
+    navigate("/master/bankmaster/add");
   };
 
   const handleFilterChange = (key: string, value: any) => {
@@ -157,4 +157,4 @@ const ProductMaster = () => {
   );
 };
 
-export default ProductMaster;
+export default BankMaster;

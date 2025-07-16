@@ -262,6 +262,7 @@ export const schemesSvg: React.FC<React.SVGProps<SVGSVGElement>> = ({
 }) => {
   return (
     <svg
+      className="ml-[-2px]"
       width={width}
       height={height}
       color={color}

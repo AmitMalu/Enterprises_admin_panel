@@ -16,6 +16,7 @@ import {
   UserConfigurationMaster,
   VendorMaster,
   WalletMaster,
+  BankMaster,
 } from "../Pages/Master";
 import SubProductForm from "../Components/Organisms/SubProductForm";
 import VendorForm from "../Components/Organisms/VendorForm";
@@ -27,6 +28,7 @@ import MainMaster from "../Pages/Master/MainMaster";
 import MainMasterForm from "../Components/Organisms/MainMasterForm";
 import SubMaster from "../Pages/Master/SubMaster";
 import SubMasterForm from "../Components/Organisms/SubMasterForm";
+import BankMasterForm from "../Components/Organisms/BankMasterForm";
 
 export const MasterRoutes = (
   <>
@@ -73,6 +75,14 @@ export const MasterRoutes = (
       path="/master/banks/edit/:id"
       element={<BankMasterForm mode="edit" />}
     />
+
+    <Route path="/master/bankmaster" element={<BankMaster />} />
+    <Route path="/master/bankmaster/add" element={<BankMasterForm mode="add" />} />
+    <Route
+      path="/master/bankmaster/edit/:id"
+      element={<BankMasterForm mode="edit" />}
+    />
+
     <Route path="/master/main" element={<MainMaster />} />
     <Route path="/master/main/add" element={<MainMasterForm mode="add" />} />
     {/* <Route path="/master/main/edit/:id" element={<MainMasterForm mode="edit" />} /> */}

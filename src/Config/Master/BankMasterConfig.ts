@@ -1,18 +1,21 @@
-import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
-import { ifscValidation, textField } from "../../Utils/ValidationUtils";
+import { GenericTableHeader } from "../../Utils/utils";
+import {
+  accountNumberValidation,
+  ifscValidation,
+  textField,
+} from "../../Utils/ValidationUtils";
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
-export const MASTER_KEY = "banks";
+export const MASTER_KEY = "bank";
 export const MASTER_URL = API_ENDPOINTS.MASTER.BANK_MASTER;
 
 export interface BankMasterFormType {
-  bankCode: string;
   bankName: string;
+  accountNumber: string;
   ifscCode: string;
-  imps: boolean;
-  neft: boolean;
-  rtgs: boolean;
+  charges: false;
+  chargesType: string;
   isActive?: boolean;
   isBlocked?: boolean;
 }
@@ -40,36 +43,41 @@ export type FetchBankMasterListParams = {
 };
 
 export const initialValues: BankMasterFormType = {
-  bankCode: "",
   bankName: "",
+  accountNumber: "",
   ifscCode: "",
-  imps: false,
-  neft: false,
-  rtgs: false,
+  charges: false,
+  chargesType: "percentage",
   isActive: false,
   isBlocked: false,
 };
 
 export const validationSchema: Record<keyof BankMasterFormType, Yup.AnySchema> =
   {
-    bankCode: textField("Bank Code", 50, true, true),
     bankName: textField("Bank Name", 50, true, true),
+    accountNumber: accountNumberValidation,
     ifscCode: ifscValidation,
-    imps: Yup.boolean().required("IMPS is Required"),
-    neft: Yup.boolean().required("NEFT is Required"),
-    rtgs: Yup.boolean().required("RTGS is Required"),
+    charges: Yup.boolean().default(false),
+    chargesType: textField("Charges Type", 50, true, true),
     isActive: Yup.boolean().default(false),
     isBlocked: Yup.boolean().default(false),
   };
 
 export const headers: GenericTableHeader<BankMasterTableType>[] = [
   { key: "id", label: "ID", filterType: "text" },
-  { key: "bankCode", label: "Bank Code", filterType: "text" },
   { key: "bankName", label: "Bank Name", filterType: "text" },
+  { key: "accountNumber", label: "Account Number", filterType: "text" },
   { key: "ifscCode", label: "IFSC Code", filterType: "text" },
-  { key: "imps", label: "IMPS", filterType: "boolean" },
-  { key: "neft", label: "NEFT", filterType: "boolean" },
-  { key: "rtgs", label: "RTGS", filterType: "boolean" },
+  { key: "charges", label: "Charges", filterType: "boolean" },
+  {
+    key: "chargesType",
+    label: "Charges Type",
+    filterType: "boolean",
+    filterOptions: [
+      { label: "PERCENTAGE", value: "PERCENTAGE" },
+      { label: "FLAT", value: "FLAT" },
+    ],
+  },
   { key: "isActive", label: "Active", filterType: "boolean" },
   { key: "isBlocked", label: "Blocked", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
@@ -83,18 +91,17 @@ export const transformToBankTableType = (
 ): BankMasterTableType => {
   return {
     id: raw.id ?? "",
-    bankCode: raw.bankCode ?? "",
     bankName: raw.bankName ?? "",
+    accountNumber: raw.accountNumber ?? "",
     ifscCode: raw.ifscCode ?? "",
-    imps: !!raw.imps,
-    neft: !!raw.neft,
-    rtgs: !!raw.rtgs,
+    charges: raw.charges ?? false,
+    chargesType: raw.chargesType ?? "PERCENTAGE",
     isActive: !!raw.isActive,
     isBlocked: !!raw.isBlocked,
     createdBy: raw.createdBy ?? "",
-    createdOn: formatDateTime(raw.createdOn) ?? "",
+    createdOn: raw.createdOn ?? "",
     editedBy: raw.editedBy ?? "",
-    editedOn: formatDateTime(raw.editedOn) ?? "",
+    editedOn: raw.editedOn ?? "",
   };
 };
 
@@ -102,28 +109,29 @@ export const transformToBankTableType = (
 export const transformBankListToFormData = (
   raw: Record<string, any>
 ): BankMasterFormType => ({
-  bankCode: raw.bankCode ?? "",
   bankName: raw.bankName ?? "",
+  accountNumber: raw.accountNumber ?? "",
   ifscCode: raw.ifscCode ?? "",
-  imps: !!raw.imps,
-  neft: !!raw.neft,
-  rtgs: !!raw.rtgs,
+  charges: raw.charges ?? false,
+  chargesType: raw.chargesType ?? "PERCENTAGE",
   isActive: !!raw.isActive,
   isBlocked: !!raw.isBlocked,
 });
 
-// Transform form data to Create payload
 export const transformFormToCreateBankMasterPayload = (
   formData: BankMasterFormType
-): BankMasterCreatePayload => ({
-  ...formData,
-  createdBy: localStorage.getItem("username") || "system",
-});
+): BankMasterCreatePayload => {
+  return {
+    ...formData,
+    createdBy: localStorage.getItem("username") || "system",
+  };
+};
 
-// Transform form data to Update payload
 export const transformFormToUpdateBankMasterPayload = (
   formData: BankMasterFormType
-): BankMasterUpdatePayload => ({
-  ...formData,
-  editedBy: localStorage.getItem("username") || "system",
-});
+): BankMasterUpdatePayload => {
+  return {
+    ...formData,
+    editedBy: localStorage.getItem("username") || "system",
+  };
+};

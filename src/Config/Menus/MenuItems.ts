@@ -50,6 +50,11 @@ export const sidebarData = [
         icon: MastersIcon,
       },
       {
+        label: "Bank Master",
+        link: "/master/bankmaster",
+        icon: MastersIcon,
+      },
+      {
         label: "Main Master",
         link: "/master/main",
         icon: MastersIcon,
@@ -59,15 +64,36 @@ export const sidebarData = [
         link: "/master/sub-master",
         icon: MastersIcon,
       },
-      // {
-      //   label: "User Configuration",
-      //   link: "/master/user-configuration",
-      //   icon: MastersIcon,
-      // },
       {
-        label: "Pincode Master",
-        link: "/master/pincode",
+        label: "Location Master",
         icon: MastersIcon,
+        links: [
+          {
+            label: "Pincode Master",
+            link: "/master/pincode",
+            icon: MastersIcon,
+          },
+          {
+            label: "Country Master",
+            link: "/master/country",
+            icon: MastersIcon,
+          },
+          {
+            label: "State Master",
+            link: "/master/state",
+            icon: MastersIcon,
+          },
+          {
+            label: "District Master",
+            link: "/master/district",
+            icon: MastersIcon,
+          },
+          {
+            label: "City Master",
+            link: "/master/city",
+            icon: MastersIcon,
+          },
+        ],
       },
     ],
   },

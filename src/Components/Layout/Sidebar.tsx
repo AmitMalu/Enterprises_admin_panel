@@ -1,16 +1,18 @@
 import { Box, Image, ScrollArea } from "@mantine/core";
-import React from "react";
+import React, { useState } from "react";
 import orgLogo from "../../assets/Images/orgLogo.png";
 import { sidebarData } from "../../Config/Menus/MenuItems";
 import LinksGroup from "../Organisms/LinksGroup";
 
 const Sidebar: React.FC = () => {
+  const [openMap, setOpenMap] = useState<Record<string, { level: number }>>({});
+
   const links = sidebarData.map((item) => (
     <LinksGroup
-      {...item}
       key={item.label}
-      link={item?.link}
-      initiallyOpened={item.initiallyOpened}
+      {...item}
+      openMap={openMap}
+      setOpenMap={setOpenMap}
     />
   ));
 
