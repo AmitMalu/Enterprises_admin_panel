@@ -53,10 +53,10 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, i
             <TextComponent
               color="#1D1F2C"
               fontFamily="Inter"
-              fontWeight={500}
+              fontWeight={600}
               fontSize={18}
             >
-              {operator.operatorName}
+              {String(operator.operatorName).toUpperCase()}
             </TextComponent>
 
             {/* Operator Table */}

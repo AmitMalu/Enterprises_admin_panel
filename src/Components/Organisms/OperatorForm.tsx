@@ -88,7 +88,7 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
       <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Operator Master Form" : "Operator Master Form"}
+        {mode === "edit" ? "Edit Operator" : "Add Operator"}
       </TextComponent>
 
       {/* Sub Heading */}

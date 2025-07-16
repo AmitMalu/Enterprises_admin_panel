@@ -99,12 +99,12 @@ const ProductMaster = () => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
-      <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
+      <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
         Bank Master
       </TextComponent>
 
       <GenericMasterToolbar
-        addButtonText="Add Product"
+        addButtonText="Add Bank"
         onAdd={handleAdd}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}

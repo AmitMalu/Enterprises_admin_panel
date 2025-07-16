@@ -118,7 +118,7 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
             <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Sub Master Form" : "Sub Master Form"}
+                {mode === "edit" ? "Edit Sub Master" : "Add Sub Master"}
             </TextComponent>
 
             {/* Sub Heading */}

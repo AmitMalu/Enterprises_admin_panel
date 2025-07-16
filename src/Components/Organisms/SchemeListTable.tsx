@@ -62,7 +62,7 @@ const SchemeListTable: React.FC<SchemesListTableProps> = ({
         <div className="flex justify-center gap-2">
           <span
             onClick={() =>
-              navigate(`/schemes/setting/${item.schemeId}`, { state: item })
+              navigate(`/schemes/schemeslist/setting/${item.schemeId}`, { state: item })
             }
             className="cursor-pointer"
           >

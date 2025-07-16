@@ -90,8 +90,8 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
       <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
         {mode === "edit"
-          ? "Edit Sub Product Master Form"
-          : "Sub Product Master Form"}
+          ? "Edit Sub Product"
+          : "Add Sub Product"}
       </TextComponent>
 
       {/* Sub Heading */}

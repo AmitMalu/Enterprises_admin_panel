@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { EditIcon2, EyeIcon2 } from "../../assets/Icons";
+import { EditIcon, EditIcon2, EyeIcon2 } from "../../assets/Icons";
 import { useAppDispatch } from "../../Redux/hooks";
 import { resetSingleSchemesData, setPagination } from "../../Redux/Features/Schemes/slice";
 import { toast } from "react-toastify";
@@ -91,7 +91,7 @@ const SchemeHierarchy = () => {
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
             {/* Heading */}
-            <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
+            <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
                 Schemes Heirarchy
             </TextComponent>
 
@@ -121,15 +121,15 @@ const SchemeHierarchy = () => {
                     )}
                     renderExtraHeader={() => <></>} // empty header for action column/>
                     renderExtraRowCell={(item) => (
-                        <div className="flex justify-center gap-2 ">
-                            <span className="cursor-pointer">
+                        <div className="flex justify-center gap-2 min-w-10 ">
+                            {/* <span className="cursor-pointer">
                                 <EyeIcon2 />
-                            </span>
+                            </span> */}
                             <span
                                 onClick={() => handleEdit(item.id)}
                                 className="cursor-pointer"
                             >
-                                <EditIcon2 />
+                                <EditIcon />
                             </span>
                         </div>
                     )}

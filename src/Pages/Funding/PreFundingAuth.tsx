@@ -49,7 +49,7 @@ const PreFundingAuth = () => {
   } | null>(null);
 
   const handleEdit = (id: any) => {
-    navigate(`/prefunding/edit/${id}`, { state: id });
+    navigate(`/funding/authorization/edit/${id}`, { state: id });
   };
 
   const handleFilterChange = (key: string, value: any) => {
@@ -146,7 +146,7 @@ const PreFundingAuth = () => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
-      <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
+      <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
         Prefunding Request
       </TextComponent>
 

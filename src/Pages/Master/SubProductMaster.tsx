@@ -97,7 +97,7 @@ const SubProductMaster = () => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
-      <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
+      <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
         Sub Product Master
       </TextComponent>
 
@@ -125,10 +125,10 @@ const SubProductMaster = () => {
           )}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
-            <div className="flex justify-center gap-2">
-              <span className="cursor-pointer">
+            <div className="flex justify-center gap-2 min-w-10">
+              {/* <span className="cursor-pointer">
                 <EyeIcon />
-              </span>
+              </span> */}
               <span
                 onClick={() => handleEdit(item?.id || "")}
                 className="cursor-pointer"

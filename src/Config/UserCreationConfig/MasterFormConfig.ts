@@ -211,7 +211,7 @@ export const handleFormSubmit = async ({
     setShowSuccessModal(true);
     setTimeout(() => {
       setShowSuccessModal(false);
-      navigate("/management/user-creation");
+      navigate("/management/user/create");
     }, 2000);
     formikHelpers.resetForm();
     setActiveStep(0);

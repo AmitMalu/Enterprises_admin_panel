@@ -18,15 +18,14 @@ import SchemeHierarchyForm from "../Components/Organisms/SchemeHierarchyForm";
 export const SchemesRoutes = (
   <>
     <Route path="/schemes/schemeslist" element={<SchemesList />} />
-    <Route path="/schemes/add" element={<SchemesFormPage mode="add" />} />
-    <Route path="/schemes/edit/:id" element={<SchemesFormPage mode="edit" />} />
-    <Route path="/schemes/setting" element={<SchemeSettingsPage />} />
+    <Route path="/schemes/schemeslist/add" element={<SchemesFormPage mode="add" />} />
+    <Route path="/schemes/schemeslist/edit/:id" element={<SchemesFormPage mode="edit" />} />
+    <Route path="/schemes/schemeslist/setting" element={<SchemeSettingsPage />} />
 
     <Route path="/schemes/hierarchy" element={<SchemeHierarchy />} />
     <Route path="/schemes/hierarchy/edit/:id" element={<SchemeHierarchyForm mode="edit" />} />
     <Route path="/schemes/hierarchy/add" element={<SchemeHierarchyForm mode="add" />} />
 
-    <Route path="/schemes/rate" element={<SchemeRate />} />
     <Route path="/schemes/allocation" element={<SchemeAllocation />} />
     <Route path="/schemes/allocation/edit/:id" element={<EditSchemeAllocation />} />
 

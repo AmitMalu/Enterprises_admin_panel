@@ -13,12 +13,12 @@ import {
 export const FundingRoutes = (
   <>
     <Route
-      path="/funding/pre-funding-authorization"
+      path="/funding/authorization"
       element={<PreFundingAuth />}
     />
-    <Route path="/prefunding/add" element={<PrefundingForm />} />
+    <Route path="/funding/authorization/add" element={<PrefundingForm />} />
     <Route
-      path="/prefunding/edit/:id"
+      path="/funding/authorization/edit/:id"
       element={<PrefundingForm />}
     />
     <Route path="/funding/credit-debit" element={<CreditDebit />} />

@@ -82,7 +82,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
             <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Scheme Hierarchy" : "Scheme Hierarchy Form"}
+                {mode === "edit" ? "Edit Scheme Hierarchy" : "Add Scheme Hierarchy"}
             </TextComponent>
 
             {/* Sub Heading */}
@@ -99,7 +99,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                     return (
                         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
                             <Grid gutter="lg">
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
                                     <FormikTextInputComponent
                                         name="schemeHierarchySelectionName"
                                         label="Scheme Hierarchy Name"
@@ -109,7 +109,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
                                     <FormikMultiSelectComponent
                                         name="schemeHierarchyCombination"
                                         label="Hierarchy Combination "

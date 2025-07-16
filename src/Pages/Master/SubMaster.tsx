@@ -91,7 +91,7 @@ const SubMaster = () => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
-            <TextComponent fontSize={22} fontFamily="Manrope" fontWeight={500}>
+            <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
                 Sub Master
             </TextComponent>
 
@@ -117,20 +117,20 @@ const SubMaster = () => {
                     headers={headers.filter((h) =>
                         visibleColumns.includes(h.key as string)
                     )}
-                    renderExtraHeader={() => <></>} // empty header for action column/>
-                    renderExtraRowCell={() => (
-                        <div className="flex justify-center gap-2">
-                            <span className="cursor-pointer">
-                                <EyeIcon />
-                            </span>
-                            {/* <span   No Edit For Master
-                onClick={() => handleEdit(String(item?.imMasterId ?? ""))}
-                className="cursor-pointer"
-              >
-                <EditIcon />
-              </span> */}
-                        </div>
-                    )}
+                    //         renderExtraHeader={() => <></>} // empty header for action column/>
+                    //         renderExtraRowCell={() => (
+                    //             <div className="flex justify-center gap-2">
+                    //                 <span className="cursor-pointer">
+                    //                     <EyeIcon />
+                    //                 </span>
+                    //                 {/* <span   No Edit For Master
+                    //     onClick={() => handleEdit(String(item?.imMasterId ?? ""))}
+                    //     className="cursor-pointer"
+                    //   >
+                    //     <EditIcon />
+                    //   </span> */}
+                    //             </div>
+                    //         )}
                     pagination
                     currentPage={pagination.currentPage}
                     totalPages={pagination.totalPages}

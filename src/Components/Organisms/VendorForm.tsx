@@ -92,7 +92,7 @@ const VendorForm = ({ mode }: ProductFormProps) => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
       <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Vendor Master Form" : "Vendor Master Form"}
+        {mode === "edit" ? "Edit Vendor" : "Add Vendor"}
       </TextComponent>
 
       {/* Sub Heading */}
