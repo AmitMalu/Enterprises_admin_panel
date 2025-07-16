@@ -19,7 +19,7 @@ import {
   MASTER_KEY,
   MASTER_URL,
   transformToBankTableType,
-} from "../../Config/Master/NetworkBanksConfig";
+} from "../../Config/Master/BankMasterConfig";
 
 const ProductMaster = () => {
   const navigate = useNavigate();
@@ -47,11 +47,11 @@ const ProductMaster = () => {
     });
 
   const handleEdit = (id: string) => {
-    navigate(`/master/network-banks/edit/${id}`, { state: id });
+    navigate(`/master/banks/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/master/network-banks/add");
+    navigate("/master/banks/add");
   };
 
   const handleFilterChange = (key: string, value: any) => {
@@ -100,7 +100,7 @@ const ProductMaster = () => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        Network Bank Master
+        Bank Master
       </TextComponent>
 
       <GenericMasterToolbar
