@@ -4,3 +4,6 @@ export { default as FeeSetting } from "./FeeSetting";
 export { default as TransactionRouting } from "./TransactionRouting";
 export { default as TransactionLimitSetting } from "./TransactionLimitSetting";
 export { default as ServiceChargeSetting } from "./ServiceChargeSetting";
+export { default as SchemeHierarchy } from "./SchemeHierarchy";
+export { default as SchemeRate } from "./SchemeRate";
+export { default as SchemeAllocation } from "./SchemeAllocation";

@@ -1,211 +1,96 @@
 import moment from "moment";
+import * as Yup from "yup";
+import { API_ENDPOINTS } from "../Api/EndPoints";
+import { GenericTableHeader } from "../../Utils/utils";
+import { textField } from "../../Utils/ValidationUtils";
 
-export type SchemesListType = {
-  schemeId: string;
+export const SCHEMES_KEY = "schemes";
+export const SCHEMES_URL = API_ENDPOINTS.SCHEMES.SCHEME_LIST;
+
+export interface SchemesListFormType {
   schemeName: string;
   schemeCode: string;
-  walletType: string;
-  schemeType: string;
-  product: string;
-  subProduct: string;
+  productId: string;
+  subProductId: string;
+  operatorId: string;
+  vendorId: string;
+  schemeHierarchySelectionId: string;
+}
+
+export interface SchemesListTableType {
+  id: string | number;
+  schemeName: string;
+  schemeCode: string;
+  productName: string;
+  subProductName: string;
+  operatorName: string;
+  vendorName: string;
+  schemeCombinationHashCode: string;
+}
+
+export interface SchemeListCreatePayload extends SchemesListFormType {
+  createdBy: string;
+}
+
+export interface SchemeListUpdatePayload extends SchemesListFormType {
+  editedBy: string;
+}
+
+export const initialValues: SchemesListFormType = {
+  schemeName: "",
+  schemeCode: "",
+  productId: "",
+  subProductId: "",
+  operatorId: "",
+  vendorId: "",
+  schemeHierarchySelectionId: "",
 };
 
-export const columnStyles: {
-  [key in keyof SchemesListType]?: React.CSSProperties;
-} = {
-  schemeId: {
-    fontFamily: '"Segoe UI", sans-serif',
-    fontWeight: "normal",
-    color: "#1D1F2C",
-  },
-  schemeName: {
-    fontFamily: "Inter, sans-serif",
-    fontWeight: "normal",
-    color: "#000000",
-  },
-  schemeCode: {
-    fontFamily: "Inter, sans-serif",
-    fontWeight: "normal",
-    color: "#000000",
-  },
-  walletType: {
-    fontFamily: "Segoe UI, serif",
-    fontWeight: "normal",
-    color: "#667085",
-  },
-  schemeType: {
-    fontFamily: "Segoe UI, serif",
-    fontWeight: "normal",
-    color: "#667085",
-  },
-  product: {
-    fontFamily: "Segoe UI, serif",
-    fontWeight: "normal",
-    color: "#667085",
-  },
-  subProduct: {
-    fontFamily: "Segoe UI, serif",
-    fontWeight: "normal",
-    color: "#667085",
-  },
+export const validationSchema: Record<
+  keyof SchemesListFormType,
+  Yup.AnySchema
+> = {
+  schemeName: textField("Scheme Name", 150, true, true),
+  schemeCode: textField("Scheme Code", 150, true, true),
+  productId: textField("Product", 150, true, true),
+  subProductId: textField("sub Product", 150, true, true),
+  operatorId: textField("Operator", 150, false, true),
+  vendorId: textField("Vendor", 150, false, true),
+  schemeHierarchySelectionId: textField("Scheme Hierarchy", 150, false, true),
 };
 
-export const data: SchemesListType[] = [
-  {
-    schemeId: "101",
-    schemeName: "Airtel DTH",
-    schemeCode: "DTH101",
-    walletType: "Airtel Digital TV",
-    schemeType: "BIN1234",
-    product: "PRD1001",
-    subProduct: "CARD-AX123",
-  },
-  {
-    schemeId: "102",
-    schemeName: "Jio Fiber",
-    schemeCode: "BRD102",
-    walletType: "Jio Broadband",
-    schemeType: "BIN5678",
-    product: "PRD1002",
-    subProduct: "CARD-JF456",
-  },
-  {
-    schemeId: "103",
-    schemeName: "Vodafone Postpaid",
-    schemeCode: "POST103",
-    walletType: "Vodafone Postpaid",
-    schemeType: "BIN9101",
-    product: "PRD1003",
-    subProduct: "CARD-VF789",
-  },
-  {
-    schemeId: "104",
-    schemeName: "BSNL Broadband",
-    schemeCode: "BRD104",
-    walletType: "BSNL Broadband",
-    schemeType: "BIN1121",
-    product: "PRD1004",
-    subProduct: "CARD-BS123",
-  },
-  {
-    schemeId: "101",
-    schemeName: "Airtel DTH",
-    schemeCode: "DTH101",
-    walletType: "Airtel Digital TV",
-    schemeType: "BIN1234",
-    product: "PRD1001",
-    subProduct: "CARD-AX123",
-  },
-  {
-    schemeId: "102",
-    schemeName: "Jio Fiber",
-    schemeCode: "BRD102",
-    walletType: "Jio Broadband",
-    schemeType: "BIN5678",
-    product: "PRD1002",
-    subProduct: "CARD-JF456",
-  },
-  {
-    schemeId: "103",
-    schemeName: "Vodafone Postpaid",
-    schemeCode: "POST103",
-    walletType: "Vodafone Postpaid",
-    schemeType: "BIN9101",
-    product: "PRD1003",
-    subProduct: "CARD-VF789",
-  },
-  {
-    schemeId: "104",
-    schemeName: "BSNL Broadband",
-    schemeCode: "BRD104",
-    walletType: "BSNL Broadband",
-    schemeType: "BIN1121",
-    product: "PRD1004",
-    subProduct: "CARD-BS123",
-  },
-  {
-    schemeId: "101",
-    schemeName: "Airtel DTH",
-    schemeCode: "DTH101",
-    walletType: "Airtel Digital TV",
-    schemeType: "BIN1234",
-    product: "PRD1001",
-    subProduct: "CARD-AX123",
-  },
-  {
-    schemeId: "102",
-    schemeName: "Jio Fiber",
-    schemeCode: "BRD102",
-    walletType: "Jio Broadband",
-    schemeType: "BIN5678",
-    product: "PRD1002",
-    subProduct: "CARD-JF456",
-  },
-  {
-    schemeId: "103",
-    schemeName: "Vodafone Postpaid",
-    schemeCode: "POST103",
-    walletType: "Vodafone Postpaid",
-    schemeType: "BIN9101",
-    product: "PRD1003",
-    subProduct: "CARD-VF789",
-  },
-  {
-    schemeId: "104",
-    schemeName: "BSNL Broadband",
-    schemeCode: "BRD104",
-    walletType: "BSNL Broadband",
-    schemeType: "BIN1121",
-    product: "PRD1004",
-    subProduct: "CARD-BS123",
-  },
-  {
-    schemeId: "101",
-    schemeName: "Airtel DTH",
-    schemeCode: "DTH101",
-    walletType: "Airtel Digital TV",
-    schemeType: "BIN1234",
-    product: "PRD1001",
-    subProduct: "CARD-AX123",
-  },
-  {
-    schemeId: "102",
-    schemeName: "Jio Fiber",
-    schemeCode: "BRD102",
-    walletType: "Jio Broadband",
-    schemeType: "BIN5678",
-    product: "PRD1002",
-    subProduct: "CARD-JF456",
-  },
-  {
-    schemeId: "103",
-    schemeName: "Vodafone Postpaid",
-    schemeCode: "POST103",
-    walletType: "Vodafone Postpaid",
-    schemeType: "BIN9101",
-    product: "PRD1003",
-    subProduct: "CARD-VF789",
-  },
-  {
-    schemeId: "104",
-    schemeName: "BSNL Broadband",
-    schemeCode: "BRD104",
-    walletType: "BSNL Broadband",
-    schemeType: "BIN1121",
-    product: "PRD1004",
-    subProduct: "CARD-BS123",
-  },
-];
-
-export const headers: { key: keyof SchemesListType; label: string }[] = [
-  { key: "schemeId", label: "Scheme ID" },
+export const headers: GenericTableHeader<SchemesListTableType>[] = [
+  { key: "id", label: "Scheme ID" },
   { key: "schemeName", label: "Scheme Name" },
   { key: "schemeCode", label: "Scheme Code" },
-  { key: "walletType", label: "Wallet Type" },
-  { key: "schemeType", label: "Scheme Type" },
-  { key: "product", label: "Product" },
-  { key: "subProduct", label: "Sub Product" },
+  { key: "productName", label: "Product" },
+  { key: "subProductName", label: "Sub Product" },
+  { key: "operatorName", label: "Operator Name" },
+  { key: "vendorName", label: "Vendor Name" },
+  { key: "schemeCombinationHashCode", label: "Scheme HashCode" },
 ];
+
+// Transform form data to Create payload
+export const transformFormToCreateSchemesPayload = (
+  formData: SchemesListFormType
+): SchemeListCreatePayload => ({
+  ...formData,
+  createdBy: localStorage.getItem("username") || "system",
+});
+
+// Transform form data to Update payload
+export const transformFormToUpdateSchemesPayload = (
+  formData: SchemesListFormType
+): SchemeListUpdatePayload => ({
+  schemeName: formData.schemeName,
+  schemeCode: formData.schemeCode,
+  productId: formData.operatorId,
+  subProductId: formData.subProductId,
+  operatorId: formData.productId,
+  vendorId: formData.operatorId,
+  schemeHierarchySelectionId: formData.schemeHierarchySelectionId,
+  editedBy: localStorage.getItem("username") || "system",
+});
 
 export type slabStructureType = {
   slabStart: string;
@@ -260,7 +145,10 @@ export const AMAXdata: slabStructureType[] = [];
 
 export const AMAX2data: slabStructureType[] = [];
 
-export const slabStructureHeaders: { key: keyof slabStructureType; label: string }[] = [
+export const slabStructureHeaders: {
+  key: keyof slabStructureType;
+  label: string;
+}[] = [
   { key: "slabStart", label: "Slab Start" },
   { key: "slabEnd", label: "Slab End" },
   { key: "rateType", label: "Rate Type" },

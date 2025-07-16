@@ -137,7 +137,8 @@ export interface HandleMasterFormSubmitProps<T> {
   navigate: NavigateFunction;
   resetFormData: () => void;
   masterKey: string;
-  masterUrl: string;
+  addUrl: string;
+  updateUrl: string;
   transformCreatePayload: TransformPayloadFn<T>;
   transformUpdatePayload: TransformPayloadFn<T>;
   successNavigatePath: string;
@@ -152,7 +153,8 @@ export const handleMasterFormSubmit = async <T>({
   navigate,
   resetFormData,
   masterKey,
-  masterUrl,
+  addUrl,
+  updateUrl,
   transformCreatePayload,
   transformUpdatePayload,
   successNavigatePath,
@@ -164,15 +166,17 @@ export const handleMasterFormSubmit = async <T>({
         ? transformUpdatePayload(values)
         : transformCreatePayload(values);
 
+    const url = mode === "edit" ? updateUrl : addUrl;
+
     const thunk =
       mode === "edit" && id
         ? updateMasterItem({
             key: masterKey,
-            url: masterUrl,
+            url: url,
             id,
             data: payload,
           })
-        : createMasterItem({ key: masterKey, url: masterUrl, data: payload });
+        : createMasterItem({ key: masterKey, url: url, data: payload });
 
     const res = await dispatch(thunk).unwrap();
 

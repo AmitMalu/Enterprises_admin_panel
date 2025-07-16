@@ -1,4 +1,4 @@
-import { useCallback} from "react";
+import { useCallback } from "react";
 import { handleMasterFormSubmit } from "../utils";
 import { useThrottledFormSubmit } from "./useThrottleFormSubmit";
 
@@ -9,7 +9,8 @@ type UseThrottleMasterFormSubmitProps<T> = {
     navigate: any;
     resetFormData: () => void;
     masterKey: string;
-    masterUrl: string;
+    addUrl: string;
+    updateUrl: string;
     transformCreatePayload: (values: T) => any;
     transformUpdatePayload: (values: T) => any;
     successNavigatePath: string;
@@ -24,7 +25,8 @@ export function useThrottleMasterFormSubmit<T>({
     navigate,
     resetFormData,
     masterKey,
-    masterUrl,
+    addUrl,
+    updateUrl,
     transformCreatePayload,
     transformUpdatePayload,
     successNavigatePath,
@@ -41,7 +43,8 @@ export function useThrottleMasterFormSubmit<T>({
                 navigate,
                 resetFormData,
                 masterKey,
-                masterUrl,
+                addUrl,
+                updateUrl,
                 transformCreatePayload,
                 transformUpdatePayload,
                 successNavigatePath,
@@ -55,7 +58,8 @@ export function useThrottleMasterFormSubmit<T>({
             navigate,
             resetFormData,
             masterKey,
-            masterUrl,
+            addUrl,
+            updateUrl,
             transformCreatePayload,
             transformUpdatePayload,
             successNavigatePath,

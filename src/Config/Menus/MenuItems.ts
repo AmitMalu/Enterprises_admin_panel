@@ -60,43 +60,8 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "Wallet Master",
-        link: "/master/wallet",
-        icon: userCreationSvg,
-      },
-      {
         label: "Pincode Master",
         link: "/master/pincode",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Ticket Master",
-        link: "/master/ticket",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Profile Master",
-        link: "/master/profile",
-        icon: userCreationSvg,
-      },
-      {
-        label: "KYC Master",
-        link: "/master/kyc",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Business Master",
-        link: "/master/business",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Registration Master",
-        link: "/master/registration",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Payment Master",
-        link: "/master/payment",
         icon: userCreationSvg,
       },
     ],
@@ -112,13 +77,18 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "Fee Distribution Setting",
-        link: "/schemes/fee-distribution",
+        label: "Schemes Hierarchy",
+        link: "/schemes/hierarchy",
         icon: userCreationSvg,
       },
       {
-        label: "Fee Setting",
-        link: "/schemes/fee-setting",
+        label: "Schemes Rate",
+        link: "/schemes/rate",
+        icon: userCreationSvg,
+      },
+      {
+        label: "Schemes Allocation",
+        link: "/schemes/allocation",
         icon: userCreationSvg,
       },
       {
@@ -129,11 +99,6 @@ export const sidebarData = [
       {
         label: "Transaction Limit Settings",
         link: "/schemes/transaction-limit",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Service Charge Setting",
-        link: "/schemes/service-charge",
         icon: userCreationSvg,
       },
     ],
@@ -201,6 +166,11 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
+        label: "Onboarded Users",
+        link: "/management/user/onboarded",
+        icon: userCreationSvg,
+      },
+      {
         label: "User Management",
         link: "/management/user-management",
         icon: userCreationSvg,
@@ -213,11 +183,6 @@ export const sidebarData = [
       {
         label: "Search User",
         link: "/management/search-user",
-        icon: userCreationSvg,
-      },
-      {
-        label: "Bulk Users",
-        link: "/management/bulk-users",
         icon: userCreationSvg,
       },
       {

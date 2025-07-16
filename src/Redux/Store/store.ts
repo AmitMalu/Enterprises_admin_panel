@@ -3,6 +3,7 @@ import authReducer from "../Features/Auth/Reducer";
 import menuReducer from "../Features/Menu/MenuReducer";
 import MastersSlice from "../Features/Masters/MastersSlice";
 import FundingSlice from "../Features/Fundings/slice";
+import schemesSlice from "../Features/Schemes/slice";
 import storageSession from "redux-persist/lib/storage/session";
 import { persistReducer, persistStore } from "redux-persist";
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   menu: persistReducer(menuPersistConfig, menuReducer), // only this is persisted
   master: MastersSlice,
   funding: FundingSlice,
+  schemes : schemesSlice
 });
 
 export const store = configureStore({
