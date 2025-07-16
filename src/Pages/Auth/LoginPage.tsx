@@ -46,6 +46,9 @@ const LoginPage: React.FC = () => {
         ).unwrap();
 
         toast.success(result.message);
+        toast.success(result.data.otp, {
+          autoClose: 2500,
+        });
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
           state: { username: values.username, otpFor: "login" },
