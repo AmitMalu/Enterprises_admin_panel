@@ -47,8 +47,13 @@ const SchemesList = () => {
     navigate("/schemes/add");
   };
 
-  const handleSetting = (id: any) => {
-    navigate(`/schemes/setting/${id}`, { state: id });
+  const handleSetting = (item: any) => {
+    navigate(`/schemes/setting`, {
+      state: {
+        schemeCode: item.schemeCode,
+        schemeName: item.schemeName,
+      },
+    });
   };
 
   const handleDelete = (id: any) => {
@@ -160,6 +165,8 @@ const SchemesList = () => {
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         visibleColumns={visibleColumns}
+        loading={loading}
+        error={error ? error.toString() : null}
       />
 
       {/* PreFunding Table */}
@@ -176,7 +183,7 @@ const SchemesList = () => {
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2 ">
               <span
-                onClick={() => handleSetting(item.id)}
+                onClick={() => handleSetting(item)}
                 className="cursor-pointer"
               >
                 <SettingIcon2 />

@@ -1,7 +1,7 @@
 export { default as UserCreation } from "./UserCreation";
 export { default as PendingUser } from "./PendingUser";
 export { default as ActivationUser } from "./ActivationUser";
-export { default as UserManagement } from "./UserManagement";
+export { default as UserConfiguration } from "./UserConfiguration";
 export { default as AddManageUser } from "./AddManageUser";
 export { default as SearchUser } from "./SearchUser";
 export { default as BulkUsers } from "./BulkUsers";

@@ -35,7 +35,7 @@ const VendorMaster = () => {
     value: any;
   } | null>(null);
 
-  const { data, loading, pagination, setPage, setPageSize } =
+  const { data, loading, pagination, error, setPage, setPageSize } =
     useFetchMasterList<VendorTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
@@ -103,6 +103,8 @@ const VendorMaster = () => {
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={headers}
         visibleColumns={visibleColumns}
+        loading={loading}
+        error={error ? error.toString() : null}
       />
 
       {loading ? (

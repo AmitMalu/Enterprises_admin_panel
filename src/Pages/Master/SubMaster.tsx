@@ -29,7 +29,7 @@ const SubMaster = () => {
         value: any;
     } | null>(null);
 
-    const { data, loading, pagination, setPage, setPageSize } =
+    const { data, loading, error, pagination, setPage, setPageSize } =
         useFetchMasterList<SubMasterTableType>({
             key: MASTER_KEY,
             url: `${MASTER_URL}/get-all-submaster`,
@@ -97,6 +97,8 @@ const SubMaster = () => {
                 onFilter={() => setFilterVisible((prev) => !prev)}
                 headers={headers}
                 visibleColumns={visibleColumns}
+                loading={loading}
+                error={error ? error.toString() : null}
             />
 
             {loading ? (

@@ -82,11 +82,6 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "Schemes Rate",
-        link: "/schemes/rate",
-        icon: userCreationSvg,
-      },
-      {
         label: "Schemes Allocation",
         link: "/schemes/allocation",
         icon: userCreationSvg,
@@ -171,8 +166,8 @@ export const sidebarData = [
         icon: userCreationSvg,
       },
       {
-        label: "User Management",
-        link: "/management/user-management",
+        label: "User Configuration",
+        link: "/management/user-configuration",
         icon: userCreationSvg,
       },
       {

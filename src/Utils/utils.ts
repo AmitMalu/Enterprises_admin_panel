@@ -7,6 +7,7 @@ import {
   createMasterItem,
   updateMasterItem,
 } from "../Redux/Features/Masters/MastersThunk";
+import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 
 export const persistOtpSession = (username: string, otpFor: string) => {
   sessionStorage.setItem("otp-username", username);
@@ -43,6 +44,18 @@ export function checkTokenValidity(token: string | null) {
 
   return isTokenValid;
 }
+
+export const setLoginData = (dispatch: any, payload: any) => {
+  const { token, ...rest } = payload;
+
+  // Save to localStorage
+  localStorage.setItem("token", token);
+  localStorage.setItem("userInfo", JSON.stringify(rest));
+
+  // Dispatch Redux state updates
+  dispatch(setToken(token));
+  dispatch(setUserInfo({ userInfo: rest }));
+};
 
 // utils/getIpAddress.ts
 export async function getIpAddress(): Promise<string> {
@@ -103,6 +116,7 @@ export type GenericTableHeader<T> = {
   filterOptions?: { label: string; value: any }[];
   searchable?: boolean; // optionally override with this
   renderType?: "link" | "custom"; //
+  showCalculatedBelow?: boolean;
 };
 
 export function exportToCsv<T extends Record<string, any>>(
@@ -135,12 +149,12 @@ export interface HandleMasterFormSubmitProps<T> {
   values: T;
   dispatch: AppDispatch;
   navigate: NavigateFunction;
-  resetFormData: () => void;
+  resetFormData?: () => void;
   masterKey: string;
   addUrl: string;
   updateUrl: string;
-  transformCreatePayload: TransformPayloadFn<T>;
-  transformUpdatePayload: TransformPayloadFn<T>;
+  transformCreatePayload?: TransformPayloadFn<T>;
+  transformUpdatePayload?: TransformPayloadFn<T>;
   successNavigatePath: string;
   entityName: string;
 }
@@ -162,18 +176,20 @@ export const handleMasterFormSubmit = async <T>({
 }: HandleMasterFormSubmitProps<T>) => {
   try {
     const payload =
-      mode === "edit" && id
+      mode === "edit" && typeof transformUpdatePayload === "function"
         ? transformUpdatePayload(values)
-        : transformCreatePayload(values);
+        : mode === "add" && typeof transformCreatePayload === "function"
+        ? transformCreatePayload(values)
+        : values;
 
     const url = mode === "edit" ? updateUrl : addUrl;
 
     const thunk =
-      mode === "edit" && id
+      mode === "edit"
         ? updateMasterItem({
             key: masterKey,
             url: url,
-            id,
+            ...(id ? { id } : {}),
             data: payload,
           })
         : createMasterItem({ key: masterKey, url: url, data: payload });
@@ -186,7 +202,9 @@ export const handleMasterFormSubmit = async <T>({
     );
 
     navigate(successNavigatePath);
-    resetFormData();
+    if (resetFormData) {
+      resetFormData();
+    }
   } catch (err: any) {
     console.error(
       `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`,
@@ -197,3 +215,14 @@ export const handleMasterFormSubmit = async <T>({
     );
   }
 };
+
+export type GenericVerticalHeader<T> = {
+  key: keyof T;
+  label: string;
+};
+
+export interface VerticalKeyValueTableProps<T extends Record<string, any>> {
+  loading?: boolean;
+  data: T;
+  headers: GenericVerticalHeader<T>[]; // not just one header
+}

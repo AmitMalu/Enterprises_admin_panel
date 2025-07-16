@@ -19,7 +19,7 @@ export const SchemesRoutes = (
     <Route path="/schemes/schemeslist" element={<SchemesList />} />
     <Route path="/schemes/add" element={<SchemesFormPage mode="add" />} />
     <Route path="/schemes/edit/:id" element={<SchemesFormPage mode="edit" />} />
-    <Route path="/schemes/setting/:id" element={<SchemeSettingsPage />} />
+    <Route path="/schemes/setting" element={<SchemeSettingsPage />} />
 
     <Route path="/schemes/hierarchy" element={<SchemeHierarchy />} />
     <Route path="/schemes/hierarchy/edit/:id" element={<SchemeHierarchyForm mode="edit" />} />

@@ -104,6 +104,8 @@ const SubOperatorMaster = () => {
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={headers}
         visibleColumns={visibleColumns}
+        loading={loading}
+        error={error ? error.toString() : null}
       />
 
       {loading ? (

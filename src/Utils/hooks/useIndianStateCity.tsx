@@ -5,8 +5,8 @@ type StateOption = { label: string; value: string; code: string };
 type CityOption = { label: string; value: string };
 
 interface UseIndianStateCityParams {
-  selectedStateName: string;
-  selectedCityName: string;
+  selectedStateName?: string;
+  selectedCityName?: string;
   onCityReset?: () => void;
 }
 

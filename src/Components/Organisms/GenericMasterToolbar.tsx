@@ -19,6 +19,8 @@ type GenericMasterToolbarProps = {
   onColumnChange?: (key: string) => void;
   headers?: GenericTableHeader<any>[];
   visibleColumns?: string[];
+  loading?: boolean;
+  error?: null | string;
 };
 
 const GenericMasterToolbar = ({
@@ -30,6 +32,8 @@ const GenericMasterToolbar = ({
   onColumnChange,
   headers,
   visibleColumns,
+  loading = false,
+  error = null
 }: GenericMasterToolbarProps) => {
   return (
     <>
@@ -46,6 +50,8 @@ const GenericMasterToolbar = ({
               bgColor="#BF0204"
               borderColor="#FFFFFF"
               leftIcon={<AddIconSvg />}
+              disabled={!!loading || !!error}
+
             >
               {addButtonText}
             </ButtonComponent>
@@ -65,6 +71,7 @@ const GenericMasterToolbar = ({
             bgColor="#ffffff"
             onClick={onFilter}
             leftIcon={<FilterIcon />}
+            disabled={!!loading || !!error}
           >
             Filter
           </ButtonComponent>
@@ -80,6 +87,7 @@ const GenericMasterToolbar = ({
             bgColor="#ffffff"
             onClick={onExport}
             leftIcon={<DownloadIcon />}
+            disabled={!!loading || !!error}
           >
             Export
           </ButtonComponent>
@@ -88,7 +96,7 @@ const GenericMasterToolbar = ({
           <ColumnVisibilityMenu
             headers={headers || []}
             visibleColumns={visibleColumns || []}
-            onToggleColumn={onColumnChange ?? (() => {})}
+            onToggleColumn={onColumnChange ?? (() => { })}
           />
 
           {/* Refresh Icon */}
@@ -102,6 +110,7 @@ const GenericMasterToolbar = ({
             borderColor="#CACACA"
             leftIcon={<RefreshIcon />}
             onClick={onRefresh}
+            disabled={!!loading}
           >
             <></>
           </ButtonComponent>

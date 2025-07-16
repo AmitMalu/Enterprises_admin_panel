@@ -1,7 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  setPagination,
-} from "./MastersSlice";
+import { setPagination } from "./MastersSlice";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
 
 type FetchMasterListParams = {
@@ -21,8 +19,8 @@ interface CreateMasterParams<T> {
 interface UpdateMasterParams<T> {
   key: string;
   url: string;
-  id: string;
-  data: T;
+  id?: string;
+  data?: T;
 }
 
 export interface FetchMasterByIdParams {
@@ -89,10 +87,7 @@ export const fetchMasterList = createAsyncThunk(
 
 export const fetchMasterById = createAsyncThunk(
   "masters/fetchMasterById",
-  async (
-    { key, endpoint, id }: FetchMasterByIdParams,
-    { rejectWithValue }
-  ) => {
+  async ({ key, endpoint, id }: FetchMasterByIdParams, { rejectWithValue }) => {
     // dispatch(setLoading({ key, loading: true }));
     try {
       const response = await axiosInstance.get(`${endpoint}/${id}`);
@@ -121,10 +116,7 @@ export const fetchMasterById = createAsyncThunk(
 
 export const createMasterItem = createAsyncThunk(
   "masters/createMasterItem",
-  async (
-    { key, url, data }: CreateMasterParams<any>,
-    { rejectWithValue }
-  ) => {
+  async ({ key, url, data }: CreateMasterParams<any>, { rejectWithValue }) => {
     // dispatch(setLoading({ key, loading: true }));
     // dispatch(setError({ key, error: null }));
     // dispatch(setLoaded({ key, loaded: false }));
@@ -165,7 +157,8 @@ export const updateMasterItem = createAsyncThunk(
     // dispatch(setLoaded({ key, loaded: false }));
 
     try {
-      const response = await axiosInstance.put(`${url}/${id}`, data);
+      const endpoint = id ? `${url}/${id}` : url;
+      const response = await axiosInstance.put(endpoint, data ?? data);
       const responseData = response?.data;
 
       if (responseData?.statusCode === 200) {

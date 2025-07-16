@@ -26,6 +26,7 @@ type GenericMasterTableProps<T> = {
   renderExtraHeader?: () => React.ReactNode;
   renderExtraRowCell?: (item: T, index: number) => React.ReactNode;
   extraColumnPosition?: "left" | "right";
+  mt?: number | string;
   pagination?: boolean;
   currentPage?: number;
   totalPages?: number;
@@ -38,6 +39,13 @@ type GenericMasterTableProps<T> = {
   onFilterChange?: (key: string, value: any) => void;
   filterValues?: Record<string, any>;
   onFilterSubmit?: (key: string, value: any) => void;
+
+  editable?: boolean;
+  onDataChange?: (rowIndex: number, key: keyof T, value: any) => void;
+  showAddRow?: boolean;
+  onAddRow?: () => void;
+  isSchemeActive?: React.MutableRefObject<boolean>;
+  tdsRate?: number | string; // Optional prop for TDS rate
 };
 
 const GenericMasterTable = <T,>({
@@ -49,6 +57,7 @@ const GenericMasterTable = <T,>({
   currentPage,
   totalPages,
   onPageChange,
+  mt = 4,
   pagination = false,
   pageSize = 5,
   onPageSizeChange,
@@ -58,10 +67,16 @@ const GenericMasterTable = <T,>({
   onFilterChange,
   filterValues,
   onFilterSubmit,
+
+  editable = false,
+  onDataChange,
+  showAddRow = false,
+  onAddRow,
+  tdsRate = 0, // Default TDS rate if not provided
 }: GenericMasterTableProps<T>) => {
 
   return (
-    <Table.ScrollContainer minWidth={600} className="mt-4">
+    <Table.ScrollContainer minWidth={600} className={`mt-${mt}`}>
       <Table
         withColumnBorders
         striped
@@ -103,8 +118,13 @@ const GenericMasterTable = <T,>({
 
           <TableBody
             data={data}
+            tdsRate={tdsRate}
             headers={headers}
             renderExtraRowCell={renderExtraRowCell}
+            editable={editable}
+            onChange={onDataChange}
+            showAddRow={showAddRow}
+            onAddRow={onAddRow}
           />
         </Table.Tbody>
 

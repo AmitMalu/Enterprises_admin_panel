@@ -4,10 +4,12 @@ const ShimmerTableRows = ({
   rowCount = 6,
   columnCount = 5,
   headers = [],
+  mt = 16,
 }: {
   rowCount?: number;
   columnCount?: number;
   headers?: string[];
+  mt?: number | string;
 }) => {
   return (
     <Table
@@ -15,7 +17,7 @@ const ShimmerTableRows = ({
       striped
       border={1}
       highlightOnHover
-      style={{ borderRadius: 8, overflow: "hidden", marginTop: 16}}
+      style={{ borderRadius: 8, overflow: "hidden", marginTop: mt }}
       styles={{
         th: {
           padding: "16px 6px",
@@ -29,13 +31,13 @@ const ShimmerTableRows = ({
         <Table.Tr>
           {headers.length > 0
             ? headers.map((header, idx) => (
-                <Table.Th key={idx}>{header}</Table.Th>
-              ))
+              <Table.Th key={idx}>{header}</Table.Th>
+            ))
             : [...Array(columnCount)].map((_, colIndex) => (
-                <Table.Th key={colIndex}>
-                  <Skeleton height={20} width="100%" />
-                </Table.Th>
-              ))}
+              <Table.Th key={colIndex}>
+                <Skeleton height={20} width="100%" />
+              </Table.Th>
+            ))}
         </Table.Tr>
       </Table.Thead>
 

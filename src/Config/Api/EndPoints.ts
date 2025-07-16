@@ -10,6 +10,8 @@ export const API_ENDPOINTS = {
   },
   MANAGEMENT: {
     USER_CREATE: USER_FORM_ENDPOINTS,
+    USER_CONFIGURATION: "api/user-config",
+    MENU: "api/menus",
   },
   MASTER: {
     PRODUCTS: "api/products",
@@ -25,5 +27,6 @@ export const API_ENDPOINTS = {
   },
   SCHEMES: {
     SCHEME_LIST: "api/scheme",
+    SCHEME_RATE: "api/scheme-rate",
   },
 };
