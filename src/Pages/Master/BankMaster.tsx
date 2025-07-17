@@ -47,11 +47,11 @@ const BankMaster = () => {
     });
 
   const handleEdit = (id: string) => {
-    navigate(`/master/bankmaster/edit/${id}`, { state: id });
+    navigate(`/master/banks/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/master/bankmaster/add");
+    navigate("/master/banks/add");
   };
 
   const handleFilterChange = (key: string, value: any) => {

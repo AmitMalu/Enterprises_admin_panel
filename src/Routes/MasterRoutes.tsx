@@ -16,19 +16,18 @@ import {
   UserConfigurationMaster,
   VendorMaster,
   WalletMaster,
-  BankMaster,
   MainMaster,
   SubMaster,
   StateMaster,
   DistrictMaster,
   CityMaster,
+  NetworkBankMaster,
 } from "../Pages/Master";
 import SubProductForm from "../Components/Organisms/SubProductForm";
 import VendorForm from "../Components/Organisms/VendorForm";
 import OperatorForm from "../Components/Organisms/OperatorForm";
 import ProductForm from "../Components/Organisms/ProductForm";
 import SubOperatorForm from "../Components/Organisms/SubOperatorForm";
-import NetworkBankMasterForm from "../Components/Organisms/NetworkBankMasterForm";
 import MainMasterForm from "../Components/Organisms/MainMasterForm";
 import SubMasterForm from "../Components/Organisms/SubMasterForm";
 import BankMasterForm from "../Components/Organisms/BankMasterForm";
@@ -37,6 +36,7 @@ import StateMasterForm from "../Components/Organisms/StateMasterForm";
 import DistrictMasterForm from "../Components/Organisms/DistrictMasterForm";
 import CityMasterForm from "../Components/Organisms/CityMasterForm";
 import PincodeMasterForm from "../Components/Organisms/PincodeMasterForm";
+import NetworkBankMasterForm from "../Components/Organisms/NetworkBankMasterForm";
 
 export const MasterRoutes = (
   <>
@@ -84,11 +84,11 @@ export const MasterRoutes = (
       element={<BankMasterForm mode="edit" />}
     />
 
-    <Route path="/master/bankmaster" element={<BankMaster />} />
-    <Route path="/master/bankmaster/add" element={<BankMasterForm mode="add" />} />
+    <Route path="/master/network-banks" element={<NetworkBankMaster />} />
+    <Route path="/master/network-banks/add" element={<NetworkBankMasterForm mode="add" />} />
     <Route
-      path="/master/bankmaster/edit/:id"
-      element={<BankMasterForm mode="edit" />}
+      path="/master/network-banks/edit/:id"
+      element={<NetworkBankMasterForm mode="edit" />}
     />
 
     <Route path="/master/main" element={<MainMaster />} />

@@ -47,7 +47,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
         updateUrl: MASTER_URL,
         transformCreatePayload: transformFormToCreateBankMasterPayload,
         transformUpdatePayload: transformFormToUpdateBankMasterPayload,
-        successNavigatePath: "/master/bankmaster",
+        successNavigatePath: "/master/banks",
         entityName: "IM-Bank",
     });
 

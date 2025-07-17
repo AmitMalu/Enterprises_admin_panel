@@ -100,7 +100,7 @@ const UploadDocumentsForm = ({ formik }: { formik: FormikProps<any> }) => {
             label="Add Business Proof"
             withAsterisk
             placeholder="Select File"
-            accept="image/png, image/jpeg , application/pdf"
+            accept="image/png, image/jpeg, application/pdf"
             size="sm"
           />
         </Grid.Col>
