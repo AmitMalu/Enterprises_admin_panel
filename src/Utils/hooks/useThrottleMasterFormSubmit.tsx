@@ -5,6 +5,7 @@ import { useThrottledFormSubmit } from "./useThrottleFormSubmit";
 type UseThrottleMasterFormSubmitProps<T> = {
     mode?: "add" | "edit";
     id?: string;
+    useFormData? : boolean;
     dispatch: any;
     navigate: any;
     resetFormData?: () => void;
@@ -21,6 +22,7 @@ type UseThrottleMasterFormSubmitProps<T> = {
 export function useThrottleMasterFormSubmit<T>({
     mode = "add",
     id,
+    useFormData = false,
     dispatch,
     navigate,
     resetFormData,
@@ -38,6 +40,7 @@ export function useThrottleMasterFormSubmit<T>({
             handleMasterFormSubmit({
                 mode,
                 id,
+                useFormData,
                 values,
                 dispatch,
                 navigate,

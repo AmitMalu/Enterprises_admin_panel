@@ -1,13 +1,14 @@
-import { FileInput } from "@mantine/core";
-import React from "react";
+import { ActionIcon, FileInput, Modal } from "@mantine/core";
+import React, { useEffect, useState } from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
+import { IconEye } from "@tabler/icons-react";
 
 interface FileInputComponentProps {
   label?: string;
   name: string;
   placeholder?: string;
   accept?: string;
-  value: File | null;
+  value: File | string | null;
   onChange: (value: File | null) => void;
   error?: string | boolean;
   required?: boolean;
@@ -32,15 +33,39 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
   disabled = false,
 }) => {
   const screenSize = useScreenSize();
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    let objectUrl: string | null = null;
+
+    if (value) {
+      if (typeof value === "string") {
+        setPreviewUrl(value); // from server
+      } else {
+        objectUrl = URL.createObjectURL(value);
+        setPreviewUrl(objectUrl);
+      }
+    } else {
+      setPreviewUrl(null);
+    }
+
+    return () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [value]);
+
   const defaultSize =
     size ||
     (screenSize === "sm" || screenSize === "md" || screenSize === "lg"
       ? "sm"
       : screenSize === "xl" || screenSize === "2xl"
-      ? "md"
-      : screenSize === "3xl"
-      ? "lg"
-      : "xl");
+        ? "md"
+        : screenSize === "3xl"
+          ? "lg"
+          : "xl");
 
   const defaultRadius = radius || (screenSize === "3xl" ? "md" : "sm");
 
@@ -62,14 +87,69 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
         fontWeight: 500,
       },
     },
+    rightSection:
+      previewUrl &&
+        !error &&
+        !(previewUrl.includes(".pdf") || (value instanceof File && value.type === "application/pdf")) ? (
+        <ActionIcon onClick={() => setShowModal(true)}>
+          <IconEye size={16} />
+        </ActionIcon>
+      ) : null,
   };
 
   return (
     <div>
-      <FileInput {...sharedProps} />
+      <div className="relative">
+        <FileInput
+          {...sharedProps}
+          placeholder={typeof value === "string" ? "" : placeholder}
+          value={typeof value === "string" ? null : value} // let it behave normally for File
+        />
+
+        {/* Custom filename overlay only when URL (string) */}
+        {typeof value === "string" && (
+          <div
+            className="absolute left-3 top-[70%] -translate-y-1/2 text-gray-700 text-sm truncate pointer-events-none w-[calc(100%-40px)]"
+            title={value.split("/").pop()?.slice(-20)}
+          >
+            {value.split("/").pop()?.slice(-30)}
+          </div>
+        )}
+      </div>
+
       {typeof error === "string" && (
         <div className="text-red-500 text-sm mt-1">{error}</div>
       )}
+
+      {/* Preview Modal */}
+      <Modal
+        opened={showModal}
+        onClose={() => setShowModal(false)}
+        title="Uploaded Preview"
+        size="lg"
+        centered
+      >
+        {previewUrl && (
+          <>
+            {previewUrl &&
+              (previewUrl.includes(".pdf") ||
+                (value instanceof File && value.type === "application/pdf")) ? (
+              <iframe
+                src={previewUrl}
+                title="PDF Preview"
+                className="w-full h-[400px]"
+              />
+            ) : (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="max-h-[400px] w-full object-contain"
+              />
+            )}
+          </>
+        )}
+
+      </Modal>
     </div>
   );
 };

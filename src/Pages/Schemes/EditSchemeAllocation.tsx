@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { Grid, Loader } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
-import { object } from "yup";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 
 
@@ -160,8 +159,12 @@ const EditSchemeAllocation = () => {
                             </Grid.Col>
                         </Grid>
                     ))
+                ) : subProducts.length === 0 ? (
+                    <div className="text-center text-gray-500 text-sm p-4">
+                        No sub-products available for this hierarchy.
+                    </div>
                 ) : (
-                    subProducts.map((item) => (
+                    subProducts?.map((item) => (
                         <Grid key={item.subProductName} align="center" gutter="sm" className="mb-2">
                             <Grid.Col span={{ base: 2, md: 2, lg: 2 }}>
                                 <TextComponent fontSize={18} fontFamily="Inter" fontWeight={500} >{item.subProductName}</TextComponent>
