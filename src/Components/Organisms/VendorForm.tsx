@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
@@ -26,7 +26,7 @@ import {
 import { useAppDispatch } from "../../Redux/hooks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { toast } from "react-toastify";
-import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import { fetchMasterById, fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 
 type ProductFormProps = { mode: "add" | "edit" };
@@ -39,6 +39,9 @@ const VendorForm = ({ mode }: ProductFormProps) => {
   const [formData, setFormData] = useState<VendorFormType>(initialValues);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+
+  const [whiteLabelAdminList, setWhiteLabelAdminList] = useState<{ label: string; value: string }[]>([]);
+  const hasFetchedRef = useRef(false);
 
   const handleSubmit = useThrottleMasterFormSubmit<VendorFormType>({
     mode,
@@ -104,18 +107,43 @@ const VendorForm = ({ mode }: ProductFormProps) => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={handleSubmit}
       >
-        {(formik: FormikProps<any>) => {
+        {({ values }) => {
           const {
             productDropdownData,
             loadingProductList,
-            subProductDropdownData,
-            loadingSubProductList,
-            subProductKey,
-          } = useProductSubProduct({
-            selectedProductId: formik.values.productId,
-            selectedSubProductId: formik.values.subProductId,
-            onSubProductReset: () => formik.setFieldValue("subProductId", ""),
-          });
+          } = useProductSubProduct({});
+
+
+          useEffect(() => {
+            const fetchAdminDropdownList = async () => {
+              if (values.isWhiteLabelAdmin && !hasFetchedRef.current) {
+                try {
+                  const data = await dispatch(
+                    fetchMasterDropdown({ url: `/api/white-labels/admin-dropdown` })
+                  ).unwrap();
+
+                  const formattedData: { label: string; value: string }[] = data?.map((item: any) => ({
+                    label: String(item.displayName),
+                    value: String(item.whiteLabelId)
+                  }));
+
+                  setWhiteLabelAdminList(formattedData)
+                  hasFetchedRef.current = true;
+
+                } catch (err: any) {
+                  toast.error(err);
+                }
+                finally {
+                  setLoading(false);
+                }
+              } else if (!values.isWhiteLabelAdmin) {
+                setWhiteLabelAdminList([]); // Reset on false
+                hasFetchedRef.current = false; // Allow refetch if toggled again
+              }
+            };
+
+            fetchAdminDropdownList();
+          }, [values.isWhiteLabelAdmin, dispatch]);
 
           return (
             <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
@@ -147,26 +175,11 @@ const VendorForm = ({ mode }: ProductFormProps) => {
                   <FormikSelectComponent
                     name="productId"
                     label="Product"
-                    value={formik.values.productId}
                     placeholder="Select Product"
                     withAsterisk
                     required
                     data={productDropdownData}
                     disabled={loadingProductList}
-                  />
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikSelectComponent
-                    name="subProductId"
-                    key={subProductKey}
-                    value={formik.values.subProductId}
-                    data={subProductDropdownData}
-                    label="Sub Product"
-                    placeholder="Select Sub Product"
-                    withAsterisk
-                    required
-                    disabled={loadingSubProductList}
                   />
                 </Grid.Col>
 
@@ -177,7 +190,7 @@ const VendorForm = ({ mode }: ProductFormProps) => {
                     placeholder="Enter Mode Supported"
                     withAsterisk
                     maxLength={50}
-                    allowSpecialChar={false}
+                    allowSpecialChar={true}
                   />
                 </Grid.Col>
 
@@ -194,7 +207,56 @@ const VendorForm = ({ mode }: ProductFormProps) => {
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikSelectComponent
-                    name="isActive"
+                    name="isWhiteLabelAdmin"
+                    label="Is WL-Admin"
+                    placeholder="Select"
+                    withAsterisk
+                    allowDeselect={false}
+                    data={booleanSelectData}
+                  />
+                </Grid.Col>
+
+                {values.isWhiteLabelAdmin && <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikSelectComponent
+                    name="whiteLabelAdminId"
+                    label="WL-Admin Id"
+                    placeholder="Select"
+                    withAsterisk
+                    allowDeselect={false}
+                    data={whiteLabelAdminList || []}
+                  />
+                </Grid.Col>}
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="userField1"
+                    label="User Field 1"
+                    placeholder="Enter User Field 1"
+                    maxLength={50}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="userField2"
+                    label="User Field 2"
+                    placeholder="Enter User Field 2"
+                    maxLength={50}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="userField3"
+                    label="User Field 3"
+                    placeholder="Enter User Field 3"
+                    maxLength={50}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikSelectComponent
+                    name="active"
                     label="Is Active"
                     placeholder="Select Active Status"
                     allowDeselect={false}

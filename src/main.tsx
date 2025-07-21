@@ -9,12 +9,13 @@ import { persistor, store } from "./Redux/Store/store.ts";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./Utils/ErrorFallback.tsx";
 import { PersistGate } from "redux-persist/integration/react";
+import { redirectTo } from "./Utils/utils.ts";
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
   <ErrorBoundary
     fallbackRender={ErrorFallback}
-    onReset={() => (window.location.href = "/login")}
+    onReset={() => redirectTo("/login")}
   >
     <MantineProvider>
       <Provider store={store}>
