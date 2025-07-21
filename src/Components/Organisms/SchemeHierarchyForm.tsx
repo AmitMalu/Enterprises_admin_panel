@@ -7,7 +7,7 @@ import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
 import { toast } from "react-toastify";
 import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
@@ -94,7 +94,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                 validationSchema={Yup.object(validationSchema)}
                 onSubmit={handleSubmit}
             >
-                {(formik: FormikProps<any>) => {
+                {() => {
 
                     return (
                         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">

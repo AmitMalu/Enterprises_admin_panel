@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   UserConfig,
@@ -16,14 +16,13 @@ import {
   SubmitHandlerArgs,
 } from "../../Config/UserCreationConfig/MasterFormConfig";
 import { Form, Formik, FormikProps } from "formik";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { useAppDispatch } from "../../Redux/hooks";
 import FormSuccessModel from "../Atoms/FormSuccessModel";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate()
-  const auth = useAppSelector((state) => state.auth);
   const { type } = useParams<{ type: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);

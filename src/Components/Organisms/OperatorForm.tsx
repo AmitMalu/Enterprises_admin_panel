@@ -109,7 +109,6 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
             subProductKey,
           } = useProductSubProduct({
             selectedProductId: formik.values.productId,
-            selectedSubProductId: formik.values.subProductId,
             onSubProductReset: () => formik.setFieldValue("subProductId", ""),
           });
 

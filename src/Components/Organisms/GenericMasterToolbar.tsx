@@ -1,11 +1,8 @@
-import { Checkbox, Menu, ScrollArea } from "@mantine/core";
 import {
   AddIconSvg,
-  ColIcon,
   DownloadIcon,
   FilterIcon,
   RefreshIcon,
-  SearchIcon,
 } from "../../assets/Icons";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import { GenericTableHeader } from "../../Utils/utils";
@@ -35,7 +32,6 @@ const GenericMasterToolbar = ({
   onFilter,
   onSearch,
   searchValue,
-  onKeyDown,
   onRefresh,
   onColumnChange,
   headers,

@@ -1,19 +1,19 @@
-import React, { Children } from "react";
+import React from "react";
 import AuthLeftImagePanel from "../Organisms/AuthLeftImagePanel";
 import StepperLines from "../Atoms/StepperLines";
 import { useLocation } from "react-router-dom";
-import { authLayoutRouteConfig } from "../../Config/Auth/AuthImagePanelConfig";
+import { authLayoutRouteConfig } from "../../Config/Auth/authImagePanelConfig";
 
 interface AuthContentWrapperProps {
-    children : React.ReactNode
+  children: React.ReactNode
 }
 
-const AuthContentWrapper: React.FC<AuthContentWrapperProps> = ({children}) => {
+const AuthContentWrapper: React.FC<AuthContentWrapperProps> = ({ children }) => {
 
-    const {pathname } = useLocation()
-    const {step = 1 , bg = ""} = authLayoutRouteConfig[pathname] || {}
+  const { pathname } = useLocation()
+  const { step = 1, bg = "" } = authLayoutRouteConfig[pathname] || {}
 
-    return (
+  return (
     <>
       {/* Left Side - only visible on large screens  */}
       <AuthLeftImagePanel bgImage={bg}>

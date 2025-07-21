@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { PasswordInput, PinInput, TextInput } from "@mantine/core";
 
@@ -64,7 +64,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
   allowSpace = true,
 }) => {
   const screenSize = useScreenSize();
-  const [isFocused, setIsFocused] = useState(false);
+  // const [isFocused, setIsFocused] = useState(false);
 
   const defaultSize =
     size ||
@@ -117,8 +117,8 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     value,
     onChange: handleChange,
     onKeyDown,
-    onFocus: () => setIsFocused(true),
-    onBlur: () => setIsFocused(false),
+    // onFocus: () => setIsFocused(true),
+    // onBlur: () => setIsFocused(false),
     error: typeof error === "string" ? true : !!error,
     required,
     maxLength,

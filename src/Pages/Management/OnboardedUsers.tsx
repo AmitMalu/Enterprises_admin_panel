@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useEffect, useRef, useState } from "react";
 import { headers, KEY, URL, UserAuthTableType } from "../../Config/Management/UserAuthConfig";
@@ -10,12 +9,10 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import { EditIcon } from "../../assets/Icons";
 
 const OnboardedUsers = () => {
 
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
 
     const [filterVisible, setFilterVisible] = useState(false);
     const [filterValues, setFilterValues] = useState<Record<string, any>>({});

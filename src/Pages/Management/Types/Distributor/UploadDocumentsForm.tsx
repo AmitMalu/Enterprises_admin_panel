@@ -3,7 +3,7 @@ import FormikFileInput from "../../../../Components/Molecules/FormikFileInput";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
 import { Grid } from "@mantine/core";
 
-const UploadDocumentsForm = ({ formik }: { formik: FormikProps<any> }) => {
+const UploadDocumentsForm = ({ }: { formik: FormikProps<any> }) => {
   return (
     <>
       <Grid gutter="lg">

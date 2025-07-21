@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
 import { setPagination } from "./slice";
-import { API_ENDPOINTS } from "../../../Config/Api/EndPoints";
 
 type FetchSchemesListParams = {
   key: string;

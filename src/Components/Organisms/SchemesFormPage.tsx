@@ -108,7 +108,6 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                         productSubproductError
                     } = useProductSubProduct({
                         selectedProductId: formik.values.productId,
-                        selectedSubProductId: formik.values.subProductId,
                         onSubProductReset: () => formik.setFieldValue("subProductId", ""),
                     });
 

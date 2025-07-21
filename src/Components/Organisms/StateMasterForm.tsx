@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Grid, Loader } from "@mantine/core";
 import ButtonComponent from "../Atoms/ButtonComponent";
@@ -102,7 +102,7 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                 validationSchema={Yup.object(validationSchema)}
                 onSubmit={handleSubmit}
             >
-                {(formik: FormikProps<any>) => {
+                {() => {
                     const { countries, countryLoading, countryError } = useLocationDropdowns({});
 
                     return (

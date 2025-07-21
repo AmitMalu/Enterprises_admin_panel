@@ -24,7 +24,7 @@ const PendingUserForm = () => {
   >(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isActionDisabled, setIsActionDisabled] = useState(false);
+  // const [isActionDisabled, setIsActionDisabled] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   const handleSubmit = useThrottledFormSubmit<any>(() => {
@@ -180,7 +180,7 @@ const PendingUserForm = () => {
                 borderColor="#fff"
                 variant="filled"
                 type="submit"
-                disabled={isSubmitting || isActionDisabled}
+                disabled={isSubmitting}
                 bgColor="#C30305"
                 textColor="#FFFFFF"
                 style={{ padding: "10px 30px" }}
@@ -195,7 +195,7 @@ const PendingUserForm = () => {
                 borderColor="#fff"
                 variant="filled"
                 type="submit"
-                disabled={isSubmitting || isActionDisabled}
+                disabled={isSubmitting}
                 bgColor="#24d12c"
                 textColor="#FFFFFF"
                 style={{ padding: "10px 30px" }}

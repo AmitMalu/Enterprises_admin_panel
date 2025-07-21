@@ -5,7 +5,6 @@ import {
   dobValidation,
   emailValidation,
   fileValidation,
-  gstValidation,
   ifscValidation,
   mobileValidation,
   panValidation,

@@ -37,7 +37,7 @@ const PrefundingForm = () => {
   const [isActionDisabled, setIsActionDisabled] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = useThrottledFormSubmit<any>((values) => {
+  const handleSubmit = useThrottledFormSubmit<any>(() => {
     if (isSubmitting) return;
 
     if (!selectedAction) {

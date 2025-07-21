@@ -48,7 +48,7 @@ const TableBody = <T,>({
             {renderExtraRowCell && (
               <Table.Td>{renderExtraRowCell(item, index)}</Table.Td>
             )}
-            {headers.map(({ key, renderType, filterType, filterOptions, showCalculatedBelow }) => {
+            {headers.map(({ key, renderType, filterType, filterOptions }) => {
               const cellData = item[key];
               const isEmpty =
                 cellData === undefined || cellData === null || cellData === "";

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { EditIcon, EditIcon2, EyeIcon2 } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import { useAppDispatch } from "../../Redux/hooks";
 import { resetSingleSchemesData, setPagination } from "../../Redux/Features/Schemes/slice";
 import { toast } from "react-toastify";

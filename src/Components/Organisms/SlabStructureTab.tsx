@@ -44,7 +44,7 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, i
 
   return (
     <>
-      {data?.map((operator, operatorIndex) => {
+      {data?.map((operator) => {
         const headers = getFilteredSlabHeaders(operator.slabs);
 
         return (

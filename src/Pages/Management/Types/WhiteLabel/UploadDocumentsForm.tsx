@@ -1,11 +1,9 @@
-import { FileInput, Grid } from "@mantine/core";
+import { Grid } from "@mantine/core";
 import { FormikProps } from "formik";
-import React from "react";
 import FormikFileInput from "../../../../Components/Molecules/FormikFileInput";
-import FilePreview from "../../../../Components/Atoms/FilePreview";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
 
-const UploadDocumentsForm = ({ formik }: { formik: FormikProps<any> }) => {
+const UploadDocumentsForm = ({ }: { formik: FormikProps<any> }) => {
   return (
     <>
       <Grid gutter="lg">

@@ -1,7 +1,5 @@
 import {
   GenericTableHeader,
-  SelectRegionTypeData,
-  SelectZoneData,
 } from "../../Utils/utils";
 import { textField } from "../../Utils/ValidationUtils";
 import * as Yup from "yup";

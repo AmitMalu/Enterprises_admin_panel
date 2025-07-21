@@ -1,4 +1,3 @@
-import React from "react";
 import { ellipsisCellStyle } from "../../Utils/utils";
 import { Table, Tooltip } from "@mantine/core";
 import TextComponent from "../Atoms/TextComponent";
