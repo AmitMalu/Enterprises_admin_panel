@@ -19,13 +19,19 @@ export const capitalizeWords = (str: string) =>
     .replace(/-/g, " ") // Replace hyphens with spaces
     .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
 
+export const redirectTo = (path: string) => {
+  const basePath = import.meta.env.VITE_BASE_PATH || "";
+
+  window.location.href = `${basePath}${path}`;
+};
+
 export const logoutUser = (
   message = "Session expired. Redirecting to login page."
 ) => {
   clearStorage();
   toast.warning(`${message}`);
   setTimeout(() => {
-    window.location.href = "/login";
+    redirectTo("/login");
   }, 1000);
 };
 
@@ -89,6 +95,13 @@ export const formatDateTime = (dateString: string) => {
 export const booleanSelectData = [
   { label: "Yes", value: "true" },
   { label: "No", value: "false" },
+];
+
+export const settlementTimeData = [
+  { label: "1 Hr", value: "1 hr" },
+  { label: "3 Hrs", value: "3 hrs" },
+  { label: "6 Hrs", value: "6 hrs" },
+  { label: "9 Hrs", value: "9 hrs" },
 ];
 
 export const booleanSelectData2 = [
