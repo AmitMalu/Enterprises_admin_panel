@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { EyeIcon } from "../../assets/Icons";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
@@ -43,9 +42,9 @@ const SubMaster = () => {
         navigate("/master/sub-master/add");
     };
 
-    const handleEdit = (id: string) => {
-        // navigate(`/master/sub-master//edit/${id}`, { state: id });
-    };
+    // const handleEdit = (id: string) => {
+    //     // navigate(`/master/sub-master//edit/${id}`, { state: id });
+    // };
 
     const handleFilterChange = (key: string, value: any) => {
         setFilterValues((prev) => ({ ...prev, [key]: value }));

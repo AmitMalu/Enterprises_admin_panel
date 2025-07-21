@@ -1,9 +1,8 @@
 import { Grid } from "@mantine/core";
 import { FormikProps } from "formik";
-import React from "react";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
 
-const BankDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
+const BankDetailsForm = ({ }: { formik: FormikProps<any> }) => {
   return (
     <>
       <Grid gutter="lg">

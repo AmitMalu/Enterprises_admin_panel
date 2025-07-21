@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { EditIcon, EyeIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import {
   headers,
   MASTER_KEY,

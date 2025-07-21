@@ -23,7 +23,6 @@ import {
     validationSchema,
 } from "../../Config/Master/BankMasterConfig";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
-import FormikFileInput from "../Molecules/FormikFileInput";
 
 type BankMasterFormProps = { mode: "add" | "edit" };
 

@@ -21,7 +21,7 @@ const EditSchemeAllocation = () => {
     const [schemeOptions, setSchemeOptions] = useState<Record<string, SchemeOption[]>>({});
     const [modifiedSchemes, setModifiedSchemes] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    // const [error, setError] = useState<string | null>(null);
     const [loadingDropdowns, setLoadingDropdowns] = useState<Record<string, boolean>>({});
 
     const schemeOptionsRef = useRef(schemeOptions);
@@ -108,7 +108,7 @@ const EditSchemeAllocation = () => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            setError(null);
+            // setError(null);
             try {
                 const response = await dispatch(
                     fetchMasterDropdown({
@@ -118,7 +118,7 @@ const EditSchemeAllocation = () => {
 
                 setSubProducts(response);
             } catch (err: any) {
-                setError(err);
+                // setError(err);
                 toast.error(err || "Failed to fetch scheme allocation data.");
                 setTimeout(() => {
                     navigate("/schemes/allocation");

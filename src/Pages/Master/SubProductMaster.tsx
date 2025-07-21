@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { EditIcon, EyeIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import {
   headers,

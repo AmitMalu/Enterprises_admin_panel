@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const FilePreview = ({ file }: { file: File | null }) => {
   const [fileURL, setFileURL] = useState<string | null>(null);

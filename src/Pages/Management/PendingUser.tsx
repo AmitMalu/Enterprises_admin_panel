@@ -43,9 +43,9 @@ const PendingUser = () => {
     navigate(`/management/user/pending/edit/${id}`, { state: id });
   };
 
-  const handleAdd = () => {
-    // navigate("/management/userconfig/add");
-  };
+  // const handleAdd = () => {
+  //   // navigate("/management/userconfig/add");
+  // };
 
   const handleFilterChange = (key: string, value: any) => {
     setFilterValues((prev) => ({ ...prev, [key]: value }));

@@ -1,4 +1,3 @@
-import React from "react";
 import TextComponent from "./TextComponent";
 
 const ComingSoonPage = ({ name }: { name?: string }) => {

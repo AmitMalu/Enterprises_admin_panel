@@ -11,7 +11,6 @@ interface UseProductSubProductProps {
 
 export const useProductSubProduct = ({
   selectedProductId,
-  selectedSubProductId,
   onSubProductReset,
 }: UseProductSubProductProps) => {
   const dispatch = useAppDispatch();

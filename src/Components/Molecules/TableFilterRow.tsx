@@ -1,13 +1,8 @@
 import { Table } from "@mantine/core";
 import { booleanSelectData2, GenericTableHeader } from "../../Utils/utils";
 import SelectComponent from "../Atoms/SelectComponent";
-import { DatePickerInput } from "@mantine/dates";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import moment from "moment";
-import {
-  LeftDateArrowSvgIcon,
-  RightDateArrowSvgIcon,
-} from "../../assets/Icons";
 import CustomDatePicker from "../Atoms/CustomDatePicker";
 
 const TableFilterRow = <T,>({

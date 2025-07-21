@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { DeleteIcon, EditIcon, EditIcon2, EyeIcon2, SettingIcon2 } from "../../assets/Icons";
+import { EditIcon, SettingIcon2 } from "../../assets/Icons";
 import { headers, SCHEMES_KEY, SCHEMES_URL, SchemesListTableType } from "../../Config/Schemes/SchemesConfig";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
@@ -56,9 +56,9 @@ const SchemesList = () => {
     });
   };
 
-  const handleDelete = (id: any) => {
-    // navigate("/schemes/schemeslist/add/");
-  };
+  // const handleDelete = (id: any) => {
+  //   // navigate("/schemes/schemeslist/add/");
+  // };
 
   const handleFilterChange = (key: string, value: any) => {
     setFilterValues((prev) => ({ ...prev, [key]: value }));

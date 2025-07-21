@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   makeSelectMasterMeta,
   setPagination,
@@ -27,7 +26,6 @@ export function useFetchMasterList<T>({
   refreshKey,
   method = "GET",
 }: UseMasterListProps<T>) {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const meta = useAppSelector(makeSelectMasterMeta(key));
 
@@ -38,7 +36,6 @@ export function useFetchMasterList<T>({
     totalElements: 0,
   };
   const currentPage = pagination.currentPage;
-  const pageSize = pagination.pageSize;
 
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(false);

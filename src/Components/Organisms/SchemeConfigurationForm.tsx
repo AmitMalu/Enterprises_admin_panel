@@ -1,4 +1,3 @@
-import React from "react";
 import SelectComponent from "../Atoms/SelectComponent";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import TextComponent from "../Atoms/TextComponent";

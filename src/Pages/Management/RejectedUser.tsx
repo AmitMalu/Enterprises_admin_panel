@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useEffect, useRef, useState } from "react";
 import { headers, KEY, URL, UserAuthTableType } from "../../Config/Management/UserAuthConfig";
@@ -14,8 +13,6 @@ import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 const RejectedUsers = () => {
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);

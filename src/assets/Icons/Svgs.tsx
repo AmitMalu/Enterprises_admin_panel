@@ -922,7 +922,6 @@ export const ExportIcon: React.FC<IconProps> = ({
 export const SettingIcon2: React.FC<IconProps> = ({
   width = 20,
   height = 20,
-  color = "#000000",
 }) => {
   return (
     <svg

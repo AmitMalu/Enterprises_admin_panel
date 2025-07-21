@@ -17,7 +17,6 @@ import {
     initialValues,
     MASTER_KEY,
     MASTER_URL,
-    transformCountryListToFormData,
     transformFormToCreateCountryMasterPayload,
     transformFormToUpdateCountryMasterPayload,
     validationSchema,

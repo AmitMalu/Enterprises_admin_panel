@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { useLocation, useNavigate } from "react-router-dom";
 import { otpVerify, resendOtp } from "../../Redux/Features/Auth/Thunk";
@@ -18,8 +18,6 @@ const validationSchema = Yup.object({
 const OtpVerify: React.FC = () => {
   const screenSize = useScreenSize();
   const navigate = useNavigate();
-  const [Otp, setOtp] = useState<string>("");
-  const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -51,7 +49,6 @@ const OtpVerify: React.FC = () => {
   };
 
   const handleOTPSubmit = useThrottledFormSubmit((values: { otp: string }) => {
-    setHasSubmitted(true);
     if (values.otp.length < 6) return;
 
     const handleAsync = async () => {
@@ -65,7 +62,7 @@ const OtpVerify: React.FC = () => {
             state: { username: username }, // Pass username to Set Password page);
           });
         } else if (otpFor === "login") {
-          setLoginData(dispatch, result.data); 
+          setLoginData(dispatch, result.data);
           sessionStorage.setItem("justLoggedIn", "true");
           if (username) {
             localStorage.setItem("username", username);
@@ -113,7 +110,7 @@ const OtpVerify: React.FC = () => {
         validationSchema={validationSchema}
         onSubmit={handleOTPSubmit}
       >
-        {({ values, handleChange, touched, errors, submitCount }) => (
+        {({ values, handleChange, errors, submitCount }) => (
           <Form>
             <div className="flex justify-center items-center ">
               <TextInputComponent

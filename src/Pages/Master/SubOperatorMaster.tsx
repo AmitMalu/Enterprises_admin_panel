@@ -14,7 +14,7 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import { EditIcon, EyeIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import {
   resetMaster,
   setPagination,

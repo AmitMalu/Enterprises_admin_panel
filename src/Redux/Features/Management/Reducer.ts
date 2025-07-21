@@ -72,9 +72,9 @@ const managementReducer = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createUser.fulfilled, (state) => {})
-      .addCase(createUser.rejected, (state, action) => {})
-      .addCase(createUser.pending, (state) => {});
+      .addCase(createUser.fulfilled, () => {})
+      .addCase(createUser.rejected, () => {})
+      .addCase(createUser.pending, () => {});
   },
 });
 

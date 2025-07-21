@@ -12,7 +12,6 @@ interface UseOperatorSubOperatorProps {
 
 export const useOperatorSubOperator = ({
   selectedOperatorCode,
-  selectedSubOperatorId,
   onSubOperatorReset,
 }: UseOperatorSubOperatorProps) => {
   const dispatch = useAppDispatch();

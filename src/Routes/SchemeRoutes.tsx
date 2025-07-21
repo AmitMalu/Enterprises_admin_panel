@@ -6,7 +6,6 @@ import {
   FeeSetting,
   SchemeAllocation,
   SchemeHierarchy,
-  SchemeRate,
   SchemesList,
   ServiceChargeSetting,
   TransactionLimitSetting,

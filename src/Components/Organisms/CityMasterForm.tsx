@@ -9,7 +9,7 @@ import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { useAppDispatch } from "../../Redux/hooks";
-import { booleanSelectData, SelectRegionTypeData, SelectZoneData } from "../../Utils/utils";
+import { booleanSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import {

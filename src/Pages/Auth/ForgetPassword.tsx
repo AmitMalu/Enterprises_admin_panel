@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { forgetPassword } from "../../Redux/Features/Auth/Thunk";
 import { persistOtpSession } from "../../Utils/utils";
-import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
+import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { UsernameSvg } from "../../assets/Icons/Svgs";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
