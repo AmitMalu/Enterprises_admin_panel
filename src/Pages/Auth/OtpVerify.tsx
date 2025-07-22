@@ -43,6 +43,12 @@ const OtpVerify: React.FC = () => {
     try {
       const result = await dispatch(resendOtp({ userName: username })).unwrap();
       toast.success(result.message);
+      toast.success(result.data.otp, {
+        autoClose: false, // Do not close automatically
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: false,
+      });
     } catch (error: any) {
       toast.error(error.message || "OTP resend failed");
     }
@@ -57,6 +63,9 @@ const OtpVerify: React.FC = () => {
           otpVerify({ userName: username, otp: values.otp })
         ).unwrap();
         toast.success(result.message);
+        setTimeout(() => {
+          toast.dismiss();
+        }, 1500)
         if (otpFor === "forgetPassword") {
           navigate("/set-password", {
             state: { username: username }, // Pass username to Set Password page);

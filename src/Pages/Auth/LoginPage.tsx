@@ -47,7 +47,10 @@ const LoginPage: React.FC = () => {
 
         toast.success(result.message);
         toast.success(result.data.otp, {
-          autoClose: 2500,
+          autoClose: false, // Do not close automatically
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: false,
         });
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
