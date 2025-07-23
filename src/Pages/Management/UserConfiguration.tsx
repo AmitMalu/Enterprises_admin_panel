@@ -39,11 +39,11 @@ const UserConfiguration = () => {
     });
 
   const handleEdit = (id: any) => {
-    navigate(`/management/userconfig/edit/${id}`, { state: id });
+    navigate(`/management/user-configuration/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
-    navigate("/management/userconfig/add");
+    navigate("/management/user-configuration/add");
   };
 
   const handleFilterChange = (key: string, value: any) => {

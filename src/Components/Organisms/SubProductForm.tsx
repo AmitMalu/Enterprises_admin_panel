@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -24,6 +23,7 @@ import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { toast } from "react-toastify";
 import { fetchMasterById, fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../Molecules/BackHeader";
 
 type SubProductFormProps = { mode: "add" | "edit" };
 
@@ -91,11 +91,11 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit"
-          ? "Edit Sub Product"
-          : "Add Sub Product"}
-      </TextComponent>
+
+      <BackHeader
+        title={mode === "edit" ? "Edit Sub Product" : "Add Sub Product"}
+        backPath="/master/sub-product"
+      />
 
       {/* Sub Heading */}
       <BreadCrumb type={"Sub Product"} text="Master" />

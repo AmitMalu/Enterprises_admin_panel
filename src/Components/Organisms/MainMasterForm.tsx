@@ -1,6 +1,5 @@
 import { Form, Formik } from "formik";
 import ButtonComponent from "../Atoms/ButtonComponent";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import {
   initialValues,
@@ -20,6 +19,7 @@ import { useAppDispatch } from "../../Redux/hooks";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../Molecules/BackHeader";
 
 type MainMasterFormProps = { mode: "add" | "edit" };
 
@@ -82,10 +82,10 @@ const MainMasterForm = ({ mode }: MainMasterFormProps) => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Main Master" : "Add Main Master"}
-      </TextComponent>
-
+      <BackHeader
+        title={mode === "edit" ? "Edit Main Master" : "Add Main Master"}
+        backPath="/master/main"
+      />
       {/* Sub Heading */}
       <BreadCrumb type={"Main"} text="Master" />
 

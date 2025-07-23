@@ -142,14 +142,14 @@ const TableBody = <T,>({
                       offset={{ mainAxis: -2, crossAxis: 50 }}
                       style={{ fontSize: "12px" }}
                       label={
-                        key === "createdOn" || key === "editedOn"
+                        key === "createdOn" || key === "editedOn" || key === "createdAt"
                           ? formatDateTime(displayValue)
                           : displayValue
                       }
                       withArrow
                     >
                       <span>
-                        {key === "createdOn" || key === "editedOn"
+                        {key === "createdOn" || key === "editedOn" || key === "createdAt"
                           ? formatDateTime(displayValue)
                           : displayValue}
                       </span>

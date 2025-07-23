@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from "yup";
@@ -24,6 +23,7 @@ import { useOperatorSubOperator } from "../../Utils/hooks/useOperatorSubOperator
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../Molecules/BackHeader";
 
 type ProductFormProps = { mode: "add" | "edit" };
 
@@ -89,11 +89,13 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit"
+
+      <BackHeader
+        title={mode === "edit"
           ? "Edit Sub-Operator"
           : "Add Sub-Operator"}
-      </TextComponent>
+        backPath="/master/sub-operator"
+      />
 
       {/* Sub Heading */}
       <BreadCrumb type={"Sub-Operator"} text="Master" />

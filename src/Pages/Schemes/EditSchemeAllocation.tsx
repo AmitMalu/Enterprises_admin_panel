@@ -9,6 +9,7 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import { Grid, Loader } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../../Components/Molecules/BackHeader";
 
 
 const EditSchemeAllocation = () => {
@@ -143,9 +144,11 @@ const EditSchemeAllocation = () => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                Edit Scheme Allocation
-            </TextComponent>
+
+            <BackHeader
+                title={"Edit Scheme Allocation"}
+                backPath="/schemes/allocation"
+            />
 
             <div className="mt-4 p-2">
                 {loading ? (

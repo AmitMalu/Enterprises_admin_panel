@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -22,6 +21,7 @@ import {
     validationSchema,
 } from "../../Config/Master/CountryMasterConfig";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../Molecules/BackHeader";
 
 type CountryMasterFormProps = { mode: "add" | "edit" };
 
@@ -87,10 +87,10 @@ const CountryMasterForm = ({ mode }: CountryMasterFormProps) => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Country" : "Add Country"}
-            </TextComponent>
-
+            <BackHeader
+                title={mode === "edit" ? "Edit Country" : "Add Country"}
+                backPath="/master/country"
+            />
             {/* Sub Heading */}
             <BreadCrumb type={"Country"} text="Master" />
 

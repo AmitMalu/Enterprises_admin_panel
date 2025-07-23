@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
 import { toast } from "react-toastify";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -13,6 +12,7 @@ import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikMultiSelectComponent from "../Molecules/FormikMultiSelectComponent";
+import BackHeader from "../Molecules/BackHeader";
 
 
 type SchemeHierarchyFormProps = { mode: "add" | "edit" };
@@ -81,9 +81,11 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Scheme Hierarchy" : "Add Scheme Hierarchy"}
-            </TextComponent>
+
+            <BackHeader
+                title={mode === "edit" ? "Edit Scheme Hierarchy" : "Add Scheme Hierarchy"}
+                backPath="/schemes/hierarchy"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type="Hierarchy" text="Schemes" />

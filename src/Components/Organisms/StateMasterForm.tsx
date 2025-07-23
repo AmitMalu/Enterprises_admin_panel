@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -24,6 +23,7 @@ import {
 } from "../../Config/Master/StateMasterConfig";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import { useLocationDropdowns } from "../../Utils/hooks/useLocationDropdowns";
+import BackHeader from "../Molecules/BackHeader";
 
 type StateMasterFormProps = { mode: "add" | "edit" };
 
@@ -89,9 +89,11 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit State" : "Add State"}
-            </TextComponent>
+
+            <BackHeader
+                title={mode === "edit" ? "Edit State" : "Add State"}
+                backPath="/master/state"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type={"State"} text="Master" />

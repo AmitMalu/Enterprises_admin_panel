@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from "yup";
@@ -24,6 +23,7 @@ import {
 } from "../../Config/Master/DistrictMasterConfig";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import { useLocationDropdowns } from "../../Utils/hooks/useLocationDropdowns";
+import BackHeader from "../Molecules/BackHeader";
 
 type DistrictMasterFormProps = { mode: "add" | "edit" };
 
@@ -90,9 +90,12 @@ const DistrictMasterForm = ({ mode }: DistrictMasterFormProps) => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit District" : "Add District"}
-            </TextComponent>
+
+            <BackHeader
+                title={mode === "edit" ? "Edit District" : "Add District"}
+                backPath="/master/district"
+            />
+
 
             {/* Sub Heading */}
             <BreadCrumb type={"District"} text="Master" />

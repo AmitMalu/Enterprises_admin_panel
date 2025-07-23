@@ -7,7 +7,6 @@ import {
   PrefundingFormType,
   validationSchema,
 } from "../../Config/Funding/preFundingConfig";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import ButtonComponent from "../Atoms/ButtonComponent";
@@ -22,6 +21,7 @@ import {
   fetchFundingById,
   submitFundRequest,
 } from "../../Redux/Features/Fundings/thunks";
+import BackHeader from "../Molecules/BackHeader";
 
 const PrefundingForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -106,9 +106,11 @@ const PrefundingForm = () => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {"Prefunding Form"}
-      </TextComponent>
+
+      <BackHeader
+        title={"Prefunding Form"}
+        backPath="/funding/authorization"
+      />
 
       {/* Sub Heading */}
       <BreadCrumb type={"Prefunding"} text="Funding" />

@@ -37,4 +37,7 @@ export const API_ENDPOINTS = {
     SCHEME_LIST: "api/scheme",
     SCHEME_RATE: "api/scheme-rate",
   },
+  SUPPORT : {
+    TICKET : "api/ticket",
+  }
 };
