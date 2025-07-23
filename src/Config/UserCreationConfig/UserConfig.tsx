@@ -11,7 +11,6 @@ import { FieldNames } from "./MasterFormConfig";
 import {
   DistributorLogoSvg,
   EnterpriseLogoSvg,
-  IMAdminLogoSvg,
   PartnerLogoSvg,
   RetailerLogoSvg,
   SuperDistributorLogoSvg,

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -23,6 +22,7 @@ import { booleanSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../Molecules/BackHeader";
 
 type ProductFormProps = { mode: "add" | "edit" };
 
@@ -86,9 +86,11 @@ const ProductForm = ({ mode }: ProductFormProps) => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Product" : "Add Product"}
-      </TextComponent>
+
+      <BackHeader
+        title={mode === "edit" ? "Edit Product" : "Add Product"}
+        backPath="/master/product"
+      />
 
       {/* Sub Heading */}
       <BreadCrumb type={"Product"} text="Master" />

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from "yup";
@@ -17,6 +16,7 @@ import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { useOperatorSubOperator } from "../../Utils/hooks/useOperatorSubOperator";
 import { useVendor } from "../../Utils/hooks/useVendor";
 import { useHeirarchyList } from "../../Utils/hooks/useHeirarchyList";
+import BackHeader from "../Molecules/BackHeader";
 
 type SchemesFormPageProps = { mode: "add" | "edit" };
 
@@ -85,9 +85,11 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Scheme" : "Add Scheme"}
-            </TextComponent>
+
+            <BackHeader
+                title={mode === "edit" ? "Edit Scheme" : "Add Scheme"}
+                backPath="/schemes/schemeslist"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type={mode} text="Schemes" />

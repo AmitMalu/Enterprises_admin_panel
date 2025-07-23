@@ -90,7 +90,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     }
 
     if (!allowSpecialChar) {
-      newValue = newValue.replace(/[^a-zA-Z0-9\s]/g, "");
+      newValue = newValue.replace(/[^a-zA-Z0-9\s._\-()]/g, "");
     }
 
     if (!allowSpace) {

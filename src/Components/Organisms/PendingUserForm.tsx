@@ -5,12 +5,12 @@ import { initialValues, KEY, URL, UserAuthFormType } from "../../Config/Manageme
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { toast } from "react-toastify";
 import { fetchMasterById, updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import ButtonComponent from "../Atoms/ButtonComponent";
+import BackHeader from "../Molecules/BackHeader";
 
 const PendingUserForm = () => {
 
@@ -91,9 +91,11 @@ const PendingUserForm = () => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {"Pending User Form"}
-      </TextComponent>
+
+      <BackHeader
+        title={"Pending User Form"}
+        backPath="/management/user/pending"
+      />
 
       {/* Sub Heading */}
       <BreadCrumb type={"Pending User"} text="Management" />

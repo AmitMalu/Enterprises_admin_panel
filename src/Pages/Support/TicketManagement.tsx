@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { DeleteIcon, EditIcon, EyeIcon } from "../../assets/Icons";
-import { useNavigate } from "react-router-dom";
+import { DeleteIcon, EditIcon } from "../../assets/Icons";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { useAppDispatch } from "../../Redux/hooks";
@@ -42,10 +41,14 @@ const TicketManagement = () => {
 
   const handleEdit = (id: string) => {
     //   navigate(`/master/banks/edit/${id}`, { state: id });
+    console.log(id);
+
   };
 
   const handleDelete = (id: string) => {
     //   navigate("/master/banks/add");
+    console.log(id);
+
   };
 
   const handleFilterChange = (key: string, value: any) => {

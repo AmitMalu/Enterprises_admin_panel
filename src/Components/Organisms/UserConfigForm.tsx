@@ -6,7 +6,6 @@ import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMaster
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
 import { Grid } from "@mantine/core";
@@ -16,6 +15,7 @@ import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { useIndianStateCity } from "../../Utils/hooks/useIndianStateCity";
 import FormikMultiSelectComponent from "../Molecules/FormikMultiSelectComponent";
 import { useMenuSubMenuList } from "../../Utils/hooks/useMenuSubMenuList";
+import BackHeader from "../Molecules/BackHeader";
 
 type UserConfigFormProps = { mode: "add" | "edit" };
 
@@ -89,9 +89,11 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit User Configuration" : "Add User Configuration"}
-            </TextComponent>
+
+            <BackHeader
+                title={mode === "edit" ? "Edit User Configuration" : "Add User Configuration"}
+                backPath="/management/user-configuration"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type="User Configuration" text="Management" />

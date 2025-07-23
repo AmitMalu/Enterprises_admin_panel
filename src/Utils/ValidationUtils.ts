@@ -15,7 +15,7 @@ export const textField = (
 
   if (!allowSpecialChars) {
     schema = schema.matches(
-      /^[A-Za-z0-9\s.-]*$/,
+      /^[A-Za-z0-9\s._\-()]*$/,
       `${field} should not contain special characters`
     );
   }

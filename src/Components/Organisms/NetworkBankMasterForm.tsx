@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -20,6 +19,7 @@ import {
     MASTER_URL,
     validationSchema, NetworkBankMasterFormType, transformFormToCreateNetworkBankMasterPayload, transformFormToUpdateNetworkBankMasterPayload, transformNetworkBankListToFormData
 } from "../../Config/Master/NetworkBankMasterConfig";
+import BackHeader from "../Molecules/BackHeader";
 
 type NetworkBankMasterFormProps = { mode: "add" | "edit" };
 
@@ -86,9 +86,11 @@ const NetworkBankMasterForm = ({ mode }: NetworkBankMasterFormProps) => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Network Bank" : "Add Network Bank"}
-            </TextComponent>
+
+            <BackHeader
+                title={mode === "edit" ? "Edit Network Bank" : "Add Network Bank"}
+                backPath="/master/network-banks"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type={"Network Bank"} text="Master" />

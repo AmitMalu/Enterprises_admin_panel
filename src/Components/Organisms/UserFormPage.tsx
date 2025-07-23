@@ -19,6 +19,7 @@ import { Form, Formik, FormikProps } from "formik";
 import { useAppDispatch } from "../../Redux/hooks";
 import FormSuccessModel from "../Atoms/FormSuccessModel";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import BackHeader from "../Molecules/BackHeader";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
@@ -45,9 +46,10 @@ const UserFormPage = () => {
   return (
     <div className="p-4 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Header Form Type */}
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {capitalizeWords(type)} Form
-      </TextComponent>
+      <BackHeader
+        title={`${capitalizeWords(type)} Form`}
+        backPath="/management/user/create"
+      />
 
       {/* Sub Heading */}
       <BreadCrumb type={`${type} Form`} text="Management" />

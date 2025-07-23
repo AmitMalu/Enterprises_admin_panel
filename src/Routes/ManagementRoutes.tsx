@@ -27,8 +27,8 @@ export const ManagementRoutes = (
     <Route path="/management/user/onboarded" element={<OnboardedUsers />} />
     <Route path="/management/user/rejected" element={<RejectedUser />} />
     <Route path="/management/user-configuration" element={<UserConfiguration />} />
-    <Route path="/management/userconfig/edit/:id" element={<UserConfigForm mode="edit" />} />
-    <Route path="/management/userconfig/add" element={<UserConfigForm mode="add" />} />
+    <Route path="/management/user-configuration/edit/:id" element={<UserConfigForm mode="edit" />} />
+    <Route path="/management/user-configuration/add" element={<UserConfigForm mode="add" />} />
     <Route path="/management/add-manage-user" element={<AddManageUser />} />
     <Route path="/management/search-user" element={<SearchUser />} />
     <Route path="/management/kyc-approved" element={<KycApprovedSummary />} />
