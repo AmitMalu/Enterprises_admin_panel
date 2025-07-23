@@ -140,22 +140,41 @@ export const websiteValidation = Yup.string()
 
 export const fileValidation = (
   field: string,
-  allowedTypes: string[] = ["image/png, image/jpeg"],
-  maxSizedMB = 1.5
-) =>
-  Yup.mixed()
-    .required(`${field} is required`)
-    .test(
-      "fileType",
-      `Only ${allowedTypes.join(", ")} files are allowed`,
-      (value) => {
-        if (typeof value === "string") return true; // Allow URL (edit case)
-        return value instanceof File
-          ? allowedTypes.includes(value.type)
-          : false;
-      }
-    )
-    .test("fileSize", `File too large. Max ${maxSizedMB}MB`, (value) => {
+  allowedTypes: string[] = ["image/png", "image/jpeg"],
+  maxSizedMB = 1.5,
+  isRequired = true
+) => {
+  let schema = Yup.mixed();
+
+  if (isRequired) {
+    schema = schema.required(`${field} is required`);
+  }
+
+  schema = schema.test(
+    "fileType",
+    `Only ${allowedTypes.join(", ")} files are allowed`,
+    (value) => {
       if (typeof value === "string") return true; // Allow URL (edit case)
-      return value instanceof File && value.size <= maxSizedMB * 1024 * 1024;
-    });
+      return value instanceof File
+        ? allowedTypes.includes(value.type)
+        : !isRequired
+        ? true
+        : false;
+    }
+  );
+
+  schema = schema.test(
+    "fileSize",
+    `File too large. Max ${maxSizedMB}MB`,
+    (value) => {
+      if (typeof value === "string") return true; // Allow URL (edit case)
+      return value instanceof File
+        ? value.size <= maxSizedMB * 1024 * 1024
+        : !isRequired
+        ? true
+        : false;
+    }
+  );
+
+  return schema;
+};

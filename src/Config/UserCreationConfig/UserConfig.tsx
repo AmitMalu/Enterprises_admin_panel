@@ -28,7 +28,7 @@ export type UserType =
   | "enterprise";
 
 export const userTypeSelectorOptions = [
-  { label: "IM Admin", icon: <IMAdminLogoSvg />, type: "im-admin" },
+  // { label: "IM Admin", icon: <IMAdminLogoSvg />, type: "im-admin" },
   { label: "Enterprise", icon: <EnterpriseLogoSvg />, type: "enterprise" },
   { label: "Retailer", icon: <RetailerLogoSvg />, type: "retailer" },
   {
