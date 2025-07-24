@@ -13,7 +13,6 @@ import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMaster
 import { initialValues, SCHEMES_KEY, SCHEMES_URL, SchemesListFormType, transformFormToCreateSchemesPayload, transformFormToUpdateSchemesPayload, validationSchema } from "../../Config/Schemes/SchemesConfig";
 import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
-import { useOperatorSubOperator } from "../../Utils/hooks/useOperatorSubOperator";
 import { useVendor } from "../../Utils/hooks/useVendor";
 import { useHeirarchyList } from "../../Utils/hooks/useHeirarchyList";
 import BackHeader from "../Molecules/BackHeader";

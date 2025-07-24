@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { DeleteIcon, EditIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { useAppDispatch } from "../../Redux/hooks";
