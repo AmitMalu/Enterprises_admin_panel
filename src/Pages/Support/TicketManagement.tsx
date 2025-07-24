@@ -13,9 +13,10 @@ import {
 } from "../../Redux/Features/Masters/MastersSlice";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { headers, TICKET_KEY, TICKET_URL, TicketTableType, transformToTicketTableType } from "../../Config/Support/ticketConfig";
+import { useNavigate } from "react-router-dom";
 
 const TicketManagement = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
@@ -40,14 +41,7 @@ const TicketManagement = () => {
     });
 
   const handleEdit = (id: string) => {
-    //   navigate(`/master/banks/edit/${id}`, { state: id });
-    console.log(id);
-
-  };
-
-  const handleDelete = (id: string) => {
-    //   navigate("/master/banks/add");
-    console.log(id);
+    navigate(`/support/ticket-management/${id}`, { state: id });
 
   };
 
@@ -122,18 +116,12 @@ const TicketManagement = () => {
           )}
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center gap-2 min-w-10">
               <span
                 onClick={() => handleEdit(String(item?.id ?? ""))}
                 className="cursor-pointer"
               >
                 <EditIcon />
-              </span>
-              <span
-                onClick={() => handleDelete(String(item?.id ?? ""))}
-                className="cursor-pointer"
-              >
-                <DeleteIcon />
               </span>
             </div>
           )}

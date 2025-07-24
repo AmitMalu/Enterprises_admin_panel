@@ -13,11 +13,11 @@ export interface TicketFormType {
   status: string;
   screenshotImage?: string | null;
   remark?: string;
+  raisedBy: string;
 }
 
 export interface TicketTableType extends TicketFormType {
   transactionId: string;
-  raisedBy: string;
   balBeforeTran: string;
   balAfterTran: string;
   amount: string;
@@ -42,6 +42,7 @@ export const initialValues: TicketFormType = {
   status: "PENDING",
   screenshotImage: null,
   remark: "",
+  raisedBy: "",
 };
 
 export const validationSchema: Record<keyof TicketFormType, Yup.AnySchema> = {
@@ -54,28 +55,31 @@ export const validationSchema: Record<keyof TicketFormType, Yup.AnySchema> = {
     1.5,
     false
   ),
-  status: Yup.boolean().default(false),
-  remark: Yup.boolean().default(false),
+  raisedBy: textField("Raised By", 150, false, true),
+  status: textField("Status", 100, false, true),
+  remark: textField("Remark", 150, false, true),
 };
 
 export const headers: GenericTableHeader<TicketTableType>[] = [
   { key: "id", label: "Ticket ID", filterType: "text" },
   { key: "transactionId", label: "Transaction ID", filterType: "text" },
-  { key: "raisedBy", label: "Raised By", filterType: "text" },
-  { key: "issueType", label: "Issue Type", filterType: "text" },
   {
     key: "status",
-    label: "Status",
+    label: "Ticket Status",
     filterType: "boolean",
+    renderType: "statusBadge",
     filterOptions: [
       { label: "PENDING", value: "PENDING" },
       { label: "SUCCESS", value: "SUCCESS" },
       { label: "REJECTED", value: "REJECTED" },
     ],
   },
+  { key: "raisedBy", label: "Raised By", filterType: "text" },
+  { key: "issueType", label: "Issue Type", filterType: "text" },
   {
     key: "tranStatus",
     label: "Transaction Status",
+    renderType: "statusBadge",
     filterType: "boolean",
     filterOptions: [
       { label: "PENDING", value: "PENDING" },
@@ -108,10 +112,8 @@ export const transformToTicketTableType = (
     status: raw.status ?? "PENDING",
     tranStatus: raw.tranStatus ?? "",
     amount: raw.amount != null ? String(raw.amount) : "",
-    balBeforeTran:
-      raw.balBeforeTran != null ? String(raw.balBeforeTran) : "",
-    balAfterTran:
-      raw.balAfterTran != null ? String(raw.balAfterTran) : "",
+    balBeforeTran: raw.balBeforeTran != null ? String(raw.balBeforeTran) : "",
+    balAfterTran: raw.balAfterTran != null ? String(raw.balAfterTran) : "",
 
     dateOfTransaction: raw.dateOfTransaction ?? "",
     service: raw.service ?? "",
@@ -126,6 +128,7 @@ export const transformTicketListToFormData = (
 ): TicketFormType => ({
   id: raw.id ?? "",
   issueType: raw.issueType ?? "",
+  raisedBy: raw.raisedBy ?? "",
   description: raw.description ?? "",
   screenshotImage: raw.screenshotImage ?? null,
   status: raw.status ?? "PENDING",
