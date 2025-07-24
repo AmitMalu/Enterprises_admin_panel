@@ -1,4 +1,3 @@
-import moment from "moment";
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 import { GenericTableHeader, GenericVerticalHeader } from "../../Utils/utils";
@@ -15,7 +14,6 @@ export interface SchemesListFormType {
   schemeCode: string;
   productId: string;
   subProductId: string;
-  operatorId: string;
   vendorId: string;
   schemeHierarchySelectionId: string;
 }
@@ -26,7 +24,6 @@ export interface SchemesListTableType {
   schemeCode: string;
   productName: string;
   subProductName: string;
-  // operatorName: string;
   vendorName: string;
   schemeCombinationHashCode: string;
 }
@@ -44,7 +41,6 @@ export const initialValues: SchemesListFormType = {
   schemeCode: "",
   productId: "",
   subProductId: "",
-  operatorId: "",
   vendorId: "",
   schemeHierarchySelectionId: "",
 };
@@ -57,7 +53,6 @@ export const validationSchema: Record<
   schemeCode: textField("Scheme Code", 150, true, true),
   productId: textField("Product", 150, true, true),
   subProductId: textField("sub Product", 150, true, true),
-  operatorId: textField("Operator", 150, false, true),
   vendorId: textField("Vendor", 150, false, true),
   schemeHierarchySelectionId: textField("Scheme Hierarchy", 150, false, true),
 };
@@ -68,7 +63,6 @@ export const headers: GenericTableHeader<SchemesListTableType>[] = [
   { key: "schemeCode", label: "Scheme Code" },
   { key: "productName", label: "Product" },
   { key: "subProductName", label: "Sub Product" },
-  // { key: "operatorName", label: "Operator Name" },
   { key: "vendorName", label: "Vendor Name" },
   { key: "schemeCombinationHashCode", label: "Scheme HashCode" },
 ];
@@ -87,10 +81,9 @@ export const transformFormToUpdateSchemesPayload = (
 ): SchemeListUpdatePayload => ({
   schemeName: formData.schemeName,
   schemeCode: formData.schemeCode,
-  productId: formData.operatorId,
+  productId: formData.productId,
   subProductId: formData.subProductId,
-  operatorId: formData.productId,
-  vendorId: formData.operatorId,
+  vendorId: formData.vendorId,
   schemeHierarchySelectionId: formData.schemeHierarchySelectionId,
   editedBy: localStorage.getItem("username") || "system",
 });
@@ -110,45 +103,6 @@ export type SlabStructureTableType = {
   retailer?: string;
   [key: string]: any;
 };
-
-export const slabStructureData: any[] = [
-  {
-    slabStart: moment().format("YYYY-MM-DD"),
-    slabEnd: moment().add(1, "year").format("YYYY-MM-DD"),
-    rateType: "12.2",
-    gross: "NA",
-    im: "NA",
-    r: "NA",
-    new: "NA",
-  },
-  {
-    slabStart: moment().format("YYYY-MM-DD"),
-    slabEnd: moment().add(1, "year").format("YYYY-MM-DD"),
-    rateType: "12.2",
-    gross: "NA",
-    im: "NA",
-    r: "NA",
-    new: "NA",
-  },
-  {
-    slabStart: moment().format("YYYY-MM-DD"),
-    slabEnd: moment().add(1, "year").format("YYYY-MM-DD"),
-    rateType: "12.2",
-    gross: "NA",
-    im: "NA",
-    r: "NA",
-    new: "NA",
-  },
-  {
-    slabStart: moment().format("YYYY-MM-DD"),
-    slabEnd: moment().add(1, "year").format("YYYY-MM-DD"),
-    rateType: "12.2",
-    gross: "NA",
-    im: "NA",
-    r: "NA",
-    new: "NA",
-  },
-];
 export interface SchemeDetails {
   isActive: boolean;
   tdsRate: number | string;
@@ -186,24 +140,36 @@ export const buildSlabPayload = (
       operatorCode: op.operatorCode,
       operatorName: op.operatorName,
       slabs: op.slabs.map((slab: any) => {
-        const isTempId =
-          (typeof slab.id === "string" && slab.id.startsWith("new-")) ||
-          /^\d{13,}$/.test(slab.id); // Detects Date.now()-based or new- prefixed IDs
-
-        return {
+        // const isTempId =
+        //   (typeof slab.id === "string" && slab.id.startsWith("new-")) ||
+        //   /^\d{13,}$/.test(slab.id); // Detects Date.now()-based or new- prefixed IDs
+        const isNewSlab =
+          slab.id === null || // Dummy slab from backend
+          (typeof slab.id === "string" && slab.id.startsWith("new-")); // Newly created in frontend
+        const updatedSlab = {
           ...slab,
-          id: isTempId ? null : slab.id,
-          editedBy,
-          ...(isTempId && { createdBy: editedBy }),
+          id: isNewSlab ? null : slab.id, // Convert frontend id to null for backend
         };
+        // return {
+        //   ...slab,
+        //   id: isTempId ? null : slab.id,
+        //   editedBy,
+        //   ...(isTempId && { createdBy: editedBy }),
+        // };
+        if (isNewSlab) {
+          updatedSlab.createdBy = editedBy;
+        } else {
+          updatedSlab.editedBy = editedBy;
+          if (slab.createdBy) {
+            updatedSlab.createdBy = slab.createdBy; // Preserve existing createdBy
+          }
+        }
+
+        return updatedSlab;
       }),
     })),
   };
 };
-
-export const AMAXdata: SlabStructureTableType[] = [];
-
-export const AMAX2data: SlabStructureTableType[] = [];
 
 export const slabStructureHeaders: GenericTableHeader<SlabStructureTableType>[] =
   [

@@ -219,7 +219,7 @@ const SchemeSettingsPage = () => {
       setLoadingScheme(true);
       try {
         const data = await dispatch(
-          fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}`, id: schemeCode })
+          fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}/get-scheme-details-by-scheme-code`, id: schemeCode })
         ).unwrap();
         setSchemeDetails(data);
         setIsSchemeActive(data.isActive);
