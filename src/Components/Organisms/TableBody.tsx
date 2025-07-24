@@ -7,6 +7,7 @@ import CustomDatePicker from "../Atoms/CustomDatePicker";
 import { AddIconButton } from "../../assets/Icons";
 import { calculateCommission } from "../../Config/Schemes/SchemesConfig";
 import React from "react";
+import TableStatusBadge from "../Molecules/TableStatusBadge";
 
 const TableBody = <T,>({
   data,
@@ -136,6 +137,8 @@ const TableBody = <T,>({
                         <span>{displayValue}</span>
                       </Tooltip>
                     </a>
+                  ) : renderType === "statusBadge" ? (
+                    <TableStatusBadge status={String(cellData)} />
                   ) : (
                     <Tooltip
                       position="top-start"

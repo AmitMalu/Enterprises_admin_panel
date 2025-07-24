@@ -54,7 +54,7 @@ const GenericMasterToolbar = ({
               bgColor="#BF0204"
               borderColor="#FFFFFF"
               leftIcon={<AddIconSvg />}
-              disabled={!!loading || !!error}
+              disabled={!!loading}
 
             >
               {addButtonText}

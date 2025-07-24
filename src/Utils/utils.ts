@@ -148,7 +148,7 @@ export type GenericTableHeader<T> = {
   filterType?: "text" | "boolean" | "date" | "none";
   filterOptions?: { label: string; value: any }[];
   searchable?: boolean; // optionally override with this
-  renderType?: "link" | "custom"; //
+  renderType?: "link" | "custom" | "statusBadge"; //
   showCalculatedBelow?: boolean;
 };
 
