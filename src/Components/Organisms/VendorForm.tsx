@@ -29,9 +29,9 @@ import { fetchMasterById, fetchMasterDropdown } from "../../Redux/Features/Maste
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
 
-type ProductFormProps = { mode: "add" | "edit" };
+type VendorFormProps = { mode: "add" | "edit" };
 
-const VendorForm = ({ mode }: ProductFormProps) => {
+const VendorForm = ({ mode }: VendorFormProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
