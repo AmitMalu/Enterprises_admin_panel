@@ -13,7 +13,6 @@ import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMaster
 import { initialValues, SCHEMES_KEY, SCHEMES_URL, SchemesListFormType, transformFormToCreateSchemesPayload, transformFormToUpdateSchemesPayload, validationSchema } from "../../Config/Schemes/SchemesConfig";
 import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
-import { useOperatorSubOperator } from "../../Utils/hooks/useOperatorSubOperator";
 import { useVendor } from "../../Utils/hooks/useVendor";
 import { useHeirarchyList } from "../../Utils/hooks/useHeirarchyList";
 import BackHeader from "../Molecules/BackHeader";
@@ -28,8 +27,6 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
     const [formData, setFormData] = useState<SchemesListFormType>(initialValues);
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
-    const { operatorDropdownData, loadingOperatorList, operatorSubOperatorError } =
-        useOperatorSubOperator({});
     const { vendorDropdownData, loadingVendorList, vendorError } = useVendor();
     const { hierarchyList, loadingHierarchyList, hierarchyListError } = useHeirarchyList()
 
@@ -165,19 +162,6 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
 
                                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikSelectComponent
-                                        name="operatorId"
-                                        label="Operator"
-                                        value={formik.values.operatorId}
-                                        placeholder="Select Operator"
-                                        withAsterisk
-                                        required
-                                        data={operatorDropdownData}
-                                        disabled={loadingOperatorList}
-                                    />
-                                </Grid.Col>
-
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                                    <FormikSelectComponent
                                         name="vendorId"
                                         label="Vendor"
                                         value={formik.values.vendorId}
@@ -212,7 +196,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                     type="submit"
                                     bgColor="#C30305"
                                     textColor="#FFFFFF"
-                                    disabled={!!productSubproductError || !!vendorError || !!hierarchyListError || !!operatorSubOperatorError}
+                                    disabled={!!productSubproductError || !!vendorError || !!hierarchyListError}
                                     style={{ padding: "10px 30px" }}
                                 >
                                     SUBMIT
