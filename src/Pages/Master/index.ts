@@ -3,6 +3,7 @@ export { default as SubProductMaster } from "./SubProductMaster";
 export { default as OperatorMaster } from "./OperatorMaster";
 export { default as SubOperatorMaster } from "./SubOperatorMaster";
 export { default as VendorMaster } from "./VendorMaster";
+export { default as VendorCredentialMaster } from "./VendorCredentialMaster";
 export { default as NetworkBankMaster } from "./NetworkBankMaster";
 export { default as BankMaster } from "./BankMaster";
 export { default as MainMaster } from "./MainMaster";

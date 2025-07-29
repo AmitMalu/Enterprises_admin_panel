@@ -20,6 +20,8 @@ export const API_ENDPOINTS = {
     SUB_PRODUCT: "api/sub-products",
     OPERATOR: "api/operators",
     VENDOR: "api/vendors",
+    VENDOR_CREDENTIAL: "api/vendor-credentials",
+    VENDOR_ROUTING: "api/vendor-routing",
     SUB_OPERATOR: "api/sub-operators",
     NETWORK_BANK_MASTER: "api/network-banks",
     BANK_MASTER: "api/im-bank",
@@ -37,7 +39,7 @@ export const API_ENDPOINTS = {
     SCHEME_LIST: "api/scheme",
     SCHEME_RATE: "api/scheme-rate",
   },
-  SUPPORT : {
-    TICKET : "api/ticket",
-  }
+  SUPPORT: {
+    TICKET: "api/ticket",
+  },
 };

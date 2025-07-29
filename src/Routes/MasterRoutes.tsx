@@ -22,6 +22,7 @@ import {
   DistrictMaster,
   CityMaster,
   NetworkBankMaster,
+  VendorCredentialMaster,
 } from "../Pages/Master";
 import SubProductForm from "../Components/Organisms/SubProductForm";
 import VendorForm from "../Components/Organisms/VendorForm";
@@ -37,6 +38,9 @@ import DistrictMasterForm from "../Components/Organisms/DistrictMasterForm";
 import CityMasterForm from "../Components/Organisms/CityMasterForm";
 import PincodeMasterForm from "../Components/Organisms/PincodeMasterForm";
 import NetworkBankMasterForm from "../Components/Organisms/NetworkBankMasterForm";
+import VendorCredentialForm from "../Components/Organisms/VendorCredentialForm";
+import VendorRoutingMaster from "../Pages/Master/VendorRoutingMaster";
+import VendorRoutingForm from "../Components/Organisms/VendorRoutingForm";
 
 export const MasterRoutes = (
   <>
@@ -77,6 +81,21 @@ export const MasterRoutes = (
       path="/master/vendor/edit/:id"
       element={<VendorForm mode="edit" />}
     />
+
+    <Route path="/master/vendor-credential" element={<VendorCredentialMaster />} />
+    <Route path="/master/vendor-credential/add" element={<VendorCredentialForm mode="add" />} /> 
+    <Route
+      path="/master/vendor-credential/:id"
+      element={<VendorCredentialForm mode="edit" />}
+    />
+
+     <Route path="/master/vendor-routing" element={<VendorRoutingMaster />} />
+    <Route path="/master/vendor-routing/add" element={<VendorRoutingForm mode="add" />} /> 
+    <Route
+      path="/master/vendor-routing/:id"
+      element={<VendorRoutingForm mode="edit" />}
+    />
+
     <Route path="/master/banks" element={<BankMaster />} />
     <Route path="/master/banks/add" element={<BankMasterForm mode="add" />} />
     <Route
