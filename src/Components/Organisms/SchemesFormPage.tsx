@@ -14,7 +14,7 @@ import { initialValues, SCHEMES_KEY, SCHEMES_URL, SchemesListFormType, transform
 import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { useVendor } from "../../Utils/hooks/useVendor";
-import { useHeirarchyList } from "../../Utils/hooks/useHeirarchyList";
+import { useHeirarchyCombinationList } from "../../Utils/hooks/useHeirarchyCombinationList";
 import BackHeader from "../Molecules/BackHeader";
 
 type SchemesFormPageProps = { mode: "add" | "edit" };
@@ -28,7 +28,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
     const { vendorDropdownData, loadingVendorList, vendorError } = useVendor();
-    const { hierarchyList, loadingHierarchyList, hierarchyListError } = useHeirarchyList()
+    const { hierarchyList, loadingHierarchyList, hierarchyListError } = useHeirarchyCombinationList()
 
     const handleSubmit = useThrottleMasterFormSubmit<SchemesListFormType>({
         mode,
