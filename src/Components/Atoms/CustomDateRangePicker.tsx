@@ -1,7 +1,7 @@
 import { DatePicker, DatePickerProps, DatesRangeValue } from "@mantine/dates";
 import { LeftDateArrowSvgIcon, RightDateArrowSvgIcon } from "../../assets/Icons";
 import moment from "moment";
-import { Box, Button, Flex, Popover, Stack } from "@mantine/core";
+import { Box, Button, Flex, Popover, Stack, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 const defaultClassNames = {
@@ -38,9 +38,16 @@ interface CustomDateRangePickerProps
     defaultValue?: DatesRangeValue;
     minDate?: Date;
     maxDate?: Date;
+    size?: "xs" | "sm" | "md" | "lg" | "xl"
+    label?: string,
     shortcuts?: boolean;
     valueFormat?: string;
     placeholder?: string;
+    onBlur?: () => void;
+    error?: string | boolean;
+    required?: boolean;
+    allowSingleDateInRange?: boolean;
+    leftIcon?: React.ReactNode;
 }
 
 export const CustomDateRangePicker = ({
@@ -50,9 +57,15 @@ export const CustomDateRangePicker = ({
     nextIcon = <RightDateArrowSvgIcon />,
     previousIcon = <LeftDateArrowSvgIcon />,
     placeholder = "Pick date",
-    minDate = new Date(2024, 0, 1),
+    minDate = moment().subtract(1, "year").toDate(),
     maxDate = new Date(),
     shortcuts = false,
+    size = "md",
+    label,
+    error,
+    required = false,
+    allowSingleDateInRange = false,
+    leftIcon,
     ...rest
 }: CustomDateRangePickerProps) => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -60,16 +73,32 @@ export const CustomDateRangePicker = ({
     const today = moment();
     const yesterday = moment().subtract(1, "day");
     const last7 = [moment().subtract(6, "days"), today];
+    const startOfThisMonth = moment().startOf("month");
+    const endOfThisMonth = moment().endOf("month");
+
+    const startOfLastMonth = moment().subtract(1, "month").startOf("month");
+    const endOfLastMonth = moment().subtract(1, "month").endOf("month");
 
     const handleShortcut = (label: string) => {
-        const range: DatesRangeValue =
-            label === "Today"
-                ? [today.toDate(), today.toDate()]
-                : label === "Yesterday"
-                    ? [yesterday.toDate(), yesterday.toDate()]
-                    : label === "Last 7 Days"
-                        ? [last7[0].toDate(), last7[1].toDate()]
-                        : [null, null];
+        let range: DatesRangeValue = [null, null];
+
+        switch (label) {
+            case "Today":
+                range = [today.toDate(), today.toDate()];
+                break;
+            case "Yesterday":
+                range = [yesterday.toDate(), yesterday.toDate()];
+                break;
+            case "Last 7 Days":
+                range = [last7[0].toDate(), last7[1].toDate()];
+                break;
+            case "This Month":
+                range = [startOfThisMonth.toDate(), endOfThisMonth.toDate()];
+                break;
+            case "Last Month":
+                range = [startOfLastMonth.toDate(), endOfLastMonth.toDate()];
+                break;
+        }
 
         onChange(range);
         close();
@@ -80,8 +109,13 @@ export const CustomDateRangePicker = ({
             <Popover.Target>
                 <Box onClick={open} className="w-full">
                     {/* Trigger input box */}
-                    <input
+                    <TextInput
+                        label={label}
                         readOnly
+                        size={size}
+                        required={required}
+                        withAsterisk={required}
+                        leftSection={leftIcon}
                         value={
                             Array.isArray(value)
                                 ? value
@@ -92,8 +126,8 @@ export const CustomDateRangePicker = ({
                                     ? moment(value).format("DD/MM/YYYY")
                                     : ""
                         }
-                        className="w-full border px-3 py-1 rounded text-sm cursor-pointer"
                         placeholder={placeholder}
+                        error={error} // ✅ Add this line
                     />
                 </Box>
             </Popover.Target>
@@ -102,7 +136,7 @@ export const CustomDateRangePicker = ({
                 <Flex gap="md">
                     <DatePicker
                         type="range"
-                        size="xs"
+                        size={size}
                         value={value as DatesRangeValue}
                         onChange={(val) => {
                             const [start, end] = val || [];
@@ -117,6 +151,7 @@ export const CustomDateRangePicker = ({
                         classNames={defaultClassNames}
                         minDate={minDate}
                         maxDate={maxDate}
+                        allowSingleDateInRange={allowSingleDateInRange}
                         {...rest}
                     />
                     {shortcuts && (
@@ -124,6 +159,8 @@ export const CustomDateRangePicker = ({
                             <Button variant="light" size="xs" onClick={() => handleShortcut("Today")}>Today</Button>
                             <Button variant="light" size="xs" onClick={() => handleShortcut("Yesterday")}>Yesterday</Button>
                             <Button variant="light" size="xs" onClick={() => handleShortcut("Last 7 Days")}>Last 7 Days</Button>
+                            <Button variant="light" size="xs" onClick={() => handleShortcut("This Month")}>This Month</Button>
+                            <Button variant="light" size="xs" onClick={() => handleShortcut("Last Month")}>Last Month</Button>
                         </Stack>
                     )}
                 </Flex>

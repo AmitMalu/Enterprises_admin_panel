@@ -196,17 +196,6 @@ const VendorForm = ({ mode }: VendorFormProps) => {
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikSelectComponent
-                    name="priority"
-                    label="Priority"
-                    placeholder="Select Priority"
-                    withAsterisk
-                    allowDeselect={false}
-                    data={prioritySelectDataInNumbers}
-                  />
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikSelectComponent
                     name="isWhiteLabelAdmin"
                     label="Is WL-Admin"
                     placeholder="Select"
@@ -227,7 +216,7 @@ const VendorForm = ({ mode }: VendorFormProps) => {
                   />
                 </Grid.Col>}
 
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                {/* <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikTextInputComponent
                     name="userField1"
                     label="User Field 1"
@@ -252,7 +241,7 @@ const VendorForm = ({ mode }: VendorFormProps) => {
                     placeholder="Enter User Field 3"
                     maxLength={50}
                   />
-                </Grid.Col>
+                </Grid.Col> */}
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikSelectComponent

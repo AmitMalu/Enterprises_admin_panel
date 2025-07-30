@@ -42,6 +42,9 @@ export const API_ENDPOINTS = {
   SUPPORT: {
     TICKET: "api/ticket",
   },
+  REPORTS: {
+    TRANSACTION: "api/my-transaction",
+  },
   COMMON : {
     HIERARCHY : "api/hierarchy"
   }

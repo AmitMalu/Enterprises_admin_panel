@@ -58,6 +58,9 @@ export const useHierarchySubHierarchy = ({
     useEffect(() => {
         if (!selectedHierarchyCode) return;
 
+        // ✅ Reset sub-hierarchy state immediately on parent change
+        if (onSubHierarchyReset) onSubHierarchyReset();
+
         const fetchSubHierarchyList = async () => {
             setLoadingSubHierarchyList(true);
             setSubHierarchyError(null)

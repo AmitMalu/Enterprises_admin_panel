@@ -11,12 +11,12 @@ export type VendorFormType = {
   vendorCode: string;
   productId: string | number;
   modesSupported: string;
-  priority: string | number;
+  // priority: string | number;
   isWhiteLabelAdmin: boolean;
   whiteLabelAdminId?: "";
-  userField1?: string;
-  userField2?: string;
-  userField3?: string;
+  // userField1?: string;
+  // userField2?: string;
+  // userField3?: string;
   active: boolean;
   bankType: string;
   website?: string;
@@ -67,12 +67,12 @@ export const initialValues: VendorFormType = {
   vendorCode: "",
   productId: "",
   modesSupported: "",
-  priority: "",
+  // priority: "",
   isWhiteLabelAdmin: false,
   whiteLabelAdminId: "",
-  userField1: "",
-  userField2: "",
-  userField3: "",
+  // userField1: "",
+  // userField2: "",
+  // userField3: "",
   active: false,
   bankType: "",
   website: "",
@@ -85,7 +85,7 @@ export const validationSchema: Record<keyof VendorFormType, Yup.AnySchema> = {
   vendorCode: textField("Vendor Code", 50, true),
   productId: textField("Product Id", 20, true),
   modesSupported: textField("Mode Supported", 50, true, true),
-  priority: textField("Priority", 50, true),
+  // priority: textField("Priority", 50, true),
   isWhiteLabelAdmin: Yup.boolean().default(false),
   whiteLabelAdminId: Yup.string()
     .max(50, "WL-Admin Id must be at most 50 characters")
@@ -94,9 +94,9 @@ export const validationSchema: Record<keyof VendorFormType, Yup.AnySchema> = {
       then: (schema) => schema.required("WL-Admin Id is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
-  userField1: textField("User Field 1", 50, false, true),
-  userField2: textField("User Field 2", 50, false, true),
-  userField3: textField("User Field 3", 50, false, true),
+  // userField1: textField("User Field 1", 50, false, true),
+  // userField2: textField("User Field 2", 50, false, true),
+  // userField3: textField("User Field 3", 50, false, true),
   active: Yup.boolean().required("Is Active is required"),
   bankType: textField("BankType", 50, true),
   website: websiteValidation,
@@ -110,7 +110,7 @@ export const headers: GenericTableHeader<VendorTableType>[] = [
   { key: "vendorCode", label: "Vendor Code", filterType: "text" },
   { key: "productId", label: "Product Id", filterType: "text" },
   { key: "modesSupported", label: "Modes Supported", filterType: "text" },
-  { key: "priority", label: "Priority", filterType: "text" },
+  // { key: "priority", label: "Priority", filterType: "text" },
   { key: "isWhiteLabelAdmin", label: "Is WL-Admin", filterType: "boolean" },
   { key: "active", label: "Active", filterType: "boolean" },
   { key: "bankType", label: "Blanks", filterType: "text" },
@@ -130,12 +130,12 @@ export const mapToVendorTableType = (
     productId: raw.productId ?? "",
     productCode: raw.productCode ?? "",
     modesSupported: raw.modesSupported ?? "",
-    priority: String(raw.priority) ?? "1",
+    // priority: String(raw.priority) ?? "1",
     isWhiteLabelAdmin: !!raw.isWhiteLabelAdmin,
     whiteLabelAdminId: raw.whiteLabelAdminId ?? "",
-    userField1: raw.userField1 ?? "",
-    userField2: raw.userField2 ?? "",
-    userField3: raw.userField3 ?? "",
+    // userField1: raw.userField1 ?? "",
+    // userField2: raw.userField2 ?? "",
+    // userField3: raw.userField3 ?? "",
     active: !!raw.active,
     bankType: raw.bankType ?? "public",
     website: raw.website ?? "",
@@ -156,7 +156,7 @@ export const transformVendorToFormData = (
   vendorCode: raw.vendorCode ?? "",
   productId: String(raw.productId) ?? "",
   modesSupported: raw.modesSupported ?? "",
-  priority: String(raw.priority) ?? "1",
+  // priority: String(raw.priority) ?? "1",
   isWhiteLabelAdmin: !!raw.isWhiteLabelAdmin,
   whiteLabelAdminId:
     raw.whiteLabelAdminId && raw.whiteLabelAdminId !== "-"
@@ -185,7 +185,7 @@ export const transformFormToCreateVendorPayload = (
     bankCharges: 17.0,
     gst: 19.0,
   },
-  priority: Number(formData.priority) ?? 1,
+  // priority: Number(formData.priority) ?? 1,
   createdBy: localStorage.getItem("username") || "system",
 });
 
@@ -205,6 +205,6 @@ export const transformFormToUpdateVendorPayload = (
     bankCharges: 17.0,
     gst: 19.0,
   },
-  priority: Number(formData.priority) ?? 1,
+  // priority: Number(formData.priority) ?? 1,
   editedBy: localStorage.getItem("username") || "system",
 });

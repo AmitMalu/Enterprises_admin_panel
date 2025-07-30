@@ -1,28 +1,57 @@
-import { DatesRangeValue } from "@mantine/dates";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { useState } from "react";
-import CustomDateRangePicker from "../../Components/Atoms/CustomDateRangePicker";
+import { Form, Formik } from "formik";
+import { Grid } from "@mantine/core";
+import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
+import FormikDateRangePicker from "../../Components/Molecules/FormikDateRangePicker";
+import { IconCalendar } from "@tabler/icons-react";
 import { useSubProductList } from "../../Utils/hooks/useSubProductList";
 import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHierarchy";
-import SelectComponent from "../../Components/Atoms/SelectComponent";
+import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import { headers, initialValues, TransactionReportSchema, TransactionReportTableType, transformToTransactionReportPayload, TRANX_REPORT_KEY, TRANX_REPORT_URL } from "../../Config/Reports/TransactionReportConfig";
+import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useFetchReportList } from "../../Utils/hooks/useFetchReportList";
+import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
+import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
+import { useEffect, useRef, useState } from "react";
+import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
+import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
+import { toast } from "react-toastify";
 
 const TransactionReport = () => {
-  const [selectedRange, setSelectedRange] = useState<DatesRangeValue>([null, null]);
-  const [selectedSubProduct, setSelectedSubProduct] = useState<string | null>("")
-  const [selectedHierarchy, setSelectedHierarchy] = useState<string | null>("")
-  const [selectedSubHierarchy, setSelectedSubHierarchy] = useState<string | null>("")
-  const [selectedWalletType, setSelectedWalletType] = useState<string | null>("")
-  const [selectedStatus, setSelectedStatus] = useState<string | null>("ALL")
 
-  const { subProductDropdownData, loadingSubProductList } = useSubProductList()
-  const { hierarchyList, loadingHierarchyList, subHierarchyList, loadingSubHierarchyList, subHierarchyKey } = useHierarchySubHierarchy({
-    selectedHierarchyCode: selectedHierarchy
-  })
+  const [reportPayload, setReportPayload] = useState<any>(null);
+  const dataRef = useRef<TransactionReportTableType[] | null>(null);
 
-  console.log(subProductDropdownData, "subpro");
-  console.log(hierarchyList, "heirarchy");
-console.log(selectedHierarchy);
+  const {
+    data,
+    loading,
+    pagination,
+    error,
+    setPage,
+    setPageSize
+  } = useFetchReportList<TransactionReportTableType>({
+    key: TRANX_REPORT_KEY,
+    url: `${TRANX_REPORT_URL}/view`,
+    payload: reportPayload,
+  });
 
+  const throttledSubmit = useThrottledFormSubmit((values: any) => {
+    const payload = transformToTransactionReportPayload(values);
+    setReportPayload(payload);
+  }, 3000);
+
+  const handleExportClick = () => {
+    const currentData = dataRef.current;
+    if (!currentData || currentData.length === 0) {
+      toast.warning("No data available to export.");
+      return;
+    }
+    exportToCsv(currentData, "Transaction-report");
+  };
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -30,62 +59,152 @@ console.log(selectedHierarchy);
         Transaction Report
       </TextComponent>
 
-      <CustomDateRangePicker
-        value={selectedRange}
-        onChange={(val) => setSelectedRange(val)}
-        minDate={new Date(2024, 0, 1)}
-        maxDate={new Date(2025, 11, 31)}
-        allowSingleDateInRange={false}
-        shortcuts
+      <GenericMasterToolbar
+        onExport={handleExportClick}
+        loading={loading}
+        error={error ? error.toString() : null}
       />
 
-      <SelectComponent
-        name="subproduct"
-        data={subProductDropdownData}
-        disabled={loadingSubProductList}
-        value={selectedSubProduct}
-        onChange={() => setSelectedSubProduct}
-      />
+      <Formik
+        initialValues={initialValues}
+        validationSchema={TransactionReportSchema}
+        onSubmit={throttledSubmit}
+      >
+        {({ values, setFieldValue }) => {
+          const { subProductDropdownData, loadingSubProductList } = useSubProductList()
+          const { hierarchyList, loadingHierarchyList, subHierarchyList, loadingSubHierarchyList, subHierarchyKey } = useHierarchySubHierarchy({
+            selectedHierarchyCode: values.hierarchy,
+            onSubHierarchyReset: () => setFieldValue("subHierarchy", "")
+          })
 
-      <SelectComponent
-        name="hierarchy"
-        data={hierarchyList}
-        disabled={loadingHierarchyList}
-        value={selectedHierarchy}
-        onChange={(val) => setSelectedHierarchy(val)}
-      />
+          return (
+            <Form className="flex flex-col gap-2 mt-1">
+              <Grid gutter="sm">
 
-      <SelectComponent
-        name="subHierarchy"
-        data={subHierarchyList}
-        disabled={loadingSubHierarchyList}
-        value={selectedSubHierarchy}
-        onChange={() => setSelectedSubHierarchy}
-      />
+                <Grid.Col span={{ base: 5, md: 3, lg: 2.5 }}>
+                  <FormikDateRangePicker
+                    name="dateRange"
+                    label="Date Range"
+                    placeholder="Select Date Range"
+                    size="xs"
+                    shortcuts
+                    required
+                    leftIcon={<IconCalendar size={16} />}
+                  />
+                </Grid.Col>
 
-      <SelectComponent
-        name="walletType"
-        data={[
-          { label: "PREPAID", value: "PREPAID" },
-          { label: "POSTPAID", value: "POSTPAID" },
-        ]}
-        value={selectedWalletType}
-        onChange={() => setSelectedWalletType}
-      />
+                <Grid.Col span={{ base: 3, md: 2, lg: 1.5 }}>
+                  <FormikSelectComponent
+                    name="subProduct"
+                    size="xs"
+                    label="Sub Product"
+                    placeholder="Select Sub Product"
+                    withAsterisk
+                    required
+                    data={subProductDropdownData?.map(item => ({
+                      label: item?.label,
+                      value: item?.label
+                    }))}
+                    disabled={loadingSubProductList}
+                  />
+                </Grid.Col>
 
-      <SelectComponent
-        name="status"
-        data={[
-          { label: "ALL", value: "ALL" },
-          { label: "FAILED", value: "FAILED" },
-          { label: "SUCCESS", value: "SUCCESS" },
-          { label: "PENDING", value: "PENDING" },
-        ]}
-        value={selectedStatus}
-        onChange={() => setSelectedStatus}
-      />
+                <Grid.Col span={{ base: 4, md: 2, lg: 1.5 }}>
+                  <FormikSelectComponent
+                    name="hierarchy"
+                    size="xs"
+                    label="Hierarchy"
+                    placeholder="Select Hierarchy"
+                    data={hierarchyList}
+                    disabled={loadingHierarchyList}
+                    withAsterisk
+                    required
+                  />
+                </Grid.Col>
 
+                <Grid.Col span={{ base: 5, md: 3, lg: 2 }}>
+                  <FormikSelectComponent
+                    key={subHierarchyKey}
+                    name="subHierarchy"
+                    size="xs"
+                    label="Hierarchy ID"
+                    placeholder="Select Hierarchy ID"
+                    data={subHierarchyList}
+                    disabled={loadingSubHierarchyList}
+                    withAsterisk
+                    required
+                  />
+                </Grid.Col>
 
+                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
+                  <FormikSelectComponent
+                    name="walletType"
+                    size="xs"
+                    label="Wallet Type"
+                    placeholder="Select Wallet Type"
+                    data={[
+                      { label: "PREPAID", value: "PREPAID" },
+                      { label: "POSTPAID", value: "POSTPAID" },
+                    ]}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
+                  <FormikSelectComponent
+                    name="status"
+                    size="xs"
+                    label="Status"
+                    placeholder="Select Status"
+                    data={[
+                      { label: "ALL", value: "ALL" },
+                      { label: "FAILED", value: "FAILED" },
+                      { label: "SUCCESS", value: "SUCCESS" },
+                      { label: "PENDING", value: "PENDING" },
+                    ]}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 3, md: 10, lg: 1.5 }}>
+                  <div className="flex justify-end items-center mt-4">
+                    {<ButtonComponent
+                      fontSize="14"
+                      fullWidth={false}
+                      radius={6}
+                      size="sm"
+                      borderColor="#fff"
+                      variant="filled"
+                      type="submit"
+                      bgColor="#C30305"
+                      textColor="#FFFFFF"
+                    >
+                      VIEW
+                    </ButtonComponent>}
+                  </div>
+                </Grid.Col>
+              </Grid>
+            </Form>
+          )
+        }}
+
+      </Formik>
+
+      {loading ? (
+        // Render shimmer
+        <ShimmerTableRows rowCount={6} columnCount={headers.length} />
+      ) : (
+        <GenericMasterTable<TransactionReportTableType>
+          data={data}
+          headers={headers}
+          pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          pageSize={pagination.pageSize}
+          pageSizeOptions={pageSizeSelectData}
+          message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+        />
+      )}
     </div>
   );
 };
