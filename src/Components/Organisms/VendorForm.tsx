@@ -19,7 +19,6 @@ import {
 } from "../../Config/Master/VendorConfig";
 import {
   booleanSelectData,
-  prioritySelectDataInNumbers,
   pubPvtSelectData,
 } from "../../Utils/utils";
 import { useAppDispatch } from "../../Redux/hooks";

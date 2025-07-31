@@ -1,17 +1,70 @@
+import { IconAlertTriangle } from "@tabler/icons-react";
+import { useEffect } from "react";
 import { FallbackProps } from "react-error-boundary";
 
 export default function ErrorFallback({
   error,
   resetErrorBoundary,
 }: FallbackProps) {
-  return (
-    <div role="alert" className="p-2 text-center">
-      <h2>Something Went Wrong</h2>
-      <pre className="text-red-700">{error.message}</pre>
 
-      <button onClick={resetErrorBoundary} className="w-fit bg-[#DB2729] text-white px-4 py-2 rounded-lg mt-4">
-        Try Again
-      </button>
+  const isChunkLoadError = /Loading chunk [\d]+ failed|ChunkLoadError/i.test(
+    error?.message || ""
+  );
+
+  const handleRecover = () => {
+    if (isChunkLoadError) {
+      // Force a hard reload to get latest assets
+      window.location.reload();
+    } else {
+      resetErrorBoundary(); // fallback to standard error recovery
+    }
+  };
+
+  useEffect(() => {
+    if (isChunkLoadError) {
+      const alreadyTriedReload = sessionStorage.getItem("chunk_reload_attempted");
+
+      if (!alreadyTriedReload) {
+        sessionStorage.setItem("chunk_reload_attempted", "true");
+        window.location.reload();
+      } else {
+        // Avoid infinite reload loop
+        console.warn("Chunk load failed again. Not reloading to prevent loop.");
+      }
+    }
+  }, [isChunkLoadError]);
+
+  // Clear reload flag when component unmounts
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem("chunk_reload_attempted");
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="bg-white border border-red-200 shadow-md rounded-xl p-6 max-w-md w-full text-center">
+        <div className="flex justify-center text-red-500 mb-4">
+          <IconAlertTriangle className="h-10 w-10" />
+        </div>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+          Oops! Something went wrong.
+        </h2>
+        <p className="text-gray-600 text-sm mb-4">
+          An unexpected error occurred. Please try again or reload the page.
+        </p>
+
+        <pre className="bg-gray-100 text-red-600 text-xs p-3 rounded-md overflow-auto max-h-40">
+          {error.message}
+        </pre>
+
+        <button
+          onClick={handleRecover}
+          className="mt-6 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-5 rounded-lg transition"
+        >
+          {isChunkLoadError ? "Reload Page" : "Try Again"}
+        </button>
+      </div>
     </div>
   );
 }
