@@ -43,6 +43,7 @@ export const API_ENDPOINTS = {
     TICKET: "api/ticket",
   },
   REPORTS: {
+    LOGS : "api/report",
     TRANSACTION: "api/my-transaction",
   },
   COMMON : {

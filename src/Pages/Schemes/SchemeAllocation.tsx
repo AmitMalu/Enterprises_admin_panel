@@ -118,7 +118,7 @@ const SchemeAllocation = () => {
                         url: `api/user/search-retailers`,
                         page: currentPage,
                         size: pageSize,
-                        filter: { key: "keyword", value: debouncedSearchValue },
+                        filter: { keyword: debouncedSearchValue },
                     })
                 ).unwrap();
 

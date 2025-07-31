@@ -7,7 +7,7 @@ type FetchMasterListParams = {
   url: string;
   page?: number;
   size?: number;
-  filter?: { key: string; value: any } | null;
+  filter?: Record<string, any> | null;
   method?: "GET" | "POST";
 };
 
@@ -42,7 +42,7 @@ export const fetchMasterList = createAsyncThunk(
       url,
       page = 1,
       size = 10,
-      filter,
+      filter = null,
       method = "GET",
     }: FetchMasterListParams,
     { rejectWithValue, dispatch }
@@ -51,8 +51,13 @@ export const fetchMasterList = createAsyncThunk(
       const params = new URLSearchParams();
       params.append("page", String(page - 1)); // 0 - based
       params.append("size", String(size));
-      if (filter?.key) {
-        params.append(filter.key, String(filter.value ?? ""));
+      // Append all filters as query params
+      if (filter && typeof filter === "object") {
+        Object.entries(filter).forEach(([k, v]) => {
+          if (v !== undefined && v !== null) {
+            params.append(k, String(v));
+          }
+        });
       }
 
       // ✅ Smart joiner: add `?` or `&` depending on presence of `?` in URL
