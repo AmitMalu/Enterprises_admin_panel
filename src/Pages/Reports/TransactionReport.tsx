@@ -71,7 +71,7 @@ const TransactionReport = () => {
         onSubmit={throttledSubmit}
       >
         {({ values, setFieldValue }) => {
-          const { subProductDropdownData, loadingSubProductList } = useSubProductList()
+          const { subProductDropdownData, loadingSubProductList, subProductError } = useSubProductList()
           const { hierarchyList, loadingHierarchyList, subHierarchyList, loadingSubHierarchyList, subHierarchyKey } = useHierarchySubHierarchy({
             selectedHierarchyCode: values.hierarchy,
             onSubHierarchyReset: () => setFieldValue("subHierarchy", "")
@@ -105,7 +105,7 @@ const TransactionReport = () => {
                       label: item?.label,
                       value: item?.label
                     }))}
-                    disabled={loadingSubProductList}
+                    disabled={loadingSubProductList || !!subProductError}
                   />
                 </Grid.Col>
 
@@ -140,6 +140,8 @@ const TransactionReport = () => {
                   <FormikSelectComponent
                     name="walletType"
                     size="xs"
+                    required
+                    withAsterisk
                     label="Wallet Type"
                     placeholder="Select Wallet Type"
                     data={[

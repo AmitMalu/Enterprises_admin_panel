@@ -31,7 +31,7 @@ export const initialValues = {
   subProduct: "",
   hierarchy: "",
   subHierarchy: "",
-  walletType: "",
+  walletType: "POSTPAID",
   status: "ALL",
 };
 
@@ -41,7 +41,7 @@ export const TransactionReportSchema = Yup.object().shape({
   subProduct: textField("Sub Product", 100, true, true),
   hierarchy: textField("Hierarchy", 100, true, true),
   subHierarchy: textField("Hierarchy ID", 100, true, true),
-  walletType: textField("Wallet Type", 100, false, true),
+  walletType: textField("Wallet Type", 100, true, true),
   status: textField("Status", 100, false, true),
 });
 
