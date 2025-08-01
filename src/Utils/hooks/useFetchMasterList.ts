@@ -16,6 +16,7 @@ interface UseMasterListProps<T> {
   filter?: FilterType;
   refreshKey?: number;
   method?: "GET" | "POST";
+  defaultPageSize?: number;
 }
 
 export function useFetchMasterList<T>({
@@ -25,12 +26,13 @@ export function useFetchMasterList<T>({
   filter = null,
   refreshKey,
   method = "GET",
+  defaultPageSize,
 }: UseMasterListProps<T>) {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(makeSelectMasterMeta(key));
 
   const pagination = meta?.pagination || {
-    pageSize: 5,
+    pageSize: defaultPageSize || 10,
     currentPage: 1,
     totalPages: 0,
     totalElements: 0,

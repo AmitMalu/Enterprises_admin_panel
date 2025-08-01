@@ -108,6 +108,7 @@ export interface SchemeDetails {
   tdsRate: number | string;
   schemeName: string;
   schemeCode: string;
+  productName : string;
   operators: OperatorSlabData[];
 }
 export interface SlabPayload {

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
@@ -15,13 +14,14 @@ import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMaster
 import { OperatorSlabData } from "../../Config/Schemes/SchemesConfig";
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import VerticalKeyValueTable from "../../Components/Organisms/VerticalKeyValueTable";
+import BackHeader from "../../Components/Molecules/BackHeader";
 
 const SchemeSettingsPage = () => {
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation();
-  const { schemeCode, schemeName } = location.state || {};
+  const { schemeCode } = location.state || {};
 
   const [activeTab, setActiveTab] = useState<"slab" | "product">("slab");
   const [schemeDetails, setSchemeDetails] = useState<SchemeDetails | null>(null);
@@ -161,7 +161,7 @@ const SchemeSettingsPage = () => {
       return;
     }
 
-    const payload = buildSlabPayload(schemeCode, schemeName, currentOperators);
+    const payload = buildSlabPayload(schemeCode, schemeDetails?.schemeName || "", currentOperators);
 
     handleSubmit(payload);
   }
@@ -211,6 +211,13 @@ const SchemeSettingsPage = () => {
   useEffect(() => {
     isSchemeActiveRef.current = isSchemeActive;
   }, [isSchemeActive]);
+
+  useEffect(() => {
+    // If user reloads or lands on this page directly without state
+    if (!schemeCode) {
+      navigate("/schemes/schemeslist", { replace: true });
+    }
+  }, [schemeCode, navigate]);
 
   useEffect(() => {
     if (!schemeCode) return;
@@ -277,20 +284,17 @@ const SchemeSettingsPage = () => {
       <div className="flex justify-between">
         <div>
           {/* Heading */}
-          <TextComponent
-            color="#1D1F2C"
-            fontFamily="Inter"
-            fontWeight={600}
-            fontSize={22}
-          >
-            {schemeName ? schemeName : "Scheme Name"}
-          </TextComponent>
+
+          <BackHeader
+            title={loadingScheme ? "Loading..." : schemeDetails?.schemeName || "-"}
+            backPath="/schemes/schemeslist"
+          />
 
           {/*Sub Heading */}
           <div className="mt-2">
             <BreadCrumb
-              type={schemeCode ? schemeCode : "Scheme Code"}
-              text="PG"
+              type={schemeCode ? schemeCode : "-"}
+              text={loadingScheme ? "Loading..." : schemeDetails?.productName || "-"}
             />
           </div>
         </div>

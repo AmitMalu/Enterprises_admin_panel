@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setPagination } from "./MastersSlice";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
+import { toast } from "react-toastify";
 
 type FetchMasterListParams = {
   key: string;
@@ -97,6 +98,16 @@ export const fetchMasterList = createAsyncThunk(
             },
           })
         );
+
+        // ✅ Show toast if content is empty
+        if (!content || content.length === 0) {
+          toast.warning("No records found", {
+            autoClose: 1000,
+            className: "!text-sm",
+            position: "bottom-right",
+          });
+        }
+
         return content;
       } else {
         throw new Error(responseData?.message || "Fetch failed");
