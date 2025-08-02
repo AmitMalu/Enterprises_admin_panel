@@ -83,11 +83,19 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         data={data}
         clearable={clearable}
         searchable={searchable}
-        rightSection={rightSection} 
+        rightSection={rightSection}
         styles={{
           input: {
             color: "#282828",
             fontWeight: 500,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          },
+          option: {
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
           },
         }}
       />

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AuthLayout from "../Components/Layout/AuthLayout";
 import MainLayout from "../Components/Layout/MainLayout";
 import ProtectedRoutes from "./ProtectedRoutes";
@@ -15,15 +15,20 @@ import { WebSettingRoutes } from "./WebSettingRoutes";
 import { MyAccountRoutes } from "./MyAccountRoutes";
 import { NotFoundRoute } from "./NotFoundRoute";
 import { LogsRoute } from "./LogsRoute";
-import { ChangePassword } from "../Pages/Auth";
-import { Profile } from "../Pages/Account";
+import FullPageLoader from "../Components/Layout/FullPageLoader";
+// import { ChangePassword } from "../Pages/Auth";
+// import { Profile } from "../Pages/Account";
+// import HomePage from "../Pages/Dashboard/HomePage";
+// import TestComponent from "../Pages/TestComponent";
 
-// Lazy loaded pages
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
+const Profile = lazy(() => import("../Pages/Account/Profile"));
+const ChangePassword = lazy(() => import("../Pages/Auth/ChangePassword"));
+const TestComponent = lazy(() => import("../Pages/TestComponent"));
 
 const AppRoutes = () => {
   return (
-    <Suspense fallback={<div>Loading..</div>}>
+    <Suspense fallback={<FullPageLoader />}>
       <Routes>
         {/*AuthLayout */}
         <Route element={<AuthLayout />}>{AuthRoutes}</Route>
@@ -48,6 +53,7 @@ const AppRoutes = () => {
             {LogsRoute}
           </Route>
         </Route>
+        <Route path="/test-error" element={<TestComponent />} />
         {/* Redirect all unknown routes */}
         {NotFoundRoute}
       </Routes>

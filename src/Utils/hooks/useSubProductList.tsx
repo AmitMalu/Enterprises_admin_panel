@@ -4,9 +4,14 @@ import { toast } from "react-toastify";
 import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 
+export interface DropdownOption {
+    label: string;
+    value: string;
+}
+
 export const useSubProductList = () => {
     const dispatch = useAppDispatch();
-    const [subProductDropdownData, setSubProductDropdownData] = useState([]);
+    const [subProductDropdownData, setSubProductDropdownData] = useState<DropdownOption[]>([]);
     const [loadingSubProductList, setLoadingSubProductList] = useState(false);
     const [subProductError, setSubProductError] = useState(null)
 

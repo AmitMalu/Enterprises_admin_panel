@@ -93,7 +93,7 @@ const GenericMasterToolbar = ({
           </ButtonComponent>}
 
           {/* Download Icon */}
-          <ButtonComponent
+          {onExport && <ButtonComponent
             style={{ padding: "4px 8px", height: 32 }}
             radius={1}
             textColor="#000000"
@@ -106,17 +106,17 @@ const GenericMasterToolbar = ({
             disabled={!!loading || !!error}
           >
             Export
-          </ButtonComponent>
+          </ButtonComponent>}
 
           {/* Col Icon */}
-          <ColumnVisibilityMenu
+          {onColumnChange && <ColumnVisibilityMenu
             headers={headers || []}
             visibleColumns={visibleColumns || []}
             onToggleColumn={onColumnChange ?? (() => { })}
-          />
+          />}
 
           {/* Refresh Icon */}
-          <ButtonComponent
+          {onRefresh && <ButtonComponent
             style={{ height: 32, width: 6, paddingLeft: "28px" }}
             radius={1}
             textColor="#000000"
@@ -129,7 +129,7 @@ const GenericMasterToolbar = ({
             disabled={!!loading}
           >
             <></>
-          </ButtonComponent>
+          </ButtonComponent>}
         </div>
       </div>
     </>

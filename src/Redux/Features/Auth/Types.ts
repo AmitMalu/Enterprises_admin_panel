@@ -15,6 +15,7 @@ export type WalletBalance = {
 export interface loginPayload {
   userName: string | number;
   password: string;
+  url: string; 
   [key: string]: any;
 }
 

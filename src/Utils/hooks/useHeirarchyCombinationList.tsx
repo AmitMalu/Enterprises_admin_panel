@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 
-export const useHeirarchyList = () => {
+export const useHeirarchyCombinationList = () => {
     const dispatch = useAppDispatch();
     const [hierarchyList, setHierarchyList] = useState([]);
     const [loadingHierarchyList, setLoadingHierarchyList] = useState(false);

@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { AppDispatch, persistor } from "../Redux/Store/store";
 import moment from "moment";
 import * as Papa from "papaparse";
+import * as Yup from "yup";
 import { NavigateFunction } from "react-router-dom";
 import {
   createMasterItem,
@@ -300,3 +301,31 @@ export const isFile = (val: any): val is File =>
   typeof val.name === "string" &&
   typeof val.size === "number" &&
   typeof val.type === "string";
+
+export const dateRangeValidationSchema = Yup.array()
+  .of(Yup.date().nullable())
+  .test("date-range-validation", function (value) {
+    const [start, end] = value || [];
+    const { path, createError } = this;
+
+    if (!start && !end) {
+      return createError({ path, message: "Date range is required" });
+    }
+
+    if (start && !end) {
+      return createError({ path, message: "End date is required" });
+    }
+
+    if (!start && end) {
+      return createError({ path, message: "Start date is required" });
+    }
+
+    if (start && end && new Date(start) > new Date(end)) {
+      return createError({
+        path,
+        message: "Start date must be before or equal to end date",
+      });
+    }
+
+    return true;
+  });

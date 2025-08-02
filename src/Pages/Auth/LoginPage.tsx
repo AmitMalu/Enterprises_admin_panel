@@ -41,8 +41,16 @@ const LoginPage: React.FC = () => {
   }>((values) => {
     const handleAsync = async () => {
       try {
+        const isDevEnv = ["localhost", "127.0.0.1"].includes(window.location.hostname) ||
+          window.location.hostname.startsWith("192.168.") ||
+          window.location.hostname === ""; // in case of file:// or blank
+
         const result = await dispatch(
-          login({ userName: values.username, password: values.password })
+          login({
+            userName: values.username,
+            password: values.password,
+            url: isDevEnv ? "https://uat.decipay.in/" : `${window.location.origin}/`,
+          })
         ).unwrap();
 
         toast.success(result.message);
