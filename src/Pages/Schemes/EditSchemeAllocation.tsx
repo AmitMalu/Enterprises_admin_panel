@@ -29,13 +29,13 @@ const EditSchemeAllocation = () => {
     const modifiedSchemesRef = useRef(modifiedSchemes);
 
     // Fetch Scheme Option list when open any dropdown
-    const handleDropdownOpen = async (subProductName: string) => {
-        if (!schemeOptions[subProductName]) {
-            setLoadingDropdowns((prev) => ({ ...prev, [subProductName]: true }));
+    const handleDropdownOpen = async (item: SubProductWithScheme) => {
+        if (!schemeOptions[item.subProductCode]) {
+            setLoadingDropdowns((prev) => ({ ...prev, [item.subProductCode]: true }));
 
             try {
                 const res = await dispatch(fetchMasterDropdown({
-                    url: `${SCHEMES_ALLOCATION_URL}/scheme-dropdown/${subProductName}`,
+                    url: `${SCHEMES_ALLOCATION_URL}/scheme-dropdown/${item.subProductName}`,
                     method: "POST"
                 })).unwrap();
 
@@ -46,35 +46,37 @@ const EditSchemeAllocation = () => {
 
                 setSchemeOptions((prev) => ({
                     ...prev,
-                    [subProductName]: updatedOptions,
+                    [item.subProductCode]: updatedOptions,
                 }));
             } catch (err) {
                 toast.error("Failed to load schemes");
             } finally {
-                setLoadingDropdowns((prev) => ({ ...prev, [subProductName]: false }));
+                setLoadingDropdowns((prev) => ({ ...prev, [item.subProductCode]: false }));
             }
         }
     };
 
-    const handleSchemeChange = (subProductName: string, selectedSchemeName: string | null) => {
+    const handleSchemeChange = (item: SubProductWithScheme, selectedSchemeName: string | null) => {
+        const { subProductCode } = item;
+
         if (!selectedSchemeName) return;
 
         if (selectedSchemeName === "No scheme assigned") {
             setModifiedSchemes((prev) => ({
                 ...prev,
-                [subProductName]: "No scheme assigned",
+                [subProductCode]: "No scheme assigned",
             }));
             return;
         }
 
-        const selectedOption = schemeOptions[subProductName]?.find(
+        const selectedOption = schemeOptions[subProductCode]?.find(
             (opt) => opt.schemeName === selectedSchemeName
         );
 
         if (selectedOption) {
             setModifiedSchemes((prev) => ({
                 ...prev,
-                [subProductName]: String(selectedOption.schemeId)
+                [subProductCode]: String(selectedOption.schemeId)
             }));
         }
     };
@@ -178,30 +180,28 @@ const EditSchemeAllocation = () => {
                                     name={item.subProductName}
                                     size="sm"
                                     rightSection={
-                                        loadingDropdowns[item.subProductName] ? <Loader size={16} /> : null
+                                        loadingDropdowns[item.subProductCode] ? <Loader size={16} /> : null
                                     }
                                     value={
-                                        modifiedSchemes[item.subProductName]
-                                            ? schemeOptions[item.subProductName]?.find(
-                                                (opt) => String(opt.schemeId) === modifiedSchemes[item.subProductName]
+                                        modifiedSchemes[item.subProductCode]
+                                            ? schemeOptions[item.subProductCode]?.find(
+                                                (opt) => String(opt.schemeId) === modifiedSchemes[item.subProductCode]
                                             )?.schemeName || "No scheme assigned"
                                             : item.schemeName || "No scheme assigned"
                                     }
                                     placeholder="Select Scheme"
-                                    onFocus={() => handleDropdownOpen(item.subProductName)}
-                                    onChange={(value: string | null) =>
-                                        handleSchemeChange(item.subProductName, value)
-                                    }
+                                    onFocus={() => handleDropdownOpen(item)}
+                                    onChange={(value: string | null) => handleSchemeChange(item, value)}
                                     data={
-                                        loadingDropdowns[item.subProductName]
+                                        loadingDropdowns[item.subProductCode]
                                             ? [{ value: "__loading__", label: "Loading schemes..." }]
                                             : [
-                                                ...((schemeOptions[item.subProductName] || []).map((scheme) => ({
+                                                ...((schemeOptions[item.subProductCode] || []).map((scheme) => ({
                                                     value: scheme.schemeName,
                                                     label: scheme.schemeName,
                                                 }))),
                                                 // fallback to current item.schemeName if not in fetched list
-                                                ...(schemeOptions[item.subProductName]?.some(s => s.schemeName === item.schemeName)
+                                                ...(schemeOptions[item.subProductCode]?.some(s => s.schemeName === item.schemeName)
                                                     ? []
                                                     : item.schemeName
                                                         ? [{ value: item.schemeName, label: item.schemeName }]

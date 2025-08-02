@@ -6,7 +6,8 @@ import GenericMasterTable from "./GenericMasterTable";
 import TextComponent from "../Atoms/TextComponent";
 import CenteredMessage from "../Molecules/CenteredMessage";
 import ShimmerTableRows from "../Atoms/ShimmerTableRows";
-import { Skeleton } from "@mantine/core";
+import { Skeleton, Table } from "@mantine/core";
+import { DeleteIcon } from "../../assets/Icons";
 
 interface SlabStructureTabProps {
   data: any[];
@@ -20,10 +21,11 @@ interface SlabStructureTabProps {
   isSchemeActive?: boolean;
   showAddRow?: boolean;
   onAddRow?: (operatorCode: string) => void;
+  handleRemoveRow: (operatorCode: string, id: string | number) => void;
   tdsRate?: number | string;
 }
 
-const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, isSchemeActive, tdsRate }: SlabStructureTabProps) => {
+const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, handleRemoveRow, isSchemeActive, tdsRate }: SlabStructureTabProps) => {
 
   if (loading) {
     return (
@@ -76,6 +78,20 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, i
                 }
                 showAddRow={showAddRow}
                 onAddRow={() => onAddRow?.(operator.operatorCode)}
+                renderExtraHeader={() => <Table.Th></Table.Th>}
+                renderExtraRowCell={(item) =>
+                  typeof item.id === "string" && item.id.startsWith("new-") ? (
+                    <span
+                      onClick={() => handleRemoveRow(operator.operatorCode, String(item.id))}
+                      className="cursor-pointer"
+                      title="Remove Slab"
+                    >
+                      <DeleteIcon />
+                    </span>
+                  ) : (
+                    <></>
+                  )
+                }
                 mt={2}
               />
             ) : (

@@ -204,6 +204,41 @@ const SchemeSettingsPage = () => {
     setUpdatedOperators(updatedDiff);
   };
 
+  const handleRemoveRow = (operatorCode: string, slabId: string | number) => {
+    console.log(operatorCode, slabId, "remove row called");
+
+    // 1. Remove from UI copy
+    setEditableRows((prev) =>
+      prev.map((op) =>
+        op.operatorCode !== operatorCode
+          ? op
+          : {
+            ...op,
+            slabs: op.slabs.filter((slab) => slab.id !== slabId),
+          }
+      )
+    );
+
+    // 2. Remove from updatedOperators (diff state)
+    setUpdatedOperators((prev) => {
+      const opIndex = prev.findIndex((op) => op.operatorCode === operatorCode);
+      if (opIndex === -1) return prev;
+
+      const op = { ...prev[opIndex] };
+      op.slabs = op.slabs.filter((slab) => slab.id !== slabId);
+
+      const next = [...prev];
+      if (op.slabs.length === 0) {
+        next.splice(opIndex, 1);
+      } else {
+        next[opIndex] = op;
+      }
+
+      return next;
+    });
+  };
+
+
   useEffect(() => {
     updatedOperatorsRef.current = updatedOperators;
   }, [updatedOperators]);
@@ -301,7 +336,13 @@ const SchemeSettingsPage = () => {
 
         {/* Button */}
         <div className="flex items-end">
-          <Tooltip label={isSchemeActive ? "Click to Deactivate Scheme" : "Click to Activate Scheme"}>
+          <Tooltip label={
+            updatedOperators.length !== 0
+              ? "Please save your changes before toggling scheme status"
+              : isSchemeActive
+                ? "Click to Deactivate Scheme"
+                : "Click to Activate Scheme"
+          }>
             <ButtonComponent
               style={{ padding: "5px 10px", height: 40 }}
               radius={8}
@@ -311,7 +352,7 @@ const SchemeSettingsPage = () => {
               bgColor={isSchemeActive ? "#BF0204" : "#28a745"}
               fontSize="14"
               leftIcon={isSchemeActive ? <DeactivateIcon /> : null}
-              disabled={!!loadingScheme}
+              disabled={!!loadingScheme || updatedOperators.length !== 0}
             >
               {isSchemeActive ? "Deactivate" : "Activate"}
             </ButtonComponent>
@@ -362,6 +403,7 @@ const SchemeSettingsPage = () => {
                 onDataChange={handleRowChange}
                 showAddRow={!isSchemeActive}
                 onAddRow={handleAddRow}
+                handleRemoveRow={handleRemoveRow}
                 isSchemeActive={!isSchemeActive}
               />
             </Tabs.Panel>

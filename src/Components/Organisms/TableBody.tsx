@@ -193,11 +193,14 @@ const TableBody = <T,>({
             colSpan={headers.length + (renderExtraRowCell ? 1 : 0)}
           >
             <div
-              className="flex items-center justify-center cursor-pointer p-2"
-              onClick={onAddRow}
+              className="flex items-center justify-center p-2"
             >
-              <AddIconButton
-              />
+              <span
+                className="cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-95 hover:text-green-600"
+                onClick={onAddRow}
+              >
+                <AddIconButton />
+              </span>
             </div>
           </Table.Td>
         </Table.Tr>
