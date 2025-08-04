@@ -20,6 +20,7 @@ import { useAppDispatch } from "../../Redux/hooks";
 import FormSuccessModel from "../Atoms/FormSuccessModel";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
+import { AdhaarValidationApi } from "../../Redux/Features/Masters/MastersThunk";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +39,28 @@ const UserFormPage = () => {
 
   const userType: UserType = type;
   const config = UserConfig[userType];
+
+  const handleAadhaarVerify = async (formik: FormikProps<any>) => {
+
+    const aadhaarNumber = formik.values.adhaarNumber;
+    console.log(aadhaarNumber, " aadhaarNumber");
+    // Basic validation
+    if (!aadhaarNumber || aadhaarNumber.length !== 12) {
+      formik.setFieldError("adhaarNumber", "Enter a valid 12-digit Aadhaar number");
+      return;
+    }
+    try {
+      // Example API call
+      const resultAction = await dispatch(AdhaarValidationApi({ aadhaarNumber })).unwrap();
+
+      // Assuming success means valid response from API
+      formik.setFieldValue("isAdhaarVerified", true);
+    } catch (error: any) {
+      console.error("Aadhaar verification error:", error);
+      formik.setFieldValue("isAdhaarVerified", false);
+      formik.setFieldError("adhaarNumber", error || "Verification failed.");
+    }
+  };
 
   const throttledHandleSubmit = useThrottledFormSubmit((args: SubmitHandlerArgs) => {
     handleFormSubmit(args);
@@ -60,7 +83,8 @@ const UserFormPage = () => {
       {/* Formik Wrapper */}
       <Formik
         initialValues={masterInitialValues}
-        validationSchema={getValidationSchema(userType, activeStep)}
+        // validationSchema={getValidationSchema(userType, activeStep)}
+        validationSchema={null}
         onSubmit={async (values, formikHelpers) => {
           if (activeStep === config.steps.length - 1) {
             throttledHandleSubmit({
@@ -95,7 +119,9 @@ const UserFormPage = () => {
             </div>
 
             {/* Render the actual form for current step */}
-            {config.renderStepForm(activeStep, formik)}
+            {config.renderStepForm(activeStep, formik, {
+              onAadhaarVerify: handleAadhaarVerify,
+            })}
 
             {/* Buttons */}
             <FormStepperButton

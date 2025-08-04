@@ -1,9 +1,14 @@
-import { FormikProps } from "formik";
 import FormikFileInput from "../../../../Components/Molecules/FormikFileInput";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
+import ButtonComponent from "../../../../Components/Atoms/ButtonComponent";
 import { Grid } from "@mantine/core";
+import { UploadDocumentsFormProps } from "../../../../Config/UserCreationConfig/UserConfig";
 
-const UploadDocumentsForm = ({ }: { formik: FormikProps<any> }) => {
+const UploadDocumentsForm = ({ formik, onAadhaarVerify }: UploadDocumentsFormProps) => {
+
+  const showVerifyButton =
+    !formik.errors.adhaarNumber && formik.values.adhaarNumber?.length === 12;
+
   return (
     <>
       <Grid gutter="lg">
@@ -62,6 +67,28 @@ const UploadDocumentsForm = ({ }: { formik: FormikProps<any> }) => {
             allowSpace={false}
             allowSpecialChar={false}
             size="sm"
+            rightSectionWidth={70}
+            rightSection={
+              showVerifyButton && (
+                <ButtonComponent
+                  fw="500"
+                  style={{
+                    marginRight: "0px",
+                    padding: "0px 8px",
+                    height: "24px",
+                    cursor: "pointer",
+                    fontSize: "12px",
+
+                  }}
+                  bgColor="#007B55"
+                  textColor="white"
+                  fontSize="12"
+                  size="xs"
+                  onClick={() => onAadhaarVerify?.(formik)}
+                >
+                  Verify
+                </ButtonComponent>
+              )}
           />
         </Grid.Col>
 

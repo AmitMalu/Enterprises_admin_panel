@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
     USER_CONFIGURATION: "api/user-config",
     MENU: "api/menus",
     USER_AUTH: "api/onboarding",
+    ADHAAR_VERIFY: "verification/aadhaar-validate",
   },
   MASTER: {
     PRODUCTS: "api/products",
@@ -43,10 +44,10 @@ export const API_ENDPOINTS = {
     TICKET: "api/ticket",
   },
   REPORTS: {
-    LOGS : "api/report",
+    LOGS: "api/report",
     TRANSACTION: "api/my-transaction",
   },
-  COMMON : {
-    HIERARCHY : "api/hierarchy"
-  }
+  COMMON: {
+    HIERARCHY: "api/hierarchy",
+  },
 };

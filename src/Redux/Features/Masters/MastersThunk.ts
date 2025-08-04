@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setPagination } from "./MastersSlice";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
 import { toast } from "react-toastify";
+import { API_ENDPOINTS } from "../../../Config/Api/EndPoints";
 
 type FetchMasterListParams = {
   key: string;
@@ -366,6 +367,31 @@ export const fetchReport = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || error.message || "No list found"
+      );
+    }
+  }
+);
+
+export const AdhaarValidationApi = createAsyncThunk(
+  "masters/Adhaarvalidation",
+  async ({ aadhaarNumber }: { aadhaarNumber: string }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.MANAGEMENT.ADHAAR_VERIFY}?aadhaarNumber=${aadhaarNumber}`
+      );
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(responseData?.message || "Failed to Verify Aadhaar");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error in Aadhaar verification"
       );
     }
   }
