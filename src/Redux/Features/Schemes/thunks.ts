@@ -19,7 +19,7 @@ export interface FetchSchemeByIdParams {
 export const fetchSchemesList = createAsyncThunk(
   "schemes/fetchSchemesList",
   async (
-    { key, url, page = 1, size = 5, filter }: FetchSchemesListParams,
+    { key, url, page = 1, size = 10, filter }: FetchSchemesListParams,
     { rejectWithValue, dispatch }
   ) => {
     try {
