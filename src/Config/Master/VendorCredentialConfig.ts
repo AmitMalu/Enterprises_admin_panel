@@ -12,6 +12,7 @@ export type VendorCredentialFormType = {
 
   baseUrlUat?: string;
   baseUrlProd?: string;
+  token?: string;
   tokenUrlUat?: string;
   tokenUrlProd?: string;
 
@@ -69,6 +70,7 @@ export type FetchVendorCredentialParams = {
 export const initialValues: VendorCredentialFormType = {
   vendorId: "",
   productId: "",
+  token: "",
   tokenUrlUat: "",
   tokenUrlProd: "",
   baseUrlUat: "",
@@ -89,15 +91,16 @@ export const validationSchema: Record<
 > = {
   vendorId: textField("Vendor", 50, true),
   productId: textField("Product", 50, true),
+  token: textField("Token", 1000, false, true),
   tokenUrlUat: textField("Token UAT", 50, true, true),
   tokenUrlProd: textField("Token Prod", 50, true, true),
   baseUrlUat: textField("Base Url UAT", 150, true, true),
   baseUrlProd: textField("Base Url Prod", 150, true, true),
-  clientId: textField("Client Id", 150, true, true),
-  saltKey: textField("Salt Key", 150, true, true),
-  clientSecret: textField("Client Secret", 150, true, true),
-  username: textField("Username", 150, true, true),
-  password: textField("Password", 150, true, true),
+  clientId: textField("Client Id", 150, false, true),
+  saltKey: textField("Salt Key", 150, false, true),
+  clientSecret: textField("Client Secret", 150, false, true),
+  username: textField("Username", 150, false, true),
+  password: textField("Password", 150, false, true),
   isActive: Yup.boolean().required("Is Active is required"),
   isWhiteLabelAdmin: Yup.boolean().default(false),
   whiteLabelAdminId: Yup.string()
@@ -144,6 +147,7 @@ export const transformVendorCredentialToFormData = (
 
   baseUrlUat: raw.baseUrlUat ?? "",
   baseUrlProd: raw.baseUrlProd ?? "",
+  token: raw.token ?? "",
   tokenUrlUat: raw.tokenUrlUat ?? "",
   tokenUrlProd: raw.tokenUrlProd ?? "",
 

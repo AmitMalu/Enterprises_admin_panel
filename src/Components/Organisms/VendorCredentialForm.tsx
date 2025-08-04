@@ -173,6 +173,20 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                 </Grid.Col>
 
                                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+
+                                </Grid.Col>
+
+                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                    <FormikTextInputComponent
+                                        name="token"
+                                        label="Token"
+                                        placeholder="Enter Token"
+                                        // withAsterisk
+                                        maxLength={1000}
+                                    />
+                                </Grid.Col>
+
+                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikTextInputComponent
                                         name="tokenUrlUat"
                                         label="Token Url UAT"
@@ -217,7 +231,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                         name="clientId"
                                         label="Client Id"
                                         placeholder="Enter Base Client Id"
-                                        withAsterisk
+                                        // withAsterisk
                                         maxLength={150}
                                     />
                                 </Grid.Col>
@@ -227,7 +241,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                         name="saltKey"
                                         label="SaltKey"
                                         placeholder="Enter SaltKey"
-                                        withAsterisk
+                                        // withAsterisk
                                         maxLength={150}
                                     />
                                 </Grid.Col>
@@ -237,7 +251,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                         name="clientSecret"
                                         label="Client Secret"
                                         placeholder="Enter Client Secret"
-                                        withAsterisk
+                                        // withAsterisk
                                         maxLength={150}
                                     />
                                 </Grid.Col>
@@ -247,7 +261,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                         name="username"
                                         label="Username"
                                         placeholder="Enter Username"
-                                        withAsterisk
+                                        // withAsterisk
                                         maxLength={50}
                                     />
                                 </Grid.Col>
@@ -257,7 +271,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                         name="password"
                                         label="Password"
                                         placeholder="Enter Password"
-                                        withAsterisk
+                                        // withAsterisk
                                         maxLength={50}
                                     />
                                 </Grid.Col>
