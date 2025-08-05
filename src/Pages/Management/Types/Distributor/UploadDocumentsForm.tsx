@@ -3,11 +3,35 @@ import FormikTextInputComponent from "../../../../Components/Molecules/FormikTex
 import ButtonComponent from "../../../../Components/Atoms/ButtonComponent";
 import { Grid } from "@mantine/core";
 import { UploadDocumentsFormProps } from "../../../../Config/UserCreationConfig/UserConfig";
+import { useEffect } from "react";
 
-const UploadDocumentsForm = ({ formik, onAadhaarVerify }: UploadDocumentsFormProps) => {
+const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDocumentsFormProps) => {
 
   const showVerifyButton =
-    !formik.errors.adhaarNumber && formik.values.adhaarNumber?.length === 12;
+    formik.values.aadhaarNumber?.length === 12 &&
+    formik.values.isAadhaarVerified !== true;
+
+  const showVerifiedMess = formik.values.aadhaarNumber?.length === 12 && formik.values.isAadhaarVerified;
+
+  const showPanVerifyButton =
+    formik.values.panNumber?.length === 10 &&
+    formik.values.panVerified !== true;
+
+  const showPanVerifiedMess = formik.values.panNumber?.length === 10 && formik.values.panVerified;
+
+
+  useEffect(() => {
+    if (formik.values.isAadhaarVerified && formik.touched.aadhaarNumber) {
+      formik.setFieldValue("isAadhaarVerified", false);
+      formik.setFieldValue("aadhaarPanVerified", false);
+    }
+  }, [formik.values.aadhaarNumber]);
+
+  useEffect(() => {
+    if (formik.values.panVerified && formik.touched.panNumber) {
+      formik.setFieldValue("panVerified", false);
+    }
+  }, [formik.values.panNumber]);
 
   return (
     <>
@@ -58,9 +82,9 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify }: UploadDocumentsFormPro
 
         <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikTextInputComponent
-            name="adhaarNumber"
-            label="Adhaar Number"
-            placeholder="Enter Your Adhaar Number"
+            name="aadhaarNumber"
+            label="Aadhaar Number"
+            placeholder="Enter Your Aadhaar Number"
             withAsterisk
             required
             maxLength={15}
@@ -69,7 +93,19 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify }: UploadDocumentsFormPro
             size="sm"
             rightSectionWidth={70}
             rightSection={
-              showVerifyButton && (
+              showVerifiedMess ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#28a745",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  ✅ Verified
+                </div>
+              ) : showVerifyButton ? (
                 <ButtonComponent
                   fw="500"
                   style={{
@@ -78,7 +114,6 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify }: UploadDocumentsFormPro
                     height: "24px",
                     cursor: "pointer",
                     fontSize: "12px",
-
                   }}
                   bgColor="#007B55"
                   textColor="white"
@@ -88,7 +123,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify }: UploadDocumentsFormPro
                 >
                   Verify
                 </ButtonComponent>
-              )}
+              ) : null}
           />
         </Grid.Col>
 
@@ -103,6 +138,39 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify }: UploadDocumentsFormPro
             allowSpace={false}
             allowSpecialChar={false}
             size="sm"
+            rightSectionWidth={70}
+            rightSection={
+              showPanVerifiedMess ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#28a745",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  ✅ Verified
+                </div>
+              ) : showPanVerifyButton ? (
+                <ButtonComponent
+                  fw="500"
+                  style={{
+                    marginRight: "0px",
+                    padding: "0px 8px",
+                    height: "24px",
+                    cursor: "pointer",
+                    fontSize: "12px",
+                  }}
+                  bgColor="#007B55"
+                  textColor="white"
+                  fontSize="12"
+                  size="xs"
+                  onClick={() => onPanVerify?.(formik)}
+                >
+                  Verify
+                </ButtonComponent>
+              ) : null}
           />
         </Grid.Col>
 

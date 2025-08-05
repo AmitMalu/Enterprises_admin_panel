@@ -15,6 +15,8 @@ export const API_ENDPOINTS = {
     MENU: "api/menus",
     USER_AUTH: "api/onboarding",
     ADHAAR_VERIFY: "verification/aadhaar-validate",
+    PAN_VERIFY: "verification/pan-validate",
+    AADHAAR_PAN_LINK: "verification/aadhaar-pan-link",
   },
   MASTER: {
     PRODUCTS: "api/products",

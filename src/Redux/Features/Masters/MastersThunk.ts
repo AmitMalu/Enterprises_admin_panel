@@ -376,7 +376,7 @@ export const AdhaarValidationApi = createAsyncThunk(
   "masters/Adhaarvalidation",
   async ({ aadhaarNumber }: { aadhaarNumber: string }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(
+      const response = await axiosInstance.post(
         `${API_ENDPOINTS.MANAGEMENT.ADHAAR_VERIFY}?aadhaarNumber=${aadhaarNumber}`
       );
 
@@ -392,6 +392,60 @@ export const AdhaarValidationApi = createAsyncThunk(
         error.response?.data?.message ||
           error.message ||
           "Error in Aadhaar verification"
+      );
+    }
+  }
+);
+
+export const PanValidationApi = createAsyncThunk(
+  "masters/PanValidationApi",
+  async ({ panNumber }: { panNumber: string }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.MANAGEMENT.PAN_VERIFY}?panNumber=${panNumber}`
+      );
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(
+          responseData?.message || "Failed to Verify Pancard Number"
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error in Pancard Number verification"
+      );
+    }
+  }
+);
+
+export const AdhaarPanLinkApi = createAsyncThunk(
+  "masters/AdhaarPanLinkApi",
+  async ({ aadhaarNumber }: { aadhaarNumber: string }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.MANAGEMENT.AADHAAR_PAN_LINK}?aadhaarNumber=${aadhaarNumber}`
+      );
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(
+          responseData?.message || "Failed to Verify Aadhaar Pan Link"
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error in Aadhaar Pan Link verification"
       );
     }
   }

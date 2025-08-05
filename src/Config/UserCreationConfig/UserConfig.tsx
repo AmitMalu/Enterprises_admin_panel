@@ -42,7 +42,8 @@ export const userTypeSelectorOptions = [
 
 export type UploadDocumentsFormProps = {
   formik: FormikProps<any>;
-  onAadhaarVerify?: (formik: FormikProps<any>) => void; // or define the correct type if it takes arguments
+  onAadhaarVerify?: (formik: FormikProps<any>) => void;
+  onPanVerify?: (formik: FormikProps<any>) => void;
 };
 
 export const UserConfig: Record<
@@ -55,6 +56,7 @@ export const UserConfig: Record<
       formik: FormikProps<any>,
       handlers?: {
         onAadhaarVerify?: (formik: FormikProps<any>) => void;
+        onPanVerify?: (formik: FormikProps<any>) => void;
       }
     ) => JSX.Element | null;
   }
@@ -91,9 +93,11 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
-        "isAdhaarVerified",
+        "aadhaarNumber",
+        "isAadhaarVerified",
+        "aadhaarPanVerified",
         "panNumber",
+        "panVerified",
         "shopNumber",
         "businessProof",
         "businessNumber",
@@ -110,7 +114,11 @@ export const UserConfig: Record<
         case 3:
           return <distributorForm.BankDetails formik={formik} />;
         case 4:
-          return <distributorForm.UploadDocuments formik={formik} onAadhaarVerify={handlers?.onAadhaarVerify} />;
+          return <distributorForm.UploadDocuments
+            formik={formik}
+            onAadhaarVerify={handlers?.onAadhaarVerify}
+            onPanVerify={handlers?.onPanVerify}
+          />;
         default:
           return null;
       }
@@ -148,7 +156,7 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
         "panNumber",
         "shopNumber",
         "businessProof",
@@ -204,7 +212,7 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
         "panNumber",
         "shopNumber",
         "businessProof",
@@ -260,7 +268,7 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
         "panNumber",
         "shopNumber",
         "businessProof",
@@ -325,7 +333,7 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
         "panNumber",
         "shopNumber",
         "businessProof",
@@ -389,7 +397,7 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
         "panNumber",
         "shopNumber",
         "businessProof",
