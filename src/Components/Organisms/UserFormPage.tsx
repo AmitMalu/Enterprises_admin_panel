@@ -21,6 +21,7 @@ import FormSuccessModel from "../Atoms/FormSuccessModel";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
 import { AdhaarPanLinkApi, AdhaarValidationApi, PanValidationApi } from "../../Redux/Features/Masters/MastersThunk";
+import { toast } from "react-toastify";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
@@ -82,6 +83,7 @@ const UserFormPage = () => {
       } catch (error) {
         // PAN API failed – Aadhaar verification fails too ❌
         console.error("Aadhaar-PAN link check failed:", error);
+        toast.error("Aadhaar-PAN link check failed. Please try again.");
         formik.setFieldValue("aadhaarPanVerified", false);
         formik.setFieldValue("isAadhaarVerified", false);
         formik.setFieldError("aadhaarNumber", "Aadhaar-PAN link check failed");

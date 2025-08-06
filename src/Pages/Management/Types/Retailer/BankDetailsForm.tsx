@@ -48,9 +48,9 @@ const BankDetailsForm = ({ }: { formik: FormikProps<any> }) => {
 
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
-            name="branchName"
-            label="Bank Branch Name"
-            placeholder="Enter Your Bank branch Name"
+            name="bankHolderName"
+            label="Bank Holder Name"
+            placeholder="Enter Bank Holder Name"
             withAsterisk
             maxLength={50}
           />

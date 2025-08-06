@@ -49,6 +49,7 @@ export const masterInitialValues = {
   // Bank Info
   bankName: "",
   accountNumber: "",
+  bankHolderName: "",
   ifsc: "",
   branchName: "",
   websiteURL: "", // Enterprise-specific
@@ -63,6 +64,8 @@ export const masterInitialValues = {
   aadhaarNumber: "",
   isAadhaarVerified: false,
   aadhaarPanVerified: false,
+  lastVerifiedAadhaar: null, //field to track last verified Aadhaar number
+  lastVerifiedPan: null, // field to track last verified PAN number
   panNumber: "",
   panVerified: false,
   shopNumber: "",
@@ -115,6 +118,7 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   accountNumber: accountNumberValidation,
   ifsc: ifscValidation,
   branchName: textField("Branch Name", 50, true, true),
+  bankHolderName: textField("Bank Holder Name", 100, true),
   websiteURL: websiteValidation,
   businessDesc: textField("Business Description", 500, true, true),
 
@@ -134,7 +138,7 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
     .required("Aadhaar Number is required")
     .test(
       "aadhaar-verified",
-      "AadhaarVerification is required",
+      "Aadhaar Verification is required",
       function (value) {
         const { isAadhaarVerified } = this.parent;
         return !value || value.length !== 12 || isAadhaarVerified === true;
@@ -142,6 +146,8 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
     ),
   isAadhaarVerified: Yup.boolean(),
   aadhaarPanVerified: Yup.boolean(),
+  lastVerifiedAadhaar: Yup.string().nullable(), // or stricter version
+  lastVerifiedPan: Yup.string().nullable(),
   panNumber: Yup.string()
     .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, "Invalid PAN number format")
     .max(10, "PAN number must be exactly 10 characters")
@@ -283,12 +289,20 @@ export function transformUserCreationPayload(
     zipCode: values.outletZipcode || "",
   };
 
-  const bankDetails = {
-    bankName: values.bankName || "",
-    bankAccountNumber: values.accountNumber || "",
-    ifscCode: values.ifsc || "",
-    branchName: values.branchName || "",
-  };
+  const bankDetails =
+    userType === "retailer"
+      ? {
+          bankName: values.bankName || "",
+          bankAccountNumber: values.accountNumber || "",
+          ifscCode: values.ifsc || "",
+          bankHolderName: values.bankHolderName || "",
+        }
+      : {
+          bankName: values.bankName || "",
+          bankAccountNumber: values.accountNumber || "",
+          ifscCode: values.ifsc || "",
+          branchName: values.branchName || "",
+        };
 
   switch (userType) {
     case "partner":
