@@ -1,13 +1,11 @@
 import * as Yup from "yup";
 import {
-  aadhaarValidation,
   accountNumberValidation,
   dobValidation,
   emailValidation,
   fileValidation,
   ifscValidation,
   mobileValidation,
-  panValidation,
   passwordValidation,
   prefixValidation,
   textField,

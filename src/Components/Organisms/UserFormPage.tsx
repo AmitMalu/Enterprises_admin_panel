@@ -95,19 +95,6 @@ const UserFormPage = () => {
     }
   };
 
-  const handleAadhaarPanLink = async (aadhaarNumber: string, formik: FormikProps<any>) => {
-    try {
-      const panLinkRes = await dispatch(AdhaarPanLinkApi({ aadhaarNumber })).unwrap();
-      const isPanApiSuccess = panLinkRes?.status_code === 200;
-      const isLinked = isPanApiSuccess && panLinkRes?.data?.linking_status === true;
-
-      formik.setFieldValue("aadhaarPanVerified", isLinked);
-    } catch (error) {
-      console.error("Aadhaar-PAN link check failed:", error);
-      formik.setFieldValue("aadhaarPanVerified", false);
-    }
-  };
-
   const handlePanVerify = async (formik: FormikProps<any>) => {
     const { panNumber } = formik.values;
 
