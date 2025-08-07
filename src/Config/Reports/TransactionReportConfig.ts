@@ -27,7 +27,10 @@ export interface TransactionReportTableType {
 }
 
 export const initialValues = {
-  dateRange: [null, null] as DatesRangeValue,
+  dateRange: [
+    moment().subtract(6, "days").toDate(), // from: 6 days ago
+    moment().toDate(), // to: today
+  ] as DatesRangeValue,
   subProduct: "",
   hierarchy: "",
   subHierarchy: "",

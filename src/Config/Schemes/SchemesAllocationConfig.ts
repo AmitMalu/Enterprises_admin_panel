@@ -6,6 +6,7 @@ export const SCHEMES_ALLOCATION_URL = "/api/scheme-allocation";
 export interface SubProductWithScheme {
   subProductName: string;
   schemeName: string;
+  subProductCode : string;
 }
 
 export interface SchemeOption {

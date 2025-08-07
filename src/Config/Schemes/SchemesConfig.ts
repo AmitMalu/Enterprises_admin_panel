@@ -108,6 +108,7 @@ export interface SchemeDetails {
   tdsRate: number | string;
   schemeName: string;
   schemeCode: string;
+  productName : string;
   operators: OperatorSlabData[];
 }
 export interface SlabPayload {
@@ -211,8 +212,8 @@ export const makeBlankSlab = (
 ): SlabStructureTableType => {
   const blankRow: SlabStructureTableType = {
     id: `new-${Date.now()}`, // Easier to recognize in the payload
-    slabStart: "",
-    slabEnd: "",
+    slabStart: "0",
+    slabEnd: "0",
     rateType: "FLAT", // default
     gross: "0",
     im: "0",
@@ -225,7 +226,7 @@ export const makeBlankSlab = (
       return; // already set above
     }
 
-    blankRow[keyStr] = ""; // default for dynamic fields
+    blankRow[keyStr] = "0"; // default for dynamic fields
   });
 
   return blankRow;

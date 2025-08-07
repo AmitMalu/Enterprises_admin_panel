@@ -17,7 +17,7 @@ const SchemesList = () => {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(SelectSchemesMeta(SCHEMES_KEY));
   const pagination = meta?.pagination || {
-    pageSize: 5,
+    pageSize: 10,
     currentPage: 1,
     totalPages: 0,
     totalElements: 0,

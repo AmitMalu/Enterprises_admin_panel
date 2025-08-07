@@ -20,7 +20,7 @@ export interface FetchFundingByIdParams {
 export const fetchFundingList = createAsyncThunk(
   "fundings/fetchFundingList",
   async (
-    { key, url, page = 1, size = 5, filter }: FetchFundingListParams,
+    { key, url, page = 1, size = 10, filter }: FetchFundingListParams,
     { rejectWithValue, dispatch }
   ) => {
     try {

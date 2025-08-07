@@ -31,7 +31,7 @@ const getDefaultMeta = (): MasterMeta => ({
   pagination: {
     totalPages: 0,
     totalElements: 0,
-    pageSize: 5,
+    pageSize: 10,
     currentPage: 1,
   },
 });

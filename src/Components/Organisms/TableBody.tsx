@@ -1,4 +1,4 @@
-import { Table, Tooltip } from "@mantine/core";
+import { Table } from "@mantine/core";
 import { booleanSelectData2, ellipsisCellStyle, formatDateTime, GenericTableHeader } from "../../Utils/utils";
 import SelectComponent from "../Atoms/SelectComponent";
 import moment from "moment";
@@ -8,6 +8,7 @@ import { AddIconButton } from "../../assets/Icons";
 import { calculateCommission } from "../../Config/Schemes/SchemesConfig";
 import React from "react";
 import TableStatusBadge from "../Molecules/TableStatusBadge";
+import { EllipsisPopoverCell } from "../Molecules/EllipsisPopoverCell";
 
 const TableBody = <T,>({
   data,
@@ -49,7 +50,7 @@ const TableBody = <T,>({
             {renderExtraRowCell && (
               <Table.Td>{renderExtraRowCell(item, index)}</Table.Td>
             )}
-            {headers.map(({ key, renderType, filterType, filterOptions }) => {
+            {headers.map(({ key, renderType, filterType, filterOptions, copyable }) => {
               const cellData = item[key];
               const isEmpty =
                 cellData === undefined || cellData === null || cellData === "";
@@ -127,36 +128,25 @@ const TableBody = <T,>({
                   {isEmpty ? (
                     displayValue
                   ) : renderType === "link" && typeof cellData === "string" ? (
-                    <a
-                      href={cellData}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      <Tooltip label={displayValue} withArrow>
-                        <span>{displayValue}</span>
-                      </Tooltip>
-                    </a>
+                    <EllipsisPopoverCell
+                      value={displayValue}
+                      renderAsLink
+                      linkUrl={cellData}
+                      showCopy={copyable}
+                    />
                   ) : renderType === "statusBadge" ? (
                     <TableStatusBadge status={String(cellData)} />
                   ) : (
-                    <Tooltip
-                      position="top-start"
-                      offset={{ mainAxis: -2, crossAxis: 50 }}
-                      style={{ fontSize: "12px" }}
-                      label={
-                        key === "createdOn" || key === "editedOn" || key === "createdAt"
+                    (() => {
+                      const finalValue =
+                        key === "createdOn" || key === "editedOn" || key === "createdAt" || key === "requestDateTime" || key === "responseDateTime"
                           ? formatDateTime(displayValue)
-                          : displayValue
-                      }
-                      withArrow
-                    >
-                      <span>
-                        {key === "createdOn" || key === "editedOn" || key === "createdAt"
-                          ? formatDateTime(displayValue)
-                          : displayValue}
-                      </span>
-                    </Tooltip>
+                          : displayValue;
+
+                      return (
+                        <EllipsisPopoverCell value={finalValue} showCopy={copyable} />
+                      );
+                    })()
                   )}
                 </Table.Td>
               );
@@ -203,11 +193,14 @@ const TableBody = <T,>({
             colSpan={headers.length + (renderExtraRowCell ? 1 : 0)}
           >
             <div
-              className="flex items-center justify-center cursor-pointer p-2"
-              onClick={onAddRow}
+              className="flex items-center justify-center p-2"
             >
-              <AddIconButton
-              />
+              <span
+                className="cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-95 hover:text-green-600"
+                onClick={onAddRow}
+              >
+                <AddIconButton />
+              </span>
             </div>
           </Table.Td>
         </Table.Tr>

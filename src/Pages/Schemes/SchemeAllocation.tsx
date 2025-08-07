@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { makeSelectMasterMeta, resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
-import { headers, SCHEMES_ALLOCATION_KEY, SchemesAllocationTableType } from "../../Config/Schemes/SchemesAllocationConfig";
+import { headers, SCHEMES_ALLOCATION_KEY, SCHEMES_ALLOCATION_URL, SchemesAllocationTableType } from "../../Config/Schemes/SchemesAllocationConfig";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
@@ -19,7 +19,7 @@ const SchemeAllocation = () => {
     const dispatch = useAppDispatch();
     const meta = useAppSelector(makeSelectMasterMeta(SCHEMES_ALLOCATION_KEY));
     const pagination = meta?.pagination || {
-        pageSize: 5,
+        pageSize: 10,
         currentPage: 1,
         totalPages: 0,
         totalElements: 0,
@@ -115,10 +115,10 @@ const SchemeAllocation = () => {
                 const response = await dispatch(
                     fetchMasterList({
                         key: SCHEMES_ALLOCATION_KEY,
-                        url: `api/user/search-retailers`,
+                        url: `${SCHEMES_ALLOCATION_URL}/active-retailers`,
                         page: currentPage,
                         size: pageSize,
-                        filter: { key: "keyword", value: debouncedSearchValue },
+                        filter: { keyword: debouncedSearchValue },
                     })
                 ).unwrap();
 

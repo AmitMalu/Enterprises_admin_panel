@@ -7,30 +7,32 @@ import { useCallback, useEffect, useState } from "react";
 import { fetchMasterList } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 
-type FilterType = { key: string; value: any } | null;
+type FilterType = Record<string, any> | null;
 
 interface UseMasterListProps<T> {
   key: string;
   url: string;
   transformDataFn?: (item: any) => T;
-  filter: FilterType;
-  refreshKey: number;
+  filter?: FilterType;
+  refreshKey?: number;
   method?: "GET" | "POST";
+  defaultPageSize?: number;
 }
 
 export function useFetchMasterList<T>({
   key,
   url,
   transformDataFn,
-  filter,
+  filter = null,
   refreshKey,
   method = "GET",
+  defaultPageSize,
 }: UseMasterListProps<T>) {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(makeSelectMasterMeta(key));
 
   const pagination = meta?.pagination || {
-    pageSize: 5,
+    pageSize: defaultPageSize || 10,
     currentPage: 1,
     totalPages: 0,
     totalElements: 0,
@@ -65,6 +67,11 @@ export function useFetchMasterList<T>({
   };
 
   const fetchData = useCallback(async () => {
+    if (!url) {
+      //Skip fetch if URL is empty (e.g., on initial load)
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -95,7 +102,7 @@ export function useFetchMasterList<T>({
     url,
     pagination.currentPage,
     pagination.pageSize,
-    filter,
+    JSON.stringify(filter),
     refreshKey,
   ]);
 

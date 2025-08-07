@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
@@ -15,13 +14,14 @@ import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMaster
 import { OperatorSlabData } from "../../Config/Schemes/SchemesConfig";
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import VerticalKeyValueTable from "../../Components/Organisms/VerticalKeyValueTable";
+import BackHeader from "../../Components/Molecules/BackHeader";
 
 const SchemeSettingsPage = () => {
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation();
-  const { schemeCode, schemeName } = location.state || {};
+  const { schemeCode } = location.state || {};
 
   const [activeTab, setActiveTab] = useState<"slab" | "product">("slab");
   const [schemeDetails, setSchemeDetails] = useState<SchemeDetails | null>(null);
@@ -161,7 +161,7 @@ const SchemeSettingsPage = () => {
       return;
     }
 
-    const payload = buildSlabPayload(schemeCode, schemeName, currentOperators);
+    const payload = buildSlabPayload(schemeCode, schemeDetails?.schemeName || "", currentOperators);
 
     handleSubmit(payload);
   }
@@ -204,6 +204,41 @@ const SchemeSettingsPage = () => {
     setUpdatedOperators(updatedDiff);
   };
 
+  const handleRemoveRow = (operatorCode: string, slabId: string | number) => {
+    console.log(operatorCode, slabId, "remove row called");
+
+    // 1. Remove from UI copy
+    setEditableRows((prev) =>
+      prev.map((op) =>
+        op.operatorCode !== operatorCode
+          ? op
+          : {
+            ...op,
+            slabs: op.slabs.filter((slab) => slab.id !== slabId),
+          }
+      )
+    );
+
+    // 2. Remove from updatedOperators (diff state)
+    setUpdatedOperators((prev) => {
+      const opIndex = prev.findIndex((op) => op.operatorCode === operatorCode);
+      if (opIndex === -1) return prev;
+
+      const op = { ...prev[opIndex] };
+      op.slabs = op.slabs.filter((slab) => slab.id !== slabId);
+
+      const next = [...prev];
+      if (op.slabs.length === 0) {
+        next.splice(opIndex, 1);
+      } else {
+        next[opIndex] = op;
+      }
+
+      return next;
+    });
+  };
+
+
   useEffect(() => {
     updatedOperatorsRef.current = updatedOperators;
   }, [updatedOperators]);
@@ -211,6 +246,13 @@ const SchemeSettingsPage = () => {
   useEffect(() => {
     isSchemeActiveRef.current = isSchemeActive;
   }, [isSchemeActive]);
+
+  useEffect(() => {
+    // If user reloads or lands on this page directly without state
+    if (!schemeCode) {
+      navigate("/schemes/schemeslist", { replace: true });
+    }
+  }, [schemeCode, navigate]);
 
   useEffect(() => {
     if (!schemeCode) return;
@@ -277,27 +319,30 @@ const SchemeSettingsPage = () => {
       <div className="flex justify-between">
         <div>
           {/* Heading */}
-          <TextComponent
-            color="#1D1F2C"
-            fontFamily="Inter"
-            fontWeight={600}
-            fontSize={22}
-          >
-            {schemeName ? schemeName : "Scheme Name"}
-          </TextComponent>
+
+          <BackHeader
+            title={loadingScheme ? "Loading..." : schemeDetails?.schemeName || "-"}
+            backPath="/schemes/schemeslist"
+          />
 
           {/*Sub Heading */}
           <div className="mt-2">
             <BreadCrumb
-              type={schemeCode ? schemeCode : "Scheme Code"}
-              text="PG"
+              type={schemeCode ? schemeCode : "-"}
+              text={loadingScheme ? "Loading..." : schemeDetails?.productName || "-"}
             />
           </div>
         </div>
 
         {/* Button */}
         <div className="flex items-end">
-          <Tooltip label={isSchemeActive ? "Click to Deactivate Scheme" : "Click to Activate Scheme"}>
+          <Tooltip label={
+            updatedOperators.length !== 0
+              ? "Please save your changes before toggling scheme status"
+              : isSchemeActive
+                ? "Click to Deactivate Scheme"
+                : "Click to Activate Scheme"
+          }>
             <ButtonComponent
               style={{ padding: "5px 10px", height: 40 }}
               radius={8}
@@ -307,7 +352,7 @@ const SchemeSettingsPage = () => {
               bgColor={isSchemeActive ? "#BF0204" : "#28a745"}
               fontSize="14"
               leftIcon={isSchemeActive ? <DeactivateIcon /> : null}
-              disabled={!!loadingScheme}
+              disabled={!!loadingScheme || updatedOperators.length !== 0}
             >
               {isSchemeActive ? "Deactivate" : "Activate"}
             </ButtonComponent>
@@ -358,6 +403,7 @@ const SchemeSettingsPage = () => {
                 onDataChange={handleRowChange}
                 showAddRow={!isSchemeActive}
                 onAddRow={handleAddRow}
+                handleRemoveRow={handleRemoveRow}
                 isSchemeActive={!isSchemeActive}
               />
             </Tabs.Panel>

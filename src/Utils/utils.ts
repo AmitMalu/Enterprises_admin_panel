@@ -140,7 +140,8 @@ export const pubPvtSelectData = [
 export const pageSizeSelectData = [
   { label: "5", value: "5" },
   { label: "10", value: "10" },
-  { label: "15", value: "15" },
+  { label: "20", value: "20" },
+  { label: "50", value: "50" },
 ];
 
 export type GenericTableHeader<T> = {
@@ -151,6 +152,7 @@ export type GenericTableHeader<T> = {
   searchable?: boolean; // optionally override with this
   renderType?: "link" | "custom" | "statusBadge"; //
   showCalculatedBelow?: boolean;
+  copyable?: boolean;
 };
 
 export function exportToCsv<T extends Record<string, any>>(

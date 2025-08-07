@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import Logs from "../Pages/Logs/Logs";
+import Logs from "../Pages/ReportLogs/Logs";
 
 export const LogsRoute = (
   <>

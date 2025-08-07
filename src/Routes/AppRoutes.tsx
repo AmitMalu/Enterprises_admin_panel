@@ -16,6 +16,7 @@ import { MyAccountRoutes } from "./MyAccountRoutes";
 import { NotFoundRoute } from "./NotFoundRoute";
 import { LogsRoute } from "./LogsRoute";
 import FullPageLoader from "../Components/Layout/FullPageLoader";
+import TestComponent from "../Pages/TestComponent";
 // import { ChangePassword } from "../Pages/Auth";
 // import { Profile } from "../Pages/Account";
 // import HomePage from "../Pages/Dashboard/HomePage";
@@ -24,7 +25,6 @@ import FullPageLoader from "../Components/Layout/FullPageLoader";
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
 const Profile = lazy(() => import("../Pages/Account/Profile"));
 const ChangePassword = lazy(() => import("../Pages/Auth/ChangePassword"));
-const TestComponent = lazy(() => import("../Pages/TestComponent"));
 
 const AppRoutes = () => {
   return (

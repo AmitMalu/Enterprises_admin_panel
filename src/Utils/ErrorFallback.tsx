@@ -1,5 +1,4 @@
 import { IconAlertTriangle } from "@tabler/icons-react";
-import { useEffect } from "react";
 import { FallbackProps } from "react-error-boundary";
 
 export default function ErrorFallback({
@@ -19,27 +18,6 @@ export default function ErrorFallback({
       resetErrorBoundary(); // fallback to standard error recovery
     }
   };
-
-  useEffect(() => {
-    if (isChunkLoadError) {
-      const alreadyTriedReload = sessionStorage.getItem("chunk_reload_attempted");
-
-      if (!alreadyTriedReload) {
-        sessionStorage.setItem("chunk_reload_attempted", "true");
-        window.location.reload();
-      } else {
-        // Avoid infinite reload loop
-        console.warn("Chunk load failed again. Not reloading to prevent loop.");
-      }
-    }
-  }, [isChunkLoadError]);
-
-  // Clear reload flag when component unmounts
-  useEffect(() => {
-    return () => {
-      sessionStorage.removeItem("chunk_reload_attempted");
-    };
-  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">

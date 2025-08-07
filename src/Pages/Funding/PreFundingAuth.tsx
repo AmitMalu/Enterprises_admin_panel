@@ -26,7 +26,7 @@ const PreFundingAuth = () => {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(SelectFundingMeta(FUNDING_KEY));
   const pagination = meta?.pagination || {
-    pageSize: 5,
+    pageSize: 10,
     currentPage: 1,
     totalPages: 0,
     totalElements: 0,
