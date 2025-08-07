@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { EditIcon } from "../../assets/Icons";
 import { useAppDispatch } from "../../Redux/hooks";
-import { resetSingleSchemesData, setPagination } from "../../Redux/Features/Schemes/slice";
+// import { resetSingleSchemesData, setPagination } from "../../Redux/Features/Schemes/slice";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
@@ -11,6 +11,7 @@ import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { headers, mapToSchemeHierarchyTableType, SCHEMES_HIERARCHY_KEY, SCHEMES_HIERARCHY_URL, SchemesHierarchyTableType } from "../../Config/Schemes/SchemesHierarchyConfig";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { useNavigate } from "react-router-dom";
+import { resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
 
 const SchemeHierarchy = () => {
     const dispatch = useAppDispatch();
@@ -76,7 +77,7 @@ const SchemeHierarchy = () => {
     };
 
     const handleRefresh = () => {
-        dispatch(resetSingleSchemesData(SCHEMES_HIERARCHY_KEY));
+        dispatch(resetMaster(SCHEMES_HIERARCHY_KEY));
         setFilterValues({});
         setSubmittedFilter(null);
         setVisibleColumns(headers.map((h) => h.key as string));

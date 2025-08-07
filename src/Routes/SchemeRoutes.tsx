@@ -13,6 +13,7 @@ import {
 } from "../Pages/Schemes";
 import SchemesFormPage from "../Components/Organisms/SchemesFormPage";
 import SchemeHierarchyForm from "../Components/Organisms/SchemeHierarchyForm";
+import TransactionLimitForm from "../Components/Organisms/TransactionLimitForm";
 
 export const SchemesRoutes = (
   <>
@@ -40,6 +41,14 @@ export const SchemesRoutes = (
     <Route
       path="/schemes/transaction-limit"
       element={<TransactionLimitSetting />}
+    />
+    <Route
+      path="/schemes/transaction-limit/:id"
+      element={<TransactionLimitForm mode="edit" />}
+    />
+    <Route
+      path="/schemes/transaction-limit/add"
+      element={<TransactionLimitForm mode="add" />}
     />
     <Route path="/schemes/service-charge" element={<ServiceChargeSetting />} />
   </>

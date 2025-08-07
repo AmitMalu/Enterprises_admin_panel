@@ -127,11 +127,11 @@ export const sidebarData = [
         link: "/schemes/allocation",
         icon: schemesSvg,
       },
-      {
-        label: "Transaction Routing",
-        link: "/schemes/transaction-routing",
-        icon: schemesSvg,
-      },
+      // {
+      //   label: "Transaction Routing",
+      //   link: "/schemes/transaction-routing",
+      //   icon: schemesSvg,
+      // },
       {
         label: "Transaction Limit Settings",
         link: "/schemes/transaction-limit",
