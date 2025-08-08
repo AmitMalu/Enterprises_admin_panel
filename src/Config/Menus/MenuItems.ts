@@ -398,11 +398,11 @@ export const sidebarData = [
         link: "/support/ticket-management",
         icon: SupportIcon,
       },
-      {
-        label: "Contact Us",
-        link: "/support/contact-us",
-        icon: SupportIcon,
-      },
+      // {
+      //   label: "Contact Us",
+      //   link: "/support/contact-us",
+      //   icon: SupportIcon,
+      // },
     ],
   },
   {

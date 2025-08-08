@@ -91,7 +91,8 @@ export const dobValidation = Yup.string()
 
 // Aadhaar Number: 12 digits only
 export const aadhaarValidation = Yup.string()
-  .matches(/^\d{12}$/, "Aadhaar must be 12 digits")
+  .trim()
+  .matches(/^\d{12}$/, "Aadhaar must be exactly 12 digits")
   .required("Aadhaar Number is required");
 
 // PAN Card Number: 10 characters (e.g., ABCDE1234F)

@@ -40,6 +40,12 @@ export const userTypeSelectorOptions = [
   { label: "Distributor", icon: <DistributorLogoSvg />, type: "distributor" },
 ];
 
+export type UploadDocumentsFormProps = {
+  formik: FormikProps<any>;
+  onAadhaarVerify?: (formik: FormikProps<any>) => void;
+  onPanVerify?: (formik: FormikProps<any>) => void;
+};
+
 export const UserConfig: Record<
   UserType,
   {
@@ -47,7 +53,11 @@ export const UserConfig: Record<
     stepFieldMap: FieldNames[][];
     renderStepForm: (
       step: number,
-      formik: FormikProps<any>
+      formik: FormikProps<any>,
+      handlers?: {
+        onAadhaarVerify?: (formik: FormikProps<any>) => void;
+        onPanVerify?: (formik: FormikProps<any>) => void;
+      }
     ) => JSX.Element | null;
   }
 > = {
@@ -83,14 +93,17 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
+        "isAadhaarVerified",
+        "aadhaarPanVerified",
+        "panVerified",
         "panNumber",
         "shopNumber",
         "businessProof",
         "businessNumber",
       ], // Step 4
     ],
-    renderStepForm: (step, formik) => {
+    renderStepForm: (step, formik, handlers) => {
       switch (step) {
         case 0:
           return <distributorForm.PersonalDetails formik={formik} />;
@@ -101,7 +114,11 @@ export const UserConfig: Record<
         case 3:
           return <distributorForm.BankDetails formik={formik} />;
         case 4:
-          return <distributorForm.UploadDocuments formik={formik} />;
+          return <distributorForm.UploadDocuments
+            formik={formik}
+            onAadhaarVerify={handlers?.onAadhaarVerify}
+            onPanVerify={handlers?.onPanVerify}
+          />;
         default:
           return null;
       }
@@ -139,14 +156,17 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
+        "isAadhaarVerified",
+        "aadhaarPanVerified",
+        "panVerified",
         "panNumber",
         "shopNumber",
         "businessProof",
         "businessNumber",
       ], // Step 4
     ],
-    renderStepForm: (step, formik) => {
+    renderStepForm: (step, formik, handlers) => {
       switch (step) {
         case 0:
           return <partnerForm.PersonalDetails formik={formik} />;
@@ -157,7 +177,11 @@ export const UserConfig: Record<
         case 3:
           return <partnerForm.BankDetails formik={formik} />;
         case 4:
-          return <partnerForm.UploadDocuments formik={formik} />;
+          return <partnerForm.UploadDocuments
+            formik={formik}
+            onAadhaarVerify={handlers?.onAadhaarVerify}
+            onPanVerify={handlers?.onPanVerify}
+          />;
         default:
           return null;
       }
@@ -189,20 +213,23 @@ export const UserConfig: Record<
         "outletState",
         "outletZipcode",
       ], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
+      ["bankName", "accountNumber", "ifsc", "bankHolderName"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
+        "isAadhaarVerified",
+        "aadhaarPanVerified",
+        "panVerified",
         "panNumber",
         "shopNumber",
         "businessProof",
         "businessNumber",
       ], // Step 4
     ],
-    renderStepForm: (step, formik) => {
+    renderStepForm: (step, formik, handlers) => {
       switch (step) {
         case 0:
           return <retailerForm.PersonalDetails formik={formik} />;
@@ -213,7 +240,11 @@ export const UserConfig: Record<
         case 3:
           return <retailerForm.BankDetails formik={formik} />;
         case 4:
-          return <retailerForm.UploadDocuments formik={formik} />;
+          return <retailerForm.UploadDocuments
+            formik={formik}
+            onAadhaarVerify={handlers?.onAadhaarVerify}
+            onPanVerify={handlers?.onPanVerify}
+          />;
         default:
           return null;
       }
@@ -251,14 +282,17 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
+        "isAadhaarVerified",
+        "aadhaarPanVerified",
+        "panVerified",
         "panNumber",
         "shopNumber",
         "businessProof",
         "businessNumber",
       ], // Step 4
     ],
-    renderStepForm: (step, formik) => {
+    renderStepForm: (step, formik, handlers) => {
       switch (step) {
         case 0:
           return <superDistributorForm.PersonalDetails formik={formik} />;
@@ -269,7 +303,10 @@ export const UserConfig: Record<
         case 3:
           return <superDistributorForm.BankDetails formik={formik} />;
         case 4:
-          return <superDistributorForm.UploadDocuments formik={formik} />;
+          return <superDistributorForm.UploadDocuments formik={formik}
+            onAadhaarVerify={handlers?.onAadhaarVerify}
+            onPanVerify={handlers?.onPanVerify}
+          />;;
         default:
           return null;
       }
@@ -316,14 +353,17 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
+        "isAadhaarVerified",
+        "aadhaarPanVerified",
+        "panVerified",
         "panNumber",
         "shopNumber",
         "businessProof",
         "businessNumber",
       ], // Step 4
     ],
-    renderStepForm: (step, formik) => {
+    renderStepForm: (step, formik, handlers) => {
       switch (step) {
         case 0:
           return <whiteLabelForm.PersonalDetails formik={formik} />;
@@ -334,7 +374,10 @@ export const UserConfig: Record<
         case 3:
           return <whiteLabelForm.BankDetails formik={formik} />;
         case 4:
-          return <whiteLabelForm.UploadDocuments formik={formik} />;
+          return <whiteLabelForm.UploadDocuments formik={formik}
+            onAadhaarVerify={handlers?.onAadhaarVerify}
+            onPanVerify={handlers?.onPanVerify}
+          />;;
         default:
           return null;
       }
@@ -380,14 +423,17 @@ export const UserConfig: Record<
         "adhaarBack",
         "pancardPhoto",
         "shopPhoto",
-        "adhaarNumber",
+        "aadhaarNumber",
+        "isAadhaarVerified",
+        "aadhaarPanVerified",
+        "panVerified",
         "panNumber",
         "shopNumber",
         "businessProof",
         "businessNumber",
       ], // Step 4
     ],
-    renderStepForm: (step, formik) => {
+    renderStepForm: (step, formik, handlers) => {
       switch (step) {
         case 0:
           return <enterpriseForm.PersonalDetails formik={formik} />;
@@ -398,7 +444,10 @@ export const UserConfig: Record<
         case 3:
           return <enterpriseForm.BankDetails formik={formik} />;
         case 4:
-          return <enterpriseForm.UploadDocuments formik={formik} />;
+          return <enterpriseForm.UploadDocuments formik={formik}
+            onAadhaarVerify={handlers?.onAadhaarVerify}
+            onPanVerify={handlers?.onPanVerify}
+          />;
         default:
           return null;
       }
