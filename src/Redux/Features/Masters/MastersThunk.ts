@@ -11,6 +11,7 @@ type FetchMasterListParams = {
   size?: number;
   filter?: Record<string, any> | null;
   method?: "GET" | "POST";
+  payload?: any;
 };
 
 interface CreateMasterParams<T> {
@@ -46,6 +47,7 @@ export const fetchMasterList = createAsyncThunk(
       size = 10,
       filter = null,
       method = "GET",
+      payload = null,
     }: FetchMasterListParams,
     { rejectWithValue, dispatch }
   ) => {
@@ -67,10 +69,12 @@ export const fetchMasterList = createAsyncThunk(
       const finalUrl = `${url}${connector}${params.toString()}`;
 
       let response;
-      if (method === "POST") {
+      if (method === "POST" && payload) {
+        response = await axiosInstance.post(finalUrl, payload || {});
+      } else if (method === "POST" && !payload) {
         response = await axiosInstance.post(finalUrl);
       } else {
-        response = await axiosInstance.get(finalUrl); // Default to GET
+        response = await axiosInstance.get(finalUrl);
       }
 
       const responseData = response?.data;

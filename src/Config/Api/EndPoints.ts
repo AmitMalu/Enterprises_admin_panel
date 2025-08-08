@@ -37,6 +37,7 @@ export const API_ENDPOINTS = {
   },
   FUNDING: {
     PREFUNDING: "api/prefund",
+    SETTLEMENT : "api/settlement",
   },
   SCHEMES: {
     SCHEME_LIST: "api/scheme",

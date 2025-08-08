@@ -11,12 +11,14 @@ type FilterType = Record<string, any> | null;
 
 interface UseMasterListProps<T> {
   key: string;
-  url: string;
+  url?: string;
   transformDataFn?: (item: any) => T;
   filter?: FilterType;
   refreshKey?: number;
   method?: "GET" | "POST";
   defaultPageSize?: number;
+  payload?: any;
+  autoFetch?: boolean;
 }
 
 export function useFetchMasterList<T>({
@@ -27,6 +29,8 @@ export function useFetchMasterList<T>({
   refreshKey,
   method = "GET",
   defaultPageSize,
+  payload = null,
+  // autoFetch = true,
 }: UseMasterListProps<T>) {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(makeSelectMasterMeta(key));
@@ -84,6 +88,7 @@ export function useFetchMasterList<T>({
           size: pagination.pageSize,
           filter,
           method,
+          payload,
         })
       ).unwrap();
 
