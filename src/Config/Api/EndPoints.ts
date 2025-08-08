@@ -41,6 +41,7 @@ export const API_ENDPOINTS = {
   SCHEMES: {
     SCHEME_LIST: "api/scheme",
     SCHEME_RATE: "api/scheme-rate",
+    TRANSACTION_LIMIT: "api/product-transaction-limit",
   },
   SUPPORT: {
     TICKET: "api/ticket",
