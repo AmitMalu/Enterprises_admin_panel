@@ -237,9 +237,9 @@ export const handleMasterFormSubmit = async <T>({
   try {
     const rawPayload =
       mode === "edit" && typeof transformUpdatePayload === "function"
-        ? transformUpdatePayload(values)
+        ? await transformUpdatePayload(values)
         : mode === "add" && typeof transformCreatePayload === "function"
-        ? transformCreatePayload(values)
+        ? await transformCreatePayload(values)
         : values;
 
     const payload = useFormData

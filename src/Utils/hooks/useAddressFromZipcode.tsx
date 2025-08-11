@@ -68,7 +68,7 @@ export const useAddressFromZipcode = (zipcode: string) => {
             }
         };
 
-        if (zipcode.length === 6 && zipcode !== lastFetchedZipRef.current) {
+        if (zipcode?.length === 6 && zipcode !== lastFetchedZipRef.current) {
             fetchAddressFromZipcode();
         } else {
             setLocation({

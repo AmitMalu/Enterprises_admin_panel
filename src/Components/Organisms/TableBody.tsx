@@ -139,7 +139,7 @@ const TableBody = <T,>({
                   ) : (
                     (() => {
                       const finalValue =
-                        key === "createdOn" || key === "editedOn" || key === "createdAt" || key === "requestDateTime" || key === "responseDateTime"
+                        key === "createdOn" || key === "editedOn" || key === "lastEditedOn" || key === "createdAt" || key === "requestDateTime" || key === "responseDateTime"
                           ? formatDateTime(displayValue)
                           : displayValue;
 

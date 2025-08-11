@@ -213,7 +213,7 @@ export const sidebarData = [
       },
       {
         label: "Admin User",
-        link: "/management/add-manage-user",
+        link: "/management/admin-user",
         icon: managementSvg,
       },
       {
