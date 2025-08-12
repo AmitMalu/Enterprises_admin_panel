@@ -10,13 +10,13 @@ import { Form, Formik, FormikProps } from "formik";
 import { Grid, Loader } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import ButtonComponent from "../Atoms/ButtonComponent";
-import { useIndianStateCity } from "../../Utils/hooks/useIndianStateCity";
 import FormikMultiSelectComponent from "../Molecules/FormikMultiSelectComponent";
 import BackHeader from "../Molecules/BackHeader";
 import { useMenuListFromSidebar } from "../../Utils/hooks/useMenuListFromSidebar";
 import { LockIconSvg } from "../../assets/Icons";
 import { useAddressFromZipcode } from "../../Utils/hooks/useAddressFromZipcode";
-import { ADMIN_USER_KEY, ADMIN_USER_URL, AdminUserFormType, initialValues, transformFormToCreateAdminUserPayload, transformFormToUpdateAdminUserPayload, transformPermissionsToMenus, validationSchema } from "../../Config/Management/AdminUserConfig";
+import { ADMIN_USER_KEY, ADMIN_USER_URL, AdminUserFormType, initialValues, transformFormToCreateAdminUserPayload, transformFormToUpdateAdminUserPayload, transformResponseToFormData, validationSchema } from "../../Config/Management/AdminUserConfig";
+import { transformPermissionsToMenus } from "../../Utils/utils";
 
 interface AdminUserFormProps {
     mode: 'add' | 'edit';
@@ -31,8 +31,6 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
     const [formData, setFormData] = useState<AdminUserFormType>(initialValues);
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
-    const { states } = useIndianStateCity({})
-
 
     const handleSubmit = useThrottleMasterFormSubmit<AdminUserFormType>({
         mode,
@@ -60,10 +58,15 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                         fetchMasterById({ key: ADMIN_USER_KEY, endpoint: `${ADMIN_USER_URL}`, id })
                     ).unwrap();
 
+                    // Step 1: Transform base fields (without touching menus/subMenus)
+                    const baseFormData = transformResponseToFormData(data);
+
+                    // Step 2: Transform permission string into menus/subMenus
                     const { menus, subMenus } = transformPermissionsToMenus(data.permission);
 
+                    // Step 3: Merge both
                     setFormData({
-                        ...data,
+                        ...baseFormData,
                         menus,
                         subMenus,
                     });
@@ -146,7 +149,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                     return (
                         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
                             <Grid gutter="lg">
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                <Grid.Col span={{ base: 6, md: 4, lg: 3 }}>
                                     <FormikTextInputComponent
                                         name="name"
                                         label="Name"
@@ -156,7 +159,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                <Grid.Col span={{ base: 6, md: 4, lg: 3 }}>
                                     <FormikTextInputComponent
                                         name="mobileNumber"
                                         label="Mobile Number"
@@ -168,7 +171,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                <Grid.Col span={{ base: 6, md: 4, lg: 3 }}>
                                     <FormikTextInputComponent
                                         name="username"
                                         label="Username"
@@ -179,7 +182,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                 </Grid.Col>
 
                                 {/* Password */}
-                                <Grid.Col span={{ base: 12, md: 6, lg: 8 }}>
+                                <Grid.Col span={{ base: 6, md: 4, lg: 3 }}>
                                     <FormikTextInputComponent
                                         type="password"
                                         name="password"
@@ -204,7 +207,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
+                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikTextInputComponent
                                         name="dob"
                                         type="date"
@@ -214,7 +217,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikTextInputComponent
                                         name="address"
                                         label="Address"
@@ -225,7 +228,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikTextInputComponent
                                         name="zipCode"
                                         label="Zip Code"
@@ -243,7 +246,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikTextInputComponent
                                         value={formik.values.state || ""}
                                         key={`state-${formik.values.state || "empty"}`}
@@ -258,7 +261,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+                                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikTextInputComponent
                                         value={formik.values.city || ""}
                                         key={`city-${formik.values.city || "empty"}`}

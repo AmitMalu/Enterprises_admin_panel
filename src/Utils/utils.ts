@@ -331,3 +331,42 @@ export const dateRangeValidationSchema = Yup.array()
 
     return true;
   });
+
+export function buildPermissions(
+  menus: string[],
+  subMenus: string[]
+): string[] {
+  const permissions: string[] = [...subMenus]; // start with all selected submenus
+
+  menus.forEach((menuCode) => {
+    const hasSubmenu = subMenus.some((sm) => sm.startsWith(menuCode));
+    if (!hasSubmenu) {
+      permissions.push(menuCode + "00");
+    }
+  });
+
+  return permissions;
+}
+
+export const transformPermissionsToMenus = (permission: string) => {
+  if (!permission) {
+    return {
+      menus: [],
+      subMenus: [],
+    };
+  }
+
+  const allPerms = permission
+    .split(",")
+    .map((perm) => perm.trim())
+    .filter(Boolean);
+
+  const menus = [...new Set(allPerms.map((perm) => perm.substring(0, 2)))];
+
+  const subMenus = allPerms.filter((perm) => perm.substring(2) !== "00");
+
+  return {
+    menus,
+    subMenus,
+  };
+};

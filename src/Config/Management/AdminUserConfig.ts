@@ -3,11 +3,12 @@ import {
   dobValidation,
   emailValidation,
   mobileValidation,
+  passwordValidation,
   textField,
   zipValidation,
 } from "../../Utils/ValidationUtils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
-import { GenericTableHeader, getIpAddress } from "../../Utils/utils";
+import { buildPermissions, GenericTableHeader, getIpAddress } from "../../Utils/utils";
 
 export const ADMIN_USER_KEY = "admin-user";
 export const ADMIN_USER_URL = API_ENDPOINTS.MANAGEMENT.ADMIN_USER;
@@ -100,7 +101,7 @@ export const validationSchema: Record<keyof AdminUserFormType, Yup.AnySchema> =
     name: textField("Name", 50, true, true),
     mobileNumber: mobileValidation,
     username: textField("Username", 50, true, true),
-    password: textField("Password", 50, true, true),
+    password: passwordValidation,
     emailId: emailValidation,
     emailVerified: Yup.boolean(),
     dob: dobValidation,
@@ -149,7 +150,7 @@ export const transformFormToCreateAdminUserPayload = async (
       state: formData.state,
       zipCode: formData.zipCode,
     },
-    permissions: formData.subMenus,
+    permissions: buildPermissions(formData.menus, formData.subMenus),
     createdBy: localStorage.getItem("username") || "system",
     createdByIPAddress: ip || "",
   };
@@ -172,28 +173,25 @@ export const transformFormToUpdateAdminUserPayload = (
       state: formData.state,
       zipCode: formData.zipCode,
     },
-    permissions: formData.subMenus,
+    permissions: buildPermissions(formData.menus, formData.subMenus),
     editedBy: localStorage.getItem("username") || "system",
   };
 };
 
-export const transformPermissionsToMenus = (permission: string) => {
-  if (!permission) {
-    return {
-      menus: [],
-      subMenus: [],
-    };
-  }
-
-  const subMenus = permission
-    .split(",")
-    .map((perm) => perm.trim())
-    .filter(Boolean);
-
-  const menus = [...new Set(subMenus.map((perm) => perm.substring(0, 2)))];
-
+export const transformResponseToFormData = (
+  raw: Record<string, any>
+): Omit<AdminUserFormType, "menus" | "subMenus"> => {
   return {
-    menus,
-    subMenus,
+    name: raw.name || "",
+    mobileNumber: raw.mobileNumber || "",
+    username: raw.username || "",
+    password: raw.password || "",
+    emailId: raw.emailId || "",
+    emailVerified: raw.emailVerified ?? false,
+    dob: raw.dob || "",
+    address: raw.add?.address || "",
+    city: raw.add?.city || "",
+    state: raw.add?.state || "",
+    zipCode: raw.add?.zipCode || "",
   };
 };

@@ -5,7 +5,7 @@ import {
   textField,
 } from "../../Utils/ValidationUtils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
-import { GenericTableHeader } from "../../Utils/utils";
+import { buildPermissions, GenericTableHeader } from "../../Utils/utils";
 
 export const KEY = "user-config";
 export const URL = API_ENDPOINTS.MANAGEMENT.USER_CONFIGURATION;
@@ -95,7 +95,7 @@ export const transformFormToCreateUserConfigPayload = (
   email: formData.email,
   mobile: formData.mobile,
   state: formData.state,
-  permissions: formData.subMenus,
+  permissions: buildPermissions(formData.menus, formData.subMenus),
   parentAccount:
     JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId || "",
   createdBy: localStorage.getItem("username") || "system",
@@ -110,29 +110,8 @@ export const transformFormToUpdateUserConfigPayload = (
   email: formData.email,
   mobile: formData.mobile,
   state: formData.state,
-  permissions: formData.subMenus,
+  permissions: buildPermissions(formData.menus, formData.subMenus),
   parentAccount:
     JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId || "",
   editedBy: localStorage.getItem("username") || "system",
 });
-
-export const transformPermissionsToMenus = (permission: string) => {
-  if (!permission) {
-    return {
-      menus: [],
-      subMenus: [],
-    };
-  }
-
-  const subMenus = permission
-    .split(",")
-    .map((perm) => perm.trim())
-    .filter(Boolean);
-
-  const menus = [...new Set(subMenus.map((perm) => perm.substring(0, 2)))];
-
-  return {
-    menus,
-    subMenus,
-  };
-};
