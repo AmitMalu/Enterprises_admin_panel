@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import ComingSoonPage from "../../Components/Atoms/ComingSoonPage";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useEffect, useRef, useState } from "react";
 import { headers, TRANSACTION_LIMIT_KEY, TRANSACTION_LIMIT_URL, TransactionLimitTableType } from "../../Config/Schemes/TransactionLimitConfig";
