@@ -74,9 +74,6 @@ export const useMenuSubMenuList = ({
 
     }, [rawMenus, selectedMenus]);
 
-    console.log(subMenuList);
-
-
     return {
         menuList,
         subMenuList,

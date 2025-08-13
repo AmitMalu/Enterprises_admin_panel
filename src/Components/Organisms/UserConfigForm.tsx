@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
-import { initialValues, KEY, transformFormToCreateUserConfigPayload, transformFormToUpdateUserConfigPayload, transformPermissionsToMenus, URL, UserConfigFormType, validationSchema } from "../../Config/Management/UserConfigurationConfig";
+import { initialValues, KEY, transformFormToCreateUserConfigPayload, transformFormToUpdateUserConfigPayload, URL, UserConfigFormType, validationSchema } from "../../Config/Management/UserConfigurationConfig";
 import { useEffect, useState } from "react";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
@@ -14,8 +14,9 @@ import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { useIndianStateCity } from "../../Utils/hooks/useIndianStateCity";
 import FormikMultiSelectComponent from "../Molecules/FormikMultiSelectComponent";
-import { useMenuSubMenuList } from "../../Utils/hooks/useMenuSubMenuList";
 import BackHeader from "../Molecules/BackHeader";
+import { useMenuListFromSidebar } from "../../Utils/hooks/useMenuListFromSidebar";
+import { transformPermissionsToMenus } from "../../Utils/utils";
 
 type UserConfigFormProps = { mode: "add" | "edit" };
 
@@ -106,7 +107,7 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
             >
                 {(formik: FormikProps<any>) => {
 
-                    const { menuList, subMenuList, loadingMenus, error } = useMenuSubMenuList({
+                    const { menuList, subMenuList, loadingMenus, MenuError } = useMenuListFromSidebar({
                         selectedMenus: formik.values.menus,
                     });
 
@@ -191,7 +192,7 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                                         withAsterisk
                                         searchable
                                         clearable
-                                        disabled={!!loadingMenus || !!loading || !!error}
+                                        disabled={!!loadingMenus || !!loading || !!MenuError}
                                     />
 
                                 </Grid.Col>
@@ -204,7 +205,7 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                                         withAsterisk
                                         searchable
                                         clearable
-                                        disabled={!formik.values.menus?.length || !!loading || !!loadingMenus || !!error}
+                                        disabled={!formik.values.menus?.length || !!loading || !!loadingMenus || !!MenuError}
                                     />
 
                                 </Grid.Col>

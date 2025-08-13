@@ -206,21 +206,21 @@ export const sidebarData = [
         link: "/management/user/rejected",
         icon: managementSvg,
       },
-      {
-        label: "User Configuration",
-        link: "/management/user-configuration",
-        icon: managementSvg,
-      },
+      // {
+      //   label: "User Configuration",
+      //   link: "/management/user-configuration",
+      //   icon: managementSvg,
+      // },
       {
         label: "Admin User",
-        link: "/management/add-manage-user",
+        link: "/management/admin-user",
         icon: managementSvg,
       },
-      {
-        label: "Search User",
-        link: "/management/search-user",
-        icon: managementSvg,
-      },
+      // {
+      //   label: "Search User",
+      //   link: "/management/search-user",
+      //   icon: managementSvg,
+      // },
       {
         label: "KYC Approved Summary",
         link: "/management/kyc-approved",

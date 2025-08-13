@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   MANAGEMENT: {
     USER_CREATE: USER_FORM_ENDPOINTS,
     USER_CONFIGURATION: "api/user-config",
+    ADMIN_USER: "api/admin-user",
     MENU: "api/menus",
     USER_AUTH: "api/onboarding",
     ADHAAR_VERIFY: "verification/aadhaar-validate",
@@ -37,7 +38,7 @@ export const API_ENDPOINTS = {
   },
   FUNDING: {
     PREFUNDING: "api/prefund",
-    SETTLEMENT : "api/settlement",
+    SETTLEMENT: "api/settlement",
   },
   SCHEMES: {
     SCHEME_LIST: "api/scheme",
