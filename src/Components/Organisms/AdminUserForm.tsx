@@ -97,12 +97,12 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
 
             <BackHeader
-                title={mode === "edit" ? "Edit User Configuration" : "Add User Configuration"}
+                title={mode === "edit" ? "Edit Admin User" : "Add Admin User"}
                 backPath="/management/admin-user"
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type="User Configuration" text="Management" />
+            <BreadCrumb type="Admin User" text="Management" />
 
             <Formik
                 enableReinitialize

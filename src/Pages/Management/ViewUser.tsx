@@ -27,7 +27,7 @@ const ViewUser = () => {
     useFetchMasterList<ViewUserTableType>({
       key: VIEW_USER_KEY,
       url: `${VIEW_USER_URL}`,
-      filter: { hierarchyId: debouncedSearchValue },
+      filter: { keyword: debouncedSearchValue },
       refreshKey,
       method: "GET"
     });
