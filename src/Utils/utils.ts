@@ -214,7 +214,7 @@ export interface HandleMasterFormSubmitProps<T> {
   updateUrl: string;
   transformCreatePayload?: TransformPayloadFn<T>;
   transformUpdatePayload?: TransformPayloadFn<T>;
-  successNavigatePath: string;
+  successNavigatePath?: string;
   entityName: string;
 }
 
@@ -270,8 +270,9 @@ export const handleMasterFormSubmit = async <T>({
       res.message ||
         `${entityName} ${mode === "edit" ? "updated" : "created"} successfully`
     );
-
-    navigate(successNavigatePath);
+    if (successNavigatePath) {
+      navigate(successNavigatePath);
+    }
     if (resetFormData) {
       resetFormData();
     }
