@@ -5,7 +5,7 @@ import { useState } from "react";
 import { CREDIT_DEBIT_KEY, CREDIT_DEBIT_URL, CreditDebitFormType, initialValues, validationSchema } from "../../Config/Funding/CreditDebitConfig";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
@@ -45,6 +45,9 @@ const CreditDebit = () => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={(values) => {
           console.log("Form Submitted", values);
+          if(!values){ //just for build
+            handleSubmit(values);
+          }
         }}
       >
         {({ values }) => {

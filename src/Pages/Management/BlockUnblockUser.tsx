@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
 import { BLOCK_USER_KEY, BLOCK_USER_URL, BlockUnblockUserHeaders, BlockUnblockUserTableType } from "../../Config/Management/BlockUnblockUserConfig";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
