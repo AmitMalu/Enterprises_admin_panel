@@ -13,6 +13,7 @@ export const API_ENDPOINTS = {
     USER_CREATE: USER_FORM_ENDPOINTS,
     USER_CONFIGURATION: "api/user-config",
     ADMIN_USER: "api/admin-user",
+    VIEW_USER: "api/user",
     MENU: "api/menus",
     USER_AUTH: "api/onboarding",
     ADHAAR_VERIFY: "verification/aadhaar-validate",

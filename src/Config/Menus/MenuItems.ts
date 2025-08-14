@@ -238,7 +238,7 @@ export const sidebarData = [
       },
       {
         label: "Block/Unblock User",
-        link: "/management/block-user",
+        link: "/management/block-unblock-user",
         icon: managementSvg,
       },
       {

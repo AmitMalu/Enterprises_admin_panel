@@ -1,7 +1,6 @@
 import { Route } from "react-router-dom";
 import UserFormPage from "../Components/Organisms/UserFormPage";
 import {
-  BlockUser,
   KycApprovedSummary,
   PendingKyc,
   PendingUser,
@@ -13,6 +12,7 @@ import {
   ViewUser,
   RejectedUser,
   AdminUser,
+  BlockUnblockUser,
 } from "../Pages/Management";
 import OnboardedUsers from "../Pages/Management/OnboardedUsers";
 import UserConfigForm from "../Components/Organisms/UserConfigForm";
@@ -37,7 +37,7 @@ export const ManagementRoutes = (
     <Route path="/management/kyc-approved" element={<KycApprovedSummary />} />
     <Route path="/management/kyc-pending" element={<PendingKyc />} />
     <Route path="/management/view-user" element={<ViewUser />} />
-    <Route path="/management/block-user" element={<BlockUser />} />
+    <Route path="/management/block-unblock-user" element={<BlockUnblockUser />} />
     <Route path="/management/settlement-bank" element={<SettlementBank />} />
     <Route path="/management/user-mapping" element={<UserMapping />} />
   </>

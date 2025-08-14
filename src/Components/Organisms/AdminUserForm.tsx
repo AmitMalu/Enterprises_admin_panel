@@ -29,7 +29,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState<AdminUserFormType>(initialValues);
-    const [loading, setLoading] = useState(false);
+    const [fetchLoading, setFetchLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
 
     const handleSubmit = useThrottleMasterFormSubmit<AdminUserFormType>({
@@ -51,7 +51,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
     useEffect(() => {
         const fetchAndSet = async () => {
             if (mode === "edit" && id) {
-                setLoading(true);
+                setFetchLoading(true);
                 setFetchError(null);
                 try {
                     const data = await dispatch(
@@ -78,7 +78,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                     }, 2000);
                 }
                 finally {
-                    setLoading(false);
+                    setFetchLoading(false);
                 }
             }
         };
@@ -97,12 +97,12 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
 
             <BackHeader
-                title={mode === "edit" ? "Edit User Configuration" : "Add User Configuration"}
+                title={mode === "edit" ? "Edit Admin User" : "Add Admin User"}
                 backPath="/management/admin-user"
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type="User Configuration" text="Management" />
+            <BreadCrumb type="Admin User" text="Management" />
 
             <Formik
                 enableReinitialize
@@ -285,7 +285,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                         withAsterisk
                                         searchable
                                         clearable
-                                        disabled={!!loadingMenus || !!loading || !!MenuError}
+                                        disabled={!!loadingMenus || !!MenuError}
                                     />
 
                                 </Grid.Col>
@@ -298,7 +298,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                         withAsterisk
                                         searchable
                                         clearable
-                                        disabled={!formik.values.menus?.length || !!loading || !!loadingMenus || !!MenuError}
+                                        disabled={!formik.values.menus?.length || !!fetchLoading || !!loadingMenus || !!loading}
                                     />
 
                                 </Grid.Col>
@@ -313,7 +313,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                     type="submit"
                                     bgColor="#C30305"
                                     textColor="#FFFFFF"
-                                    disabled={!!fetchError || !!loading}
+                                    disabled={!!fetchError || !!fetchLoading || !!loadingMenus || !!loading}
                                     style={{ padding: "10px 30px" }}
                                 >
                                     SUBMIT

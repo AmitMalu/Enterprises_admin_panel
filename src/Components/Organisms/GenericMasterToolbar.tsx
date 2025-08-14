@@ -73,6 +73,7 @@ const GenericMasterToolbar = ({
               value={searchValue || ""}
               placeholder="Search..."
               onChange={onSearch}
+              disabled={loading}
             />
           )}
 

@@ -286,14 +286,14 @@ export const updateMasterItem = createAsyncThunk(
         return responseData;
       } else {
         throw new Error(
-          responseData?.message || `Failed to create ${key} Master`
+          responseData?.message || `Failed to Update ${key} Master`
         );
       }
     } catch (error: any) {
       const errMsg =
         error?.response?.data?.message ||
         error.message ||
-        `Failed to create ${key} Master`;
+        `Error Updating ${key} Master`;
       return rejectWithValue(errMsg);
     }
   }

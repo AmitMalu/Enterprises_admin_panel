@@ -8,6 +8,6 @@ export { default as BulkUsers } from "./BulkUsers";
 export { default as KycApprovedSummary } from "./KycApprovedSummary";
 export { default as PendingKyc } from "./PendingKyc";
 export { default as ViewUser } from "./ViewUser";
-export { default as BlockUser } from "./BlockUser";
+export { default as BlockUnblockUser } from "./BlockUnblockUser";
 export { default as SettlementBank } from "./SettlementBank";
 export { default as UserMapping } from "./UserMapping";
