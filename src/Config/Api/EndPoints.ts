@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
     USER_CONFIGURATION: "api/user-config",
     ADMIN_USER: "api/admin-user",
     VIEW_USER: "api/user",
+    USER_MAPPING: "api/user-mapping",
     MENU: "api/menus",
     USER_AUTH: "api/onboarding",
     ADHAAR_VERIFY: "verification/aadhaar-validate",
