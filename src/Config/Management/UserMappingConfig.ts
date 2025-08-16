@@ -2,8 +2,8 @@ import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 import { textField } from "../../Utils/ValidationUtils";
 
-export const KEY = "user-mapping";
-export const URL = API_ENDPOINTS.MANAGEMENT.USER_MAPPING;
+export const USER_MAPPING_KEY = "user-mapping";
+export const USER_MAPPING_URL = API_ENDPOINTS.MANAGEMENT.USER_MAPPING;
 
 export interface UserMappingFormType {
   mode: boolean;
