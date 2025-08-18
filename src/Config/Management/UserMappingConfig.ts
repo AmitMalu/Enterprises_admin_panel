@@ -48,3 +48,13 @@ export const validationSchema: Record<
 
   parentId: textField("Parent Id", 100, true, true),
 };
+
+export const mapUserDetails = (user: any) => ({
+  parentName: user?.parentName ?? "—",
+  userName: user?.name ?? `—`,
+  mobileNumber: user?.mobileno ?? "—",
+  email: user?.email ?? "—",
+  userType: user?.userType ?? "—",
+  prepaid: user?.prepaidAmount ?? 0,
+  postpaid: user?.postpaidAmount ?? 0,
+});

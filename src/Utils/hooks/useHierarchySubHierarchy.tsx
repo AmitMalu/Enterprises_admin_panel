@@ -71,12 +71,7 @@ export const useHierarchySubHierarchy = ({
                     })
                 ).unwrap();
 
-                const filteredData = (result || [])?.map((item: any) => ({
-                    label: item.displayName,
-                    value: String(item.id),
-                }));
-
-                setSubHierarchyList(filteredData);
+                setSubHierarchyList(result);
                 setSubHierarchyKey(Date.now());
             } catch (err: any) {
                 console.error("Failed to fetch sub-Hierarchy list", err);

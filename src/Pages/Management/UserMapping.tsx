@@ -3,7 +3,7 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import { Form, Formik } from "formik";
 import { Grid } from "@mantine/core";
 import * as Yup from "yup";
-import { USER_MAPPING_KEY, USER_MAPPING_URL, UserMappingInitialValues, validationSchema } from "../../Config/Management/UserMappingConfig";
+import { mapUserDetails, USER_MAPPING_KEY, USER_MAPPING_URL, UserMappingInitialValues, validationSchema } from "../../Config/Management/UserMappingConfig";
 import FormikSwitchComponent from "../../Components/Molecules/FormikSwitchComponent";
 import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHierarchy";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
@@ -15,6 +15,8 @@ import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit"
 import { useAppDispatch } from "../../Redux/hooks";
 import { createMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
+import PopupModal from "../../Components/Atoms/PopupModal";
+import { CustomCarousel } from "../../Components/Atoms/CustomCarousel";
 
 const switchClassNames = {
   label: "mantine-Switch-label text-[14px] font-medium w-[180px] ", // fixed width outer label
@@ -28,9 +30,11 @@ const UserMapping = () => {
 
   const dispatch = useAppDispatch();
   const [formKey, setFormKey] = useState(0);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const throttledSubmit = useThrottledFormSubmit(
     async (values: any, { resetForm }: any) => {
+      setIsConfirmOpen(false)
       const payload = {
         userIds: values.userId,
         newParentId: values.parentId,
@@ -72,10 +76,7 @@ const UserMapping = () => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={throttledSubmit}
       >
-        {({ values, setFieldValue }) => {
-
-          console.log(values, "values");
-
+        {({ values, setFieldValue, submitForm, validateForm, setTouched }) => {
           // Left section: user hierarchy
           const {
             hierarchyList: userTypeList,
@@ -156,6 +157,7 @@ const UserMapping = () => {
                       key={userListKey}
                       name="userId"
                       label="User"
+                      inputHeight="10"
                       placeholder={`Select ${values.mode ? "Users" : "User"}`}
                       maxValues={values.mode ? 5 : 1}
                       withScrollArea
@@ -167,24 +169,47 @@ const UserMapping = () => {
                       className="w-[60%]"
                       clearable
                       withAsterisk
-                      data={userList}
+                      data={userList?.map((item: any) => ({
+                        label: item.displayName,
+                        value: String(item.id),
+                      }))}
                       disabled={loadingUserList}
-                      inputHeight="10"
                     />
                   </div>
 
-                  {/* User Details Card */}
-                  <UserMappingUserDetailsCard
-                    title="User Details"
-                    userDetails={{
-                      parentName: "—",
-                      userName: "Amaan Chaudhary",
-                      mobileNumber: "—",
-                      email: "—",
-                      userType: "—",
-                      balance: { main: 0, settlement: 0 },
-                    }}
-                  />
+                  {/* User Details Section */}
+                  {Array.isArray(values.userId) && values.userId.length > 1 ? (
+                    <CustomCarousel
+                      slideSize="100%"
+                      height="full"
+                      controlsOffset="xs"
+                      shouldAutoPlay
+                      autoplayDelay={5000}
+                      controlSize={28}
+                      withIndicators
+                      loop={false}
+                      indicatorColor="gray"
+                    >
+                      {values.userId?.map((userId: string) => {
+                        // Find the full user object from userList
+                        const userDetails = userList?.find((u: any) => String(u.id) === userId);
+                        return (
+                          <UserMappingUserDetailsCard
+                            key={userId}
+                            title="User Details"
+                            userDetails={mapUserDetails(userDetails)}
+                          />
+                        )
+                      })}
+                    </CustomCarousel>
+                  ) : (
+                    <UserMappingUserDetailsCard
+                      title="User Details"
+                      userDetails={mapUserDetails(
+                        userList?.find((u: any) => String(u.id) === values.userId[0]),
+                      )}
+                    />
+                  )}
                 </Grid.Col>
 
                 {/* Middle Section */}
@@ -195,12 +220,26 @@ const UserMapping = () => {
                     fontSize="14"
                     borderColor="#fff"
                     variant="filled"
-                    type="submit"
+                    // type="submit"
                     bgColor="#C30305"
                     textColor="#FFFFFF"
                     rightIcon={<IconArrowLeftFromArc />}
                     style={{ padding: "5px 10px" }}
-                  >
+                    onClick={async () => {
+                      const errors = await validateForm(); // run validation
+                      if (Object.keys(errors).length === 0) {
+                        // ✅ valid → open confirm modal
+                        setIsConfirmOpen(true);
+                      } else {
+                        // ❌ invalid → show errors
+                        setTouched(
+                          Object.keys(errors).reduce(
+                            (acc, key) => ({ ...acc, [key]: true }),
+                            {}
+                          )
+                        );
+                      }
+                    }}                  >
                     Migrate User
                   </ButtonComponent>
                 </Grid.Col>
@@ -237,30 +276,72 @@ const UserMapping = () => {
                       nothingFoundMessage="No Users found for Selected Type"
                       label="Parent"
                       placeholder="Select Parent"
-                      data={ParentUserList}
+                      data={ParentUserList?.map((item: any) => ({
+                        label: item.displayName,
+                        value: String(item.id),
+                      }))}
                       disabled={loadingParentUserList}
                       withAsterisk
                       required
                     />
                   </div>
 
-                  {/* User Details Card */}
+                  {/* Parent Details Card */}
                   <UserMappingUserDetailsCard
                     title="Parent Details"
-                    userDetails={{
-                      parentName: "—",
-                      userName: "Amaan Chaudhary",
-                      mobileNumber: "—",
-                      email: "—",
-                      userType: "—",
-                      balance: { main: 0, settlement: 0 },
-                    }}
+                    userDetails={mapUserDetails(
+                      ParentUserList?.find((u: any) => String(u.id) === values.parentId),
+                    )}
                   />
                 </Grid.Col>
               </Grid>
+              {/* Confirmation Modal */}
+              <PopupModal
+                opened={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                size="sm"
+                padding="md"
+              >
+                <div className="flex flex-col gap-4">
+                  <TextComponent
+                    fontSize={18}
+                    fontWeight={600}
+                    align="center"
+                  >
+                    Confirm Migration
+                  </TextComponent>
+                  <TextComponent fontSize={14} color="gray" align="center">
+                    Are you sure you want to migrate the selected{" "}
+                    <b>{values.mode ? "Users" : "User"}</b>{" "}
+                    under <b>{values.parentId}</b>?
+                  </TextComponent>
+
+                  <div className="flex justify-end gap-3 mt-4">
+                    <ButtonComponent
+                      variant="outline"
+                      bgColor="#f1f1f1"
+                      textColor="#333"
+                      onClick={() => setIsConfirmOpen(false)}
+                    >
+                      Cancel
+                    </ButtonComponent>
+                    <ButtonComponent
+                      bgColor="#C30305"
+                      textColor="#fff"
+                      onClick={() => {
+                        setIsConfirmOpen(false);
+                        submitForm(); // <-- call Formik submit programmatically
+                      }}
+                    >
+                      Confirm
+                    </ButtonComponent>
+                  </div>
+                </div>
+              </PopupModal>
             </Form>
           )
         }}
+
       </Formik>
     </div>
   );

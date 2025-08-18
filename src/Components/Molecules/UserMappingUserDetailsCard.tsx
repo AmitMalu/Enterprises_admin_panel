@@ -7,10 +7,8 @@ interface UserDetails {
     mobileNumber?: string;
     email?: string;
     userType?: string;
-    balance?: {
-        main: number;
-        settlement: number;
-    };
+    prepaid?: number;
+    postpaid?: number;
 }
 
 interface Props {
@@ -20,12 +18,13 @@ interface Props {
 
 export const UserMappingUserDetailsCard = ({ title = "User Details", userDetails }: Props) => {
     const {
-        parentName = "-",
+        // parentName = "-",
         userName = "-",
         mobileNumber = "-",
         email = "-",
-        userType = "-",
-        balance = { main: 0, settlement: 0 },
+        // userType = "-",
+        prepaid = 0,
+        postpaid = 0,
     } = userDetails;
 
     return (
@@ -36,10 +35,10 @@ export const UserMappingUserDetailsCard = ({ title = "User Details", userDetails
 
             <Table withColumnBorders>
                 <Table.Tbody>
-                    <Table.Tr>
+                    {/* <Table.Tr>
                         <Table.Td fw={500}>Parent Name</Table.Td>
                         <Table.Td>{parentName}</Table.Td>
-                    </Table.Tr>
+                    </Table.Tr> */}
 
                     <Table.Tr>
                         <Table.Td w="40%" fw={500}>User Name</Table.Td>
@@ -64,8 +63,8 @@ export const UserMappingUserDetailsCard = ({ title = "User Details", userDetails
                     <Table.Tr>
                         <Table.Td fw={500}>Balance</Table.Td>
                         <Table.Td>
-                            Main: {balance.main} <br />
-                            Settlement: {balance.settlement}
+                            Prepaid: {postpaid}<br />
+                            Postpaid: {prepaid}
                         </Table.Td>
                     </Table.Tr>
                 </Table.Tbody>

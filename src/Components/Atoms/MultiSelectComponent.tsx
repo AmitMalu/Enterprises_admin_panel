@@ -1,6 +1,6 @@
 // components/Atoms/MultiSelectComponent.tsx
 import React from "react";
-import { Badge, MultiSelect } from "@mantine/core";
+import { MultiSelect } from "@mantine/core";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 
 interface MultiSelectComponentProps {

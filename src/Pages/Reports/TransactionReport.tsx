@@ -129,7 +129,10 @@ const TransactionReport = () => {
                     size="xs"
                     label="Hierarchy ID"
                     placeholder="Select Hierarchy ID"
-                    data={subHierarchyList}
+                    data={subHierarchyList?.map((item: any) => ({
+                      label: item.displayName,
+                      value: String(item.id),
+                    }))}
                     disabled={loadingSubHierarchyList}
                     withAsterisk
                     required

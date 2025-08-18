@@ -10,6 +10,7 @@ import ErrorFallback from "./Utils/ErrorFallback.tsx";
 import { PersistGate } from "redux-persist/integration/react";
 import { redirectTo } from "./Utils/utils.ts";
 import { StrictMode } from "react";
+import '@mantine/carousel/styles.css';
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
