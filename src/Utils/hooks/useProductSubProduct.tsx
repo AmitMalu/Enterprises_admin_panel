@@ -7,11 +7,13 @@ interface UseProductSubProductProps {
   selectedProductId?: string;
   selectedSubProductId?: string;
   onSubProductReset?: () => void;
+  isSettlement?: boolean;
 }
 
 export const useProductSubProduct = ({
   selectedProductId,
   onSubProductReset,
+  isSettlement = false,
 }: UseProductSubProductProps) => {
   const dispatch = useAppDispatch();
 
@@ -67,11 +69,10 @@ export const useProductSubProduct = ({
       setSubProductError(null);
 
       try {
-        const result = await dispatch(
-          fetchMasterDropdown({
-            url: `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}/dropdown/${selectedProductId}`,
-          })
-        ).unwrap();
+        const url = `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}/dropdown/${selectedProductId}${isSettlement ? "?isSettlement=true" : ""
+          }`;
+
+        const result = await dispatch(fetchMasterDropdown({ url })).unwrap();
 
         const filteredData = (result || [])?.map((item: any) => ({
           label: item.subProduct_name,

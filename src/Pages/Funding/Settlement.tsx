@@ -4,13 +4,14 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import { useEffect, useRef, useState } from "react";
 import { Form, Formik } from "formik";
-import { Checkbox, Grid } from "@mantine/core";
+import { Checkbox, Grid, Loader } from "@mantine/core";
 import FormikDateRangePicker from "../../Components/Molecules/FormikDateRangePicker";
-import { IconCalendar } from "@tabler/icons-react";
+import { IconCalendar, IconCancel } from "@tabler/icons-react";
+import { GiCheckMark } from "react-icons/gi";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import { preSettlementHeaders, PreSettlementTableType, SETTLEMENT_KEY, settlementFilterInitialValues } from "../../Config/Funding/SettlementConfig";
+import { dummyPreSettlementData, preSettlementHeaders, PreSettlementTableType, SETTLEMENT_KEY, SETTLEMENT_URL, settlementFilterInitialValues, settlementFilterValidationSchema, transformToViewSettlementPayload } from "../../Config/Funding/SettlementConfig";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
@@ -18,56 +19,50 @@ import { useVendor } from "../../Utils/hooks/useVendor";
 import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
+import BackHeader from "../../Components/Molecules/BackHeader";
+import * as Yup from "yup"
+import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 
 const Settlement = () => {
 
   const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>(null);
+
   const dataRef = useRef<PreSettlementTableType[] | null>(null);
-  // const [filterVisible, setFilterVisible] = useState(false);
-  // const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     preSettlementHeaders.map((h) => h.key as string)
   );
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+
+  // const [submittedFilter, setSubmittedFilter] = useState<{
+  //   key: string;
+  //   value: any;
+  // } | null>(null);
+
+  const [formValues, setFormValues] = useState(settlementFilterInitialValues);
+  const [viewSubmitted, setViewSubmitted] = useState(false);
+  const [loadingActionSubmit, setLoadingActionSubmit] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
 
   const { data, loading, pagination, error, setPage, setPageSize } =
     useFetchMasterList<PreSettlementTableType>({
       method: "POST",
       key: SETTLEMENT_KEY,
-      // url: `${SETTLEMENT_URL}/view`,
-      payload: payload,
-      filter: submittedFilter,
+      url: viewSubmitted ? `${SETTLEMENT_URL}/settlement-pending` : undefined,
+      payload,
       refreshKey,
-      autoFetch: false,
     });
 
   const throttledSubmit = useThrottledFormSubmit((values: any) => {
-    // const payload = transformToSettlementPayload(values);
-    setPayload(values);
+    setFormValues(values);
+    const payload = transformToViewSettlementPayload(values);
+    setPayload(payload);
+    setViewSubmitted(true);
   }, 3000);
 
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
-
-  // const handleFilterChange = (key: string, value: any) => {
-  //   setFilterValues((prev) => ({ ...prev, [key]: value }));
-  // };
-
-  // const handleFilterSubmit = (key: string, value: any) => {
-  //   dispatch(
-  //     setPagination({
-  //       key: SETTLEMENT_KEY,
-  //       pagination: { ...pagination, currentPage: 1, pageSize: 5 },
-  //     })
-  //   );
-  //   setSubmittedFilter({ key, value });
-  // };
 
   const handleExportClick = () => {
     const currentData = dataRef.current;
@@ -75,7 +70,7 @@ const Settlement = () => {
       toast.warning("No data available to export.");
       return;
     }
-    exportToCsv(currentData, "product-master");
+    exportToCsv(currentData, "Settlement");
   };
 
   const handleToggleColumn = (key: string) => {
@@ -86,22 +81,78 @@ const Settlement = () => {
 
   const handleRefresh = () => {
     dispatch(resetMaster(SETTLEMENT_KEY));
-    // setFilterValues({});
-    setSubmittedFilter(null);
     setVisibleColumns(preSettlementHeaders.map((h) => h.key as string));
     setRefreshKey((prev) => prev + 1);
-    // setFilterVisible(false);
   };
+
+  const handleToggleAll = (checked: boolean, data: PreSettlementTableType[]) => {
+    if (checked) {
+      setSelectedIds(data.map((row) => row.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const handleToggleRow = (checked: boolean, id: string | number) => {
+    if (checked) {
+      setSelectedIds((prev) => [...prev, id]);
+    } else {
+      setSelectedIds((prev) => prev.filter((rowId) => rowId !== id));
+    }
+  };
+
+  const handleSettlementAction = async (action: "APPROVE" | "REJECT") => {
+    if (!selectedIds.length) return;
+    setLoadingActionSubmit(true); // set which row is loading
+    try {
+      await dispatch(updateMasterItem({
+        key: SETTLEMENT_KEY,
+        url: `${SETTLEMENT_URL}?settlement=${action}`,
+        data: { ids: selectedIds },
+        mode: "PUT",
+      })).unwrap();
+
+      toast.success(`Settlement ${action === "APPROVE" ? "APPROVED" : "REJECTED"} successfully!`);
+      setSelectedIds([]);
+      handleRefresh()
+    } catch (err: any) {
+      toast.error(`Failed to Update Settlement.`);
+      console.error(err);
+    } finally {
+      setLoadingActionSubmit(false);
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      setFormValues(settlementFilterInitialValues); // Reset form data on unmount
+    }
+  }, []);
+
+  // 👇 fallback to dummy data if API not ready
+  const tableData = data && data.length > 0 ? data : dummyPreSettlementData;
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
-      <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        Settlement
-      </TextComponent>
+      {viewSubmitted ? (
+        <BackHeader
+          title="PRE-SETTLEMENT"
+          onBack={() => {
+            setViewSubmitted(false);
+            setPayload(null);
+            dispatch(resetMaster(SETTLEMENT_KEY));
+          }}
+        />
+      ) : (
+        <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
+          SETTLEMENT
+        </TextComponent>
+      )}
 
-      <Formik
-        initialValues={settlementFilterInitialValues}
-        validationSchema={null}
+      {!viewSubmitted && <Formik
+        initialValues={formValues}
+        enableReinitialize
+        validationSchema={Yup.object(settlementFilterValidationSchema)}
         onSubmit={throttledSubmit}
       >
         {({ values, setFieldValue }) => {
@@ -114,12 +165,13 @@ const Settlement = () => {
           } = useProductSubProduct({
             selectedProductId: values.productId,
             onSubProductReset: () => setFieldValue("subProductId", ""),
+            isSettlement: true
           });
 
           const { vendorDropdownData, loadingVendorList } = useVendor();
 
           return (
-            <Form className="flex flex-col gap-2 mt-1">
+            <Form className="flex flex-col gap-2 mt-4">
               <Grid gutter="sm">
 
                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2.5 }}>
@@ -157,6 +209,8 @@ const Settlement = () => {
                     label="Sub Product"
                     placeholder="Select Sub Product"
                     size="xs"
+                    withAsterisk
+                    required
                     disabled={loadingSubProductList}
                   />
                 </Grid.Col>
@@ -175,15 +229,15 @@ const Settlement = () => {
 
                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
-                    name="reportType"
+                    name="walletType"
                     size="xs"
-                    label="Report Type"
-                    placeholder="Select Report Type"
+                    label="Wallet Type"
+                    placeholder="Select Wallet Type"
                     required
                     withAsterisk
                     data={[
-                      { label: "PRE SETTLEMENT", value: "PRE_SETTLEMENT" },
-                      { label: "HISTORY", value: "HISTORY" },
+                      { label: "PREPAID", value: "PREPAID" },
+                      { label: "POSTPAID", value: "POSTPAID" },
                     ]}
                   />
                 </Grid.Col>
@@ -210,56 +264,111 @@ const Settlement = () => {
           )
         }}
 
-      </Formik>
+      </Formik>}
 
-      <GenericMasterToolbar
-        onRefresh={handleRefresh}
-        onColumnChange={handleToggleColumn}
-        onExport={handleExportClick}
-        // onFilter={() => setFilterVisible((prev) => !prev)}
-        headers={preSettlementHeaders}
-        visibleColumns={visibleColumns}
-        loading={loading}
-        error={error ? error.toString() : null}
-      />
+      {/* SHOW TOOLBAR + TABLE ONLY AFTER VIEW CLICKED */}
+      {viewSubmitted && (
+        <>
+          <div className="flex justify-between">
+            {/* Left side extra buttons */}
+            <div className="flex gap-2 items-end">
+              <ButtonComponent
+                style={{ padding: "4px 20px", height: 32 }}
+                radius={2}
+                textColor="#fff"
+                borderColor="#fff"
+                fontSize="16"
+                throttleMs={5000}
+                bgColor="#BF0204"
+                onClick={() => handleSettlementAction("REJECT")}
+                leftIcon={<IconCancel />}
+                disabled={
+                  loadingActionSubmit ||
+                  !!loading ||
+                  // !!error ||
+                  !tableData?.length ||
+                  !selectedIds?.length
+                }
+              >
+                REJECT
+              </ButtonComponent>
+              <ButtonComponent
+                style={{ padding: "4px 20px", height: 32 }}
+                radius={2}
+                textColor="#FFF"
+                borderColor="#fff"
+                fontSize="16"
+                throttleMs={5000}
+                bgColor="#28A745"
+                onClick={() => handleSettlementAction("APPROVE")}
+                leftIcon={<GiCheckMark size={16} color="#FFF" />}
+                disabled={
+                  loadingActionSubmit ||
+                  !!loading ||
+                  // !!error ||
+                  !tableData?.length ||
+                  !selectedIds?.length
+                }
+              >
+                ACCEPT
+              </ButtonComponent>
+            </div>
 
-      {loading ? (
-        // Render shimmer
-        <ShimmerTableRows rowCount={6} columnCount={preSettlementHeaders.length} />
-      ) : (
-        <GenericMasterTable<PreSettlementTableType>
-          data={data}
-          headers={preSettlementHeaders.filter((h) =>
-            visibleColumns.includes(h.key as string)
+            {/* Your existing toolbar */}
+            <GenericMasterToolbar
+              onRefresh={handleRefresh}
+              onColumnChange={handleToggleColumn}
+              onExport={handleExportClick}
+              headers={preSettlementHeaders}
+              visibleColumns={visibleColumns}
+              loading={loading || loadingActionSubmit}
+              error={error ? error.toString() : null}
+            />
+          </div>
+
+          {loading ? (
+            // Render shimmer
+            <ShimmerTableRows rowCount={6} columnCount={preSettlementHeaders.length} />
+          ) : (
+            <GenericMasterTable<PreSettlementTableType>
+              data={tableData}
+              headers={preSettlementHeaders.filter((h) =>
+                visibleColumns.includes(h.key as string)
+              )}
+              renderExtraHeader={() => (
+                <div className="flex justify-center gap-2 min-w-10">
+                  <Checkbox
+                    checked={selectedIds.length === tableData.length && tableData.length > 0}
+                    indeterminate={
+                      selectedIds.length > 0 && selectedIds.length < tableData.length
+                    }
+                    onChange={(e) => handleToggleAll(e.currentTarget.checked, tableData)}
+                    disabled={loadingActionSubmit}
+                  />
+                </div>
+              )}
+              renderExtraRowCell={(item) => (
+                <div className="flex justify-center gap-2 min-w-10">
+                  <Checkbox
+                    checked={selectedIds.includes(item.id)}
+                    onChange={(e) => handleToggleRow(e.currentTarget.checked, item.id)}
+                    disabled={loadingActionSubmit}
+                  />
+                </div>
+              )}
+              pagination
+              currentPage={pagination.currentPage}
+              totalPages={pagination.totalPages}
+              onPageChange={setPage}
+              onPageSizeChange={setPageSize}
+              pageSize={pagination.pageSize}
+              pageSizeOptions={pageSizeSelectData}
+              message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+            />
           )}
-          renderExtraHeader={() => (
-            <div className="flex justify-center gap-2 min-w-10">
-              <span
-                className="cursor-pointer"
-              >
-                <Checkbox />
-              </span>
-            </div>
-          )}
-          renderExtraRowCell={() => (
-            <div className="flex justify-center gap-2 min-w-10">
-              <span
-                className="cursor-pointer"
-              >
-                <Checkbox />
-              </span>
-            </div>
-          )}
-          pagination
-          currentPage={pagination.currentPage}
-          totalPages={pagination.totalPages}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
-          pageSize={pagination.pageSize}
-          pageSizeOptions={pageSizeSelectData}
-          message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
-        />
+        </>
       )}
+
     </div>
   );
 };

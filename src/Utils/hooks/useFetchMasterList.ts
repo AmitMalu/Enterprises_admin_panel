@@ -18,7 +18,6 @@ interface UseMasterListProps<T> {
   method?: "GET" | "POST";
   defaultPageSize?: number;
   payload?: any;
-  autoFetch?: boolean;
 }
 
 export function useFetchMasterList<T>({
@@ -30,7 +29,6 @@ export function useFetchMasterList<T>({
   method = "GET",
   defaultPageSize,
   payload = null,
-  // autoFetch = true,
 }: UseMasterListProps<T>) {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(makeSelectMasterMeta(key));

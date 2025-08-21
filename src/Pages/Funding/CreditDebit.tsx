@@ -45,7 +45,7 @@ const CreditDebit = () => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={(values) => {
           console.log("Form Submitted", values);
-          if(!values){ //just for build
+          if (!values) { //just for build
             handleSubmit(values);
           }
         }}
