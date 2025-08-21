@@ -157,7 +157,7 @@ const UserMapping = () => {
                       key={userListKey}
                       name="userId"
                       label="User"
-                      inputHeight="10"
+                      inputHeight={40}
                       placeholder={`Select ${values.mode ? "Users" : "User"}`}
                       maxValues={values.mode ? 5 : 1}
                       withScrollArea
