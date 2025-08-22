@@ -269,6 +269,11 @@ export const sidebarData = [
         icon: reportsSvg,
       },
       {
+        label: "Settlement report",
+        link: "/report/transaction",
+        icon: reportsSvg,
+      },
+      {
         label: "Unsettled Transaction report",
         link: "/report/unsettled-transaction",
         icon: reportsSvg,

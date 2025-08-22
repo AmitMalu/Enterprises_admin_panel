@@ -57,5 +57,6 @@ export const API_ENDPOINTS = {
   },
   COMMON: {
     HIERARCHY: "api/hierarchy",
+    TRANSACTION: "api/transaction",
   },
 };

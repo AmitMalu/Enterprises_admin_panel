@@ -11,7 +11,7 @@ import { GiCheckMark } from "react-icons/gi";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import { dummyPreSettlementData, preSettlementHeaders, PreSettlementTableType, SETTLEMENT_KEY, SETTLEMENT_URL, settlementFilterInitialValues, settlementFilterValidationSchema, transformToViewSettlementPayload } from "../../Config/Funding/SettlementConfig";
+import { preSettlementHeaders, PreSettlementTableType, SETTLEMENT_KEY, SETTLEMENT_URL, settlementFilterInitialValues, settlementFilterValidationSchema, transformToViewSettlementPayload } from "../../Config/Funding/SettlementConfig";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
@@ -22,6 +22,8 @@ import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import BackHeader from "../../Components/Molecules/BackHeader";
 import * as Yup from "yup"
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
+import { RefreshIcon } from "../../assets/Icons";
+import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 
 const Settlement = () => {
 
@@ -34,12 +36,8 @@ const Settlement = () => {
     preSettlementHeaders.map((h) => h.key as string)
   );
 
-  // const [submittedFilter, setSubmittedFilter] = useState<{
-  //   key: string;
-  //   value: any;
-  // } | null>(null);
-
   const [formValues, setFormValues] = useState(settlementFilterInitialValues);
+  const [walletType, setWalletType] = useState<string>("");
   const [viewSubmitted, setViewSubmitted] = useState(false);
   const [loadingActionSubmit, setLoadingActionSubmit] = useState(false);
   const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
@@ -57,6 +55,7 @@ const Settlement = () => {
     setFormValues(values);
     const payload = transformToViewSettlementPayload(values);
     setPayload(payload);
+    setWalletType(values.walletType);
     setViewSubmitted(true);
   }, 3000);
 
@@ -82,6 +81,7 @@ const Settlement = () => {
   const handleRefresh = () => {
     dispatch(resetMaster(SETTLEMENT_KEY));
     setVisibleColumns(preSettlementHeaders.map((h) => h.key as string));
+    setSelectedIds([]);
     setRefreshKey((prev) => prev + 1);
   };
 
@@ -104,12 +104,20 @@ const Settlement = () => {
   const handleSettlementAction = async (action: "APPROVE" | "REJECT") => {
     if (!selectedIds.length) return;
     setLoadingActionSubmit(true); // set which row is loading
+    if (!walletType) {
+      toast.error("Wallet Type is required!");
+      return;
+    }
     try {
       await dispatch(updateMasterItem({
         key: SETTLEMENT_KEY,
-        url: `${SETTLEMENT_URL}?settlement=${action}`,
-        data: { ids: selectedIds },
-        mode: "PUT",
+        url: `${API_ENDPOINTS.COMMON.TRANSACTION}/isSettlement/bulk`,
+        data: {
+          transactionIds: selectedIds,
+          newStatus: action,
+          walletType: walletType
+        },
+        mode: "POST",
       })).unwrap();
 
       toast.success(`Settlement ${action === "APPROVE" ? "APPROVED" : "REJECTED"} successfully!`);
@@ -129,9 +137,6 @@ const Settlement = () => {
     }
   }, []);
 
-  // 👇 fallback to dummy data if API not ready
-  const tableData = data && data.length > 0 ? data : dummyPreSettlementData;
-
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {viewSubmitted ? (
@@ -140,6 +145,8 @@ const Settlement = () => {
           onBack={() => {
             setViewSubmitted(false);
             setPayload(null);
+            setSelectedIds([]);
+            setWalletType("");
             dispatch(resetMaster(SETTLEMENT_KEY));
           }}
         />
@@ -162,8 +169,10 @@ const Settlement = () => {
             subProductDropdownData,
             loadingSubProductList,
             subProductKey,
+            refetchProducts
           } = useProductSubProduct({
             selectedProductId: values.productId,
+            selectedSubProductId: values.subProductId,
             onSubProductReset: () => setFieldValue("subProductId", ""),
             isSettlement: true
           });
@@ -188,29 +197,49 @@ const Settlement = () => {
 
                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
+                    key={values.productId}
                     name="productId"
                     label="Product"
                     value={values.productId}
                     placeholder="Select Product"
+                    nothingFoundMessage="No Product Found"
                     size="xs"
                     withAsterisk
                     required
                     data={productDropdownData}
                     disabled={loadingProductList}
+                    rightSection={
+                      <>
+                        {loadingProductList && (
+                          <Loader size={14} color="blue" />
+                        )}
+                        {!loadingProductList && productDropdownData.length < 1 && (
+                          <div
+                            onClick={refetchProducts}
+                            className="cursor-pointer"
+                            style={{ pointerEvents: "auto", display: "flex", alignItems: "center" }}
+                            title="Refresh Products"
+                          >
+                            <RefreshIcon />
+                          </div>
+                        )}
+                      </>
+                    }
                   />
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
                     name="subProductId"
-                    key={subProductKey}
+                    key={`${subProductKey}-${values.productId}`}
                     value={values.subProductId}
                     data={subProductDropdownData}
                     label="Sub Product"
                     placeholder="Select Sub Product"
+                    nothingFoundMessage="No SubProduct Found for Selected Product"
                     size="xs"
                     withAsterisk
-                    required
+                    // required
                     disabled={loadingSubProductList}
                   />
                 </Grid.Col>
@@ -285,8 +314,8 @@ const Settlement = () => {
                 disabled={
                   loadingActionSubmit ||
                   !!loading ||
-                  // !!error ||
-                  !tableData?.length ||
+                  !!error ||
+                  !data?.length ||
                   !selectedIds?.length
                 }
               >
@@ -305,8 +334,8 @@ const Settlement = () => {
                 disabled={
                   loadingActionSubmit ||
                   !!loading ||
-                  // !!error ||
-                  !tableData?.length ||
+                  !!error ||
+                  !data?.length ||
                   !selectedIds?.length
                 }
               >
@@ -331,18 +360,18 @@ const Settlement = () => {
             <ShimmerTableRows rowCount={6} columnCount={preSettlementHeaders.length} />
           ) : (
             <GenericMasterTable<PreSettlementTableType>
-              data={tableData}
+              data={data}
               headers={preSettlementHeaders.filter((h) =>
                 visibleColumns.includes(h.key as string)
               )}
               renderExtraHeader={() => (
                 <div className="flex justify-center gap-2 min-w-10">
                   <Checkbox
-                    checked={selectedIds.length === tableData.length && tableData.length > 0}
+                    checked={selectedIds.length === data.length && data.length > 0}
                     indeterminate={
-                      selectedIds.length > 0 && selectedIds.length < tableData.length
+                      selectedIds.length > 0 && selectedIds.length < data.length
                     }
-                    onChange={(e) => handleToggleAll(e.currentTarget.checked, tableData)}
+                    onChange={(e) => handleToggleAll(e.currentTarget.checked, data)}
                     disabled={loadingActionSubmit}
                   />
                 </div>

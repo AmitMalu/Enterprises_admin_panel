@@ -95,6 +95,7 @@ export function useFetchMasterList<T>({
         : response;
       setData(transformed);
     } catch (err: any) {
+      setData([]);
       setError(err);
       toast.error(err);
     } finally {
