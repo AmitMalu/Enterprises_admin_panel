@@ -46,7 +46,7 @@ const Settlement = () => {
     useFetchMasterList<PreSettlementTableType>({
       method: "POST",
       key: SETTLEMENT_KEY,
-      url: viewSubmitted ? `${SETTLEMENT_URL}/settlement-pending` : undefined,
+      url: viewSubmitted ? `${SETTLEMENT_URL}/settlement` : undefined,
       payload,
       refreshKey,
     });

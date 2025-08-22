@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
-  console.log("18/08 04:00");
+  console.log("22/08 06:00");
 
   const basePath = import.meta.env.VITE_BASE_PATH || "/";
 

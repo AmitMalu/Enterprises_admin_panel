@@ -264,7 +264,7 @@ export const handleMasterFormSubmit = async <T>({
             useFormData,
           });
 
-    const res = await dispatch(thunk).unwrap();
+    const res = await (dispatch as any)(thunk).unwrap();
 
     toast.success(
       res.message ||

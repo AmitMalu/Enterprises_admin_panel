@@ -3,10 +3,11 @@ import { textField } from "../../Utils/ValidationUtils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
 export const CREDIT_DEBIT_KEY = "CREDIT_DEBIT";
-export const CREDIT_DEBIT_URL = API_ENDPOINTS.FUNDING.PREFUNDING;
+export const CREDIT_DEBIT_URL = API_ENDPOINTS.FUNDING.FUNDING;
 
 export interface CreditDebitFormType {
   type: string;
+  userType: string;
   accountNo: string;
   walletType: string;
   amount: string | number;
@@ -17,6 +18,7 @@ export interface CreditDebitFormType {
 
 export const initialValues: CreditDebitFormType = {
   type: "credit",
+  userType: "",
   accountNo: "",
   walletType: "PREPAID",
   amount: "0",
@@ -30,8 +32,9 @@ export const validationSchema: Record<
   Yup.AnySchema
 > = {
   type: Yup.string()
-    .oneOf(["credit", "debit"], "Type must be Credit or Debit")
+    .oneOf(["CREDIT", "DEBIT"], "Type must be CREDIT or DEBIT")
     .required("Type is required"),
+  userType: textField("User Type", 100, true, true),
   accountNo: textField("Account Number", 150, true, true),
   walletType: textField("Wallet Type", 150, true, true).default("PREPAID"),
   amount: Yup.number()
@@ -59,6 +62,16 @@ export const validationSchema: Record<
         return String(value) === String(amount);
       }
     ),
-  narrationType: textField("Narration", 150, true, true).default("other"),
+  narrationType: textField("Narration", 150, true, true),
   remark: textField("Partner Name", 150, false, true),
 };
+
+export const transformToCreditDebitPayload = (values: any) => ({
+  fundingType: values.type ?? "",
+  userAccountId: values.accountNo ?? "",
+  walletType: values.walletType ?? "PREPAID", // PREPAID / POSTPAID
+  amount: Number(values.amount) ?? 0, // ensure number
+  confirmAmount: Number(values.confirmAmount) ?? 0, // ensure number
+  narrationType: values.narrationType ?? "", // commission → Fund Debit
+  remarks: values.remark ?? "",
+});
