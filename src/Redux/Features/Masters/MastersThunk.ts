@@ -36,6 +36,14 @@ export interface FetchMasterByIdParams {
   id: string;
 }
 
+// Define the input type for reusability
+interface DownloadFileParams {
+  url: string;
+  filename: string; // default name for download
+  method?: "GET" | "POST"; // optional, defaults to GET
+  body?: any; // for POST APIs
+}
+
 // APIs
 export const fetchMasterList = createAsyncThunk(
   "masters/fetchMasterList",
@@ -382,6 +390,45 @@ export const AdhaarPanLinkApi = createAsyncThunk(
           error.message ||
           "Error in Aadhaar Pan Link verification"
       );
+    }
+  }
+);
+
+export const downloadFileThunk = createAsyncThunk(
+  "common/downloadFile",
+  async (
+    {
+      url,
+      filename = "Sample-file.xlsx",
+      method = "GET",
+      body,
+    }: DownloadFileParams,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await axiosInstance.request({
+        url,
+        method,
+        data: body,
+        responseType: "blob", // Important: tells axios to treat it as a file
+      });
+
+      // 🔹 Create a Blob object from the binary response data
+      const blob = new Blob([response.data]);
+      // 🔹 Create a temporary invisible link in DOM
+      const link = document.createElement("a");
+      // 🔹 Attach blob data to the link as a downloadable URL
+      link.href = window.URL.createObjectURL(blob);
+      // 🔹 Set filename for downloaded file
+      link.download = filename;
+      // 🔹 Trigger the download (simulate a click)
+      link.click();
+      // 🔹 Remove the temporary link from DOM
+      link.remove();
+
+      return { success: true, filename };
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data || "File download failed");
     }
   }
 );

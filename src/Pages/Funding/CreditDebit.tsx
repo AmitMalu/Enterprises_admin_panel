@@ -33,7 +33,7 @@ const CreditDebit = () => {
           })
         ).unwrap();
 
-        toast.success(res.message || "Operation Successfull");
+        toast.success(res.message || "Transaction Successfull");
         resetForm();
         setFormKey(k => k + 1);
       } catch (err: any) {
