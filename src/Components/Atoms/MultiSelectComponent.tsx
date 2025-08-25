@@ -26,6 +26,8 @@ interface MultiSelectComponentProps {
     maxDropdownHeight?: number;
     checkIconPosition?: "left" | "right";
     dropdownOpened?: boolean;
+    limit?: number;
+    inputHeight?: string;
 }
 
 const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({
@@ -51,6 +53,8 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({
     maxDropdownHeight = 200,
     checkIconPosition,
     dropdownOpened,
+    limit,
+    inputHeight = 40,
 }) => {
     const screenSize = useScreenSize();
 
@@ -65,6 +69,10 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({
                     : "xl");
 
     const defaultRadius = radius || (screenSize === "3xl" ? "md" : "sm");
+
+    const resolvedHeight =
+        typeof inputHeight === "number" ? `${inputHeight}px` : inputHeight;
+
 
     return (
         <div className={className}>
@@ -89,8 +97,17 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({
                 maxDropdownHeight={maxDropdownHeight}
                 checkIconPosition={checkIconPosition}
                 dropdownOpened={dropdownOpened}
+                limit={limit}
+                classNames={{
+                    // pillsList: `max-h-${inputHeight} overflow-y-auto scrollbar-hide`,
+                }}
                 error={typeof error === "string" ? true : !!error}
                 styles={{
+                    pillsList: {
+                        maxHeight: resolvedHeight,
+                        overflowY: "auto",
+                        scrollbarWidth: "none"
+                    },
                     input: {
                         color: "#282828",
                         fontWeight: 500,

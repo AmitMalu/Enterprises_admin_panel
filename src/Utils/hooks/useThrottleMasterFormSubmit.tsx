@@ -14,7 +14,7 @@ type UseThrottleMasterFormSubmitProps<T> = {
     updateUrl: string;
     transformCreatePayload?: (values: T) => any;
     transformUpdatePayload?: (values: T) => any;
-    successNavigatePath: string;
+    successNavigatePath?: string;
     entityName: string;
     delay?: number;
 };
