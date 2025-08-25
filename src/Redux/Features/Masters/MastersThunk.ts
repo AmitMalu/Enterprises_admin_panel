@@ -36,6 +36,14 @@ export interface FetchMasterByIdParams {
   id: string;
 }
 
+// Define the input type for reusability
+interface DownloadFileParams {
+  url: string;
+  filename: string; // default name for download
+  method?: "GET" | "POST"; // optional, defaults to GET
+  body?: any; // for POST APIs
+}
+
 // APIs
 export const fetchMasterList = createAsyncThunk(
   "masters/fetchMasterList",
@@ -154,41 +162,6 @@ export const fetchMasterById = createAsyncThunk(
   }
 );
 
-// export const createMasterItem = createAsyncThunk(
-//   "masters/createMasterItem",
-//   async ({ key, url, data }: CreateMasterParams<any>, { rejectWithValue }) => {
-//     // dispatch(setLoading({ key, loading: true }));
-//     // dispatch(setError({ key, error: null }));
-//     // dispatch(setLoaded({ key, loaded: false }));
-
-//     try {
-//       const response = await axiosInstance.post(url, data);
-//       const responseData = response?.data;
-
-//       if (
-//         responseData?.statusCode === 201 ||
-//         responseData?.statusCode === 200
-//       ) {
-//         // dispatch(setLoading({ key, loading: false }));
-//         // dispatch(setLoaded({ key, loaded: false }));
-//         return responseData;
-//       } else {
-//         throw new Error(
-//           responseData?.message || `Failed to create ${key} Master`
-//         );
-//       }
-//     } catch (error: any) {
-//       const errMsg =
-//         error?.response?.data?.message ||
-//         error.message ||
-//         `Failed to create ${key} Master`;
-//       // dispatch(setLoading({ key, loading: false }));
-//       // dispatch(setError({ key, error: errMsg }));
-//       return rejectWithValue(errMsg);
-//     }
-//   }
-// );
-
 export const createMasterItem = createAsyncThunk(
   "masters/createMasterItem",
   async (
@@ -223,40 +196,6 @@ export const createMasterItem = createAsyncThunk(
     }
   }
 );
-
-// export const updateMasterItem = createAsyncThunk(
-//   "masters/updateMasterItem",
-//   async (
-//     { key, url, id, data, mode = "PUT" }: UpdateMasterParams<any>,
-//     { rejectWithValue }
-//   ) => {
-//     try {
-//       const endpoint = id ? `${url}/${id}` : url;
-//       let response;
-
-//       if (mode === "POST") {
-//         response = await axiosInstance.post(endpoint, data ?? data);
-//       } else {
-//         response = await axiosInstance.put(endpoint, data ?? data); //default to put
-//       }
-//       const responseData = response?.data;
-
-//       if (responseData?.statusCode === 200) {
-//         return responseData;
-//       } else {
-//         throw new Error(
-//           responseData?.message || `Failed to create ${key} Master`
-//         );
-//       }
-//     } catch (error: any) {
-//       const errMsg =
-//         error?.response?.data?.message ||
-//         error.message ||
-//         `Failed to create ${key} Master`;
-//       return rejectWithValue(errMsg);
-//     }
-//   }
-// );
 
 export const updateMasterItem = createAsyncThunk(
   "masters/updateMasterItem",
@@ -451,6 +390,45 @@ export const AdhaarPanLinkApi = createAsyncThunk(
           error.message ||
           "Error in Aadhaar Pan Link verification"
       );
+    }
+  }
+);
+
+export const downloadFileThunk = createAsyncThunk(
+  "common/downloadFile",
+  async (
+    {
+      url,
+      filename = "Sample-file.xlsx",
+      method = "GET",
+      body,
+    }: DownloadFileParams,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await axiosInstance.request({
+        url,
+        method,
+        data: body,
+        responseType: "blob", // Important: tells axios to treat it as a file
+      });
+
+      // 🔹 Create a Blob object from the binary response data
+      const blob = new Blob([response.data]);
+      // 🔹 Create a temporary invisible link in DOM
+      const link = document.createElement("a");
+      // 🔹 Attach blob data to the link as a downloadable URL
+      link.href = window.URL.createObjectURL(blob);
+      // 🔹 Set filename for downloaded file
+      link.download = filename;
+      // 🔹 Trigger the download (simulate a click)
+      link.click();
+      // 🔹 Remove the temporary link from DOM
+      link.remove();
+
+      return { success: true, filename };
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data || "File download failed");
     }
   }
 );

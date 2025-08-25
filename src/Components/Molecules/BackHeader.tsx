@@ -6,24 +6,35 @@ import TextComponent from "../Atoms/TextComponent";
 
 interface BackHeaderProps {
     title: string;
-    backPath: string;
+    backPath?: string;
+    onBack?: () => void;
     tooltipLabel?: string;
 }
 
-const BackHeader = ({ title, backPath, tooltipLabel = "Go Back" }: BackHeaderProps) => {
+const BackHeader = ({ title, backPath, onBack, tooltipLabel = "Go Back" }: BackHeaderProps) => {
     const navigate = useNavigate();
+
+    const handleBack = () => {
+        if (backPath) {
+            navigate(backPath);
+        } else if (onBack) {
+            onBack();
+        }
+    };
 
     return (
         <div className="flex items-center gap-2 mb-1">
-            <Tooltip label={tooltipLabel} position="bottom" withArrow>
-                <button
-                    onClick={() => navigate(backPath)}
-                    className="p-1 rounded hover:bg-gray-100 transition"
-                    aria-label={tooltipLabel}
-                >
-                    <IconArrowLeft size={22} stroke={1.8} color="#C30305" />
-                </button>
-            </Tooltip>
+            {(backPath || onBack) && (
+                <Tooltip label={tooltipLabel} position="bottom" withArrow>
+                    <button
+                        onClick={handleBack}
+                        className="p-1 rounded hover:bg-gray-100 transition"
+                        aria-label={tooltipLabel}
+                    >
+                        <IconArrowLeft size={22} stroke={1.8} color="#C30305" />
+                    </button>
+                </Tooltip>
+            )}
 
             <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
                 {title}

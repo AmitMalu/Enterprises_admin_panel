@@ -1,7 +1,9 @@
-import { ActionIcon, FileInput, Modal } from "@mantine/core";
+import { ActionIcon, FileInput, Modal, Table } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { IconEye } from "@tabler/icons-react";
+import * as XLSX from "xlsx";
+import { ellipsisCellStyle } from "../../Utils/utils";
 
 interface FileInputComponentProps {
   label?: string;
@@ -16,6 +18,12 @@ interface FileInputComponentProps {
   disabled?: boolean;
   radius?: "xs" | "sm" | "md" | "lg" | "xl";
   size?: "xs" | "sm" | "md" | "lg" | "xl";
+  showPreviewIcon?: boolean; // ✅ new prop
+  styles?: Partial<{
+    input: React.CSSProperties;
+    wrapper: React.CSSProperties;
+    placeholder: React.CSSProperties;
+  }>; // ✅ custom styles from outside
 }
 
 const FileInputComponent: React.FC<FileInputComponentProps> = ({
@@ -31,10 +39,13 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
   required = false,
   withAsterisk = false,
   disabled = false,
+  showPreviewIcon = true,
+  styles: customStyles = {},
 }) => {
   const screenSize = useScreenSize();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [excelData, setExcelData] = useState<any[][]>([]);
 
   useEffect(() => {
     let objectUrl: string | null = null;
@@ -57,6 +68,18 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
     };
   }, [value]);
 
+  const handlePreview = async () => {
+    if (value instanceof File && (value.name.endsWith(".xlsx") || value.name.endsWith(".csv"))) {
+      const data = await value.arrayBuffer();
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const json = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" }) as any[][];
+      setExcelData(json);
+    }
+    setShowModal(true);
+  };
+
   const defaultSize =
     size ||
     (screenSize === "sm" || screenSize === "md" || screenSize === "lg"
@@ -69,41 +92,70 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
 
   const defaultRadius = radius || (screenSize === "3xl" ? "md" : "sm");
 
-  const sharedProps = {
-    label,
-    name,
-    placeholder,
-    accept,
-    value,
-    onChange,
-    error: typeof error === "string" ? true : !!error,
-    required: withAsterisk || required,
-    disabled,
-    size: defaultSize,
-    radius: defaultRadius,
-    styles: {
-      input: {
-        color: "#282828",
-        fontWeight: 500,
-      },
+  const defaultStyles: FileInputComponentProps["styles"] = {
+    input: {
+      color: "#282828",
+      fontWeight: 500,
     },
-    rightSection:
-      previewUrl &&
-        !error &&
-        !(previewUrl.includes(".pdf") || (value instanceof File && value.type === "application/pdf")) ? (
-        <ActionIcon onClick={() => setShowModal(true)}>
-          <IconEye size={16} />
-        </ActionIcon>
-      ) : null,
   };
+
+  // const sharedProps = {
+  //   label,
+  //   name,
+  //   placeholder,
+  //   accept,
+  //   value,
+  //   onChange,
+  //   error: typeof error === "string" ? true : !!error,
+  //   required: withAsterisk || required,
+  //   disabled,
+  //   size: defaultSize,
+  //   radius: defaultRadius,
+  //   styles: {
+  //     input: {
+  //       color: "#282828",
+  //       fontWeight: 500,
+  //     },
+  //   },
+  //   rightSection:
+  //     showPreviewIcon &&
+  //       previewUrl &&
+  //       !error &&
+  //       !(previewUrl.includes(".pdf") || (value instanceof File && value.type === "application/pdf")) ? (
+  //       <ActionIcon onClick={() => setShowModal(true)}>
+  //         <IconEye size={16} />
+  //       </ActionIcon>
+  //     ) : null,
+  // };
 
   return (
     <div>
       <div className="relative">
         <FileInput
-          {...sharedProps}
+          // {...sharedProps}
+          // placeholder={typeof value === "string" ? "" : placeholder}
+          // value={typeof value === "string" ? null : value} // let it behave normally for File
+          label={label}
+          name={name}
           placeholder={typeof value === "string" ? "" : placeholder}
-          value={typeof value === "string" ? null : value} // let it behave normally for File
+          accept={accept}
+          value={typeof value === "string" ? null : value}
+          onChange={onChange}
+          error={typeof error === "string" ? true : !!error}
+          required={withAsterisk || required}
+          disabled={disabled}
+          size={defaultSize}
+          radius={defaultRadius}
+          styles={{ ...defaultStyles, ...customStyles }} // ✅ merge default + external styles
+          rightSection={
+            showPreviewIcon &&
+              previewUrl &&
+              !(previewUrl.includes(".pdf") || (value instanceof File && value.type === "application/pdf")) ? (
+              <ActionIcon onClick={handlePreview}>
+                <IconEye size={16} />
+              </ActionIcon>
+            ) : null
+          }
         />
 
         {/* Custom filename overlay only when URL (string) */}
@@ -129,7 +181,7 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
         size="lg"
         centered
       >
-        {previewUrl && (
+        {/* {previewUrl && (
           <>
             {previewUrl &&
               (previewUrl.includes(".pdf") ||
@@ -147,6 +199,42 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
               />
             )}
           </>
+        )} */}
+        {value instanceof File && (value.name.endsWith(".xlsx") || value.name.endsWith(".csv")) ? (
+          <Table.ScrollContainer minWidth={500} type="native" className="max-h-[400px]">
+            <Table striped highlightOnHover withColumnBorders withRowBorders>
+              <Table.Thead>
+                <Table.Tr>
+                  {excelData[0]?.map((header, idx) => (
+                    <Table.Th key={idx}>{header}</Table.Th>
+                  ))}
+                </Table.Tr>
+              </Table.Thead>
+
+              <Table.Tbody>
+                {excelData.slice(1).map((row, rowIndex) => (
+                  <Table.Tr key={rowIndex}>
+                    {row.map((cell, colIndex) => (
+                      <Table.Td key={colIndex} style={ellipsisCellStyle}>{cell}</Table.Td>
+                    ))}
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </Table.ScrollContainer>
+
+        ) : previewUrl &&
+          (previewUrl.includes(".pdf") ||
+            (value instanceof File && value.type === "application/pdf")) ? (
+          <iframe src={previewUrl} title="PDF Preview" className="w-full h-[400px]" />
+        ) : (
+          previewUrl && (
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="max-h-[400px] w-full object-contain"
+            />
+          )
         )}
 
       </Modal>

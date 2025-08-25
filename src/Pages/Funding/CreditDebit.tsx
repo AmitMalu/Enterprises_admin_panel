@@ -1,35 +1,49 @@
-import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useState } from "react";
-import { CREDIT_DEBIT_KEY, CREDIT_DEBIT_URL, CreditDebitFormType, initialValues, validationSchema } from "../../Config/Funding/CreditDebitConfig";
-import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import { CREDIT_DEBIT_KEY, CREDIT_DEBIT_URL, initialValues, transformToCreditDebitPayload, validationSchema } from "../../Config/Funding/CreditDebitConfig";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { Form, Formik } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHierarchy";
+import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { createMasterItem } from "../../Redux/Features/Masters/MastersThunk";
+import { toast } from "react-toastify";
 
 const CreditDebit = () => {
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<CreditDebitFormType>(initialValues);
+  const [formKey, setFormKey] = useState(0);
 
-  const handleSubmit = useThrottleMasterFormSubmit<CreditDebitFormType>({
-    mode: "add",
-    dispatch,
-    navigate,
-    resetFormData: () => setFormData(initialValues),
-    masterKey: CREDIT_DEBIT_KEY,
-    addUrl: `${CREDIT_DEBIT_URL}/create`,
-    updateUrl: `${CREDIT_DEBIT_URL}`,
-    entityName: "Admin User",
-    delay: 5000,
-  });
 
+  const throttledSubmit = useThrottledFormSubmit(
+    async (values: any, { resetForm }: any) => {
+      const payload = await transformToCreditDebitPayload(values)
+
+      try {
+        const res = await dispatch(
+          createMasterItem({
+            key: CREDIT_DEBIT_KEY,
+            data: payload,
+            url: `${CREDIT_DEBIT_URL}/credit-debit`,
+          })
+        ).unwrap();
+
+        toast.success(res.message || "Transaction Successfull");
+        resetForm();
+        setFormKey(k => k + 1);
+      } catch (err: any) {
+        toast.error(
+          err || "Something went wrong"
+        );
+      }
+    },
+    3000
+  );
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
@@ -40,38 +54,24 @@ const CreditDebit = () => {
       </TextComponent>
 
       <Formik
+        key={formKey}
         enableReinitialize
-        initialValues={formData}
+        initialValues={initialValues}
         validationSchema={Yup.object(validationSchema)}
-        onSubmit={(values) => {
-          console.log("Form Submitted", values);
-          if(!values){ //just for build
-            handleSubmit(values);
-          }
-        }}
+        onSubmit={throttledSubmit}
       >
-        {({ values }) => {
+        {({ values, setFieldValue }) => {
 
-          const accountList = [
-            {
-              value: "IM-P-001/Partner/Shubham Khopade",
-              label: "IM-P-001/Partner/Shubham Khopade",
-              prepaidAmount: "9000",
-              postpaidAmount: "90000"
-            },
-            {
-              value: "BZT-RT-002/Retailer/Rahul Patil",
-              label: "BZT-RT-002/Retailer/Rahul Patil",
-              prepaidAmount: "1000",
-              postpaidAmount: "10000"
-            },
-            {
-              value: "IM-AD-001/Admin/Amit Deshmukh",
-              label: "IM-AD-001/Admin/Amit Deshmukh",
-              prepaidAmount: "2000",
-              postpaidAmount: "20000"
-            }
-          ];
+          const {
+            hierarchyList: userTypeList,
+            loadingHierarchyList: loadingUserTypeList,
+            subHierarchyList: accountList,
+            loadingSubHierarchyList: loadingAccountList,
+            subHierarchyKey: accountListKey,
+          } = useHierarchySubHierarchy({
+            selectedHierarchyCode: values.userType,
+            onSubHierarchyReset: () => setFieldValue("accountNo", ""),
+          });
 
 
           return (
@@ -94,25 +94,58 @@ const CreditDebit = () => {
                     withAsterisk
                     required
                     data={[
-                      { value: "credit", label: "Credit" },
-                      { value: "debit", label: "Debit" }
+                      { value: "CREDIT", label: "CREDIT" },
+                      { value: "DEBIT", label: "DEBIT" }
                     ]}
                   />
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-
                   <FormikSelectComponent
+                    name="walletType"
+                    label="Wallet Type"
+                    placeholder="Select Wallet Type"
+                    withAsterisk
+                    required
+                    data={[
+                      { value: "PREPAID", label: "PREPAID" },
+                      { value: "POSTPAID", label: "POSTPAID" }
+                    ]}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                  <FormikSelectComponent
+                    name="userType"
+                    label="User Type"
+                    nothingFoundMessage="No UserType Found"
+                    placeholder="Select User Type"
+                    withAsterisk
+                    required
+                    data={userTypeList}
+                    disabled={loadingUserTypeList}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                  <FormikSelectComponent
+                    key={accountListKey}
                     name="accountNo"
                     label="Account"
+                    nothingFoundMessage="No Accounts found for Selected Type"
                     placeholder="Select Account"
                     withAsterisk
                     required
-                    data={accountList.map(({ value, label }) => ({ value, label }))}
+                    data={accountList.map((item: any) => ({
+                      label: item.displayName,
+                      value: String(item.id),
+                    }))}
+                    disabled={loadingAccountList}
                   />
                   {/* Balance display */}
                   {(() => {
-                    const selectedAccount = accountList.find(acc => acc.value === values.accountNo);
+                    const selectedAccount = accountList.find(acc => String(acc.id) === String(values?.accountNo)
+                    )
                     return selectedAccount ? (
                       <div className="mt-1 flex gap-2">
                         <TextComponent fontSize={14} fontFamily="Inter" fontWeight={500}>
@@ -127,23 +160,6 @@ const CreditDebit = () => {
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
-
-                  <FormikSelectComponent
-                    name="walletType"
-                    label="Wallet Type"
-                    placeholder="Select Wallet Type"
-                    withAsterisk
-                    required
-                    data={[
-                      { value: "PREPAID", label: "PREPAID" },
-                      { value: "POSTPAID", label: "POSTPAID" }
-                    ]}
-                  />
-                </Grid.Col>
-
-
-                <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
-
                   <FormikTextInputComponent
                     name="amount"
                     label="Amount"

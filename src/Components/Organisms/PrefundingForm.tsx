@@ -243,9 +243,9 @@ const PrefundingForm = () => {
                 variant="filled"
                 type="submit"
                 disabled={isSubmitting || isActionDisabled}
-                bgColor="#C30305"
+                bgColor="#BF0204"
                 textColor="#FFFFFF"
-                style={{ padding: "10px 30px" }}
+                style={{ padding: "0px 30px" }}
                 onClick={() => setSelectedAction("REJECTED")}
               >
                 REJECT
@@ -257,10 +257,10 @@ const PrefundingForm = () => {
                 borderColor="#fff"
                 variant="filled"
                 type="submit"
-                bgColor="#C30305"
+                bgColor="#28a745"
                 disabled={isSubmitting || isActionDisabled}
                 textColor="#FFFFFF"
-                style={{ padding: "10px 30px" }}
+                style={{ padding: "0px 30px" }}
                 onClick={() => setSelectedAction("APPROVED")}
               >
                 APPROVED

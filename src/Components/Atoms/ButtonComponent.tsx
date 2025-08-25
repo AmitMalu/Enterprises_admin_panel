@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from "react";
+import React, { forwardRef, useEffect, useMemo } from "react";
 import { Button } from "@mantine/core";
 import throttle from "lodash.throttle";
 
@@ -64,7 +64,13 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
       // Cleanup on unmount
       return throttled;
       // Note: DO NOT include `onClick` in dependencies
-    }, [throttleMs]);
+    }, [onClick, throttleMs]);
+
+    useEffect(() => {
+      return () => {
+        throttledOnClick?.cancel();
+      };
+    }, [throttledOnClick]);
 
     return (
       <Button

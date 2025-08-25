@@ -9,6 +9,16 @@ interface UseHierarchySubHierarchyProps {
     onSubHierarchyReset?: () => void;
 }
 
+interface SubHierarchyType {
+    id: string;
+    displayName: string;
+    name: string;
+    mobileno: string;
+    prepaidAmount: number;
+    postpaidAmount: number;
+    email: string;
+}
+
 export const useHierarchySubHierarchy = ({
     selectedHierarchyCode,
     onSubHierarchyReset,
@@ -18,7 +28,7 @@ export const useHierarchySubHierarchy = ({
     const [loadingHierarchyList, setLoadingHierarchyList] = useState(false);
     const [hierarchyError, setHierarchyError] = useState<string | null>(null);
 
-    const [subHierarchyList, setSubHierarchyList] = useState([]);
+    const [subHierarchyList, setSubHierarchyList] = useState<SubHierarchyType[]>([]);
     const [loadingSubHierarchyList, setLoadingSubHierarchyList] = useState(false);
     const [subHierarchyError, setSubHierarchyError] = useState<string | null>(null);
     const [subHierarchyKey, setSubHierarchyKey] = useState(Date.now());
