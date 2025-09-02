@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import {
-  AppleSvg,
-  FacebookSvg,
-  GoogleSvg,
+  // AppleSvg,
+  // FacebookSvg,
+  // GoogleSvg,
   LockIconSvg,
   UsernameSvg,
 } from "../../assets/Icons/Svgs";
@@ -157,26 +157,26 @@ const LoginPage: React.FC = () => {
       </div>
 
       {/* Divider */}
-      <div className="flex items-center w-full">
+      {/* <div className="flex items-center w-full">
         <hr className="flex-grow border-t border-gray-300" />
         <span className="font-open px-3 text-black text-sm xl:text-sm 2xl:text-xl font-medium">
           Or Login With
         </span>
         <hr className="flex-grow border-t border-gray-400" />
-      </div>
+      </div> */}
 
       {/* Social Icons */}
-      <div className="flex items-center justify-center gap-6 my-6">
+      {/* <div className="flex items-center justify-center gap-6 my-6">
         <FacebookSvg />
         <GoogleSvg />
         <AppleSvg />
-      </div>
+      </div> */}
 
       {/* Sign Up Prompt */}
-      <p className="text-center text-sm xl:text-lg 2xl:text-xl font-lora text-[#747483] ">
+      {/* <p className="text-center text-sm xl:text-lg 2xl:text-xl font-lora text-[#747483] ">
         Don't have an account?
         <span className="text-[#BF0204] cursor-pointer"> Sign up here</span>
-      </p>
+      </p> */}
     </div>
   );
 };

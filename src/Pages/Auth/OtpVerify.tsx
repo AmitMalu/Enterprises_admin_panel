@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { useLocation, useNavigate } from "react-router-dom";
 import { otpVerify, resendOtp } from "../../Redux/Features/Auth/Thunk";
@@ -10,14 +10,17 @@ import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 const validationSchema = Yup.object({
   otp: Yup.string().length(6, "OTP must be 6 digits").required("OTP is required"),
 })
 
-const OtpVerify: React.FC = () => {
+const OtpVerify = () => {
   const screenSize = useScreenSize();
   const navigate = useNavigate();
+
+  const [timer, setTimer] = useState(0);
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -49,6 +52,7 @@ const OtpVerify: React.FC = () => {
         pauseOnHover: true,
         draggable: false,
       });
+      setTimer(30);
     } catch (error: any) {
       toast.error(error.message || "OTP resend failed");
     }
@@ -89,6 +93,20 @@ const OtpVerify: React.FC = () => {
   }, 5000)
 
   useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000)
+    }
+    return () => clearInterval(interval);
+  }, [timer])
+
+  useEffect(() => {
+    setTimer(30)
+  }, [])
+
+  useEffect(() => {
     const resolvedUsername =
       locationState?.username ?? sessionStorage.getItem("otp-username");
     const resolvedOtpFor =
@@ -103,7 +121,7 @@ const OtpVerify: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full px-10 flex flex-col text-left">
+    <div className="w-full px-4 flex flex-col text-left">
       <h2 className="pl-4 mb-8 text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
         Enter OTP
       </h2>
@@ -143,14 +161,32 @@ const OtpVerify: React.FC = () => {
                 fontSize="14"
                 font="poppins"
                 throttleMs={10000}
+                disabled={timer > 0} // disable while counting
               >
-                Resend OTP
+                {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
               </ButtonComponent>
             </div>
 
-            <div className="flex justify-center items-center">
+            <div className="flex justify-between items-center">
               <ButtonComponent
-                fullWidth
+                size="md"
+                bgColor="#DB2729"
+                textColor="#fff"
+                radius={12}
+                leftIcon={<IconArrowLeft />}
+                onClick={() => {
+                  sessionStorage.removeItem("otpFor");
+                  sessionStorage.removeItem("otp-username");
+                  if (otpFor === "forgetPassword") {
+                    navigate("/forget-password");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
+              >
+                Back
+              </ButtonComponent>
+              <ButtonComponent
                 size="md"
                 bgColor="#DB2729"
                 textColor="#fff"

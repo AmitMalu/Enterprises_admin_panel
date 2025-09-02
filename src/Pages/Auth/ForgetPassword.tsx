@@ -10,6 +10,7 @@ import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { UsernameSvg } from "../../assets/Icons/Svgs";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { usernamePhoneEmailValidation } from "../../Utils/ValidationUtils";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 const validationSchema = Yup.object().shape({
   username: usernamePhoneEmailValidation,
@@ -78,9 +79,18 @@ const ForgetPassword: React.FC = () => {
           leftSectionWidth={36}
         />
 
-        <div className="flex justify-center items-center">
+        <div className="flex justify-between items-center">
           <ButtonComponent
-            fullWidth
+            size="md"
+            bgColor="#DB2729"
+            textColor="#fff"
+            radius={12}
+            leftIcon={<IconArrowLeft />}
+            onClick={() => navigate("/login")}
+          >
+            Back
+          </ButtonComponent>
+          <ButtonComponent
             size="md"
             bgColor="#DB2729"
             textColor="#fff"
