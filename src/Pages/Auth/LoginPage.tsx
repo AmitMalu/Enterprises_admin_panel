@@ -55,8 +55,9 @@ const LoginPage: React.FC = () => {
 
         toast.success(result.message);
         toast.success(result.data.otp, {
+          toastId: "otp-toast",
           autoClose: false, // Do not close automatically
-          closeOnClick: false,
+          closeOnClick: true,
           pauseOnHover: true,
           draggable: false,
         });
@@ -73,6 +74,7 @@ const LoginPage: React.FC = () => {
   }, 5000);
 
   useEffect(() => {
+    toast.dismiss();
     sessionStorage.removeItem("from-login-forget"); // Remove stale flag
   }, []);
 

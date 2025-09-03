@@ -45,10 +45,12 @@ const OtpVerify = () => {
   const handleResendOtp = async (): Promise<void> => {
     try {
       const result = await dispatch(resendOtp({ userName: username })).unwrap();
+      toast.dismiss();
       toast.success(result.message);
       toast.success(result.data.otp, {
+        toastId: "resend-otp-toast",
         autoClose: false, // Do not close automatically
-        closeOnClick: false,
+        closeOnClick: true,
         pauseOnHover: true,
         draggable: false,
       });
@@ -175,13 +177,15 @@ const OtpVerify = () => {
                 radius={12}
                 leftIcon={<IconArrowLeft />}
                 onClick={() => {
-                  sessionStorage.removeItem("otpFor");
-                  sessionStorage.removeItem("otp-username");
                   if (otpFor === "forgetPassword") {
+                    sessionStorage.setItem("from-login-forget", "true");
                     navigate("/forget-password");
                   } else {
                     navigate("/login");
                   }
+                  toast.dismiss();
+                  sessionStorage.removeItem("otpFor");
+                  sessionStorage.removeItem("otp-username");
                 }}
               >
                 Back
