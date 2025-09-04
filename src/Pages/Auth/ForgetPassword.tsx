@@ -10,6 +10,7 @@ import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { UsernameSvg } from "../../assets/Icons/Svgs";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { usernamePhoneEmailValidation } from "../../Utils/ValidationUtils";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 const validationSchema = Yup.object().shape({
   username: usernamePhoneEmailValidation,
@@ -37,6 +38,13 @@ const ForgetPassword: React.FC = () => {
       ).unwrap();
       toast.success(result.message);
       sessionStorage.removeItem("from-login-forget");
+      toast.success(result.data.otp, {
+        toastId: "forget-otp-toast",
+        autoClose: false, // Do not close automatically
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+      });
       persistOtpSession(values.username, "forgetPassword"); //set both values in Session storage
       navigate("/otp-verify", {
         state: { username: values.username, otpFor: "forgetPassword" },
@@ -48,6 +56,7 @@ const ForgetPassword: React.FC = () => {
   };
 
   useEffect(() => {
+    toast.dismiss();
     if (!sessionStorage.getItem("from-login-forget")) {
       navigate("/login", { replace: true });
     }
@@ -78,9 +87,18 @@ const ForgetPassword: React.FC = () => {
           leftSectionWidth={36}
         />
 
-        <div className="flex justify-center items-center">
+        <div className="flex justify-between items-center">
           <ButtonComponent
-            fullWidth
+            size="md"
+            bgColor="#DB2729"
+            textColor="#fff"
+            radius={12}
+            leftIcon={<IconArrowLeft />}
+            onClick={() => navigate("/login")}
+          >
+            Back
+          </ButtonComponent>
+          <ButtonComponent
             size="md"
             bgColor="#DB2729"
             textColor="#fff"
