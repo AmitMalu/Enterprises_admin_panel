@@ -108,6 +108,7 @@ export function useFetchMasterList<T>({
     pagination.pageSize,
     JSON.stringify(filter),
     refreshKey,
+    // payload,
   ]);
 
   useEffect(() => {

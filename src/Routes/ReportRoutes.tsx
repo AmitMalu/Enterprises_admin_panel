@@ -14,6 +14,7 @@ import {
   ReconciliationReport,
   RefundReport,
   SearchTransactionReport,
+  SettlementReport,
   SmsReport,
   TransactionReport,
   UnsettledTransactionReport,
@@ -27,6 +28,7 @@ export const ReportRoutes = (
       element={<LiveTransactionReport />}
     />
     <Route path="/report/transaction" element={<TransactionReport />} />
+    <Route path="/report/settlement" element={<SettlementReport />} />
     <Route
       path="/report/unsettled-transaction"
       element={<UnsettledTransactionReport />}

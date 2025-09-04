@@ -270,7 +270,7 @@ export const sidebarData = [
       },
       {
         label: "Settlement report",
-        link: "/report/transaction",
+        link: "/report/settlement",
         icon: reportsSvg,
       },
       {

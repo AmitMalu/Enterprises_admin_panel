@@ -1,5 +1,6 @@
 export { default as LiveTransactionReport } from "./LiveTransactionReport";
 export { default as TransactionReport } from "./TransactionReport";
+export { default as SettlementReport } from "./SettlementReport";
 export { default as UnsettledTransactionReport } from "./UnsettledTransactionReport";
 export { default as LedgerReport } from "./LedgerReport";
 export { default as PendingTransactionReport } from "./PendingTransactionReport";
