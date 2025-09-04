@@ -8,7 +8,7 @@ import { DatesRangeValue } from "@mantine/dates";
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
 
-export const SETTLEMENT_REPORT_URL = API_ENDPOINTS.REPORTS.SETTLEMENT;
+export const SETTLEMENT_REPORT_URL = API_ENDPOINTS.FUNDING.FUNDING;
 export const SETTLEMENT_REPORT_KEY = "SETTLEMENT_REPORT";
 
 interface SettlementReportFormType {
