@@ -279,11 +279,6 @@ export const sidebarData = [
         icon: reportsSvg,
       },
       {
-        label: "Ledger Report",
-        link: "/report/ledger-transaction",
-        icon: reportsSvg,
-      },
-      {
         label: "Pending Transaction",
         link: "/report/pending-transaction",
         icon: reportsSvg,
@@ -296,6 +291,16 @@ export const sidebarData = [
       {
         label: "Search Transaction report",
         link: "/report/search-transaction",
+        icon: reportsSvg,
+      },
+      {
+        label: "GST/TDS Report",
+        link: "/report/gst-tds",
+        icon: reportsSvg,
+      },
+      {
+        label: "Ledger Report",
+        link: "/report/ledger-transaction",
         icon: reportsSvg,
       },
       {
@@ -324,11 +329,6 @@ export const sidebarData = [
         icon: reportsSvg,
       },
       { label: "Email Report", link: "/report/email", icon: reportsSvg },
-      {
-        label: "GST/TDS Report",
-        link: "/report/gst-tds",
-        icon: reportsSvg,
-      },
       { label: "Refund Report", link: "/report/refund", icon: reportsSvg },
       {
         label: "Reconcillation report",

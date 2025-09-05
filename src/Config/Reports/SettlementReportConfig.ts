@@ -8,8 +8,12 @@ import { DatesRangeValue } from "@mantine/dates";
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
 
+//Same Config as Used for Settlement/Unsettled/Pending Report with different transform functions
+
 export const SETTLEMENT_REPORT_URL = API_ENDPOINTS.FUNDING.FUNDING;
 export const SETTLEMENT_REPORT_KEY = "SETTLEMENT_REPORT";
+export const UNSETTLED_REPORT_KEY = "UNSETTLED_REPORT";
+export const PENDING_TRANSCATION_REPORT_KEY = "PENDING_TRANSCATION_REPORT";
 
 interface SettlementReportFormType {
   dateRange: DatesRangeValue;
@@ -112,5 +116,35 @@ export const transformToViewSettlementReportPayload = (values: any) => {
     walletType: values.walletType ?? "",
     // reportType: "PRE_SETTLEMENT",
     tranStatus: values.tranStatus ? values.tranStatus : "POST SETTLEMENT",
+  };
+};
+
+export const transformToUnSettledTranxReportPayload = (values: any) => {
+  const [fromDate, toDate] = values.dateRange || [];
+
+  return {
+    fromDate: moment(fromDate).format("YYYY-MM-DD"),
+    toDate: moment(toDate).format("YYYY-MM-DD"),
+    // productId: values?.productId ?? "",
+    subProductId: values.subProductId ?? "",
+    vendorId: values.vendorId ?? "",
+    walletType: values.walletType ?? "",
+    // reportType: "PRE_SETTLEMENT",
+    tranStatus: "SETTLEMENT PENDING",
+  };
+};
+
+export const transformToPendingTranxReportPayload = (values: any) => {
+  const [fromDate, toDate] = values.dateRange || [];
+
+  return {
+    fromDate: moment(fromDate).format("YYYY-MM-DD"),
+    toDate: moment(toDate).format("YYYY-MM-DD"),
+    // productId: values?.productId ?? "",
+    subProductId: values.subProductId ?? "",
+    vendorId: values.vendorId ?? "",
+    walletType: values.walletType ?? "",
+    // reportType: "PRE_SETTLEMENT",
+    tranStatus: "PENDING",
   };
 };
