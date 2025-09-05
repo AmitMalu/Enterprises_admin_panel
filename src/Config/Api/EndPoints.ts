@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
     RESEND_OTP: "auth/resend-otp",
     FORGET_PASSWORD: "auth/forgot-password",
     SET_PASSWORD: "auth/set-password",
+    CHANGE_PASSWORD: "auth/change-password-admin",
     WALLET_BALANCE: "/api/dashboard/wallet-balance",
   },
   MANAGEMENT: {
