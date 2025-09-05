@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../Config/Api/EndPoints";
 import {
+  changePasswordPayload,
   forgetPasswordPayload,
   loginPayload,
   optVerifyPayload,
@@ -160,6 +161,32 @@ export const fetchWalletBalance = createAsyncThunk(
         error.response?.data?.message ||
           error.message ||
           "Error Fetching Wallet Balance"
+      );
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (payload: changePasswordPayload, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.AUTH.CHANGE_PASSWORD}`,
+        // "https://uat.decipay.in/enterprises/auth/change-password-admin",
+        payload
+      );
+      if (response.data.statusCode == 200) {
+        return response.data;
+      } else {
+        return rejectWithValue(
+          response.data.message || "Failed to Change Password"
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error While Change Password"
       );
     }
   }

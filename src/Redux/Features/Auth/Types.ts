@@ -41,3 +41,11 @@ export interface setPasswordPayload {
   reEnteredPassword: string;
   [key: string]: any;
 }
+
+export interface changePasswordPayload {
+  userName: string | number;
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+  [key: string]: any;
+}
