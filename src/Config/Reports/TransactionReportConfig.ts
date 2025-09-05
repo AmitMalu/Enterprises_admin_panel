@@ -59,7 +59,7 @@ export const transformToTransactionReportPayload = (values: any) => {
     walletType: values.walletType ?? "",
     status: values.status ?? "ALL",
     page: 0,
-    size: 100,
+    size: 10,
   };
 };
 
