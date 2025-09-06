@@ -99,42 +99,10 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
     },
   };
 
-  // const sharedProps = {
-  //   label,
-  //   name,
-  //   placeholder,
-  //   accept,
-  //   value,
-  //   onChange,
-  //   error: typeof error === "string" ? true : !!error,
-  //   required: withAsterisk || required,
-  //   disabled,
-  //   size: defaultSize,
-  //   radius: defaultRadius,
-  //   styles: {
-  //     input: {
-  //       color: "#282828",
-  //       fontWeight: 500,
-  //     },
-  //   },
-  //   rightSection:
-  //     showPreviewIcon &&
-  //       previewUrl &&
-  //       !error &&
-  //       !(previewUrl.includes(".pdf") || (value instanceof File && value.type === "application/pdf")) ? (
-  //       <ActionIcon onClick={() => setShowModal(true)}>
-  //         <IconEye size={16} />
-  //       </ActionIcon>
-  //     ) : null,
-  // };
-
   return (
     <div>
       <div className="relative">
         <FileInput
-          // {...sharedProps}
-          // placeholder={typeof value === "string" ? "" : placeholder}
-          // value={typeof value === "string" ? null : value} // let it behave normally for File
           label={label}
           name={name}
           placeholder={typeof value === "string" ? "" : placeholder}
@@ -181,25 +149,6 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
         size="lg"
         centered
       >
-        {/* {previewUrl && (
-          <>
-            {previewUrl &&
-              (previewUrl.includes(".pdf") ||
-                (value instanceof File && value.type === "application/pdf")) ? (
-              <iframe
-                src={previewUrl}
-                title="PDF Preview"
-                className="w-full h-[400px]"
-              />
-            ) : (
-              <img
-                src={previewUrl}
-                alt="Preview"
-                className="max-h-[400px] w-full object-contain"
-              />
-            )}
-          </>
-        )} */}
         {value instanceof File && (value.name.endsWith(".xlsx") || value.name.endsWith(".csv")) ? (
           <Table.ScrollContainer minWidth={500} type="native" className="max-h-[400px]">
             <Table striped highlightOnHover withColumnBorders withRowBorders>

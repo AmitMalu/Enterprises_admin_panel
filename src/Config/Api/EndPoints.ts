@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
     SET_PASSWORD: "auth/set-password",
     CHANGE_PASSWORD: "auth/change-password-admin",
     WALLET_BALANCE: "/api/dashboard/wallet-balance",
+    PROFILE: "/api/dashboard/profile",
   },
   MANAGEMENT: {
     USER_CREATE: USER_FORM_ENDPOINTS,
