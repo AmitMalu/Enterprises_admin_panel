@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState } from "./Types";
 import {
+  fetchProfileInfo,
   fetchWalletBalance,
   forgetPassword,
   login,
@@ -15,6 +16,7 @@ const initialState: AuthState = {
   error: null,
   token: null,
   walletBalance: {},
+  profileInfo: null,
 };
 
 const authReducer = createSlice({
@@ -92,6 +94,9 @@ const authReducer = createSlice({
       })
       .addCase(fetchWalletBalance.fulfilled, (state, action) => {
         state.walletBalance = action.payload.data;
+      })
+      .addCase(fetchProfileInfo.fulfilled, (state, action) => {
+        state.profileInfo = action.payload.data;
       });
   },
 });

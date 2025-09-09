@@ -39,7 +39,7 @@ const AppRoutes = () => {
           <Route element={<MainLayout />}>
             {/* MainLayout  */}
             <Route path="/" element={<HomePage />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/account/profile" element={<Profile />} />
             <Route path="/change-password" element={<ChangePassword />} />
             {MasterRoutes}
             {FundingRoutes}

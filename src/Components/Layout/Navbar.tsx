@@ -85,7 +85,7 @@ const Navbar: React.FC = () => {
         </Menu.Target>
         <Menu.Dropdown>
           <Menu.Label>Account</Menu.Label>
-          <Menu.Item onClick={() => navigate("/profile")}>Profile</Menu.Item>
+          <Menu.Item onClick={() => navigate("/account/profile")}>Profile</Menu.Item>
           <Menu.Item onClick={() => navigate("/change-password")}>
             Change Password
           </Menu.Item>

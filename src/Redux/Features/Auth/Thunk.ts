@@ -166,6 +166,30 @@ export const fetchWalletBalance = createAsyncThunk(
   }
 );
 
+export const fetchProfileInfo = createAsyncThunk(
+  "auth/fetchProfileInfo",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.AUTH.PROFILE}/${id}`
+      );
+      if (response.data.statusCode == 200 || response.data.statusCode == 201) {
+        return response.data;
+      } else {
+        return rejectWithValue(
+          response.data.message || "Failed to Fetch Profile Info"
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error Fetching Profile Info"
+      );
+    }
+  }
+);
+
 export const changePassword = createAsyncThunk(
   "auth/changePassword",
   async (payload: changePasswordPayload, { rejectWithValue }) => {

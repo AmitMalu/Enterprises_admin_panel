@@ -4,7 +4,17 @@ export interface AuthState {
   error: string | null;
   token: string | null;
   walletBalance: WalletBalance | null;
+  profileInfo: profileInfo | null;
 }
+
+export type profileInfo = {
+  info: any;
+  address: any;
+  outletAddress: any;
+  myBanks: any;
+  kycDocs: any;
+  [key: string]: any;
+};
 
 export type WalletBalance = {
   postpaidBalance?: number;
@@ -15,7 +25,7 @@ export type WalletBalance = {
 export interface loginPayload {
   userName: string | number;
   password: string;
-  url: string; 
+  url: string;
   [key: string]: any;
 }
 
