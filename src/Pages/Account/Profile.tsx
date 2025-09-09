@@ -9,6 +9,7 @@ import ProfileOutletInfo from "../../Components/Organisms/ProfileOutletInfo";
 import ProfileBankInfo from "../../Components/Organisms/ProfileBankInfo";
 import ProfileAddressInfo from "../../Components/Organisms/ProfileAddressInfo";
 import ProfileKycDocuments from "../../Components/Organisms/ProfileKycDocuments";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const profileData = useAppSelector((state) => state.auth.profileInfo); // Assuming you store it in auth slice
@@ -44,7 +45,11 @@ const Profile = () => {
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId || ""
     if (id) {
-      dispatch(fetchProfileInfo(id))
+      dispatch(fetchProfileInfo(id)).unwrap()
+        .catch((err) => {
+          toast.error(err);
+          console.error("Error fetching profile info:", err);
+        });
     }
   }, [])
 
