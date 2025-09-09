@@ -9,6 +9,13 @@ import { toast } from "react-toastify";
 
 type FilterType = Record<string, any> | null;
 
+type PaginationType = {
+  totalPages: number;
+  totalElements: number;
+  pageSize: number;
+  currentPage: number;
+};
+
 interface UseMasterListProps<T> {
   key: string;
   url?: string;
@@ -18,7 +25,32 @@ interface UseMasterListProps<T> {
   method?: "GET" | "POST";
   defaultPageSize?: number;
   payload?: any;
+  expectArray?: boolean; // new flag to distinguish data shape
 }
+
+// Overload for array data
+export function useFetchMasterList<T>(
+  props: UseMasterListProps<T> & { expectArray?: true }
+): {
+  data: T[];
+  loading: boolean;
+  error: string | null;
+  pagination: PaginationType;
+  setPage: (page: number) => void;
+  setPageSize: (size: number) => void;
+};
+
+// Overload for single object data
+export function useFetchMasterList<T>(
+  props: UseMasterListProps<T> & { expectArray: false }
+): {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+  pagination: PaginationType;
+  setPage: (page: number) => void;
+  setPageSize: (size: number) => void;
+};
 
 export function useFetchMasterList<T>({
   key,
@@ -29,7 +61,8 @@ export function useFetchMasterList<T>({
   method = "GET",
   defaultPageSize,
   payload = null,
-}: UseMasterListProps<T>) {
+  expectArray = true,
+}: UseMasterListProps<T> & { expectArray?: boolean }) {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(makeSelectMasterMeta(key));
 
@@ -41,7 +74,7 @@ export function useFetchMasterList<T>({
   };
   const currentPage = pagination.currentPage;
 
-  const [data, setData] = useState<T[]>([]);
+  const [data, setData] = useState<T[] | T | null>(expectArray ? [] : null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -95,7 +128,7 @@ export function useFetchMasterList<T>({
         : response;
       setData(transformed);
     } catch (err: any) {
-      setData([]);
+      setData(expectArray ? [] : null);
       setError(err);
       toast.error(err);
     } finally {

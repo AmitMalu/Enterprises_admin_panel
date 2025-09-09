@@ -58,6 +58,7 @@ export const API_ENDPOINTS = {
     TRANSACTION: "api/my-transaction",
     SETTLEMENT: "api/settlement",
     GST_TDS: "api/commission-charge",
+    SEARCH_TRANSACTION : "api/search-transaction"
   },
   COMMON: {
     HIERARCHY: "api/hierarchy",

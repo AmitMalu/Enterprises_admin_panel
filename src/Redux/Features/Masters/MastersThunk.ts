@@ -89,14 +89,14 @@ export const fetchMasterList = createAsyncThunk(
 
       if (responseData.statusCode === 200) {
         const {
-          content,
-          totalPages,
-          totalElements,
+          content = [],
+          totalPages = 0,
+          totalElements = 0,
           size,
           pageSize,
           pageNumber,
           number,
-        } = responseData.data;
+        } = responseData.data || {};
 
         // Set data and meta in store
         // dispatch(setData({ key, value: content }));
@@ -104,10 +104,10 @@ export const fetchMasterList = createAsyncThunk(
           setPagination({
             key,
             pagination: {
-              totalPages,
-              totalElements,
-              pageSize: size ?? pageSize,
-              currentPage: number + 1 || pageNumber + 1,
+              totalPages: totalPages || 0,
+              totalElements: totalElements || 0,
+              pageSize: size ?? pageSize ?? 10,
+              currentPage: (number ?? pageNumber ?? 0) + 1,
             },
           })
         );
@@ -122,6 +122,7 @@ export const fetchMasterList = createAsyncThunk(
         }
 
         return content;
+        
       } else {
         throw new Error(responseData?.message || "Fetch failed");
       }

@@ -140,6 +140,17 @@ export const pubPvtSelectData = [
   { label: "Private", value: "Private" },
 ];
 
+export const walletTypeSelectData = [
+  { value: "PREPAID", label: "PREPAID" },
+  { value: "POSTPAID", label: "POSTPAID" },
+];
+
+export const transactionStatusSelectData = [
+  { label: "PENDING", value: "PENDING" },
+  { label: "APPROVED", value: "APPROVED" },
+  { label: "REJECTED", value: "REJECTED" },
+];
+
 export const pageSizeSelectData = [
   { label: "5", value: "5" },
   { label: "10", value: "10" },
