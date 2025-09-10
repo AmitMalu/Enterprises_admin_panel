@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
 import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
@@ -33,34 +33,35 @@ export const useHierarchySubHierarchy = ({
     const [subHierarchyError, setSubHierarchyError] = useState<string | null>(null);
     const [subHierarchyKey, setSubHierarchyKey] = useState(Date.now());
 
-    // Fetch Heirarchy list (always)
+
+    const fetchHierarchyList = useCallback(async () => {
+        setLoadingHierarchyList(true);
+        setHierarchyError(null)
+        try {
+            const result = await dispatch(
+                fetchMasterDropdown({
+                    url: `${API_ENDPOINTS?.COMMON.HIERARCHY}/name-code`,
+                })
+            ).unwrap();
+
+            const filteredData = (result || [])?.map((item: any) => ({
+                label: item.name,
+                value: String(item.code),     // dropdown binds to operatorId
+            }));
+
+            setHierarchyList(filteredData);
+        } catch (err: any) {
+            console.error("Failed to fetch Hierarchy list", err);
+            toast.error(err);
+            setHierarchyError(err)
+            setHierarchyList([]);
+        } finally {
+            setLoadingHierarchyList(false);
+        }
+    }, [dispatch]);
+
+    // Always fetch hierarchy list when mounted
     useEffect(() => {
-        const fetchHierarchyList = async () => {
-            setLoadingHierarchyList(true);
-            setHierarchyError(null)
-            try {
-                const result = await dispatch(
-                    fetchMasterDropdown({
-                        url: `${API_ENDPOINTS?.COMMON.HIERARCHY}/name-code`,
-                    })
-                ).unwrap();
-
-                const filteredData = (result || [])?.map((item: any) => ({
-                    label: item.name,
-                    value: String(item.code),     // dropdown binds to operatorId
-                }));
-
-                setHierarchyList(filteredData);
-            } catch (err: any) {
-                console.error("Failed to fetch Hierarchy list", err);
-                toast.error(err);
-                setHierarchyError(err)
-                setHierarchyList([]);
-            } finally {
-                setLoadingHierarchyList(false);
-            }
-        };
-
         fetchHierarchyList();
     }, [dispatch]);
 
@@ -68,7 +69,7 @@ export const useHierarchySubHierarchy = ({
     useEffect(() => {
         if (!selectedHierarchyCode) return;
 
-        // ✅ Reset sub-hierarchy state immediately on parent change
+        // Reset sub-hierarchy state immediately on parent change
         if (onSubHierarchyReset) onSubHierarchyReset();
 
         const fetchSubHierarchyList = async () => {
@@ -104,5 +105,6 @@ export const useHierarchySubHierarchy = ({
         loadingSubHierarchyList,
         hierarchySubHierarchyError: hierarchyError || subHierarchyError,
         subHierarchyKey,
+        refetchHierarchy: fetchHierarchyList,
     };
 };
