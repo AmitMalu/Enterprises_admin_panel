@@ -25,7 +25,9 @@ interface UseMasterListProps<T> {
   method?: "GET" | "POST";
   defaultPageSize?: number;
   payload?: any;
-  expectArray?: boolean; // new flag to distinguish data shape
+  expectArray?: boolean;
+  skipPagination?: boolean;
+  returnFullData?: boolean;
 }
 
 // Overload for array data
@@ -62,7 +64,9 @@ export function useFetchMasterList<T>({
   defaultPageSize,
   payload = null,
   expectArray = true,
-}: UseMasterListProps<T> & { expectArray?: boolean }) {
+  skipPagination = false,
+  returnFullData = false,
+}: UseMasterListProps<T>) {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(makeSelectMasterMeta(key));
 
@@ -120,12 +124,17 @@ export function useFetchMasterList<T>({
           filter,
           method,
           payload,
+          skipPagination,
+          returnFullData,
         })
       ).unwrap();
 
       const transformed = transformDataFn
-        ? response.map(transformDataFn)
+        ? Array.isArray(response)
+          ? response.map(transformDataFn)
+          : transformDataFn(response)
         : response;
+
       setData(transformed);
     } catch (err: any) {
       setData(expectArray ? [] : null);
@@ -141,7 +150,6 @@ export function useFetchMasterList<T>({
     pagination.pageSize,
     JSON.stringify(filter),
     refreshKey,
-    // payload,
   ]);
 
   useEffect(() => {
