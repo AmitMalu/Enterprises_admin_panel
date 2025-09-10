@@ -44,7 +44,7 @@ interface DownloadFileParams {
   body?: any; // for POST APIs
 }
 
-// APIs
+// Here Filter and pagination will be passed as Params and Payload in body.
 export const fetchMasterList = createAsyncThunk(
   "masters/fetchMasterList",
   async (
@@ -122,7 +122,6 @@ export const fetchMasterList = createAsyncThunk(
         }
 
         return content;
-        
       } else {
         throw new Error(responseData?.message || "Fetch failed");
       }
@@ -130,6 +129,52 @@ export const fetchMasterList = createAsyncThunk(
       const errMsg =
         error?.response?.data?.message || error.message || "Failed to fetch";
       return rejectWithValue(errMsg);
+    }
+  }
+);
+
+// All Request Data will be passed in body - pagination and data everything
+export const fetchReport = createAsyncThunk(
+  "masters/fetchReport",
+  async (
+    { url, key, data }: { url: string; key: any; data: any },
+    { rejectWithValue, dispatch }
+  ) => {
+    try {
+      let response = await axiosInstance.post(url, data);
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        const {
+          content,
+          totalPages,
+          totalElements,
+          size,
+          pageSize,
+          pageNumber,
+          number,
+        } = responseData.data;
+
+        dispatch(
+          setPagination({
+            key,
+            pagination: {
+              totalPages,
+              totalElements,
+              pageSize: size ?? pageSize,
+              currentPage: number + 1 || pageNumber + 1,
+            },
+          })
+        );
+        return content;
+      } else {
+        throw new Error(responseData?.message || "Failed to fetch data");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "No list found"
+      );
     }
   }
 );
@@ -260,51 +305,6 @@ export const fetchMasterDropdown = createAsyncThunk(
 
       if (responseData?.statusCode === 200) {
         return responseData.data;
-      } else {
-        throw new Error(responseData?.message || "Failed to fetch data");
-      }
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || error.message || "No list found"
-      );
-    }
-  }
-);
-
-export const fetchReport = createAsyncThunk(
-  "masters/fetchReport",
-  async (
-    { url, key, data }: { url: string; key: any; data: any },
-    { rejectWithValue, dispatch }
-  ) => {
-    try {
-      let response = await axiosInstance.post(url, data);
-
-      const responseData = response?.data;
-
-      if (responseData?.statusCode === 200) {
-        const {
-          content,
-          totalPages,
-          totalElements,
-          size,
-          pageSize,
-          pageNumber,
-          number,
-        } = responseData.data;
-
-        dispatch(
-          setPagination({
-            key,
-            pagination: {
-              totalPages,
-              totalElements,
-              pageSize: size ?? pageSize,
-              currentPage: number + 1 || pageNumber + 1,
-            },
-          })
-        );
-        return content;
       } else {
         throw new Error(responseData?.message || "Failed to fetch data");
       }
