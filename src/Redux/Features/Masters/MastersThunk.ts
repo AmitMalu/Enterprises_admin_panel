@@ -12,6 +12,8 @@ type FetchMasterListParams = {
   filter?: Record<string, any> | null;
   method?: "GET" | "POST";
   payload?: any;
+  skipPagination?: Boolean;
+  returnFullData?: Boolean;
 };
 
 interface CreateMasterParams<T> {
@@ -56,13 +58,20 @@ export const fetchMasterList = createAsyncThunk(
       filter = null,
       method = "GET",
       payload = null,
+      skipPagination = false,
+      returnFullData = false,
     }: FetchMasterListParams,
     { rejectWithValue, dispatch }
   ) => {
     try {
       const params = new URLSearchParams();
-      params.append("page", String(page - 1)); // 0 - based
-      params.append("size", String(size));
+
+      // Append page & size only if skipPagination is false
+      if (!skipPagination) {
+        params.append("page", String(page - 1)); // 0 - based
+        params.append("size", String(size));
+      }
+
       // Append all filters as query params
       if (filter && typeof filter === "object") {
         Object.entries(filter).forEach(([k, v]) => {
@@ -88,6 +97,11 @@ export const fetchMasterList = createAsyncThunk(
       const responseData = response?.data;
 
       if (responseData.statusCode === 200) {
+        if (returnFullData) {
+          // Return the full data object
+          return responseData.data;
+        }
+
         const {
           content = [],
           totalPages = 0,
@@ -99,20 +113,21 @@ export const fetchMasterList = createAsyncThunk(
         } = responseData.data || {};
 
         // Set data and meta in store
-        // dispatch(setData({ key, value: content }));
-        dispatch(
-          setPagination({
-            key,
-            pagination: {
-              totalPages: totalPages || 0,
-              totalElements: totalElements || 0,
-              pageSize: size ?? pageSize ?? 10,
-              currentPage: (number ?? pageNumber ?? 0) + 1,
-            },
-          })
-        );
+        if (!skipPagination) {
+          dispatch(
+            setPagination({
+              key,
+              pagination: {
+                totalPages: totalPages || 0,
+                totalElements: totalElements || 0,
+                pageSize: size ?? pageSize ?? 10,
+                currentPage: (number ?? pageNumber ?? 0) + 1,
+              },
+            })
+          );
+        }
 
-        // ✅ Show toast if content is empty
+        // Show toast if content is empty
         if (!content || content.length === 0) {
           toast.warning("No records found", {
             autoClose: 1000,

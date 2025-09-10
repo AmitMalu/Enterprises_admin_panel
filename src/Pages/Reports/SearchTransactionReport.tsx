@@ -1,20 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { exportToCsv } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import { Form, Formik } from "formik";
-import { Grid, Loader } from "@mantine/core";
-import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
+import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import * as Yup from "yup";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import { RefreshIcon } from "../../assets/Icons";
 import { SEARCH_TRANSACTION_REPORT_KEY, SEARCH_TRANSACTION_REPORT_URL, searchTransInitialValues, SearchTransReportData, SearchTransReportHeaders, SearchTransReportSchema, SearchTransReportTableType } from "../../Config/Reports/SearchTransReportConfig";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
-import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHierarchy";
 import { CustomTab } from "../../Components/Molecules/CustomTab";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import { useAppDispatch } from "../../Redux/hooks";
@@ -23,7 +20,6 @@ import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
 const SearchTransactionReport = () => {
 
   const [reportFilter, setReportFilter] = useState<Record<string, any> | null>(null);
-  const dataRef = useRef<SearchTransReportData | null>(null);
   const [shouldFetch, setShouldFetch] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -45,8 +41,9 @@ const SearchTransactionReport = () => {
       filter: shouldFetch ? reportFilter : null,
       method: "GET",
       refreshKey,
-      defaultPageSize: 20,
       expectArray: false,
+      skipPagination: true,     // don't send page & size
+      returnFullData: true,     // return response.data directly
     });
 
   const filteredData = data ? (activeTab === "transaction" ? data.transactionDetails : data.walletDetails) : [];
@@ -80,10 +77,6 @@ const SearchTransactionReport = () => {
     setShouldFetch(true); //enable fetch only after form submit
   }, 3000);
 
-  useEffect(() => {
-    dataRef.current = data;
-  }, [data]);
-
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
@@ -112,26 +105,6 @@ const SearchTransactionReport = () => {
                     maxLength={20}
                   />
                 </Grid.Col>
-
-                {/* <Grid.Col span={{ base: 6, md: 4, lg: 4 }} >
-                  <div className="flex h-full w-full items-end justify-end gap-2">
-                    <ButtonComponent
-                      fontSize="14"
-                      fullWidth={false}
-                      radius={6}
-                      style={{ height: 30 }}
-                      size="sm"
-                      borderColor="#fff"
-                      variant="filled"
-                      type="submit"
-                      disabled={loading}
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
-                    >
-                      VIEW
-                    </ButtonComponent>
-                  </div>
-                </Grid.Col> */}
 
                 <Grid.Col span="auto">
                   <div className="flex justify-end items-end h-full gap-2">
