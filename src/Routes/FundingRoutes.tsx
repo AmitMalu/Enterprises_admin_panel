@@ -8,6 +8,7 @@ import {
   ManageSettlement,
   PreFundingAuth,
   Settlement,
+  UpdateTransaction,
 } from "../Pages/Funding";
 
 export const FundingRoutes = (
@@ -25,6 +26,7 @@ export const FundingRoutes = (
     <Route path="/funding/manage-payment" element={<ManagePayment />} />
     <Route path="/funding/manage-settlement" element={<ManageSettlement />} />
     <Route path="/funding/settlement" element={<Settlement />} />
+    <Route path="/funding/update-transaction" element={<UpdateTransaction />} />
     <Route path="/funding/low-balance" element={<LowBalance />} />
     <Route path="/funding/bulk-credit-debit" element={<BulkCreditDebit />} />
   </>
