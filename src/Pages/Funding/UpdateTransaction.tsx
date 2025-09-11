@@ -54,7 +54,7 @@ const UpdateTransaction = () => {
     setFormValues(values);
     const payload = transformToUpdateTransPayload(values);
     setPayload(payload);
-    setWalletType(values.walletType);
+    // setWalletType(values.walletType);
     setViewSubmitted(true);
   }, 3000);
 
@@ -86,7 +86,7 @@ const UpdateTransaction = () => {
 
   const handleToggleAll = (checked: boolean, data: UpdateTransTableType[]) => {
     if (checked) {
-      setSelectedIds(data.map((row) => row.id));
+      setSelectedIds(data.map((row) => row.txId));
     } else {
       setSelectedIds([]);
     }
@@ -157,20 +157,20 @@ const UpdateTransaction = () => {
         validationSchema={Yup.object(UpdateTransValidationSchema)}
         onSubmit={throttledSubmit}
       >
-        {() => {
-          // const {
-          //   productDropdownData,
-          //   loadingProductList,
-          //   subProductDropdownData,
-          //   loadingSubProductList,
-          //   subProductKey,
-          //   refetchProducts
-          // } = useProductSubProduct({
-          //   selectedProductId: values.productId,
-          //   selectedSubProductId: values.subProductId,
-          //   onSubProductReset: () => setFieldValue("subProductId", ""),
-          //   isSettlement: true
-          // });
+        {({ values, setFieldValue }) => {
+          const {
+            productDropdownData,
+            loadingProductList,
+            subProductDropdownData,
+            loadingSubProductList,
+            subProductKey,
+            refetchProducts
+          } = useProductSubProduct({
+            selectedProductId: values.productId,
+            selectedSubProductId: values.subProductId,
+            onSubProductReset: () => setFieldValue("subProductId", ""),
+            isSettlement: true
+          });
 
           // const { vendorDropdownData, loadingVendorList } = useVendor();
 
@@ -178,7 +178,7 @@ const UpdateTransaction = () => {
             <Form className="flex flex-col gap-2 mt-4">
               <Grid gutter="sm">
 
-                <Grid.Col span={{ base: 3, xs: 4, md: 4, lg: 2.5 }}>
+                <Grid.Col span={{ base: 4, md: 4, lg: 2.5 }}>
                   <FormikDateRangePicker
                     name="dateRange"
                     label="Date Range"
@@ -190,7 +190,7 @@ const UpdateTransaction = () => {
                   />
                 </Grid.Col>
 
-                {/* <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
+                <Grid.Col span={{ base: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
                     key={values.productId}
                     name="productId"
@@ -223,7 +223,7 @@ const UpdateTransaction = () => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
+                <Grid.Col span={{ base: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
                     name="subProductId"
                     key={`${subProductKey}-${values.productId}`}
@@ -239,7 +239,7 @@ const UpdateTransaction = () => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
+                {/* <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
                     name="vendorId"
                     label="Vendor"
@@ -296,7 +296,7 @@ const UpdateTransaction = () => {
         }}
       </Formik>
 
-      {selectedIds?.length ? <div className="flex gap-2 items-end justify-end mt-1">
+      {selectedIds?.length ? <div className="flex gap-2 items-end justify-end mt-2">
         <ButtonComponent
           style={{ padding: "4px 20px", height: 32 }}
           radius={2}
@@ -344,6 +344,7 @@ const UpdateTransaction = () => {
         <ShimmerTableRows rowCount={6} columnCount={updateTransHeaders.length} />
       ) : (
         <GenericMasterTable<UpdateTransTableType>
+          mt={2}
           data={data}
           headers={updateTransHeaders.filter((h) =>
             visibleColumns.includes(h.key as string)
@@ -363,8 +364,8 @@ const UpdateTransaction = () => {
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2 min-w-10">
               <Checkbox
-                checked={selectedIds.includes(item.id)}
-                onChange={(e) => handleToggleRow(e.currentTarget.checked, item.id)}
+                checked={selectedIds.includes(item.txId)}
+                onChange={(e) => handleToggleRow(e.currentTarget.checked, item.txId)}
                 disabled={loadingActionSubmit}
               />
             </div>

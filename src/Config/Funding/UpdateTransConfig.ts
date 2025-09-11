@@ -15,8 +15,8 @@ interface UpdateTransFormType {
   dateRange: DatesRangeValue;
   productId: string | number;
   subProductId: string | number;
-  vendorId: string | number;
-  walletType: string;
+  // vendorId: string | number;
+  // walletType: string;
 }
 export interface UpdateTransTableType {
   id: string | number;
@@ -51,8 +51,8 @@ export const updateTransInitialValues = {
   ] as DatesRangeValue,
   productId: "",
   subProductId: "",
-  vendorId: "",
-  walletType: "",
+  // vendorId: "",
+  // walletType: "",
 };
 
 export const UpdateTransValidationSchema: Record<
@@ -62,8 +62,8 @@ export const UpdateTransValidationSchema: Record<
   dateRange: dateRangeValidationSchema,
   productId: textField("Product", 100, true, true),
   subProductId: textField("Sub Product", 100, true, true),
-  vendorId: textField("Vendor", 100, false, true),
-  walletType: textField("Wallet Type", 150, false, true),
+  // vendorId: textField("Vendor", 100, false, true),
+  // walletType: textField("Wallet Type", 150, false, true),
 };
 
 export const updateTransHeaders: GenericTableHeader<UpdateTransTableType>[] = [
@@ -99,8 +99,8 @@ export const transformToUpdateTransPayload = (values: any) => {
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
     subProductId: values.subProductId ?? "",
-    vendorId: values.vendorId ?? "",
-    walletType: values.walletType ?? "",
+    // vendorId: values.vendorId ?? "",
+    // walletType: values.walletType ?? "",
     tranStatus: "PENDING",
   };
 };
