@@ -170,6 +170,11 @@ export const sidebarData = [
         icon: fundingSvg,
       },
       {
+        label: "Update Transaction",
+        link: "/funding/update-transaction",
+        icon: fundingSvg,
+      },
+      {
         label: "Low Balance",
         link: "/funding/low-balance",
         icon: fundingSvg,
