@@ -8,15 +8,19 @@ export const textField = (
   required = false,
   allowSpecialChars = false
 ) => {
-  let schema = Yup.string().max(
-    max,
-    `${field} cannot exceed ${max} characters`
-  );
+  let schema = Yup.string()
+    .max(max, `${field} cannot exceed ${max} characters`)
+    .nullable()
+    .notRequired(); // allow null and undefined by default
 
   if (!allowSpecialChars) {
-    schema = schema.matches(
-      /^[A-Za-z0-9\s._\-()]*$/,
-      `${field} should not contain special characters`
+    schema = schema.test(
+      "no-special-chars",
+      `${field} should not contain special characters`,
+      (value) => {
+        if (!value) return true; // skip if value is null or empty
+        return /^[A-Za-z0-9\s._\-()]*$/.test(value);
+      }
     );
   }
 
