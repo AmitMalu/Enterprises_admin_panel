@@ -61,6 +61,7 @@ export const API_ENDPOINTS = {
     SEARCH_TRANSACTION: "api/search-transaction",
     LEDGER_REPORT: "api/ledger-report",
     REFUND_REPORT: "api/refund",
+    REPORT: "api/reports",
   },
   COMMON: {
     HIERARCHY: "api/hierarchy",

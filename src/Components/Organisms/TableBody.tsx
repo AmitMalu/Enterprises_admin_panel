@@ -138,10 +138,19 @@ const TableBody = <T,>({
                     <TableStatusBadge status={String(cellData)} />
                   ) : (
                     (() => {
-                      const finalValue =
-                        key === "createdOn" || key === "editedOn" || key === "lastEditedOn" || key === "createdAt" || key === "requestDateTime" || key === "responseDateTime"
-                          ? formatDateTime(displayValue)
-                          : displayValue;
+                      const dateKeys = [
+                        "createdon",
+                        "editedon",
+                        "lasteditedon",
+                        "createdat",
+                        "requestdatetime",
+                        "responsedatetime",
+                        "timestamp"
+                      ];
+
+                      const finalValue = dateKeys.includes(key.toString().toLowerCase())
+                        ? formatDateTime(displayValue)
+                        : displayValue;
 
                       return (
                         <EllipsisPopoverCell value={finalValue} showCopy={copyable} />
