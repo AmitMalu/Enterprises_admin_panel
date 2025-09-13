@@ -288,11 +288,11 @@ export const sidebarData = [
         link: "/report/pending-transaction",
         icon: reportsSvg,
       },
-      {
-        label: "Update Transaction report",
-        link: "/report/update-transaction",
-        icon: reportsSvg,
-      },
+      // {
+      //   label: "Update Transaction report",
+      //   link: "/report/update-transaction",
+      //   icon: reportsSvg,
+      // },
       {
         label: "Search Transaction report",
         link: "/report/search-transaction",

@@ -347,6 +347,10 @@ export const dateRangeValidationSchema = Yup.array()
     return true;
   });
 
+export const singleDateValidationSchema = Yup.date()
+  .nullable()
+  .required("Date is required");
+
 export function buildPermissions(
   menus: string[],
   subMenus: string[]
