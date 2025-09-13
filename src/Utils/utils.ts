@@ -11,7 +11,7 @@ import {
 import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.0 (04-09)";
+export const DEV_APP_VERSION_LABEL = "v1.0.0 (13-09)";
 
 export const persistOtpSession = (username: string, otpFor: string) => {
   sessionStorage.setItem("otp-username", username);
