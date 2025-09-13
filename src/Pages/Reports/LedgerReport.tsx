@@ -10,7 +10,6 @@ import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit"
 import * as Yup from "yup";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import { useAppDispatch } from "../../Redux/hooks";
 import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";

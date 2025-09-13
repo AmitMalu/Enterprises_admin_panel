@@ -4,9 +4,7 @@ import {
   dateRangeValidationSchema,
   GenericTableHeader,
   transactionStatusSelectData,
-  walletTypeSelectData,
 } from "../../Utils/utils";
-import { textField } from "../../Utils/ValidationUtils";
 import { DatesRangeValue } from "@mantine/dates";
 import moment from "moment";
 

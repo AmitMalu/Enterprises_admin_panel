@@ -199,7 +199,7 @@ export const fetchMasterById = createAsyncThunk(
   async ({ key, endpoint, id }: FetchMasterByIdParams, { rejectWithValue }) => {
     // dispatch(setLoading({ key, loading: true }));
     try {
-      const response = await axiosInstance.get(`${endpoint}/${id}`);
+      const response = await axiosInstance.post(`${endpoint}/${id}`);
       const responseData = response?.data;
 
       if (responseData && responseData.statusCode === 200) {

@@ -22,6 +22,7 @@ export const API_ENDPOINTS = {
     ADHAAR_VERIFY: "verification/aadhaar-validate",
     PAN_VERIFY: "verification/pan-validate",
     AADHAAR_PAN_LINK: "verification/aadhaar-pan-link",
+    KYC : "api/kyc",
   },
   MASTER: {
     PRODUCTS: "api/products",
