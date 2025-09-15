@@ -1,7 +1,7 @@
 import { API_ENDPOINTS } from "../Api/EndPoints";
 import * as Yup from "yup";
 import { GenericTableHeader } from "../../Utils/utils";
-import { textField } from "../../Utils/ValidationUtils";
+import { fileValidation, textField } from "../../Utils/ValidationUtils";
 
 export const PENDING_KYC_URL = API_ENDPOINTS.MANAGEMENT.KYC;
 export const PENDING_KYC_KEY = "pending-kyc";
@@ -12,6 +12,11 @@ interface PendingKycFormType {
   hierarchyType: string;
 }
 
+export interface KycDetailsFormType {
+  doc_name: string;
+  doc_number: string;
+  doc_image: null | string;
+}
 export interface PendingKycTableType {
   hierarchyId: string | number;
   name: string;
@@ -31,11 +36,29 @@ export const pendingKycInitialValues: PendingKycFormType = {
   hierarchyType: "",
 };
 
+export const kycDetailsInitialValues: KycDetailsFormType = {
+  doc_name: "",
+  doc_number: "",
+  doc_image: null,
+};
+
 // Yup schema
 export const pendingKycSchema: Record<keyof PendingKycFormType, Yup.AnySchema> =
   {
     searchKeyword: textField("value", 50, false, true),
     hierarchyType: textField("Hierarchy Type", 50, false, true),
+  };
+
+export const kycDetailsSchema: Record<keyof KycDetailsFormType, Yup.AnySchema> =
+  {
+    doc_name: textField("Document Name", 50, true, true),
+    doc_number: textField("Document Number", 50, true, true),
+    doc_image: fileValidation(
+      "Document Image",
+      ["image/jpeg", "image/png"],
+      1.5,
+      false
+    ),
   };
 
 export const pendingKycHeaders: GenericTableHeader<PendingKycTableType>[] = [

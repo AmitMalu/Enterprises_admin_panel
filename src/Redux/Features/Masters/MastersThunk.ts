@@ -36,6 +36,7 @@ export interface FetchMasterByIdParams {
   key: string;
   endpoint: string;
   id: string;
+  method?: "GET" | "POST";
 }
 
 // Define the input type for reusability
@@ -45,6 +46,48 @@ interface DownloadFileParams {
   method?: "GET" | "POST"; // optional, defaults to GET
   body?: any; // for POST APIs
 }
+
+const documentApiMap: Record<
+  string,
+  { url: string; method: "get" | "post"; type: "params" | "data"; key: string }
+> = {
+  AADHAAR_FRONT: {
+    url: API_ENDPOINTS.MANAGEMENT.ADHAAR_VERIFY,
+    method: "post",
+    type: "params",
+    key: "aadhaarNumber",
+  },
+  AADHAAR_BACK: {
+    url: API_ENDPOINTS.MANAGEMENT.ADHAAR_VERIFY,
+    method: "post",
+    type: "params",
+    key: "aadhaarNumber",
+  },
+  PAN: {
+    url: API_ENDPOINTS.MANAGEMENT.PAN_VERIFY,
+    method: "post",
+    type: "params",
+    key: "panNumber",
+  },
+  AADHAAR_PAN_VERIFIED: {
+    url: API_ENDPOINTS.MANAGEMENT.AADHAAR_PAN_LINK,
+    method: "post",
+    type: "params",
+    key: "aadhaarNumber",
+  },
+  EMAIL: {
+    url: API_ENDPOINTS.MANAGEMENT.EMAIL_VERIFY,
+    method: "post",
+    type: "data",
+    key: "email",
+  },
+  VOTER_ID: {
+    url: API_ENDPOINTS.MANAGEMENT.VOTERID_VERIFY,
+    method: "post",
+    type: "params",
+    key: "voterId",
+  },
+};
 
 // Here Filter and pagination will be passed as Params and Payload in body.
 export const fetchMasterList = createAsyncThunk(
@@ -196,10 +239,18 @@ export const fetchReport = createAsyncThunk(
 
 export const fetchMasterById = createAsyncThunk(
   "masters/fetchMasterById",
-  async ({ key, endpoint, id }: FetchMasterByIdParams, { rejectWithValue }) => {
+  async (
+    { key, endpoint, id, method = "GET" }: FetchMasterByIdParams,
+    { rejectWithValue }
+  ) => {
     // dispatch(setLoading({ key, loading: true }));
     try {
-      const response = await axiosInstance.post(`${endpoint}/${id}`);
+      let response;
+      if (method === "POST") {
+        response = await axiosInstance.post(`${endpoint}/${id}`);
+      } else {
+        response = await axiosInstance.get(`${endpoint}/${id}`);
+      }
       const responseData = response?.data;
 
       if (responseData && responseData.statusCode === 200) {
@@ -405,6 +456,108 @@ export const AdhaarPanLinkApi = createAsyncThunk(
         error.response?.data?.message ||
           error.message ||
           "Error in Aadhaar Pan Link verification"
+      );
+    }
+  }
+);
+
+export const DocumentValidationApi = createAsyncThunk(
+  "masters/DocumentValidationApi",
+  async (
+    {
+      documentType,
+      value, // this is the value user entered or selected for verification
+    }: {
+      documentType: string;
+      value: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const configData = documentApiMap[documentType];
+      if (!configData) {
+        throw new Error("Invalid document type");
+      }
+
+      const { url, method, type, key } = configData;
+
+      // Prepare payload based on type
+      let payload: any = {};
+      if (type === "params") {
+        payload = { [key]: value };
+      } else if (type === "data") {
+        payload = { [key]: value };
+      }
+
+      const response = await axiosInstance.request({
+        url,
+        method,
+        ...(type === "params" ? { params: payload } : { data: payload }),
+      });
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(responseData?.message || "Verification failed");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error in verification"
+      );
+    }
+  }
+);
+
+export const handleKycDocumentUpdate = createAsyncThunk(
+  "masters/handleKycDocumentUpdate",
+  async (
+    {
+      hierarchyId,
+      category,
+      verified,
+      imageFile,
+    }: {
+      hierarchyId: string;
+      category: string;
+      verified: boolean;
+      imageFile?: File | null;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const formData = new FormData();
+      formData.append("hierarchyId", hierarchyId);
+      formData.append("category", category);
+      formData.append("verified", String(verified));
+
+      if (imageFile) {
+        formData.append("imageFile", imageFile);
+      }
+
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.MANAGEMENT.KYC}/edit`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(responseData?.message || "Update failed");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "Error updating KYC"
       );
     }
   }
