@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../Redux/hooks';
 import { toast } from 'react-toastify';
-import { KYC_VIEW_KEY, KycDetailsFormType, kycDetailsHeaders, kycDetailsInitialValues, kycDetailsSchema, KycDetailsTableType, PENDING_KYC_URL } from '../../Config/Management/PendingKycConfig';
-import { DocumentValidationApi, fetchMasterById, handleKycDocumentUpdate } from '../../Redux/Features/Masters/MastersThunk';
+import { KYC_VIEW_KEY, KycDetailsFormType, kycDetailsHeaders, kycDetailsInitialValues, kycDetailsSchema, KycDetailsTableType, PENDING_KYC_URL, pendingKycSchema } from '../../Config/Management/PendingKycConfig';
+import { deleteMasterItem, DocumentValidationApi, fetchMasterById, handleKycDocumentUpdate } from '../../Redux/Features/Masters/MastersThunk';
 import BackHeader from '../../Components/Molecules/BackHeader';
 import BreadCrumb from '../../Components/Molecules/BreadCrumb';
 import ShimmerTableRows from '../../Components/Atoms/ShimmerTableRows';
 import GenericMasterTable from '../../Components/Organisms/GenericMasterTable';
 import { Grid, Tooltip } from '@mantine/core';
-import { DeleteIcon, EditIcon, EditIcon2, EyeIcon, EyeIcon2 } from '../../assets/Icons';
+import { DeleteIcon, EditIcon2, EyeIcon2 } from '../../assets/Icons';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import FormikSelectComponent from '../../Components/Molecules/FormikSelectComponent';
@@ -17,6 +17,8 @@ import FormikTextInputComponent from '../../Components/Molecules/FormikTextInput
 import FormikFileInput from '../../Components/Molecules/FormikFileInput';
 import ButtonComponent from '../../Components/Atoms/ButtonComponent';
 import FilePreviewModal from '../../Components/Atoms/FilePreviewModal';
+import { extractVerificationApiMessage } from '../../Utils/utils';
+import { API_ENDPOINTS } from '../../Config/Api/EndPoints';
 
 const documents = [
     { label: "AADHAAR FRONT", value: "AADHAAR_FRONT" },
@@ -35,60 +37,97 @@ const PendingKycView = () => {
     const navigate = useNavigate();
     const [data, setData] = useState<KycDetailsTableType[]>([]);
     const [loading, setLoading] = useState(false);
+    const [verifying, setVerifying] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
     const [selectedFile, setSelectedFile] = useState<File | string | null>(null);
     const [selectedFileName, setSelectedFileName] = useState<string>("");
     const [previewOpen, setPreviewOpen] = useState(false);
+    const [formKey, setFormKey] = useState(0);
 
 
     const handleVerify = async (values: KycDetailsFormType, formik: any) => {
+        setVerifying(true);
+
         try {
             const verificationResult = await dispatch(
                 DocumentValidationApi({ documentType: values.doc_name, value: values.doc_number })
             ).unwrap();
-            console.log(verificationResult);
 
-            toast.success(verificationResult.data.remarks);
+            const verificationMessage = extractVerificationApiMessage(verificationResult, "Verification failed");
 
-            // // 2️⃣ Determine if image needs to be sent
+            if (verificationResult.success) {
+                toast.success(verificationMessage);
+            } else {
+                toast.error(verificationMessage); // Or toast.warning if you prefer
+            }
+
+            // Determine if image needs to be sent
             const imageFile: File | undefined =
                 values.doc_image && typeof values.doc_image !== "string"
                     ? (values.doc_image as File)
                     : undefined;
 
-            // // 3️⃣ Call update API
-            const updateResult = await dispatch(
-                handleKycDocumentUpdate({
-                    hierarchyId: id || "",
-                    category: values.doc_name,
-                    verified: verificationResult.success,
-                    imageFile,
-                })
-            ).unwrap();
+            // Call update API
+            await dispatch(handleKycDocumentUpdate({
+                hierarchyId: id || "",
+                category: values.doc_name,
+                verified: verificationResult.success,
+                docNumber: values.doc_number,
+                imageFile,
+            })).unwrap();
 
-            toast.success("KYC document updated successfully");
-
-            // ✅ Update local data
+            // Update local data
             setData(prevData =>
                 prevData.map(item =>
-                    item.docName === values.doc_name
+                    item.docName?.toLowerCase() === values.doc_name?.toLowerCase()
                         ? {
                             ...item,
                             docNumber: values.doc_number,
-                            docImage: imageFile ? URL.createObjectURL(imageFile) : item.docImage,
-                            verified: verificationResult.success,
+                            docImage: values.doc_image && typeof values.doc_image === "string"
+                                ? values.doc_image
+                                : item.docImage,
+                            // Keep as boolean
+                            docStatus: !!verificationResult.success,
                         }
                         : item
                 )
             );
 
-            // 5️⃣ Reset form
+            // Reset form
             formik.resetForm();
+            setFormKey(prev => prev + 1);
         } catch (err: any) {
             toast.error(err);
+        } finally {
+            setVerifying(false);
         }
     };
 
+    const handleDelete = async (item: KycDetailsTableType) => {
+        try {
+            // Call delete API
+            await dispatch(
+                deleteMasterItem({
+                    url: `${API_ENDPOINTS.MANAGEMENT.KYC}/delete-document`,
+                    params: { hierarchyId: id, category: item.docName },
+                    successMessage: "Document deleted successfully",
+                    failureMessage: "Failed to delete document",
+                })
+            ).unwrap();
+
+            // Update the docImage field to ""
+            setData(prevData =>
+                prevData.map(d =>
+                    d.docName?.toLowerCase() === item.docName?.toLowerCase()
+                        ? { ...d, docImage: "" }
+                        : d
+                )
+            );
+
+        } catch (err: any) {
+            console.error("Delete failed", err);
+        }
+    };
 
     useEffect(() => {
         const fetchAndSet = async () => {
@@ -131,6 +170,7 @@ const PendingKycView = () => {
             <BreadCrumb type={"Pending KYC"} text="Management" />
 
             <Formik
+                key={formKey}
                 initialValues={kycDetailsInitialValues}
                 validationSchema={Yup.object(kycDetailsSchema)}
                 onSubmit={(values, formikHelpers) => {
@@ -185,9 +225,9 @@ const PendingKycView = () => {
                                             radius={6}
                                             bgColor="#C30305"
                                             textColor="#FFFFFF"
-                                            disabled={loading}
+                                            disabled={!!fetchError || !!loading || verifying}
                                         >
-                                            Verify
+                                            {verifying ? "Verifying..." : "Verify"}
                                         </ButtonComponent>
                                     </div>
                                 </Grid.Col>
@@ -259,7 +299,7 @@ const PendingKycView = () => {
                                                     }}
                                                 >
                                                     <span
-                                                        onClick={() => { }}
+                                                        onClick={() => handleDelete(item)}
                                                         className="cursor-pointer"
                                                     >
                                                         <DeleteIcon width={14} height={14} color='black' />

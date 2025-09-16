@@ -15,7 +15,7 @@ interface PendingKycFormType {
 export interface KycDetailsFormType {
   doc_name: string;
   doc_number: string;
-  doc_image: null | string;
+  doc_image: null | undefined | string | File;
 }
 export interface PendingKycTableType {
   hierarchyId: string | number;

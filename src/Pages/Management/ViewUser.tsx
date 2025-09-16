@@ -36,7 +36,7 @@ const ViewUser = () => {
     () =>
       debounce((val: string) => {
         setDebouncedSearchValue(val); // store it here
-      }, 500),
+      }, 1000),
     []
   );
 

@@ -22,6 +22,7 @@ type GenericMasterToolbarProps = {
   error?: null | string;
   onSearch?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   searchValue?: string;
+  searchPlaceholder?: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
@@ -32,6 +33,8 @@ const GenericMasterToolbar = ({
   onFilter,
   onSearch,
   searchValue,
+  onKeyDown,
+  searchPlaceholder = "Search...",
   onRefresh,
   onColumnChange,
   headers,
@@ -71,7 +74,8 @@ const GenericMasterToolbar = ({
               name="search"
               size="sm"
               value={searchValue || ""}
-              placeholder="Search..."
+              placeholder={searchPlaceholder}
+              onKeyDown={onKeyDown}
               onChange={onSearch}
               disabled={loading}
             />

@@ -389,3 +389,57 @@ export const transformPermissionsToMenus = (permission: string) => {
     subMenus,
   };
 };
+
+export interface VerificationApiData {
+  data: any; // varies by API type
+  status_code?: number;
+  success?: boolean;
+  message?: string | null;
+  message_code?: string;
+}
+
+export const extractVerificationApiMessage = (
+  response: VerificationApiData,
+  fallback = "Something went wrong"
+): string => {
+  if (!response) return fallback;
+
+  // Error messages first
+  if (response.message && response.message.trim() !== "") {
+    return response.message;
+  }
+
+  if (response.data?.message && response.data.message.trim() !== "") {
+    return response.data.message;
+  }
+
+  if (response.data?.remarks && response.data.remarks.trim() !== "") {
+    return response.data.remarks;
+  }
+
+  if (response.data?.reason && response.data.reason.trim() !== "") {
+    return response.data.reason;
+  }
+
+  if (
+    response.data?.detailed_reason &&
+    response.data.detailed_reason.trim() !== ""
+  ) {
+    return response.data.detailed_reason;
+  }
+
+  // If API was successful but no message provided
+  if (response.success) {
+    // PAN success
+    if (response.data?.pan_number) return "PAN validation successful";
+    // Aadhaar success
+    if (response.data?.aadhaar_number) return "Aadhaar verification successful";
+    // Link success
+    if (response.data?.linking_status) return "Aadhaar-PAN linked successfully";
+
+    return "Verification successful";
+  }
+
+  // Default fallback
+  return fallback;
+};

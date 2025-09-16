@@ -192,7 +192,7 @@ const NetworkBankMasterForm = ({ mode }: NetworkBankMasterFormProps) => {
                                 label="Add Logo"
                                 withAsterisk
                                 placeholder="Select File"
-                                accept="image/png, image/jpeg"
+                                accept="image/png, image/jpeg, application/pdf"
                             />
                         </Grid.Col>
 

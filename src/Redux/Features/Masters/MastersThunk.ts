@@ -46,6 +46,14 @@ interface DownloadFileParams {
   method?: "GET" | "POST"; // optional, defaults to GET
   body?: any; // for POST APIs
 }
+interface DeleteParams {
+  url: string;
+  params?: Record<string, any>; // query params
+  payload?: any; // request body for delete
+  successMessage?: string;
+  failureMessage?: string;
+  useFormData?: boolean;
+}
 
 const documentApiMap: Record<
   string,
@@ -75,12 +83,12 @@ const documentApiMap: Record<
     type: "params",
     key: "aadhaarNumber",
   },
-  EMAIL: {
-    url: API_ENDPOINTS.MANAGEMENT.EMAIL_VERIFY,
-    method: "post",
-    type: "data",
-    key: "email",
-  },
+  // EMAIL: {
+  //   url: API_ENDPOINTS.MANAGEMENT.EMAIL_VERIFY,
+  //   method: "post",
+  //   type: "data",
+  //   key: "email",
+  // },
   VOTER_ID: {
     url: API_ENDPOINTS.MANAGEMENT.VOTERID_VERIFY,
     method: "post",
@@ -139,7 +147,7 @@ export const fetchMasterList = createAsyncThunk(
 
       const responseData = response?.data;
 
-      if (responseData.statusCode === 200) {
+      if ([200, 201].includes(responseData.statusCode)) {
         if (returnFullData) {
           // Return the full data object
           return responseData.data;
@@ -382,6 +390,57 @@ export const fetchMasterDropdown = createAsyncThunk(
   }
 );
 
+export const deleteMasterItem = createAsyncThunk(
+  "masters/deleteMasterItem",
+  async (deleteParams: DeleteParams, { rejectWithValue }) => {
+    const {
+      url,
+      params,
+      payload,
+      successMessage,
+      failureMessage,
+      useFormData = false,
+    } = deleteParams;
+
+    try {
+      // Build query string if params exist
+      let finalUrl = url;
+      if (params && Object.keys(params).length > 0) {
+        const query = new URLSearchParams(
+          Object.entries(params).map(([k, v]) => [k, String(v)])
+        ).toString();
+        finalUrl += url.includes("?") ? `&${query}` : `?${query}`;
+      }
+
+      // Send DELETE request
+      const response = await axiosInstance.delete(finalUrl, {
+        data: payload,
+        headers: useFormData
+          ? { "Content-Type": "multipart/form-data" }
+          : undefined,
+      });
+
+      const responseData = response?.data;
+
+      if ([200, 201].includes(responseData?.statusCode)) {
+        if (successMessage) {
+          toast.success(successMessage);
+        }
+        return responseData;
+      } else {
+        throw new Error(responseData?.message || failureMessage);
+      }
+    } catch (error: any) {
+      const errMsg =
+        error?.response?.data?.message || error.message || failureMessage;
+      if (errMsg) {
+        toast.error(errMsg);
+      }
+      return rejectWithValue(errMsg);
+    }
+  }
+);
+
 export const AdhaarValidationApi = createAsyncThunk(
   "masters/Adhaarvalidation",
   async ({ aadhaarNumber }: { aadhaarNumber: string }, { rejectWithValue }) => {
@@ -519,20 +578,28 @@ export const handleKycDocumentUpdate = createAsyncThunk(
       hierarchyId,
       category,
       verified,
+      docNumber,
       imageFile,
     }: {
       hierarchyId: string;
       category: string;
       verified: boolean;
+      docNumber?: string | number;
       imageFile?: File | null;
     },
     { rejectWithValue }
   ) => {
     try {
       const formData = new FormData();
-      formData.append("hierarchyId", hierarchyId);
-      formData.append("category", category);
-      formData.append("verified", String(verified));
+
+      const requestObject = {
+        hierarchyId,
+        category,
+        verified,
+        docNumber,
+      };
+
+      formData.append("request", JSON.stringify(requestObject));
 
       if (imageFile) {
         formData.append("imageFile", imageFile);
