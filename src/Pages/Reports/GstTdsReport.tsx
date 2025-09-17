@@ -100,6 +100,9 @@ const GstTdsReport = () => {
                     size="xs"
                     label="Sub Product"
                     placeholder="Select Sub Product"
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="No Sub Product found"
                     withAsterisk
                     required
                     data={subProductDropdownData?.map(item => ({
@@ -116,6 +119,9 @@ const GstTdsReport = () => {
                     size="xs"
                     label="Hierarchy"
                     placeholder="Select Hierarchy"
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="Nothing Found"
                     data={hierarchyList}
                     disabled={loadingHierarchyList}
                     withAsterisk
@@ -134,6 +140,9 @@ const GstTdsReport = () => {
                       label: item.displayName,
                       value: String(item.id),
                     }))}
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="Nothing Found"
                     disabled={loadingSubHierarchyList}
                     withAsterisk
                     required
@@ -148,6 +157,8 @@ const GstTdsReport = () => {
                     withAsterisk
                     label="Wallet Type"
                     placeholder="Select Wallet Type"
+                    allowDeselect={true}
+                    nothingFoundMessage="Nothing Found"
                     data={[
                       { label: "PREPAID", value: "PREPAID" },
                       { label: "POSTPAID", value: "POSTPAID" },
@@ -161,6 +172,7 @@ const GstTdsReport = () => {
                     size="xs"
                     label="Report Type"
                     placeholder="Select Report Type"
+                    allowDeselect={true}
                     required
                     withAsterisk
                     data={[

@@ -67,7 +67,7 @@ export const UpdateTransValidationSchema: Record<
 };
 
 export const updateTransHeaders: GenericTableHeader<UpdateTransTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "userId", label: "User ID", filterType: "text" },
   { key: "mobileNo", label: "Mobile Number", filterType: "text" },
   { key: "amount", label: "Amount", filterType: "text" },

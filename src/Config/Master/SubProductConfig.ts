@@ -1,6 +1,10 @@
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
-import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
+import {
+  formatDateTime,
+  GenericTableHeader,
+  walletTypeSelectData,
+} from "../../Utils/utils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
 export const MASTER_KEY = "sub-products";
@@ -88,11 +92,16 @@ export const validationSchema: Record<keyof SubProductFormType, Yup.AnySchema> =
   };
 
 export const headers: GenericTableHeader<SubProductTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "subProductTitle", label: "Sub Product Title", filterType: "text" },
   { key: "subProductCode", label: "Sub Product Code", filterType: "text" },
   { key: "productName", label: "Product", filterType: "text" },
-  { key: "walletType", label: "Wallet Type", filterType: "text" },
+  {
+    key: "walletType",
+    label: "Wallet Type",
+    filterType: "boolean",
+    filterOptions: walletTypeSelectData,
+  },
   { key: "isSettlement", label: "Is Settlement", filterType: "boolean" },
   { key: "settlementTime", label: "Settlement Time", filterType: "text" },
   { key: "isWhiteLabelAdmin", label: "Is WL-Admin", filterType: "boolean" },

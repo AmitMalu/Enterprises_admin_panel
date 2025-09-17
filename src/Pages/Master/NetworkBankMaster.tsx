@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { EditIcon, EyeIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import { useNavigate } from "react-router-dom";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
@@ -26,10 +26,7 @@ const NetworkBankMaster = () => {
   );
   const dataRef = useRef<NetworkBankMasterTableType[] | null>(null);
 
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
   const { data, loading, error, pagination, setPage, setPageSize } =
     useFetchMasterList<NetworkBankMasterTableType>({
@@ -38,6 +35,7 @@ const NetworkBankMaster = () => {
       transformDataFn: transformToNetworkBankTableType,
       filter: submittedFilter,
       refreshKey,
+      defaultPageSize: 5
     });
 
   const handleEdit = (id: string) => {
@@ -59,7 +57,7 @@ const NetworkBankMaster = () => {
         pagination: { ...pagination, currentPage: 1, pageSize: 5 },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter({ [key]: value });
   };
 
   const handleExportClick = () => {
@@ -122,9 +120,9 @@ const NetworkBankMaster = () => {
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2">
-              <span className="cursor-pointer">
+              {/* <span className="cursor-pointer">
                 <EyeIcon />
-              </span>
+              </span> */}
               <span
                 onClick={() => handleEdit(String(item?.id ?? ""))}
                 className="cursor-pointer"

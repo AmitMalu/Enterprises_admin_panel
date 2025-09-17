@@ -137,7 +137,7 @@ export const validationSchema: Record<keyof ProductFormType, Yup.AnySchema> = {
 };
 
 export const headers: GenericTableHeader<ProductTableType>[] = [
-  { key: "id", label: "Id", filterType: "text", searchable: false },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "name", label: "Name", filterType: "text" },
   { key: "productCode", label: "Product Code", filterType: "text" },
   {

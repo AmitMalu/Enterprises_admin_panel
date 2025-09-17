@@ -34,13 +34,13 @@ const ColumnVisibilityMenu: React.FC<ColumnVisibilityMenuProps> = ({
       <Menu.Dropdown>
         <ScrollArea.Autosize mah={200} px="xs">
           {headers?.map((h) => (
-            <Menu.Item key={String(h.key)}>
+            <Menu.Label key={String(h.key)}>
               <Checkbox
                 label={(h.label as string) || (h.key as string)}
                 checked={visibleColumns.includes(h.key as string)}
                 onChange={() => onToggleColumn(h.key as string)}
               />
-            </Menu.Item>
+            </Menu.Label >
           ))}
         </ScrollArea.Autosize>
       </Menu.Dropdown>

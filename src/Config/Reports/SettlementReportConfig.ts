@@ -77,7 +77,7 @@ export const settlementReportFilterValidationSchema: Record<
 
 export const settlementReportHeaders: GenericTableHeader<SettlementReportTableType>[] =
   [
-    { key: "id", label: "ID", filterType: "text" },
+    { key: "id", label: "Id", filterType: "number", searchable: true },
     { key: "userId", label: "User ID", filterType: "text" },
     { key: "mobileNo", label: "User Mobile No", filterType: "text" },
     { key: "amount", label: "Amount", filterType: "text" },

@@ -209,6 +209,8 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                     placeholder="Enter Card BIN Number"
                     required={false}
                     maxLength={21}
+                    allowNumber={true}
+                    allowCharacter={false}
                     allowSpecialChar={false}
                   />
                 </Grid.Col>

@@ -31,12 +31,11 @@ const TableFilterRow = <T,>({
                 <SelectComponent
                   name={String(key)}
                   value={value}
+                  searchable={filterOptions && filterOptions.length > 2 ? true : false}
                   allowDeselect={true}
                   onChange={(val) => {
-                    if (val !== null) {
-                      onFilterChange?.(String(key), val ?? "");
-                      onFilterSubmit?.(String(key), val ?? "");
-                    }
+                    onFilterChange?.(String(key), val ?? "");
+                    onFilterSubmit?.(String(key), val ?? "");
                   }}
                   data={filterOptions ?? booleanSelectData2}
                   placeholder="Select"
@@ -49,6 +48,7 @@ const TableFilterRow = <T,>({
               <Table.Td key={String(key)}>
                 <CustomDatePicker
                   value={value ? moment(value, "DD-MM-YYYY").toDate() : null}
+                  maxDate={new Date()}
                   onChange={(val) => {
                     if (val) {
                       const formatted = moment(val).format("DD-MM-YYYY");
@@ -57,6 +57,25 @@ const TableFilterRow = <T,>({
                     } else {
                       onFilterChange?.(String(key), null);
                       onFilterSubmit?.(String(key), "");
+                    }
+                  }}
+                />
+              </Table.Td>
+            );
+          case "number":
+            return (
+              <Table.Td key={String(key)}>
+                <TextInputComponent
+                  size="xs"
+                  name={String(key)}
+                  value={value}
+                  onChange={(e) => {
+                    const num = e.target.value.replace(/[^0-9]/g, ''); // only digits
+                    onFilterChange?.(String(key), num);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      onFilterSubmit?.(String(key), value?.trim() ?? "");
                     }
                   }}
                 />

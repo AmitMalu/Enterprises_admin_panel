@@ -11,7 +11,7 @@ import {
 import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.0 (13-09)";
+export const DEV_APP_VERSION_LABEL = "v1.0.1 (17-09)";
 
 export const persistOtpSession = (username: string, otpFor: string) => {
   sessionStorage.setItem("otp-username", username);
@@ -161,7 +161,7 @@ export const pageSizeSelectData = [
 export type GenericTableHeader<T> = {
   key: keyof T;
   label?: string;
-  filterType?: "text" | "boolean" | "date" | "none";
+  filterType?: "text" | "number" | "boolean" | "date" | "none";
   filterOptions?: { label: string; value: any }[];
   searchable?: boolean; // optionally override with this
   renderType?: "link" | "custom" | "statusBadge"; //

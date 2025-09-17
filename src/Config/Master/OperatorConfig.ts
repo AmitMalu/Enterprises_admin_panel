@@ -66,7 +66,7 @@ export const validationSchema: Record<keyof OperatorFormType, Yup.AnySchema> = {
 };
 
 export const headers: GenericTableHeader<OperatorTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "operatorAlias", label: "Operator Alias", filterType: "text" },
   {
     key: "operatorCategory",

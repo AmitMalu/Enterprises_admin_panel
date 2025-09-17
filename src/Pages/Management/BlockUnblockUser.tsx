@@ -33,7 +33,8 @@ const BlockUnblockUser = () => {
       url: `${BLOCK_USER_URL}`,
       filter: { keyword: debouncedSearchValue },
       refreshKey,
-      method: "GET"
+      method: "GET",
+      defaultPageSize: 5
     });
 
   const debouncedSearch = useMemo(
@@ -120,6 +121,7 @@ const BlockUnblockUser = () => {
         onSearch={handleSearchChange}
         searchValue={search}
         onRefresh={handleRefresh}
+        searchPlaceholder="Search by Mobile / Hierarchy Id"
         onColumnChange={handleToggleColumn}
         onExport={handleExportClick}
         visibleColumns={visibleColumns}

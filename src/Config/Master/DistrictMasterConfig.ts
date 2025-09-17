@@ -60,7 +60,7 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<DistrictMasterTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "districtName", label: "District Name", filterType: "text" },
   { key: "districtCode", label: "District Code", filterType: "text" },
   { key: "stateName", label: "State Name", filterType: "text" },

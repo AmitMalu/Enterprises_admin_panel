@@ -52,7 +52,7 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<SubOperatorTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "subOperatorName", label: "Sub Operator Name", filterType: "text" },
   {
     key: "operatorCode",

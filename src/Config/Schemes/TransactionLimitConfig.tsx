@@ -110,22 +110,22 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<TransactionLimitTableType>[] = [
-    { key: "id", label: "ID" },
+    { key: "id", label: "ID", filterType: "number" },
     { key: "description", label: "Description" },
     { key: "productName", label: "Product" },
     { key: "subProductName", label: "Sub Product" },
     { key: "paymentCurrency", label: "Currency" },
     { key: "isAllowPerDayCardLimit", label: "Per Day Card Limit", filterType: "boolean" },
     { key: "isAllowMonthlyCardLimit", label: "Monthly Card Limit", filterType: "boolean" },
-    { key: "perDayTransactionLimit", label: "Customer Per Day Limit" },
-    { key: "monthlyTransactionLimit", label: "Customer Monthly Limit" },
+    { key: "perDayTransactionLimit", label: "Customer Per Day Limit", filterType: "number" },
+    { key: "monthlyTransactionLimit", label: "Customer Monthly Limit", filterType: "number" },
     { key: "checkAmountPattern", label: "Check Amount Pattern", filterType: "boolean" },
     // { key: "maxAmountSMSCollect", label: "Max Amount (SMS Collect)" },
-    { key: "maxAmount", label: "Max Amount" },
+    { key: "maxAmount", label: "Max Amount", filterType: "number" },
     { key: "blocked", label: "Blocked", filterType: "boolean" },
-    { key: "createdOn", label: "Created On" },
+    { key: "createdOn", label: "Created On", filterType: "date" },
     { key: "createdBy", label: "Created By" },
-    { key: "editedOn", label: "Edited On" },
+    { key: "editedOn", label: "Edited On", filterType: "date" },
     { key: "editedBy", label: "Edited By" },
 ];
 

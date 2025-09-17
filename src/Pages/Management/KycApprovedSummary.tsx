@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
@@ -8,7 +8,6 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import debounce from "lodash.debounce";
 import { KYC_APPROVED_KEY, KYC_APPROVED_URL, KycApprovedHeaders, KycApprovedTableType } from "../../Config/Management/KycApprovedConfig";
 
 const KycApprovedSummary = () => {

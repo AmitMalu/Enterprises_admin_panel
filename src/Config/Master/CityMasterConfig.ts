@@ -1,6 +1,4 @@
-import {
-  GenericTableHeader,
-} from "../../Utils/utils";
+import { GenericTableHeader } from "../../Utils/utils";
 import { textField } from "../../Utils/ValidationUtils";
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
@@ -62,7 +60,7 @@ export const validationSchema: Record<keyof CityMasterFormType, Yup.AnySchema> =
   };
 
 export const headers: GenericTableHeader<CityMasterTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "cityName", label: "City Name", filterType: "text" },
   { key: "cityCode", label: "City Code", filterType: "text" },
   { key: "districtName", label: "District Name", filterType: "text" },

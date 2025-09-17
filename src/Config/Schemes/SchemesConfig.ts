@@ -58,7 +58,7 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<SchemesListTableType>[] = [
-  { key: "id", label: "Scheme ID" },
+  { key: "id", label: "Scheme ID", filterType: "number" },
   { key: "schemeName", label: "Scheme Name" },
   { key: "schemeCode", label: "Scheme Code" },
   { key: "productName", label: "Product" },
@@ -108,7 +108,7 @@ export interface SchemeDetails {
   tdsRate: number | string;
   schemeName: string;
   schemeCode: string;
-  productName : string;
+  productName: string;
   operators: OperatorSlabData[];
 }
 export interface SlabPayload {

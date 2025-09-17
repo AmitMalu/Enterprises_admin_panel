@@ -32,10 +32,7 @@ const VendorCredentialMaster = () => {
   );
   const dataRef = useRef<VendorCredentialTableType[] | null>(null);
 
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
   const { data, loading, pagination, error, setPage, setPageSize } =
     useFetchMasterList<VendorCredentialTableType>({
@@ -44,6 +41,7 @@ const VendorCredentialMaster = () => {
       transformDataFn: mapToVendorCredentialTableType,
       filter: submittedFilter,
       refreshKey,
+      defaultPageSize: 5
     });
 
   const handleEdit = (id: any) => {
@@ -64,7 +62,7 @@ const VendorCredentialMaster = () => {
         pagination: { ...pagination, currentPage: 1, pageSize: 5 },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter({ [key]: value });
   };
 
   const handleExportClick = () => {

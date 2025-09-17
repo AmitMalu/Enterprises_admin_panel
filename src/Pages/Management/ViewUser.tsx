@@ -29,7 +29,8 @@ const ViewUser = () => {
       url: `${VIEW_USER_URL}`,
       filter: { keyword: debouncedSearchValue },
       refreshKey,
-      method: "GET"
+      method: "GET",
+      defaultPageSize: 5
     });
 
   const debouncedSearch = useMemo(
@@ -86,6 +87,7 @@ const ViewUser = () => {
         headers={ViewUserHeaders}
         onSearch={handleSearchChange}
         searchValue={search}
+        searchPlaceholder="Search by Mobile / Hierarchy Id"
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
         onExport={handleExportClick}

@@ -45,7 +45,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   onBlur,
   onFocus,
   allowDeselect = false,
-  searchable = true,
+  searchable = false,
   className = "",
 }) => {
   const screenSize = useScreenSize();

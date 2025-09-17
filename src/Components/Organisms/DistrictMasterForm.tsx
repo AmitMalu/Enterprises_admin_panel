@@ -136,6 +136,7 @@ const DistrictMasterForm = ({ mode }: DistrictMasterFormProps) => {
                                             placeholder="Select Country"
                                             withAsterisk
                                             required
+                                            nothingFoundMessage="No Match for Country Found"
                                             searchable
                                             data={countries}
                                             rightSection={
@@ -151,6 +152,7 @@ const DistrictMasterForm = ({ mode }: DistrictMasterFormProps) => {
                                             name="stateId"
                                             label="State"
                                             placeholder="Select State"
+                                            nothingFoundMessage="No State for Selected Country"
                                             searchable
                                             withAsterisk
                                             required

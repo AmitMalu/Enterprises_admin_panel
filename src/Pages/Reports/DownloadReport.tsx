@@ -106,6 +106,7 @@ const DownloadReport = () => {
                     placeholder="Select a Date"
                     size="xs"
                     required
+                    maxDate={new Date}
                     valueFormat="YYYY-MM-DD"
                     leftIcon={<IconCalendar size={16} />}
                   />

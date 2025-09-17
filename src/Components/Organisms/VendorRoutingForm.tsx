@@ -26,6 +26,11 @@ import { useSubProductList } from "../../Utils/hooks/useSubProductList";
 
 type VendorRoutingFormProps = { mode: "add" | "edit" };
 
+type VendorOption = {
+    value: string;
+    label: string;
+};
+
 const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
     const { id } = useParams();
     const dispatch = useAppDispatch();
@@ -99,10 +104,34 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                 validationSchema={Yup.object(validationSchema)}
                 onSubmit={handleSubmit}
             >
-                {() => {
+                {({ values }) => {
                     const { subProductDropdownData, loadingSubProductList } = useSubProductList();
 
                     const { vendorDropdownData, loadingVendorList } = useVendor();
+
+                    // const selectedVendors = [
+                    //     values.routingPriority1,
+                    //     values.routingPriority2,
+                    //     values.routingPriority3
+                    // ].filter(Boolean);
+
+                    const optionsForPriority1 = vendorDropdownData.filter(
+                        (vendor: VendorOption) =>
+                            vendor.value !== values.routingPriority2 &&
+                            vendor.value !== values.routingPriority3
+                    );
+
+                    const optionsForPriority2 = vendorDropdownData.filter(
+                        (vendor: VendorOption) =>
+                            vendor.value !== values.routingPriority1 &&
+                            vendor.value !== values.routingPriority3
+                    );
+
+                    const optionsForPriority3 = vendorDropdownData.filter(
+                        (vendor: VendorOption) =>
+                            vendor.value !== values.routingPriority1 &&
+                            vendor.value !== values.routingPriority2
+                    );
 
                     return (
                         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
@@ -113,6 +142,9 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                         label="Sub Product"
                                         placeholder="Select Sub Product "
                                         withAsterisk
+                                        allowDeselect={true}
+                                        searchable={true}
+                                        nothingFoundMessage="Nothing Found"
                                         required
                                         data={subProductDropdownData}
                                         disabled={loadingSubProductList}
@@ -125,8 +157,11 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                         label="Routing Priority 1"
                                         placeholder="Select Routing Priority 1"
                                         withAsterisk
+                                        allowDeselect={true}
+                                        searchable={true}
+                                        nothingFoundMessage="Nothing Found"
                                         required
-                                        data={vendorDropdownData}
+                                        data={optionsForPriority1}
                                         disabled={loadingVendorList}
                                     />
                                 </Grid.Col>
@@ -138,7 +173,10 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                         placeholder="Select Routing Priority 2"
                                         withAsterisk
                                         required
-                                        data={vendorDropdownData}
+                                        allowDeselect={true}
+                                        searchable={true}
+                                        nothingFoundMessage="Nothing Found"
+                                        data={optionsForPriority2}
                                         disabled={loadingVendorList}
                                     />
                                 </Grid.Col>
@@ -149,8 +187,11 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                         label="Routing Priority 3"
                                         placeholder="Select Routing Priority 3"
                                         withAsterisk
+                                        allowDeselect={true}
+                                        searchable={true}
+                                        nothingFoundMessage="Nothing Found"
                                         required
-                                        data={vendorDropdownData}
+                                        data={optionsForPriority3}
                                         disabled={loadingVendorList}
                                     />
                                 </Grid.Col>

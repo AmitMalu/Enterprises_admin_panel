@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import { EyeIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import {
@@ -89,7 +89,7 @@ const PreFundingAuth = () => {
     setSubmittedFilter({ key, value });
   };
 
-   const handleExportClick = () => {
+  const handleExportClick = () => {
     setData((current) => {
       if (!current || current.length === 0) {
         toast.warning("No data available to export.");
@@ -179,7 +179,7 @@ const PreFundingAuth = () => {
                 onClick={() => handleEdit(String(item?.id ?? ""))}
                 className="cursor-pointer"
               >
-                <EyeIcon />
+                <EditIcon />
               </span>
             </div>
           )}

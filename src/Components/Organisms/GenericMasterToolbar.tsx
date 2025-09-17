@@ -8,6 +8,7 @@ import ButtonComponent from "../Atoms/ButtonComponent";
 import { GenericTableHeader } from "../../Utils/utils";
 import ColumnVisibilityMenu from "../Molecules/ColumnVisibilityMenu";
 import TextInputComponent from "../Atoms/TextInputComponent";
+import { useEffect, useRef } from "react";
 
 type GenericMasterToolbarProps = {
   addButtonText?: string;
@@ -42,6 +43,15 @@ const GenericMasterToolbar = ({
   loading = false,
   error = null
 }: GenericMasterToolbarProps) => {
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!loading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [loading]);
+
   return (
     <>
       <div className="flex justify-between mt-2">
@@ -70,6 +80,7 @@ const GenericMasterToolbar = ({
           {/* Search Bar */}
           {onSearch && (
             <TextInputComponent
+              ref={inputRef}
               className="inline-block h-[40px] w-[250px] "
               name="search"
               size="sm"

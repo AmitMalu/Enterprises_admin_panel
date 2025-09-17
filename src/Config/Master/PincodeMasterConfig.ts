@@ -64,8 +64,8 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<PincodeMasterTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
-  { key: "pinCode", label: "Pincode", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
+  { key: "pinCode", label: "Pincode", filterType: "number" },
   { key: "cityName", label: "City Name", filterType: "text" },
   { key: "districtName", label: "District Name", filterType: "text" },
   { key: "stateName", label: "State Name", filterType: "text" },

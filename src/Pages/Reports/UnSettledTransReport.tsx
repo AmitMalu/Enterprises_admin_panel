@@ -135,8 +135,10 @@ const UnSettledTransReport = () => {
                     name="productId"
                     label="Product"
                     value={values.productId}
-                    placeholder="Select Product"
+                    allowDeselect={true}
+                    searchable={true}
                     nothingFoundMessage="No Product Found"
+                    placeholder="Select Product"
                     size="xs"
                     withAsterisk
                     required
@@ -170,6 +172,8 @@ const UnSettledTransReport = () => {
                     data={subProductDropdownData}
                     label="Sub Product"
                     placeholder="Select Sub Product"
+                    allowDeselect={true}
+                    searchable={true}
                     nothingFoundMessage="No SubProduct Found for Selected Product"
                     size="xs"
                     withAsterisk
@@ -184,6 +188,9 @@ const UnSettledTransReport = () => {
                     label="Vendor"
                     value={values.vendorId}
                     placeholder="Select Vendor"
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="No Vendor found"
                     size="xs"
                     data={vendorDropdownData}
                     disabled={loadingVendorList}
@@ -195,6 +202,7 @@ const UnSettledTransReport = () => {
                     name="walletType"
                     size="xs"
                     label="Wallet Type"
+                    allowDeselect={true}
                     placeholder="Select Wallet Type"
                     data={[
                       { label: "PREPAID", value: "PREPAID" },

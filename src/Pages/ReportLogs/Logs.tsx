@@ -92,6 +92,9 @@ const Logs = () => {
                     placeholder="Select log type"
                     label="Log Type"
                     size="xs"
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="Not Found"
                     withAsterisk
                     required
                     data={[

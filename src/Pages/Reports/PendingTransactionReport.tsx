@@ -136,6 +136,8 @@ const PendingTransactionReport = () => {
                     label="Product"
                     value={values.productId}
                     placeholder="Select Product"
+                    allowDeselect={true}
+                    searchable={true}
                     nothingFoundMessage="No Product Found"
                     size="xs"
                     withAsterisk
@@ -170,6 +172,8 @@ const PendingTransactionReport = () => {
                     data={subProductDropdownData}
                     label="Sub Product"
                     placeholder="Select Sub Product"
+                    allowDeselect={true}
+                    searchable={true}
                     nothingFoundMessage="No SubProduct Found for Selected Product"
                     size="xs"
                     withAsterisk
@@ -183,6 +187,9 @@ const PendingTransactionReport = () => {
                     name="vendorId"
                     label="Vendor"
                     value={values.vendorId}
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="No Vendor found"
                     placeholder="Select Vendor"
                     size="xs"
                     data={vendorDropdownData}
@@ -196,6 +203,7 @@ const PendingTransactionReport = () => {
                     size="xs"
                     label="Wallet Type"
                     placeholder="Select Wallet Type"
+                    allowDeselect={true}
                     data={[
                       { label: "PREPAID", value: "PREPAID" },
                       { label: "POSTPAID", value: "POSTPAID" },

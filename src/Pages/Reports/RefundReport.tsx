@@ -137,6 +137,9 @@ const RefundReport = () => {
                     name="hierarchyType"
                     size="xs"
                     label="Hierarchy Type"
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="No Hierarchy Found"
                     placeholder="Select Hierarchy Type"
                     data={hierarchyList}
                     disabled={loadingHierarchyList}

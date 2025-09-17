@@ -64,7 +64,7 @@ export const transformToTransactionReportPayload = (values: any) => {
 };
 
 export const headers: GenericTableHeader<TransactionReportTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "tranxId", label: "Transaction ID", filterType: "text" },
   { key: "balBefore", label: "Balance Before", filterType: "text" },
   { key: "balAfter", label: "Balance After", filterType: "text" },

@@ -39,28 +39,9 @@ export const validationSchema: Record<keyof MainMasterFormType, Yup.AnySchema> =
   };
 
 export const headers: GenericTableHeader<MainMasterTableType>[] = [
-  { key: "imMasterId", label: "Master Id", filterType: "text" },
+  { key: "imMasterId", label: "Master Id", filterType: "number" },
   { key: "imMasterName", label: "Master Name", filterType: "text" },
 ];
-
-// export const mapToDropdownTableType = (
-//   raw: Record<string, any>
-// ): DropdownTableType => {
-//   return {
-//     imMasterId: raw?.imMasterId ?? "",
-//     imSubMasterId: raw?.imSubMasterId ?? "",
-//     imMasterName: raw?.imMasterName ?? "",
-//     imSubMasterName: raw?.imSubMasterName ?? "",
-//   };
-// };
-
-// Convert API response to Formik-compatible form data
-// export const transformDropdownListToFormData = (
-//   raw: Record<string, any>
-// ): DropdownFormType => ({
-//   imMasterName: raw?.imMasterName ?? "",
-//   imSubMasterName: raw?.imSubMasterName ?? "",
-// });
 
 // Transform form data to Create payload
 export const transformFormToCreateMainMasterPayload = (

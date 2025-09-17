@@ -204,6 +204,8 @@ const Settlement = () => {
                     placeholder="Select Product"
                     nothingFoundMessage="No Product Found"
                     size="xs"
+                    searchable={true}
+                    allowDeselect={true}
                     withAsterisk
                     required
                     data={productDropdownData}
@@ -238,6 +240,8 @@ const Settlement = () => {
                     placeholder="Select Sub Product"
                     nothingFoundMessage="No SubProduct Found for Selected Product"
                     size="xs"
+                    searchable={true}
+                    allowDeselect={true}
                     withAsterisk
                     // required
                     disabled={loadingSubProductList}
@@ -251,6 +255,9 @@ const Settlement = () => {
                     value={values.vendorId}
                     placeholder="Select Vendor"
                     size="xs"
+                    searchable={true}
+                    allowDeselect={true}
+                    nothingFoundMessage="No Vendor Found"
                     data={vendorDropdownData}
                     disabled={loadingVendorList}
                   />

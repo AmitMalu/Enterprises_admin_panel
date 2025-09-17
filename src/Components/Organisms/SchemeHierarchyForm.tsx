@@ -116,6 +116,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                         name="schemeHierarchyCombination"
                                         label="Hierarchy Combination "
                                         placeholder="Select Scheme Hierarchy combinations"
+                                        nothingFoundMessage="No Scheme found"
                                         withAsterisk
                                         data={["Retailer", "Distributor", "Partner", "SuperDistributor", "Whitelabel"]}
                                         clearable

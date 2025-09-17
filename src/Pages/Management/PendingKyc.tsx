@@ -100,6 +100,7 @@ const PendingKyc = () => {
                     label="Hierarchy Type"
                     placeholder="Search By Hierarchy Type"
                     size="xs"
+                    searchable={true}
                     allowDeselect={true}
                     onChange={(val: any) => {
                       if (val !== null) {

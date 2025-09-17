@@ -97,6 +97,8 @@ const TransactionReport = () => {
                   <FormikSelectComponent
                     name="subProduct"
                     size="xs"
+                    allowDeselect={true}
+                    searchable={true}
                     label="Sub Product"
                     placeholder="Select Sub Product"
                     withAsterisk
@@ -114,7 +116,9 @@ const TransactionReport = () => {
                     name="hierarchy"
                     size="xs"
                     label="Hierarchy"
-                    placeholder="Select Hierarchy"
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="Nothing Found"
                     data={hierarchyList}
                     disabled={loadingHierarchyList}
                     withAsterisk
@@ -128,6 +132,9 @@ const TransactionReport = () => {
                     name="subHierarchy"
                     size="xs"
                     label="Hierarchy ID"
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="Nothing Found"
                     placeholder="Select Hierarchy ID"
                     data={subHierarchyList?.map((item: any) => ({
                       label: item.displayName,
@@ -144,6 +151,8 @@ const TransactionReport = () => {
                     name="walletType"
                     size="xs"
                     required
+                    allowDeselect={true}
+                    nothingFoundMessage="Nothing Found"
                     withAsterisk
                     label="Wallet Type"
                     placeholder="Select Wallet Type"
@@ -158,11 +167,14 @@ const TransactionReport = () => {
                   <FormikSelectComponent
                     name="status"
                     size="xs"
+                    searchable={true}
+                    allowDeselect={true}
+                    nothingFoundMessage="Nothing Found"
                     label="Status"
                     placeholder="Select Status"
                     data={[
                       { label: "ALL", value: "ALL" },
-                      { label: "FAILED", value: "FAILED" },
+                      { label: "FAILED", value: "REJECTED" },
                       { label: "SUCCESS", value: "SUCCESS" },
                       { label: "PENDING", value: "PENDING" },
                     ]}
