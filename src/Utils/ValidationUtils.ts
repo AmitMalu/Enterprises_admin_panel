@@ -149,7 +149,7 @@ export const fileValidation = (
   maxSizedMB = 1.5,
   isRequired = true
 ) => {
-  let schema = Yup.mixed();
+  let schema = Yup.mixed().nullable();
 
   if (isRequired) {
     schema = schema.required(`${field} is required`);
@@ -159,12 +159,12 @@ export const fileValidation = (
     "fileType",
     `Only ${allowedTypes.join(", ")} files are allowed`,
     (value) => {
+      if (!value) return !isRequired; // Allow null/undefined if not required
       if (typeof value === "string") return true; // Allow URL (edit case)
-      return value instanceof File
-        ? allowedTypes.includes(value.type)
-        : !isRequired
-        ? true
-        : false;
+      if (value instanceof File) {
+        return allowedTypes.includes(value.type);
+      }
+      return false;
     }
   );
 
@@ -172,14 +172,14 @@ export const fileValidation = (
     "fileSize",
     `File too large. Max ${maxSizedMB}MB`,
     (value) => {
+      if (!value) return !isRequired;
       if (typeof value === "string") return true; // Allow URL (edit case)
-      return value instanceof File
-        ? value.size <= maxSizedMB * 1024 * 1024
-        : !isRequired
-        ? true
-        : false;
+      if (value instanceof File) {
+        return value.size <= maxSizedMB * 1024 * 1024;
+      }
+      return false;
     }
   );
 
-  return schema;
+  return schema as Yup.MixedSchema<string | File | null | undefined>;
 };

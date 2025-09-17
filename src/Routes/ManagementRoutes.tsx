@@ -18,6 +18,7 @@ import OnboardedUsers from "../Pages/Management/OnboardedUsers";
 import UserConfigForm from "../Components/Organisms/UserConfigForm";
 import PendingUserForm from "../Components/Organisms/PendingUserForm";
 import AdminUserForm from "../Components/Organisms/AdminUserForm";
+import PendingKycView from "../Pages/Management/PendingKycView";
 
 export const ManagementRoutes = (
   <>
@@ -36,6 +37,7 @@ export const ManagementRoutes = (
     <Route path="/management/search-user" element={<SearchUser />} />
     <Route path="/management/kyc-approved" element={<KycApprovedSummary />} />
     <Route path="/management/kyc-pending" element={<PendingKyc />} />
+    <Route path="/management/kyc-pending/:id" element={<PendingKycView />} />
     <Route path="/management/view-user" element={<ViewUser />} />
     <Route path="/management/block-unblock-user" element={<BlockUnblockUser />} />
     <Route path="/management/settlement-bank" element={<SettlementBank />} />

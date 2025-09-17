@@ -36,6 +36,7 @@ export interface FetchMasterByIdParams {
   key: string;
   endpoint: string;
   id: string;
+  method?: "GET" | "POST";
 }
 
 // Define the input type for reusability
@@ -45,6 +46,56 @@ interface DownloadFileParams {
   method?: "GET" | "POST"; // optional, defaults to GET
   body?: any; // for POST APIs
 }
+interface DeleteParams {
+  url: string;
+  params?: Record<string, any>; // query params
+  payload?: any; // request body for delete
+  successMessage?: string;
+  failureMessage?: string;
+  useFormData?: boolean;
+}
+
+const documentApiMap: Record<
+  string,
+  { url: string; method: "get" | "post"; type: "params" | "data"; key: string }
+> = {
+  AADHAAR_FRONT: {
+    url: API_ENDPOINTS.MANAGEMENT.ADHAAR_VERIFY,
+    method: "post",
+    type: "params",
+    key: "aadhaarNumber",
+  },
+  AADHAAR_BACK: {
+    url: API_ENDPOINTS.MANAGEMENT.ADHAAR_VERIFY,
+    method: "post",
+    type: "params",
+    key: "aadhaarNumber",
+  },
+  PAN: {
+    url: API_ENDPOINTS.MANAGEMENT.PAN_VERIFY,
+    method: "post",
+    type: "params",
+    key: "panNumber",
+  },
+  AADHAAR_PAN_VERIFIED: {
+    url: API_ENDPOINTS.MANAGEMENT.AADHAAR_PAN_LINK,
+    method: "post",
+    type: "params",
+    key: "aadhaarNumber",
+  },
+  // EMAIL: {
+  //   url: API_ENDPOINTS.MANAGEMENT.EMAIL_VERIFY,
+  //   method: "post",
+  //   type: "data",
+  //   key: "email",
+  // },
+  VOTER_ID: {
+    url: API_ENDPOINTS.MANAGEMENT.VOTERID_VERIFY,
+    method: "post",
+    type: "params",
+    key: "voterId",
+  },
+};
 
 // Here Filter and pagination will be passed as Params and Payload in body.
 export const fetchMasterList = createAsyncThunk(
@@ -96,7 +147,7 @@ export const fetchMasterList = createAsyncThunk(
 
       const responseData = response?.data;
 
-      if (responseData.statusCode === 200) {
+      if ([200, 201].includes(responseData.statusCode)) {
         if (returnFullData) {
           // Return the full data object
           return responseData.data;
@@ -196,10 +247,18 @@ export const fetchReport = createAsyncThunk(
 
 export const fetchMasterById = createAsyncThunk(
   "masters/fetchMasterById",
-  async ({ key, endpoint, id }: FetchMasterByIdParams, { rejectWithValue }) => {
+  async (
+    { key, endpoint, id, method = "GET" }: FetchMasterByIdParams,
+    { rejectWithValue }
+  ) => {
     // dispatch(setLoading({ key, loading: true }));
     try {
-      const response = await axiosInstance.get(`${endpoint}/${id}`);
+      let response;
+      if (method === "POST") {
+        response = await axiosInstance.post(`${endpoint}/${id}`);
+      } else {
+        response = await axiosInstance.get(`${endpoint}/${id}`);
+      }
       const responseData = response?.data;
 
       if (responseData && responseData.statusCode === 200) {
@@ -331,6 +390,57 @@ export const fetchMasterDropdown = createAsyncThunk(
   }
 );
 
+export const deleteMasterItem = createAsyncThunk(
+  "masters/deleteMasterItem",
+  async (deleteParams: DeleteParams, { rejectWithValue }) => {
+    const {
+      url,
+      params,
+      payload,
+      successMessage,
+      failureMessage,
+      useFormData = false,
+    } = deleteParams;
+
+    try {
+      // Build query string if params exist
+      let finalUrl = url;
+      if (params && Object.keys(params).length > 0) {
+        const query = new URLSearchParams(
+          Object.entries(params).map(([k, v]) => [k, String(v)])
+        ).toString();
+        finalUrl += url.includes("?") ? `&${query}` : `?${query}`;
+      }
+
+      // Send DELETE request
+      const response = await axiosInstance.delete(finalUrl, {
+        data: payload,
+        headers: useFormData
+          ? { "Content-Type": "multipart/form-data" }
+          : undefined,
+      });
+
+      const responseData = response?.data;
+
+      if ([200, 201].includes(responseData?.statusCode)) {
+        if (successMessage) {
+          toast.success(successMessage);
+        }
+        return responseData;
+      } else {
+        throw new Error(responseData?.message || failureMessage);
+      }
+    } catch (error: any) {
+      const errMsg =
+        error?.response?.data?.message || error.message || failureMessage;
+      if (errMsg) {
+        toast.error(errMsg);
+      }
+      return rejectWithValue(errMsg);
+    }
+  }
+);
+
 export const AdhaarValidationApi = createAsyncThunk(
   "masters/Adhaarvalidation",
   async ({ aadhaarNumber }: { aadhaarNumber: string }, { rejectWithValue }) => {
@@ -405,6 +515,116 @@ export const AdhaarPanLinkApi = createAsyncThunk(
         error.response?.data?.message ||
           error.message ||
           "Error in Aadhaar Pan Link verification"
+      );
+    }
+  }
+);
+
+export const DocumentValidationApi = createAsyncThunk(
+  "masters/DocumentValidationApi",
+  async (
+    {
+      documentType,
+      value, // this is the value user entered or selected for verification
+    }: {
+      documentType: string;
+      value: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const configData = documentApiMap[documentType];
+      if (!configData) {
+        throw new Error("Invalid document type");
+      }
+
+      const { url, method, type, key } = configData;
+
+      // Prepare payload based on type
+      let payload: any = {};
+      if (type === "params") {
+        payload = { [key]: value };
+      } else if (type === "data") {
+        payload = { [key]: value };
+      }
+
+      const response = await axiosInstance.request({
+        url,
+        method,
+        ...(type === "params" ? { params: payload } : { data: payload }),
+      });
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(responseData?.message || "Verification failed");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error in verification"
+      );
+    }
+  }
+);
+
+export const handleKycDocumentUpdate = createAsyncThunk(
+  "masters/handleKycDocumentUpdate",
+  async (
+    {
+      hierarchyId,
+      category,
+      verified,
+      docNumber,
+      imageFile,
+    }: {
+      hierarchyId: string;
+      category: string;
+      verified: boolean;
+      docNumber?: string | number;
+      imageFile?: File | null;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const formData = new FormData();
+
+      const requestObject = {
+        hierarchyId,
+        category,
+        verified,
+        docNumber,
+      };
+
+      formData.append("request", JSON.stringify(requestObject));
+
+      if (imageFile) {
+        formData.append("imageFile", imageFile);
+      }
+
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.MANAGEMENT.KYC}/edit`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(responseData?.message || "Update failed");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "Error updating KYC"
       );
     }
   }

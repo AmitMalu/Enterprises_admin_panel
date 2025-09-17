@@ -14,7 +14,6 @@ import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
-import { useVendor } from "../../Utils/hooks/useVendor";
 import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
@@ -36,7 +35,6 @@ const UpdateTransaction = () => {
   );
 
   const [formValues, setFormValues] = useState(updateTransInitialValues);
-  const [walletType, setWalletType] = useState<string>("");
   const [viewSubmitted, setViewSubmitted] = useState(false);
   const [loadingActionSubmit, setLoadingActionSubmit] = useState(false);
   const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
