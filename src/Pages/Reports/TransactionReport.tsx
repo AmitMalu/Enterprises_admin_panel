@@ -118,6 +118,7 @@ const TransactionReport = () => {
                     label="Hierarchy"
                     allowDeselect={true}
                     searchable={true}
+                    placeholder="Select Hierarchy Type"
                     nothingFoundMessage="Nothing Found"
                     data={hierarchyList}
                     disabled={loadingHierarchyList}

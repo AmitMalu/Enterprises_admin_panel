@@ -61,7 +61,7 @@ const RefundReport = () => {
         pagination: { ...pagination, currentPage: 1, pageSize: 10 },
       })
     );
-    setSubmittedFilter({ [key]: value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -90,6 +90,14 @@ const RefundReport = () => {
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
   };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(refundReportHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
 
   const handleRefresh = () => {
     dispatch(resetMaster(REFUND_REPORT_KEY));
@@ -204,6 +212,7 @@ const RefundReport = () => {
                     <GenericMasterToolbar
                       onRefresh={handleRefresh}
                       onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
                       onExport={handleExportClick}
                       onFilter={() => setFilterVisible((prev) => !prev)}
                       headers={refundReportHeaders}

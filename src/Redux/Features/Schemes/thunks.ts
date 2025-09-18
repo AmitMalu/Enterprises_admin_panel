@@ -7,7 +7,7 @@ type FetchSchemesListParams = {
   url: string;
   page?: number;
   size?: number;
-  filter?: { key: string; value: any } | null;
+  filter?: Record<string, any> | null;
 };
 
 export interface FetchSchemeByIdParams {
@@ -26,9 +26,15 @@ export const fetchSchemesList = createAsyncThunk(
       const params = new URLSearchParams();
       params.append("page", String(page - 1)); // 0 - based
       params.append("size", String(size));
-      if (filter?.key) {
-        params.append(filter.key, String(filter.value ?? ""));
+      // Handle multiple filters
+      if (filter && typeof filter === "object") {
+        Object.entries(filter).forEach(([k, v]) => {
+          if (v !== undefined && v !== null) {
+            params.append(k, String(v));
+          }
+        });
       }
+      
       const response = await axiosInstance.get(`${url}?${params.toString()}`);
       const responseData = response?.data;
 

@@ -117,7 +117,8 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                         placeholder="Select Zone"
                                         withAsterisk
                                         required
-                                        searchable={false}
+                                        allowDeselect={true}
+                                        searchable={true}
                                         data={SelectZoneData}
                                     />
                                 </Grid.Col>
@@ -131,6 +132,7 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                         withAsterisk
                                         required
                                         searchable
+                                        allowDeselect
                                         data={countries}
                                         rightSection={
                                             countryLoading ? <Loader size={16} /> : null

@@ -167,10 +167,12 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                   <FormikSelectComponent
                     name="productId"
                     label="Product"
-                    value={formik.values.productId}
+                    // value={formik.values.productId}
                     placeholder="Select Product"
                     withAsterisk
                     required
+                    allowDeselect={true}
+                    searchable={true}
                     data={productDropdownData}
                     disabled={loadingProductList}
                   />
@@ -180,10 +182,12 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                   <FormikSelectComponent
                     name="subProductId"
                     key={subProductKey}
-                    value={formik.values.subProductId}
+                    // value={formik.values.subProductId}
                     data={subProductDropdownData}
                     label="Sub Product"
                     placeholder="Select Sub Product"
+                    allowDeselect={true}
+                    searchable={true}
                     withAsterisk
                     required
                     disabled={loadingSubProductList}

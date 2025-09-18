@@ -123,6 +123,8 @@ const TransactionLimitForm = ({ mode }: TransactionLimitFormProps) => {
                                         label="Product"
                                         value={formik.values.productId}
                                         placeholder="Select Product"
+                                        searchable
+                                        allowDeselect
                                         withAsterisk
                                         required
                                         data={productDropdownData}
@@ -138,6 +140,8 @@ const TransactionLimitForm = ({ mode }: TransactionLimitFormProps) => {
                                         data={subProductDropdownData}
                                         label="Sub Product"
                                         placeholder="Select Sub Product"
+                                        searchable
+                                        allowDeselect
                                         withAsterisk
                                         required
                                         disabled={loadingSubProductList}

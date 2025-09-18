@@ -60,7 +60,7 @@ const ProductMaster = () => {
     dispatch(
       setPagination({
         key: MASTER_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
     setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
@@ -79,6 +79,14 @@ const ProductMaster = () => {
     setVisibleColumns((prev) =>
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
+  };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
   };
 
   const handleRefresh = () => {
@@ -105,6 +113,7 @@ const ProductMaster = () => {
         onAdd={handleAdd}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={headers}

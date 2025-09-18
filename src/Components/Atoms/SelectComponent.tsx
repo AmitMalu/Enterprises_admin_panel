@@ -30,7 +30,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   label,
   name,
   placeholder,
-  nothingFoundMessage,
+  nothingFoundMessage = "Not Found",
   value,
   onChange,
   error,

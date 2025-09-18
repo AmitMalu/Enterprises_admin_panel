@@ -120,6 +120,8 @@ const CreditDebit = () => {
                     label="User Type"
                     nothingFoundMessage="No UserType Found"
                     placeholder="Select User Type"
+                    searchable
+                    allowDeselect
                     withAsterisk
                     required
                     data={userTypeList}
@@ -132,8 +134,10 @@ const CreditDebit = () => {
                     key={accountListKey}
                     name="accountNo"
                     label="Account"
-                    nothingFoundMessage="No Accounts found for Selected Type"
+                    nothingFoundMessage="No Accounts found"
                     placeholder="Select Account"
+                    searchable
+                    allowDeselect
                     withAsterisk
                     required
                     data={accountList.map((item: any) => ({
@@ -167,6 +171,8 @@ const CreditDebit = () => {
                     withAsterisk
                     required
                     maxLength={10}
+                    allowCharacter={false}
+                    allowSpecialChar={false}
                   />
                 </Grid.Col>
 
@@ -178,6 +184,8 @@ const CreditDebit = () => {
                     placeholder="Enter Confirm Amount"
                     withAsterisk
                     required
+                    allowCharacter={false}
+                    allowNumber={false}
                     maxLength={10}
                   />
                 </Grid.Col>
@@ -190,6 +198,7 @@ const CreditDebit = () => {
                     placeholder="Select Narration Type"
                     withAsterisk
                     required
+                    allowDeselect
                     data={[
                       { value: "commission", label: "Commission" },
                       { value: "refund", label: "Refund" },

@@ -107,6 +107,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                         label="Scheme Hierarchy Name"
                                         placeholder="Enter Scheme Hierarchy Name"
                                         withAsterisk
+                                        allowSpecialChar={false}
                                         maxLength={50}
                                     />
                                 </Grid.Col>

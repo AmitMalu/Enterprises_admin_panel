@@ -57,6 +57,14 @@ const KycApprovedSummary = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(KycApprovedHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(KYC_APPROVED_KEY));
     setSearch("")
@@ -85,6 +93,7 @@ const KycApprovedSummary = () => {
         searchPlaceholder="Search using RT, DT, BZT-RT-001"
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         visibleColumns={visibleColumns}
         loading={loading}

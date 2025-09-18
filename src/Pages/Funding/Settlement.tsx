@@ -101,6 +101,14 @@ const Settlement = () => {
     }
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(preSettlementHeaders.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
+
   const handleSettlementAction = async (action: "APPROVE" | "REJECT") => {
     if (!selectedIds.length) return;
     setLoadingActionSubmit(true); // set which row is loading
@@ -354,6 +362,7 @@ const Settlement = () => {
             <GenericMasterToolbar
               onRefresh={handleRefresh}
               onColumnChange={handleToggleColumn}
+              onToggleAll={handleToggleAllColumns}
               onExport={handleExportClick}
               headers={preSettlementHeaders}
               visibleColumns={visibleColumns}

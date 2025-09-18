@@ -66,6 +66,14 @@ const DownloadReport = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(downloadReportHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(DOWNLOAD_REPORT_KEY));
     setVisibleColumns(downloadReportHeaders.map((h) => h.key as string));
@@ -117,6 +125,7 @@ const DownloadReport = () => {
                     <GenericMasterToolbar
                       onRefresh={handleRefresh}
                       onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
                       onExport={handleExportClick}
                       headers={downloadReportHeaders}
                       visibleColumns={visibleColumns}

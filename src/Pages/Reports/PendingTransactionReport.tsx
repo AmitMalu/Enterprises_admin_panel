@@ -72,6 +72,14 @@ const PendingTransactionReport = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(PENDING_TRANSCATION_REPORT_KEY));
     setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
@@ -237,6 +245,7 @@ const PendingTransactionReport = () => {
       <GenericMasterToolbar
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         headers={settlementReportHeaders}
         visibleColumns={visibleColumns}

@@ -53,10 +53,10 @@ const PendingUser = () => {
     dispatch(
       setPagination({
         key: KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ [key]: value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -74,6 +74,14 @@ const PendingUser = () => {
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
   };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(headers.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
 
   const handleRefresh = () => {
     dispatch(resetMaster(KEY));
@@ -100,6 +108,7 @@ const PendingUser = () => {
         headers={headers}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         visibleColumns={visibleColumns}

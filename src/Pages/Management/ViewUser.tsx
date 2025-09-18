@@ -63,6 +63,14 @@ const ViewUser = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(ViewUserHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(VIEW_USER_KEY));
     setSearch("")
@@ -90,6 +98,7 @@ const ViewUser = () => {
         searchPlaceholder="Search by Mobile / Hierarchy Id"
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         visibleColumns={visibleColumns}
         loading={loading}

@@ -134,7 +134,9 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
                   <FormikSelectComponent
                     name="operatorCode"
                     label="Operator"
-                    value={formik.values.operatorName}
+                    allowDeselect={true}
+                    searchable={true}
+                    // value={formik.values.operatorName}
                     placeholder="Select Operator"
                     withAsterisk
                     required

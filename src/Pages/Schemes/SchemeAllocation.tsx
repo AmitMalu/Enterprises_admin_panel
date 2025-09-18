@@ -99,6 +99,14 @@ const SchemeAllocation = () => {
         );
     };
 
+    const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(headers.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
     const handleRefresh = () => {
         setSearch("")
         debouncedSearchValueRef.current = ""
@@ -152,6 +160,7 @@ const SchemeAllocation = () => {
                 headers={headers}
                 onRefresh={handleRefresh}
                 onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
                 onExport={handleExportClick}
                 onSearch={handleSearchChange}
                 searchValue={search}

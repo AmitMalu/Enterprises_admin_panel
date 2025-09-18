@@ -19,6 +19,7 @@ type GenericMasterToolbarProps = {
   onColumnChange?: (key: string) => void;
   headers?: GenericTableHeader<any>[];
   visibleColumns?: string[];
+  onToggleAll?: (selectAll: boolean) => void;
   loading?: boolean;
   error?: null | string;
   onSearch?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -38,10 +39,11 @@ const GenericMasterToolbar = ({
   searchPlaceholder = "Search...",
   onRefresh,
   onColumnChange,
+  onToggleAll,
   headers,
   visibleColumns,
   loading = false,
-  error = null
+  error = null,
 }: GenericMasterToolbarProps) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -129,6 +131,7 @@ const GenericMasterToolbar = ({
             headers={headers || []}
             visibleColumns={visibleColumns || []}
             onToggleColumn={onColumnChange ?? (() => { })}
+            onToggleAll={onToggleAll}
           />}
 
           {/* Refresh Icon */}

@@ -43,10 +43,9 @@ const PreFundingAuth = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
 
   const handleEdit = (id: any) => {
     navigate(`/funding/authorization/edit/${id}`, { state: id });
@@ -83,10 +82,10 @@ const PreFundingAuth = () => {
     dispatch(
       setPagination({
         key: FUNDING_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -113,6 +112,14 @@ const PreFundingAuth = () => {
     setVisibleColumns(headers.map((h) => h.key as string));
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
+  };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
   };
 
   useEffect(() => {
@@ -155,6 +162,7 @@ const PreFundingAuth = () => {
         headers={headers}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         visibleColumns={visibleColumns}

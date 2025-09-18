@@ -177,6 +177,8 @@ const VendorForm = ({ mode }: VendorFormProps) => {
                     placeholder="Select Product"
                     withAsterisk
                     required
+                    allowDeselect={true}
+                    searchable={true}
                     data={productDropdownData}
                     disabled={loadingProductList}
                   />

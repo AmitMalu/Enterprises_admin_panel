@@ -66,6 +66,14 @@ const BlockUnblockUser = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(BlockUnblockUserHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(BLOCK_USER_KEY));
     setSearch("")
@@ -123,6 +131,7 @@ const BlockUnblockUser = () => {
         onRefresh={handleRefresh}
         searchPlaceholder="Search by Mobile / Hierarchy Id"
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         visibleColumns={visibleColumns}
         loading={loading || loadingRowId !== null}

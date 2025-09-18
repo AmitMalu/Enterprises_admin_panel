@@ -18,7 +18,7 @@ import {
   validationSchema,
 } from "../../Config/Master/SubProductConfig";
 import { useAppDispatch } from "../../Redux/hooks";
-import { booleanSelectData, settlementTimeData } from "../../Utils/utils";
+import { booleanSelectData, settlementTimeData, walletTypeSelectData } from "../../Utils/utils";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { toast } from "react-toastify";
 import { fetchMasterById, fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
@@ -176,13 +176,14 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikTextInputComponent
+                  <FormikSelectComponent
                     name="walletType"
                     label="Wallet Type"
                     placeholder="Enter Wallet Type"
+                    allowDeselect={false}
+                    data={walletTypeSelectData}
                     withAsterisk
                     required
-                    maxLength={50}
                   />
                 </Grid.Col>
 
