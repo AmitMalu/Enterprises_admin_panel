@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import BreadCrumb from "../Molecules/BreadCrumb";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import {
   initialValues,
@@ -106,7 +106,7 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={handleSubmit}
       >
-        {(formik: FormikProps<any>) => {
+        {() => {
           const { operatorDropdownData, loadingOperatorList } =
             useOperatorSubOperator({});
 
