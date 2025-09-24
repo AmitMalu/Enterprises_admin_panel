@@ -33,6 +33,7 @@
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
     "country-state-city": "^3.2.1",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.5.0",
     "embla-carousel-autoplay": "^7.1.0",
     "formik": "^2.4.6",
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@types/crypto-js": "^4.2.2",
     "@types/lodash.debounce": "^4.0.9",
     "@types/lodash.throttle": "^4.1.9",
     "@types/papaparse": "^5.3.16",
