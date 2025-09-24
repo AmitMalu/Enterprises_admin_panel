@@ -101,6 +101,14 @@ const Settlement = () => {
     }
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(preSettlementHeaders.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
+
   const handleSettlementAction = async (action: "APPROVE" | "REJECT") => {
     if (!selectedIds.length) return;
     setLoadingActionSubmit(true); // set which row is loading
@@ -204,6 +212,8 @@ const Settlement = () => {
                     placeholder="Select Product"
                     nothingFoundMessage="No Product Found"
                     size="xs"
+                    searchable={true}
+                    allowDeselect={true}
                     withAsterisk
                     required
                     data={productDropdownData}
@@ -238,6 +248,8 @@ const Settlement = () => {
                     placeholder="Select Sub Product"
                     nothingFoundMessage="No SubProduct Found for Selected Product"
                     size="xs"
+                    searchable={true}
+                    allowDeselect={true}
                     withAsterisk
                     // required
                     disabled={loadingSubProductList}
@@ -251,6 +263,9 @@ const Settlement = () => {
                     value={values.vendorId}
                     placeholder="Select Vendor"
                     size="xs"
+                    searchable={true}
+                    allowDeselect={true}
+                    nothingFoundMessage="No Vendor Found"
                     data={vendorDropdownData}
                     disabled={loadingVendorList}
                   />
@@ -347,6 +362,7 @@ const Settlement = () => {
             <GenericMasterToolbar
               onRefresh={handleRefresh}
               onColumnChange={handleToggleColumn}
+              onToggleAll={handleToggleAllColumns}
               onExport={handleExportClick}
               headers={preSettlementHeaders}
               visibleColumns={visibleColumns}

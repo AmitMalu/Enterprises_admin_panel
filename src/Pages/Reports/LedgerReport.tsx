@@ -60,6 +60,14 @@ const LedgerReport = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(LedgerReportHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(LEDGER_REPORT_KEY));
     setVisibleColumns(LedgerReportHeaders.map((h) => h.key as string));
@@ -114,6 +122,7 @@ const LedgerReport = () => {
                     <GenericMasterToolbar
                       onRefresh={handleRefresh}
                       onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
                       onExport={handleExportClick}
                       headers={LedgerReportHeaders}
                       visibleColumns={visibleColumns}

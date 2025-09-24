@@ -72,6 +72,14 @@ const SettlementReport = () => {
         );
     };
 
+    const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
     const handleRefresh = () => {
         dispatch(resetMaster(SETTLEMENT_REPORT_KEY));
         setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
@@ -136,6 +144,8 @@ const SettlementReport = () => {
                                         label="Product"
                                         value={values.productId}
                                         placeholder="Select Product"
+                                        allowDeselect={true}
+                                        searchable={true}
                                         nothingFoundMessage="No Product Found"
                                         size="xs"
                                         withAsterisk
@@ -169,8 +179,10 @@ const SettlementReport = () => {
                                         value={values.subProductId}
                                         data={subProductDropdownData}
                                         label="Sub Product"
-                                        placeholder="Select Sub Product"
+                                        allowDeselect={true}
+                                        searchable={true}
                                         nothingFoundMessage="No SubProduct Found for Selected Product"
+                                        placeholder="Select Sub Product"
                                         size="xs"
                                         withAsterisk
                                         // required
@@ -183,6 +195,9 @@ const SettlementReport = () => {
                                         name="vendorId"
                                         label="Vendor"
                                         value={values.vendorId}
+                                        allowDeselect={true}
+                                        searchable={true}
+                                        nothingFoundMessage="No Vendor found"
                                         placeholder="Select Vendor"
                                         size="xs"
                                         data={vendorDropdownData}
@@ -194,6 +209,7 @@ const SettlementReport = () => {
                                     <FormikSelectComponent
                                         name="walletType"
                                         size="xs"
+                                        allowDeselect={true}
                                         label="Wallet Type"
                                         placeholder="Select Wallet Type"
                                         data={[
@@ -227,6 +243,7 @@ const SettlementReport = () => {
                                         size="xs"
                                         label="Transaction Status"
                                         placeholder="Select Transaction Status"
+                                        allowDeselect={true}
                                         data={[
                                             { label: "ACCEPTED", value: "SUCCESS" },
                                             { label: "REJECTED", value: "FAILURE" },
@@ -239,6 +256,7 @@ const SettlementReport = () => {
                                         <GenericMasterToolbar
                                             onRefresh={handleRefresh}
                                             onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
                                             onExport={handleExportClick}
                                             headers={settlementReportHeaders}
                                             visibleColumns={visibleColumns}

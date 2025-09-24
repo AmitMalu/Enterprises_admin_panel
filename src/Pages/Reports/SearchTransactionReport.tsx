@@ -66,6 +66,14 @@ const SearchTransactionReport = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(SearchTransReportHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(SEARCH_TRANSACTION_REPORT_KEY));
     setVisibleColumns(SearchTransReportHeaders.map((h) => h.key as string));
@@ -111,6 +119,7 @@ const SearchTransactionReport = () => {
                     <GenericMasterToolbar
                       onRefresh={handleRefresh}
                       onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
                       onExport={handleExportClick}
                       headers={SearchTransReportHeaders}
                       visibleColumns={visibleColumns}

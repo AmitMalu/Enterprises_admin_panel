@@ -64,7 +64,7 @@ export const validationSchema: Record<keyof BankMasterFormType, Yup.AnySchema> =
   };
 
 export const headers: GenericTableHeader<BankMasterTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "bankName", label: "Bank Name", filterType: "text" },
   { key: "accountNumber", label: "Account Number", filterType: "text" },
   { key: "ifscCode", label: "IFSC Code", filterType: "text" },
@@ -81,9 +81,9 @@ export const headers: GenericTableHeader<BankMasterTableType>[] = [
   { key: "isActive", label: "Active", filterType: "boolean" },
   { key: "isBlocked", label: "Blocked", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
-  { key: "createdOn", label: "Created On", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
-  { key: "editedOn", label: "Edited On", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const transformToBankTableType = (

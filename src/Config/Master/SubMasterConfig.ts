@@ -42,9 +42,9 @@ export const validationSchema: Record<keyof SubMasterFormType, Yup.AnySchema> =
   };
 
 export const headers: GenericTableHeader<SubMasterTableType>[] = [
-  { key: "imMasterId", label: "Master Id", filterType: "text" },
+  { key: "imMasterId", label: "Master Id", filterType: "number" },
   { key: "imMasterName", label: "Master Name", filterType: "text" },
-  { key: "imSubMasterId", label: "Sub Master Id", filterType: "text" },
+  { key: "imSubMasterId", label: "Sub Master Id", filterType: "number" },
   { key: "imSubMasterName", label: "Sub Master Name", filterType: "text" },
 ];
 

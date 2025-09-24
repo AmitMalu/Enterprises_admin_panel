@@ -124,6 +124,13 @@ export const websiteValidation = Yup.string()
   .url("Must be a valid URL")
   .nullable();
 
+export const apiUrlValidation = Yup.string()
+  .matches(
+    /^https?:\/\/.+$/,
+    "Must be a valid API URL starting with http:// or https://"
+  )
+  .nullable();
+
 // export const fileValidation = (
 //   field: string,
 //   allowedTypes: string[] = ["image/jpeg", "image/png"],

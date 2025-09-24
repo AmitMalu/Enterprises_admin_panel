@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../Redux/hooks';
 import { toast } from 'react-toastify';
-import { KYC_VIEW_KEY, KycDetailsFormType, kycDetailsHeaders, kycDetailsInitialValues, kycDetailsSchema, KycDetailsTableType, PENDING_KYC_URL, pendingKycSchema } from '../../Config/Management/PendingKycConfig';
+import { KYC_VIEW_KEY, KycDetailsFormType, kycDetailsHeaders, kycDetailsInitialValues, kycDetailsSchema, KycDetailsTableType, PENDING_KYC_URL } from '../../Config/Management/PendingKycConfig';
 import { deleteMasterItem, DocumentValidationApi, fetchMasterById, handleKycDocumentUpdate } from '../../Redux/Features/Masters/MastersThunk';
 import BackHeader from '../../Components/Molecules/BackHeader';
 import BreadCrumb from '../../Components/Molecules/BreadCrumb';
@@ -188,6 +188,8 @@ const PendingKycView = () => {
                                         label="Document"
                                         placeholder="Select Document"
                                         size="sm"
+                                        searchable={true}
+                                        allowDeselect={true}
                                         data={documents.map((item) => item)}
                                         required
                                         withAsterisk

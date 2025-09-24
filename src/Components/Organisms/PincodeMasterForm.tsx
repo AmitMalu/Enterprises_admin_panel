@@ -150,10 +150,11 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
                                             name="countryId"
                                             label="Country"
                                             placeholder="Select Country"
-                                            nothingFoundMessage="Country List Empty"
+                                            nothingFoundMessage="No Match for Country Found"
                                             withAsterisk
                                             required
                                             searchable
+                                            allowDeselect
                                             data={countries}
                                             rightSection={
                                                 countryLoading ? <Loader size={16} /> : null
@@ -168,8 +169,9 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
                                             name="stateId"
                                             label="State"
                                             placeholder="Select State"
-                                            nothingFoundMessage="No State for Selected Country"
+                                            nothingFoundMessage="No State Found"
                                             searchable
+                                            allowDeselect
                                             withAsterisk
                                             required
                                             rightSection={
@@ -185,9 +187,10 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
                                             key={districtKey}
                                             name="districtId"
                                             label="District"
-                                            nothingFoundMessage="No District for Selected State"
+                                            nothingFoundMessage="No District Found"
                                             placeholder="Select District"
                                             searchable
+                                            allowDeselect
                                             withAsterisk
                                             required
                                             rightSection={
@@ -203,9 +206,10 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
                                             key={cityKey}
                                             name="cityId"
                                             label="City"
-                                            nothingFoundMessage="No Cities for Selected District"
+                                            nothingFoundMessage="No Cities found"
                                             placeholder="Select City"
                                             searchable
+                                            allowDeselect
                                             withAsterisk
                                             required
                                             rightSection={
@@ -220,8 +224,10 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
                                         <FormikTextInputComponent
                                             name="pinCode"
                                             label="Pincode"
-                                            placeholder="Enter Pincode Name"
+                                            placeholder="Enter Pincode"
                                             withAsterisk
+                                            allowCharacter={false}
+                                            allowSpecialChar={false}
                                             maxLength={6}
                                         />
                                     </Grid.Col>

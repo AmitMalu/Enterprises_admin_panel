@@ -33,7 +33,8 @@ const BlockUnblockUser = () => {
       url: `${BLOCK_USER_URL}`,
       filter: { keyword: debouncedSearchValue },
       refreshKey,
-      method: "GET"
+      method: "GET",
+      defaultPageSize: 5
     });
 
   const debouncedSearch = useMemo(
@@ -64,6 +65,14 @@ const BlockUnblockUser = () => {
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
   };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(BlockUnblockUserHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
 
   const handleRefresh = () => {
     dispatch(resetMaster(BLOCK_USER_KEY));
@@ -120,7 +129,9 @@ const BlockUnblockUser = () => {
         onSearch={handleSearchChange}
         searchValue={search}
         onRefresh={handleRefresh}
+        searchPlaceholder="Search by Mobile / Hierarchy Id"
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         visibleColumns={visibleColumns}
         loading={loading || loadingRowId !== null}

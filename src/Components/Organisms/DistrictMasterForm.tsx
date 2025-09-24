@@ -136,7 +136,9 @@ const DistrictMasterForm = ({ mode }: DistrictMasterFormProps) => {
                                             placeholder="Select Country"
                                             withAsterisk
                                             required
+                                            nothingFoundMessage="No Match for Country Found"
                                             searchable
+                                            allowDeselect
                                             data={countries}
                                             rightSection={
                                                 countryLoading ? <Loader size={16} /> : null
@@ -151,7 +153,9 @@ const DistrictMasterForm = ({ mode }: DistrictMasterFormProps) => {
                                             name="stateId"
                                             label="State"
                                             placeholder="Select State"
+                                            nothingFoundMessage="No State for Selected Country"
                                             searchable
+                                            allowDeselect
                                             withAsterisk
                                             required
                                             rightSection={

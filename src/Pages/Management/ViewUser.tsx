@@ -29,7 +29,8 @@ const ViewUser = () => {
       url: `${VIEW_USER_URL}`,
       filter: { keyword: debouncedSearchValue },
       refreshKey,
-      method: "GET"
+      method: "GET",
+      defaultPageSize: 5
     });
 
   const debouncedSearch = useMemo(
@@ -62,6 +63,14 @@ const ViewUser = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(ViewUserHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(VIEW_USER_KEY));
     setSearch("")
@@ -86,8 +95,10 @@ const ViewUser = () => {
         headers={ViewUserHeaders}
         onSearch={handleSearchChange}
         searchValue={search}
+        searchPlaceholder="Search by Mobile / Hierarchy Id"
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         visibleColumns={visibleColumns}
         loading={loading}

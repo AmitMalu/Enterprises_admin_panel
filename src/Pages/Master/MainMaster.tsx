@@ -30,10 +30,7 @@ const MainMaster = () => {
   );
   const dataRef = useRef<MainMasterTableType[] | null>(null);
 
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
   const { data, loading, error, pagination, setPage, setPageSize } =
     useFetchMasterList<MainMasterTableType>({
@@ -41,6 +38,7 @@ const MainMaster = () => {
       url: MASTER_URL,
       filter: submittedFilter,
       refreshKey,
+      defaultPageSize: 5
     });
 
   const handleAdd = () => {
@@ -59,10 +57,10 @@ const MainMaster = () => {
     dispatch(
       setPagination({
         key: MASTER_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -80,6 +78,14 @@ const MainMaster = () => {
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
   };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(headers.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
 
   const handleRefresh = () => {
     dispatch(resetMaster(MASTER_KEY));
@@ -105,6 +111,7 @@ const MainMaster = () => {
         onAdd={handleAdd}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={headers}

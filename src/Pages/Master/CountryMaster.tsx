@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { EditIcon, EyeIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import { useNavigate } from "react-router-dom";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
@@ -31,10 +31,7 @@ const CountryMaster = () => {
   );
   const dataRef = useRef<CountryMasterTableType[] | null>(null);
 
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
   const { data, loading, error, pagination, setPage, setPageSize } =
     useFetchMasterList<CountryMasterTableType>({
@@ -60,10 +57,10 @@ const CountryMaster = () => {
     dispatch(
       setPagination({
         key: MASTER_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -80,6 +77,14 @@ const CountryMaster = () => {
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
   };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(headers.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
 
   const handleRefresh = () => {
     dispatch(resetMaster(MASTER_KEY));
@@ -106,6 +111,7 @@ const CountryMaster = () => {
         onAdd={handleAdd}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={headers}
@@ -126,9 +132,9 @@ const CountryMaster = () => {
           renderExtraHeader={() => <></>} // empty header for action column/>
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2">
-              <span className="cursor-pointer">
+              {/* <span className="cursor-pointer">
                 <EyeIcon />
-              </span>
+              </span> */}
               <span
                 onClick={() => handleEdit(String(item?.id ?? ""))}
                 className="cursor-pointer"

@@ -117,7 +117,8 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                         placeholder="Select Zone"
                                         withAsterisk
                                         required
-                                        searchable
+                                        allowDeselect={true}
+                                        searchable={true}
                                         data={SelectZoneData}
                                     />
                                 </Grid.Col>
@@ -127,9 +128,11 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                         name="countryId"
                                         label="Country"
                                         placeholder="Select Country"
+                                        nothingFoundMessage="No Match for Country Found"
                                         withAsterisk
                                         required
                                         searchable
+                                        allowDeselect
                                         data={countries}
                                         rightSection={
                                             countryLoading ? <Loader size={16} /> : null
@@ -165,7 +168,6 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                         placeholder="Select Region Type"
                                         withAsterisk
                                         required
-                                        searchable
                                         data={SelectRegionTypeData}
                                     />
                                 </Grid.Col>

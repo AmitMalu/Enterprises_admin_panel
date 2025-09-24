@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
@@ -8,7 +8,6 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import debounce from "lodash.debounce";
 import { KYC_APPROVED_KEY, KYC_APPROVED_URL, KycApprovedHeaders, KycApprovedTableType } from "../../Config/Management/KycApprovedConfig";
 
 const KycApprovedSummary = () => {
@@ -58,6 +57,14 @@ const KycApprovedSummary = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(KycApprovedHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(KYC_APPROVED_KEY));
     setSearch("")
@@ -86,6 +93,7 @@ const KycApprovedSummary = () => {
         searchPlaceholder="Search using RT, DT, BZT-RT-001"
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         visibleColumns={visibleColumns}
         loading={loading}

@@ -56,8 +56,8 @@ export const validationSchema: Record<keyof PrefundingFormType, Yup.AnySchema> =
 export const headers: GenericTableHeader<PrefundingTableType>[] = [
   { key: "paymentMode", label: "Deposit Type", filterType: "text" },
   { key: "bankTranId", label: "Transaction ID", filterType: "text" },
-  { key: "depositAmount", label: "Amount", filterType: "text" },
-  { key: "bankAccountNumber", label: "Account Number", filterType: "text" },
+  { key: "depositAmount", label: "Amount", filterType: "number" },
+  { key: "bankAccountNumber", label: "Account Number", filterType: "number" },
   { key: "depositDate", label: "Deposit Date", filterType: "date" },
   {
     key: "depositImage",
@@ -68,7 +68,7 @@ export const headers: GenericTableHeader<PrefundingTableType>[] = [
   // { key: "partnerName", label: "Partner Name", filterType: "text" },
   { key: "requestedBy", label: "Requested By", filterType: "text" },
   { key: "ipAddress", label: "Client IP", filterType: "text" },
-  { key: "mobileNumber", label: "Partner Mobile Number", filterType: "text" },
+  { key: "mobileNumber", label: "Partner Mobile Number", filterType: "number" },
   {
     key: "status",
     label: "Request Status",
@@ -80,4 +80,3 @@ export const headers: GenericTableHeader<PrefundingTableType>[] = [
     ],
   },
 ];
-

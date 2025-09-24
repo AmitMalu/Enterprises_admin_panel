@@ -8,6 +8,7 @@ import ButtonComponent from "../Atoms/ButtonComponent";
 import { GenericTableHeader } from "../../Utils/utils";
 import ColumnVisibilityMenu from "../Molecules/ColumnVisibilityMenu";
 import TextInputComponent from "../Atoms/TextInputComponent";
+import { useEffect, useRef } from "react";
 
 type GenericMasterToolbarProps = {
   addButtonText?: string;
@@ -18,6 +19,7 @@ type GenericMasterToolbarProps = {
   onColumnChange?: (key: string) => void;
   headers?: GenericTableHeader<any>[];
   visibleColumns?: string[];
+  onToggleAll?: (selectAll: boolean) => void;
   loading?: boolean;
   error?: null | string;
   onSearch?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -37,11 +39,21 @@ const GenericMasterToolbar = ({
   searchPlaceholder = "Search...",
   onRefresh,
   onColumnChange,
+  onToggleAll,
   headers,
   visibleColumns,
   loading = false,
-  error = null
+  error = null,
 }: GenericMasterToolbarProps) => {
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!loading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [loading]);
+
   return (
     <>
       <div className="flex justify-between mt-2">
@@ -70,6 +82,7 @@ const GenericMasterToolbar = ({
           {/* Search Bar */}
           {onSearch && (
             <TextInputComponent
+              ref={inputRef}
               className="inline-block h-[40px] w-[250px] "
               name="search"
               size="sm"
@@ -118,6 +131,7 @@ const GenericMasterToolbar = ({
             headers={headers || []}
             visibleColumns={visibleColumns || []}
             onToggleColumn={onColumnChange ?? (() => { })}
+            onToggleAll={onToggleAll}
           />}
 
           {/* Refresh Icon */}

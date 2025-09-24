@@ -105,7 +105,7 @@ export const validationSchema: Record<keyof VendorFormType, Yup.AnySchema> = {
 };
 
 export const headers: GenericTableHeader<VendorTableType>[] = [
-  { key: "id", label: "Id", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "vendorName", label: "Vendor Name", filterType: "text" },
   { key: "vendorCode", label: "Vendor Code", filterType: "text" },
   { key: "productId", label: "Product Id", filterType: "text" },

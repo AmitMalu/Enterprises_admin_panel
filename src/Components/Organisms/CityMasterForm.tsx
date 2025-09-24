@@ -147,6 +147,7 @@ const CityMasterForm = ({ mode }: CityMasterFormProps) => {
                                             withAsterisk
                                             required
                                             searchable
+                                            allowDeselect
                                             data={countries}
                                             rightSection={
                                                 countryLoading ? <Loader size={16} /> : null
@@ -161,8 +162,9 @@ const CityMasterForm = ({ mode }: CityMasterFormProps) => {
                                             name="stateId"
                                             label="State"
                                             placeholder="Select State"
-                                            nothingFoundMessage="No State for Selected Country"
+                                            nothingFoundMessage="No State Found"
                                             searchable
+                                            allowDeselect
                                             withAsterisk
                                             required
                                             rightSection={
@@ -178,9 +180,10 @@ const CityMasterForm = ({ mode }: CityMasterFormProps) => {
                                             key={districtKey}
                                             name="districtId"
                                             label="District"
-                                            nothingFoundMessage="No District for Selected State"
+                                            nothingFoundMessage="No District Found"
                                             placeholder="Select District"
                                             searchable
+                                            allowDeselect
                                             withAsterisk
                                             required
                                             rightSection={

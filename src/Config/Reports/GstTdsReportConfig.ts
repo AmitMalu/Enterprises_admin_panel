@@ -60,7 +60,7 @@ export const GstTdsReportSchema: Record<
 };
 
 export const GstTdsheaders: GenericTableHeader<GstTdsReportTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "txId", label: "Transaction ID", filterType: "text" },
   { key: "txType", label: "Transaction Type", filterType: "text" },
   { key: "balBefore", label: "Balance Before", filterType: "text" },

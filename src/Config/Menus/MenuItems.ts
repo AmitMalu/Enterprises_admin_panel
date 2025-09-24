@@ -363,11 +363,11 @@ export const sidebarData = [
         link: "/notification/sms-template",
         icon: NotificationIcon,
       },
-      {
-        label: "Email Report",
-        link: "/notification/email-report",
-        icon: NotificationIcon,
-      },
+      // {
+      //   label: "Email Report",
+      //   link: "/notification/email-report",
+      //   icon: NotificationIcon,
+      // },
       {
         label: "Send SMS",
         link: "/notification/send-sms",

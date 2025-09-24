@@ -58,7 +58,7 @@ export const initialValues: UserAuthFormType = {
 };
 
 export const headers: GenericTableHeader<UserAuthTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "text" },
   { key: "parentAccount", label: "Parent Account", filterType: "text" },
   {
     key: "type",
@@ -68,7 +68,7 @@ export const headers: GenericTableHeader<UserAuthTableType>[] = [
   },
   { key: "emailId", label: "Email", filterType: "text" },
   { key: "name", label: "Name", filterType: "text" },
-  { key: "mobileNumber", label: "Mobile Number", filterType: "text" },
+  { key: "mobileNumber", label: "Mobile Number", filterType: "number" },
   { key: "status", label: "Status", filterType: "text" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },

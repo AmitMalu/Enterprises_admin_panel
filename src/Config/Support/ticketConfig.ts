@@ -61,7 +61,7 @@ export const validationSchema: Record<keyof TicketFormType, Yup.AnySchema> = {
 };
 
 export const headers: GenericTableHeader<TicketTableType>[] = [
-  { key: "id", label: "Ticket ID", filterType: "text" },
+  { key: "id", label: "Ticket ID", filterType: "number" },
   { key: "transactionId", label: "Transaction ID", filterType: "text" },
   {
     key: "status",
@@ -87,9 +87,9 @@ export const headers: GenericTableHeader<TicketTableType>[] = [
       { label: "FAILED", value: "FAILED" },
     ],
   },
-  { key: "amount", label: "Amount", filterType: "text" },
-  { key: "balBeforeTran", label: "Balance Before", filterType: "text" },
-  { key: "balAfterTran", label: "Balance After", filterType: "text" },
+  { key: "amount", label: "Amount", filterType: "number" },
+  { key: "balBeforeTran", label: "Balance Before", filterType: "number" },
+  { key: "balAfterTran", label: "Balance After", filterType: "number" },
   { key: "dateOfTransaction", label: "Transaction Date", filterType: "date" },
   { key: "service", label: "Service", filterType: "text" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },

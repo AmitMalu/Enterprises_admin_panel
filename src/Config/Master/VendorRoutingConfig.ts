@@ -101,7 +101,7 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<VendorRoutingTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "subProductId", label: "Sub Product ID", filterType: "text" },
   {
     key: "routingPriority1Name",

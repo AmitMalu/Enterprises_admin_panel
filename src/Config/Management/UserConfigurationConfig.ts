@@ -79,7 +79,7 @@ export const validationSchema: Record<keyof UserConfigFormType, Yup.AnySchema> =
   };
 
 export const headers: GenericTableHeader<UserConfigTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "userRole", label: "User Role", filterType: "text" },
   { key: "fullName", label: "Full Name", filterType: "text" },
   { key: "email", label: "Email", filterType: "text" },

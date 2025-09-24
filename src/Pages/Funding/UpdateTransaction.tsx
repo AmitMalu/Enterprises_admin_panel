@@ -90,6 +90,14 @@ const UpdateTransaction = () => {
     }
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(updateTransHeaders.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
+
   const handleToggleRow = (checked: boolean, id: string | number) => {
     if (checked) {
       setSelectedIds((prev) => [...prev, id]);
@@ -267,6 +275,7 @@ const UpdateTransaction = () => {
                     <GenericMasterToolbar
                       onRefresh={handleRefresh}
                       onColumnChange={handleToggleColumn}
+                      onToggleAll={handleToggleAllColumns}
                       onExport={handleExportClick}
                       headers={updateTransHeaders}
                       visibleColumns={visibleColumns}

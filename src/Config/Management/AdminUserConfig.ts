@@ -117,7 +117,7 @@ export const validationSchema: Record<keyof AdminUserFormType, Yup.AnySchema> =
   };
 
 export const headers: GenericTableHeader<AdminUserTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number" },
   { key: "parentAccount", label: "Parent Account", filterType: "text" },
   { key: "name", label: "Name", filterType: "text" },
   { key: "emailId", label: "Email", filterType: "text" },

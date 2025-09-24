@@ -107,6 +107,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                         label="Scheme Hierarchy Name"
                                         placeholder="Enter Scheme Hierarchy Name"
                                         withAsterisk
+                                        allowSpecialChar={false}
                                         maxLength={50}
                                     />
                                 </Grid.Col>
@@ -116,6 +117,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                         name="schemeHierarchyCombination"
                                         label="Hierarchy Combination "
                                         placeholder="Select Scheme Hierarchy combinations"
+                                        nothingFoundMessage="No Scheme found"
                                         withAsterisk
                                         data={["Retailer", "Distributor", "Partner", "SuperDistributor", "Whitelabel"]}
                                         clearable

@@ -83,7 +83,7 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, h
                   typeof item.id === "string" && item.id.startsWith("new-") ? (
                     <span
                       onClick={() => handleRemoveRow(operator.operatorCode, String(item.id))}
-                      className="cursor-pointer"
+                      className="cursor-pointer flex items-center justify-center"
                       title="Remove Slab"
                     >
                       <DeleteIcon />

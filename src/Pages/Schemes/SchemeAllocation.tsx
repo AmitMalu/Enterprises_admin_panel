@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { makeSelectMasterMeta, resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
 import { headers, SCHEMES_ALLOCATION_KEY, SCHEMES_ALLOCATION_URL, SchemesAllocationTableType } from "../../Config/Schemes/SchemesAllocationConfig";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import { fetchMasterList } from "../../Redux/Features/Masters/MastersThunk";
@@ -33,7 +33,7 @@ const SchemeAllocation = () => {
     const [error, setError] = useState<string | null>(null);
 
     const [search, setSearch] = useState("")
-    const [debouncedSearchValue, setDebouncedSearchValue] = useState<string | null>("");
+    const debouncedSearchValueRef = useRef<string>("");
 
     const [refreshKey, setRefreshKey] = useState(0);
     const [visibleColumns, setVisibleColumns] = useState<string[]>(
@@ -47,7 +47,8 @@ const SchemeAllocation = () => {
     const debouncedSearch = useMemo(
         () =>
             debounce((val: string) => {
-                setDebouncedSearchValue(val); // store it here
+                debouncedSearchValueRef.current = val;
+                fetchData();
             }, 500),
         []
     );
@@ -98,41 +99,49 @@ const SchemeAllocation = () => {
         );
     };
 
+    const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(headers.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
     const handleRefresh = () => {
         setSearch("")
-        setDebouncedSearchValue("")
+        debouncedSearchValueRef.current = ""
         dispatch(resetMaster(SCHEMES_ALLOCATION_KEY));
         setVisibleColumns(headers.map((h) => h.key as string));
         setRefreshKey((prev) => prev + 1);
     };
 
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const response = await dispatch(
+                fetchMasterList({
+                    key: SCHEMES_ALLOCATION_KEY,
+                    url: `${SCHEMES_ALLOCATION_URL}/active-retailers`,
+                    page: currentPage,
+                    size: pageSize,
+                    filter: { keyword: debouncedSearchValueRef.current },
+                })
+            ).unwrap();
+
+            setData(response);
+        } catch (err: any) {
+            toast.error(err);
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const response = await dispatch(
-                    fetchMasterList({
-                        key: SCHEMES_ALLOCATION_KEY,
-                        url: `${SCHEMES_ALLOCATION_URL}/active-retailers`,
-                        page: currentPage,
-                        size: pageSize,
-                        filter: { keyword: debouncedSearchValue },
-                    })
-                ).unwrap();
-
-                setData(response);
-            } catch (err: any) {
-                toast.error(err);
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
-    }, [currentPage, pageSize, refreshKey, debouncedSearchValue]);
+    }, [currentPage, pageSize, refreshKey]);
 
     useEffect(() => {
         // Cleanup on unmount
@@ -151,6 +160,7 @@ const SchemeAllocation = () => {
                 headers={headers}
                 onRefresh={handleRefresh}
                 onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
                 onExport={handleExportClick}
                 onSearch={handleSearchChange}
                 searchValue={search}

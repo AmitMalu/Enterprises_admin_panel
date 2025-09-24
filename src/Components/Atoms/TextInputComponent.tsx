@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { PasswordInput, PinInput, TextInput } from "@mantine/core";
 
@@ -34,7 +34,7 @@ interface TextInputComponentProps {
   allowSpace?: boolean;
 }
 
-const TextInputComponent: React.FC<TextInputComponentProps> = ({
+const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>(({
   type = "text",
   label,
   name,
@@ -62,7 +62,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
   allowCharacter = true,
   allowSpecialChar = true,
   allowSpace = true,
-}) => {
+}, ref) => {
   const screenSize = useScreenSize();
   // const [isFocused, setIsFocused] = useState(false);
 
@@ -138,6 +138,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
         fontWeight: 500,
       },
     },
+    ref
   };
 
   const InputComponent = oneTimeCode ? (
@@ -169,6 +170,8 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
       )}
     </div>
   );
-};
+})
+
+TextInputComponent.displayName = "TextInputComponent";
 
 export default TextInputComponent;

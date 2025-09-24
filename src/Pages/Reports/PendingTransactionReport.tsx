@@ -72,6 +72,14 @@ const PendingTransactionReport = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
     dispatch(resetMaster(PENDING_TRANSCATION_REPORT_KEY));
     setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
@@ -136,6 +144,8 @@ const PendingTransactionReport = () => {
                     label="Product"
                     value={values.productId}
                     placeholder="Select Product"
+                    allowDeselect={true}
+                    searchable={true}
                     nothingFoundMessage="No Product Found"
                     size="xs"
                     withAsterisk
@@ -170,6 +180,8 @@ const PendingTransactionReport = () => {
                     data={subProductDropdownData}
                     label="Sub Product"
                     placeholder="Select Sub Product"
+                    allowDeselect={true}
+                    searchable={true}
                     nothingFoundMessage="No SubProduct Found for Selected Product"
                     size="xs"
                     withAsterisk
@@ -183,6 +195,9 @@ const PendingTransactionReport = () => {
                     name="vendorId"
                     label="Vendor"
                     value={values.vendorId}
+                    allowDeselect={true}
+                    searchable={true}
+                    nothingFoundMessage="No Vendor found"
                     placeholder="Select Vendor"
                     size="xs"
                     data={vendorDropdownData}
@@ -196,6 +211,7 @@ const PendingTransactionReport = () => {
                     size="xs"
                     label="Wallet Type"
                     placeholder="Select Wallet Type"
+                    allowDeselect={true}
                     data={[
                       { label: "PREPAID", value: "PREPAID" },
                       { label: "POSTPAID", value: "POSTPAID" },
@@ -229,6 +245,7 @@ const PendingTransactionReport = () => {
       <GenericMasterToolbar
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         headers={settlementReportHeaders}
         visibleColumns={visibleColumns}

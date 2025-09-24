@@ -34,10 +34,8 @@ const SchemesList = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
   const handleEdit = (id: any) => {
     navigate(`/schemes/schemeslist/edit/${id}`, { state: id });
@@ -91,10 +89,10 @@ const SchemesList = () => {
     dispatch(
       setPagination({
         key: SCHEMES_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -113,6 +111,14 @@ const SchemesList = () => {
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
   };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(headers.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
 
   const handleRefresh = () => {
     dispatch(resetSingleSchemesData(SCHEMES_KEY));
@@ -165,6 +171,7 @@ const SchemesList = () => {
         headers={headers}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         visibleColumns={visibleColumns}

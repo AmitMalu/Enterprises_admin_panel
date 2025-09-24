@@ -12,6 +12,7 @@ const thStyle = {
   padding: "6px 12px",
   fontWeight: 600,
   fontSize: 14,
+  minWidth : "100px",
   whiteSpace: "nowrap", // prevent wrapping
 };
 const tdStyle = {

@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { textField } from "../../Utils/ValidationUtils";
+import { apiUrlValidation, textField } from "../../Utils/ValidationUtils";
 import { GenericTableHeader } from "../../Utils/utils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
@@ -92,10 +92,10 @@ export const validationSchema: Record<
   vendorId: textField("Vendor", 50, true),
   productId: textField("Product", 50, true),
   token: textField("Token", 1000, false, true),
-  tokenUrlUat: textField("Token UAT", 50, true, true),
-  tokenUrlProd: textField("Token Prod", 50, true, true),
-  baseUrlUat: textField("Base Url UAT", 150, true, true),
-  baseUrlProd: textField("Base Url Prod", 150, true, true),
+  tokenUrlUat: apiUrlValidation.required("Field is Required"),
+  tokenUrlProd: apiUrlValidation.required("Field is Required"),
+  baseUrlUat: apiUrlValidation.required("Field is Required"),
+  baseUrlProd: apiUrlValidation.required("Field is Required"),
   clientId: textField("Client Id", 150, false, true),
   saltKey: textField("Salt Key", 150, false, true),
   clientSecret: textField("Client Secret", 150, false, true),

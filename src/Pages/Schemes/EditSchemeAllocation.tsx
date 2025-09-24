@@ -179,6 +179,8 @@ const EditSchemeAllocation = () => {
                                 <SelectComponent
                                     name={item.subProductName}
                                     size="sm"
+                                    searchable
+                                    allowDeselect
                                     rightSection={
                                         loadingDropdowns[item.subProductCode] ? <Loader size={16} /> : null
                                     }

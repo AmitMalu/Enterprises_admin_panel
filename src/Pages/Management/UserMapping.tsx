@@ -147,7 +147,10 @@ const UserMapping = () => {
                       className="w-[40%]"
                       label="User Type"
                       placeholder="Select User Type"
+                      nothingFoundMessage="Nothing found"
                       data={userTypeList}
+                      allowDeselect={true}
+                      searchable={true}
                       disabled={loadingUserTypeList}
                       withAsterisk
                       required
@@ -163,9 +166,11 @@ const UserMapping = () => {
                       withScrollArea
                       maxDropdownHeight={100}
                       size="xs"
+                      searchable={true}
+                      allowDeselect={true}
                       checkIconPosition="right"
                       // hidePickedOptions
-                      nothingFoundMessage="No Users found for Selected Type"
+                      nothingFoundMessage="No Users found"
                       className="w-[60%]"
                       clearable
                       withAsterisk
@@ -260,9 +265,11 @@ const UserMapping = () => {
                       size="xs"
                       className="w-[40%]"
                       label="Parent Type"
+                      allowDeselect={true}
+                      searchable={true}
                       placeholder="Select Parent Type"
                       data={filteredParentUserTypeList}
-                      nothingFoundMessage="No Parent Types found for Selected User Type"
+                      nothingFoundMessage="No Parent Types found"
                       disabled={!values.userType || loadingParentUserTypeList}
                       withAsterisk
                       required
@@ -273,8 +280,10 @@ const UserMapping = () => {
                       size="xs"
                       name="parentId"
                       className="w-[60%]"
-                      nothingFoundMessage="No Users found for Selected Type"
+                      nothingFoundMessage="No Parent found"
                       label="Parent"
+                      allowDeselect={true}
+                      searchable={true}
                       placeholder="Select Parent"
                       data={ParentUserList?.map((item: any) => ({
                         label: item.displayName,

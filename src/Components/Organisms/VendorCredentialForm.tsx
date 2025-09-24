@@ -152,7 +152,9 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                     <FormikSelectComponent
                                         name="vendorId"
                                         label="Vendor"
-                                        placeholder="Select Vendor "
+                                        placeholder="Select Vendor"
+                                        allowDeselect={true}
+                                        searchable={true}
                                         withAsterisk
                                         required
                                         data={vendorDropdownData}
@@ -167,6 +169,8 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                         placeholder="Select Product"
                                         withAsterisk
                                         required
+                                        allowDeselect={true}
+                                        searchable={true}
                                         data={productDropdownData}
                                         disabled={loadingProductList}
                                     />

@@ -53,14 +53,14 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<CountryMasterTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number" },
   { key: "countryName", label: "Country Name", filterType: "text" },
   { key: "countryCode", label: "Country Code", filterType: "text" },
   { key: "blocked", label: "Blocked", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
-  { key: "createdOn", label: "Created On", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
-  { key: "editedOn", label: "Edited On", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 // export const transformToCountryTableType = (

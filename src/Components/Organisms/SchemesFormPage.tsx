@@ -130,6 +130,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         placeholder="Enter Scheme Code"
                                         withAsterisk
                                         maxLength={30}
+                                        allowSpecialChar={false}
                                     />
                                 </Grid.Col>
 
@@ -141,6 +142,8 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         placeholder="Select Product"
                                         withAsterisk
                                         required
+                                        searchable
+                                        allowDeselect
                                         data={productDropdownData}
                                         disabled={loadingProductList}
                                     />
@@ -154,6 +157,8 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         data={subProductDropdownData}
                                         label="Sub Product"
                                         placeholder="Select Sub Product"
+                                        searchable
+                                        allowDeselect
                                         withAsterisk
                                         required
                                         disabled={loadingSubProductList}
@@ -166,6 +171,8 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         label="Vendor"
                                         value={formik.values.vendorId}
                                         placeholder="Select Vendor"
+                                        searchable
+                                        allowDeselect
                                         withAsterisk
                                         required
                                         data={vendorDropdownData}

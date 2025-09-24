@@ -74,7 +74,7 @@ export const CustomDateRangePicker = ({
     const yesterday = moment().subtract(1, "day");
     const last7 = [moment().subtract(6, "days"), today];
     const startOfThisMonth = moment().startOf("month");
-    const endOfThisMonth = moment().endOf("month");
+    // const endOfThisMonth = moment().endOf("month");
 
     const startOfLastMonth = moment().subtract(1, "month").startOf("month");
     const endOfLastMonth = moment().subtract(1, "month").endOf("month");
@@ -93,7 +93,7 @@ export const CustomDateRangePicker = ({
                 range = [last7[0].toDate(), last7[1].toDate()];
                 break;
             case "This Month":
-                range = [startOfThisMonth.toDate(), endOfThisMonth.toDate()];
+                range = [startOfThisMonth.toDate(), today.toDate()];
                 break;
             case "Last Month":
                 range = [startOfLastMonth.toDate(), endOfLastMonth.toDate()];

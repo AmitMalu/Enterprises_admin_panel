@@ -61,7 +61,7 @@ export const refundReportSchema: Record<
 
 export const refundReportHeaders: GenericTableHeader<RefundReportTableType>[] =
   [
-    { key: "id", label: "ID", filterType: "text" },
+    { key: "id", label: "Id", filterType: "number", searchable: true },
     { key: "transactionId", label: "Transaction ID", filterType: "text" },
     { key: "userId", label: "User Id", filterType: "text" },
     { key: "service", label: "Service", filterType: "text" },
