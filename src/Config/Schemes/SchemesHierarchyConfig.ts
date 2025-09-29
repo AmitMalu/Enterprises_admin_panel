@@ -50,10 +50,10 @@ export const headers: GenericTableHeader<SchemesHierarchyTableType>[] = [
   { key: "schemeHierarchySelectionName", label: "Scheme Hierarchy Name" },
   { key: "schemeHierarchyCombination", label: "Scheme Hierarchy Combination" },
   { key: "combinationHashCode", label: "Combination Hashcode" },
-  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "createdBy", label: "Created By" },
-  { key: "editedOn", label: "Edited On", filterType: "date" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 // Transform form data to Create payload

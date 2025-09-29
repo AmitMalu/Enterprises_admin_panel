@@ -15,6 +15,8 @@ import { OperatorSlabData } from "../../Config/Schemes/SchemesConfig";
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import VerticalKeyValueTable from "../../Components/Organisms/VerticalKeyValueTable";
 import BackHeader from "../../Components/Molecules/BackHeader";
+// import PopupModal from "../../Components/Atoms/PopupModal";
+// import TextComponent from "../../Components/Atoms/TextComponent";
 
 const SchemeSettingsPage = () => {
 
@@ -30,6 +32,9 @@ const SchemeSettingsPage = () => {
   const updatedOperatorsRef = useRef(updatedOperators);
   const [isSchemeActive, setIsSchemeActive] = useState<boolean | null>(false);
   const isSchemeActiveRef = useRef(isSchemeActive);
+  const [slabSize, setSlabSize] = useState<number>(500);
+
+  // const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const [productDetails, setProductDetails] = useState<Record<string, any> | null>(null);
   const [loadingScheme, setLoadingScheme] = useState(false);
@@ -166,7 +171,7 @@ const SchemeSettingsPage = () => {
     handleSubmit(payload);
   }
 
-  const handleAddRow = (operatorCode: string) => {
+  const handleAddRow = (operatorCode: string, slabSize: number) => {
     const operatorIdx = editableRows.findIndex(
       (op) => op.operatorCode === operatorCode
     );
@@ -175,7 +180,15 @@ const SchemeSettingsPage = () => {
 
     const operator = editableRows[operatorIdx];
     const headers = getFilteredSlabHeaders(operator.slabs);
-    const newSlab = makeBlankSlab(headers);
+
+    // get last slab's end value
+    const lastSlab = operator.slabs[operator.slabs.length - 1];
+    const lastEnd = lastSlab ? Number(lastSlab.slabEnd) : 0;
+
+    const newStart = lastEnd + 1;
+    const newEnd = newStart + slabSize - 1;
+
+    const newSlab = makeBlankSlab(headers, newStart, newEnd);
 
     // Add slab to editableRows
     const updatedEditable = [...editableRows];
@@ -402,7 +415,7 @@ const SchemeSettingsPage = () => {
                 loading={loadingScheme}
                 onDataChange={handleRowChange}
                 showAddRow={!isSchemeActive}
-                onAddRow={handleAddRow}
+                onAddRow={(opCode) => handleAddRow(opCode, slabSize)}
                 handleRemoveRow={handleRemoveRow}
                 isSchemeActive={!isSchemeActive}
               />
@@ -416,7 +429,10 @@ const SchemeSettingsPage = () => {
 
         {/* Right Side Form */}
         <Grid.Col span={{ base: 12, md: 3.5, lg: 3.5 }}>
-          <SchemeConfigurationForm />
+          <SchemeConfigurationForm
+            slabSize={slabSize}
+            onSlabSizeChange={setSlabSize}
+          />
         </Grid.Col>
 
         {updatedOperators.length !== 0 && (
@@ -427,6 +443,39 @@ const SchemeSettingsPage = () => {
           </div>
         )}
       </Grid>
+
+      {/* <PopupModal
+        opened={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        size="sm"
+        padding="md"
+      >
+        <div className="flex flex-col gap-4">
+          <TextComponent fontSize={14} color="gray" align="center">
+            You have unsaved changes. Are you sure you want to discard them?
+          </TextComponent>
+
+          <div className="flex justify-end gap-3 mt-4">
+            <ButtonComponent
+              variant="outline"
+              bgColor="#f1f1f1"
+              textColor="#333"
+              onClick={() => setIsConfirmOpen(false)}
+            >
+              Cancel
+            </ButtonComponent>
+            <ButtonComponent
+              bgColor="#C30305"
+              textColor="#fff"
+              onClick={() => {
+                setIsConfirmOpen(false);
+              }}
+            >
+              Discard
+            </ButtonComponent>
+          </div>
+        </div>
+      </PopupModal> */}
     </div>
   );
 };

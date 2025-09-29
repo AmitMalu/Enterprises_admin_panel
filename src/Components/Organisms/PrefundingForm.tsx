@@ -47,8 +47,15 @@ const PrefundingForm = () => {
 
     setIsSubmitting(true);
 
+    const adminHierarchyId = JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId;
+
+    if (!adminHierarchyId) {
+      toast.error("Admin Hierarchy ID not found. Cannot submit request.");
+      return; // stop execution if id is missing
+    }
+
     const payload = {
-      approveOrRejectHierarchyId: "IM-AD-024",
+      approveOrRejectHierarchyId: String(adminHierarchyId),
       fundRequestId: id,
       status: selectedAction,
     };

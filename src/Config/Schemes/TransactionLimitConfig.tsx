@@ -123,10 +123,10 @@ export const headers: GenericTableHeader<TransactionLimitTableType>[] = [
     // { key: "maxAmountSMSCollect", label: "Max Amount (SMS Collect)" },
     { key: "maxAmount", label: "Max Amount", filterType: "number" },
     { key: "blocked", label: "Blocked", filterType: "boolean" },
-    { key: "createdOn", label: "Created On", filterType: "date" },
     { key: "createdBy", label: "Created By" },
-    { key: "editedOn", label: "Edited On", filterType: "date" },
+    { key: "createdOn", label: "Created On", filterType: "date" },
     { key: "editedBy", label: "Edited By" },
+    { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const transformTransactionLimitToFormData = (

@@ -12,7 +12,7 @@ import {
     setPagination,
 } from "../../Redux/Features/Masters/MastersSlice";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
-import { headers, MASTER_KEY, MASTER_URL, SubMasterTableType } from "../../Config/Master/SubMasterConfig";
+import { headers, mapToSubMasterTableType, MASTER_KEY, MASTER_URL, SubMasterTableType } from "../../Config/Master/SubMasterConfig";
 
 const SubMaster = () => {
     const navigate = useNavigate();
@@ -31,6 +31,7 @@ const SubMaster = () => {
         useFetchMasterList<SubMasterTableType>({
             key: MASTER_KEY,
             url: `${MASTER_URL}/get-all-submaster`,
+            transformDataFn: mapToSubMasterTableType,
             filter: submittedFilter,
             refreshKey,
             defaultPageSize: 5
@@ -75,11 +76,11 @@ const SubMaster = () => {
 
     const handleToggleAllColumns = (selectAll: boolean) => {
         if (selectAll) {
-          setVisibleColumns(headers.map((h) => h.key as string));
+            setVisibleColumns(headers.map((h) => h.key as string));
         } else {
-          setVisibleColumns([]);
+            setVisibleColumns([]);
         }
-      };
+    };
 
     const handleRefresh = () => {
         dispatch(resetMaster(MASTER_KEY));
@@ -105,7 +106,7 @@ const SubMaster = () => {
                 onAdd={handleAdd}
                 onRefresh={handleRefresh}
                 onColumnChange={handleToggleColumn}
-        onToggleAll={handleToggleAllColumns}
+                onToggleAll={handleToggleAllColumns}
                 onExport={handleExportClick}
                 onFilter={() => setFilterVisible((prev) => !prev)}
                 headers={headers}

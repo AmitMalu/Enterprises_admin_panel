@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
-import { GenericTableHeader } from "../../Utils/utils";
+import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
 export const MASTER_KEY = "vendor-routing";
@@ -29,7 +29,10 @@ export interface VendorRoutingTableType extends VendorRoutingFormType {
   routingPriority1Name: string;
   routingPriority2Name: string;
   routingPriority3Name: string;
-  createdBy: string;
+  createdOn?: string;
+  createdBy?: string;
+  editedOn?: string;
+  editedBy?: string;
 }
 
 export interface CreateVendorRoutingPayload
@@ -119,6 +122,9 @@ export const headers: GenericTableHeader<VendorRoutingTableType>[] = [
     filterType: "text",
   },
   { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const mapToVendorRoutingTableType = (
@@ -130,7 +136,10 @@ export const mapToVendorRoutingTableType = (
     routingPriority1Name: raw.routingPriority1Name ?? "",
     routingPriority2Name: raw.routingPriority2Name ?? "",
     routingPriority3Name: raw.routingPriority3Name ?? "",
+    createdOn: formatDateTime(raw.createdOn) ?? "",
     createdBy: raw.createdBy ?? "",
+    editedOn: formatDateTime(raw.editedOn) ?? "",
+    editedBy: raw.editedBy ?? "",
   };
 };
 

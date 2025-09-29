@@ -1,6 +1,10 @@
 import * as Yup from "yup";
 import { textField, websiteValidation } from "../../Utils/ValidationUtils";
-import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
+import {
+  formatDateTime,
+  GenericTableHeader,
+  pubPvtSelectData,
+} from "../../Utils/utils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
 export const MASTER_KEY = "vendor";
@@ -84,7 +88,7 @@ export const validationSchema: Record<keyof VendorFormType, Yup.AnySchema> = {
   vendorName: textField("Vendor Name", 50, true),
   vendorCode: textField("Vendor Code", 50, true),
   productId: textField("Product Id", 20, true),
-  modesSupported: textField("Mode Supported", 50, true, true),
+  modesSupported: textField("Mode Supported", 50, false, true),
   // priority: textField("Priority", 50, true),
   isWhiteLabelAdmin: Yup.boolean().default(false),
   whiteLabelAdminId: Yup.string()
@@ -98,7 +102,7 @@ export const validationSchema: Record<keyof VendorFormType, Yup.AnySchema> = {
   // userField2: textField("User Field 2", 50, false, true),
   // userField3: textField("User Field 3", 50, false, true),
   active: Yup.boolean().required("Is Active is required"),
-  bankType: textField("BankType", 50, true),
+  bankType: textField("BankType", 50, false),
   website: websiteValidation,
   logo: websiteValidation,
   parameter: textField("Parameter", 50, false, true),
@@ -113,11 +117,16 @@ export const headers: GenericTableHeader<VendorTableType>[] = [
   // { key: "priority", label: "Priority", filterType: "text" },
   { key: "isWhiteLabelAdmin", label: "Is WL-Admin", filterType: "boolean" },
   { key: "active", label: "Active", filterType: "boolean" },
-  { key: "bankType", label: "Blanks", filterType: "text" },
-  { key: "createdOn", label: "Created On", filterType: "date" },
+  {
+    key: "bankType",
+    label: "Bank Type",
+    filterType: "boolean",
+    filterOptions: pubPvtSelectData,
+  },
   { key: "createdBy", label: "Created By", filterType: "text" },
-  { key: "editedOn", label: "Edited On", filterType: "date" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const mapToVendorTableType = (

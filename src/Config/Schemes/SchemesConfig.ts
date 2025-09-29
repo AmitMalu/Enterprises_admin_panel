@@ -208,12 +208,14 @@ export const getFilteredSlabHeaders = (slabs: any[]) => {
 };
 
 export const makeBlankSlab = (
-  headers: GenericTableHeader<SlabStructureTableType>[]
+  headers: GenericTableHeader<SlabStructureTableType>[],
+  slabStart: number,
+  slabEnd: number
 ): SlabStructureTableType => {
   const blankRow: SlabStructureTableType = {
     id: `new-${Date.now()}`, // Easier to recognize in the payload
-    slabStart: "0",
-    slabEnd: "0",
+    slabStart: slabStart.toString(),
+    slabEnd: slabEnd.toString(),
     rateType: "FLAT", // default
     gross: "0",
     im: "0",

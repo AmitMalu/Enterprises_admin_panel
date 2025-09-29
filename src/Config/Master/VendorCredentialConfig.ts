@@ -1,6 +1,10 @@
 import * as Yup from "yup";
-import { apiUrlValidation, textField } from "../../Utils/ValidationUtils";
-import { GenericTableHeader } from "../../Utils/utils";
+import {
+  apiUrlValidation,
+  textField,
+  websiteValidation,
+} from "../../Utils/ValidationUtils";
+import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
 export const MASTER_KEY = "vendor-credential";
@@ -26,6 +30,9 @@ export type VendorCredentialFormType = {
   isWhiteLabelAdmin?: boolean;
   whiteLabelAdminId?: string;
 
+  callbackUrl?: string;
+  tokenType?: "JWT" | "AES";
+
   userField1?: string;
   userField2?: string;
   userField3?: string;
@@ -36,7 +43,10 @@ export interface VendorCredentialTableType extends VendorCredentialFormType {
   vendorName: string;
   productName: string;
   whiteLabelAdminName?: string;
+  createdOn?: string;
   createdBy?: string;
+  editedOn?: string;
+  editedBy?: string;
 }
 
 export interface CreateVendorCredentialPayload
@@ -83,6 +93,8 @@ export const initialValues: VendorCredentialFormType = {
   isActive: false,
   isWhiteLabelAdmin: false,
   whiteLabelAdminId: "",
+  callbackUrl: "",
+  tokenType: "AES",
 };
 
 export const validationSchema: Record<
@@ -110,6 +122,10 @@ export const validationSchema: Record<
       then: (schema) => schema.required("WL-Admin Id is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
+  callbackUrl: websiteValidation,
+  tokenType: Yup.string()
+    .oneOf(["JWT", "AES"], "Token Type must be either JWT or AES")
+    .required("Token Type is required"),
   userField1: textField("User Field 1", 50, false, true),
   userField2: textField("User Field 2", 50, false, true),
   userField3: textField("User Field 3", 50, false, true),
@@ -122,6 +138,9 @@ export const headers: GenericTableHeader<VendorCredentialTableType>[] = [
   { key: "username", label: "Username", filterType: "text" },
   { key: "isActive", label: "Active", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const mapToVendorCredentialTableType = (
@@ -134,7 +153,10 @@ export const mapToVendorCredentialTableType = (
     whiteLabelAdminName: raw.whiteLabelAdminName ?? "",
     username: raw.username ?? "",
     isActive: !!raw.isActive,
+    createdOn: formatDateTime(raw.createdOn) ?? "",
     createdBy: raw.createdBy ?? "",
+    editedOn: formatDateTime(raw.editedOn) ?? "",
+    editedBy: raw.editedBy ?? "",
   };
 };
 
@@ -160,6 +182,9 @@ export const transformVendorCredentialToFormData = (
   isActive: raw.isActive ?? false,
   isWhiteLabelAdmin: raw.isWhiteLabelAdmin ?? false,
   whiteLabelAdminId: raw.whiteLabelAdminId ?? "",
+
+  callbackUrl: raw.callbackUrl ?? "",
+  tokenType: raw.tokenType ?? "AES",
 
   // userField1: raw.userField1 ?? "",
   // userField2: raw.userField2 ?? "",

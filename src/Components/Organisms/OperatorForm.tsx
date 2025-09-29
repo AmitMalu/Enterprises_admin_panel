@@ -128,14 +128,13 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikTextInputComponent
+                  <FormikSelectComponent
                     name="operatorCategory"
                     label="Operator Category"
-                    placeholder="Enter Operator Category"
+                    placeholder="Select Operator Category"
+                    data={[{ label: "CARD", value: "CARD" }, { label: "ONLINE", value: "ONLINE" }]}
                     withAsterisk
                     required
-                    maxLength={51}
-                    allowSpecialChar={false}
                   />
                 </Grid.Col>
 
@@ -206,7 +205,7 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                {/* <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikTextInputComponent
                     name="cardBinNo"
                     label="Card BIN Number"
@@ -217,7 +216,7 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                     allowCharacter={false}
                     allowSpecialChar={false}
                   />
-                </Grid.Col>
+                </Grid.Col> */}
 
                 {mode === "edit" &&
                   <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>

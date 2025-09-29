@@ -6,14 +6,14 @@ import { API_ENDPOINTS } from "../Api/EndPoints";
 export const MASTER_KEY = "operators";
 export const MASTER_URL = API_ENDPOINTS.MASTER.OPERATOR; // Replace with actual URL or API_ENDPOINTS.MASTER.PRODUCTS
 export interface OperatorFormType {
-  operatorCategory: string;
+  operatorCategory: "CARD" | "ONLINE";
   operatorCode: string;
   operatorName: string;
   operatorAlias: string;
   alias: string;
   productId: string | number;
   subProductId: string | number;
-  cardBinNo: string | number;
+  // cardBinNo: string | number;
   isActive: boolean;
 }
 
@@ -42,26 +42,28 @@ export type FetchOperatorParams = {
 };
 
 export const initialValues: OperatorFormType = {
-  operatorCategory: "",
+  operatorCategory: "CARD",
   operatorCode: "",
   operatorName: "",
   operatorAlias: "",
   alias: "",
   productId: "",
   subProductId: "",
-  cardBinNo: "",
+  // cardBinNo: "",
   isActive: false,
 };
 
 export const validationSchema: Record<keyof OperatorFormType, Yup.AnySchema> = {
-  operatorCategory: textField("Operator Category", 100, true, true),
+  operatorCategory: Yup.string()
+    .oneOf(["CARD", "ONLINE"], "Operator Category must be CARD or ONLINE")
+    .required("Operator Category is required"),
   operatorCode: textField("Operator Code", 50, true, true),
   operatorName: textField("Operator Name", 50, true, true),
   operatorAlias: textField("Operator Alias", 50, true, true),
   alias: textField("Alias", 50, true, true),
   productId: textField("Product Id", 50, true),
   subProductId: textField("Sub Product Id", 50, true),
-  cardBinNo: textField("Card Bin No", 50, true),
+  // cardBinNo: textField("Card Bin No", 50, true),
   isActive: Yup.boolean().required("Is Active is required"),
 };
 
@@ -71,7 +73,11 @@ export const headers: GenericTableHeader<OperatorTableType>[] = [
   {
     key: "operatorCategory",
     label: "Operator Category",
-    filterType: "text",
+    filterType: "boolean",
+    filterOptions: [
+      { label: "CARD", value: "CARD" },
+      { label: "ONLINE", value: "ONLINE" },
+    ],
   },
   { key: "operatorCode", label: "Operator Code", filterType: "text" },
   { key: "operatorName", label: "Operator Name", filterType: "text" },
@@ -81,11 +87,11 @@ export const headers: GenericTableHeader<OperatorTableType>[] = [
   { key: "subProductId", label: "Sub Product ID", filterType: "text" },
   { key: "alias", label: "Alias", filterType: "text" },
   { key: "isActive", label: "Is Active", filterType: "boolean" },
-  { key: "cardBinNo", label: "Card BIN No", filterType: "text" },
-  { key: "createdOn", label: "Created On", filterType: "date" },
-  { key: "editedOn", label: "Edited On", filterType: "date" },
+  // { key: "cardBinNo", label: "Card BIN No", filterType: "text" },
   { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const mapToOperatorTableType = (
@@ -102,7 +108,7 @@ export const mapToOperatorTableType = (
     productId: raw.productId ?? "",
     subProductCode: raw.subProductCode ?? "",
     subProductId: raw.subProductId ?? "",
-    cardBinNo: raw.cardBinNo ?? "",
+    // cardBinNo: raw.cardBinNo ?? "",
     isActive: !!raw.isActive,
     createdBy: raw.createdBy ?? "",
     createdOn: formatDateTime(raw.createdOn) ?? "",
@@ -122,7 +128,7 @@ export const transformOperatorToFormData = (
   alias: raw.alias ?? "",
   productId: String(raw.productId),
   subProductId: String(raw.subProductId),
-  cardBinNo: raw.cardBinNo ?? "",
+  // cardBinNo: raw.cardBinNo ?? "",
   isActive: !!raw.isActive,
 });
 

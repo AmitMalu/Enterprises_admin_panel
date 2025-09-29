@@ -21,6 +21,7 @@ export interface NetworkBankMasterFormType {
   logo?: string | null;
   maxAccountNoLength: string;
   isActive?: boolean;
+  verification?: boolean;
   isBlocked?: boolean;
 }
 
@@ -59,6 +60,7 @@ export const initialValues: NetworkBankMasterFormType = {
   logo: null,
   maxAccountNoLength: "",
   isActive: false,
+  verification: false,
   isBlocked: false,
 };
 
@@ -73,9 +75,10 @@ export const validationSchema: Record<
   imps: Yup.boolean().required("IMPS is Required"),
   neft: Yup.boolean().required("NEFT is Required"),
   rtgs: Yup.boolean().required("RTGS is Required"),
-  logo: fileValidation("Logo", ["application/pdf"]),
+  logo: fileValidation("Logo", ["application/pdf", "image/png", "image/jpeg"]),
   maxAccountNoLength: textField("Max Account No Length", 50, false, false),
   isActive: Yup.boolean().default(false),
+  verification: Yup.boolean().default(false),
   isBlocked: Yup.boolean().default(false),
 };
 
@@ -93,6 +96,7 @@ export const headers: GenericTableHeader<NetworkBankMasterTableType>[] = [
     filterType: "text",
   },
   { key: "isActive", label: "Active", filterType: "boolean" },
+  { key: "verification", label: "Verification", filterType: "boolean" },
   { key: "isBlocked", label: "Blocked", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
@@ -115,6 +119,7 @@ export const transformToNetworkBankTableType = (
     maxAccountNoLength: raw.maxAccountNoLength ?? "",
     isActive: !!raw.isActive,
     isBlocked: !!raw.isBlocked,
+    verification: !!raw.verification,
     createdBy: raw.createdBy ?? "",
     createdOn: raw.createdOn ?? "",
     editedBy: raw.editedBy ?? "",
@@ -137,6 +142,7 @@ export const transformNetworkBankListToFormData = (
   logo: raw.logo ?? null,
   isActive: !!raw.isActive,
   isBlocked: !!raw.isBlocked,
+  verification: !!raw.verification,
 });
 
 // shared function to build the payload object (not FormData)

@@ -189,7 +189,6 @@ const VendorForm = ({ mode }: VendorFormProps) => {
                     name="modesSupported"
                     label="Modes Supported"
                     placeholder="Enter Mode Supported"
-                    withAsterisk
                     maxLength={50}
                     allowSpecialChar={true}
                   />
@@ -260,7 +259,6 @@ const VendorForm = ({ mode }: VendorFormProps) => {
                     name="bankType"
                     label="Bank Type"
                     placeholder="Select Bank Type"
-                    withAsterisk
                     allowDeselect={false}
                     data={pubPvtSelectData}
                   />

@@ -1,4 +1,4 @@
-import { GenericTableHeader } from "../../Utils/utils";
+import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
 import { textField } from "../../Utils/ValidationUtils";
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
@@ -13,6 +13,10 @@ export interface MainMasterFormType {
 export interface MainMasterTableType extends MainMasterFormType {
   imMasterId: string | number;
   imMasterName: string;
+  createdOn?: string;
+  createdBy?: string;
+  // editedOn?: string;
+  // editedBy?: string;
 }
 
 export interface CreateMainMasterPayload extends MainMasterFormType {
@@ -41,7 +45,24 @@ export const validationSchema: Record<keyof MainMasterFormType, Yup.AnySchema> =
 export const headers: GenericTableHeader<MainMasterTableType>[] = [
   { key: "imMasterId", label: "Master Id", filterType: "number" },
   { key: "imMasterName", label: "Master Name", filterType: "text" },
+  { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  // { key: "editedBy", label: "Edited By", filterType: "text" },
+  // { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
+
+export const mapToMainMasterTableType = (
+  raw: Record<string, any>
+): MainMasterTableType => {
+  return {
+    imMasterName: raw?.imMasterName ?? "",
+    imMasterId: raw?.imMasterId ?? "",
+    createdOn: formatDateTime(raw.createdOn) ?? "",
+    createdBy: raw.createdBy ?? "",
+    // editedOn: formatDateTime(raw.editedOn) ?? "",
+    // editedBy: raw.editedBy ?? "",
+  };
+};
 
 // Transform form data to Create payload
 export const transformFormToCreateMainMasterPayload = (

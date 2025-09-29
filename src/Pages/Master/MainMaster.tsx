@@ -6,6 +6,7 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import {
   headers,
   MainMasterTableType,
+  mapToMainMasterTableType,
   MASTER_KEY,
   MASTER_URL,
 } from "../../Config/Master/MainMasterConfig";
@@ -36,6 +37,7 @@ const MainMaster = () => {
     useFetchMasterList<MainMasterTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
+      transformDataFn: mapToMainMasterTableType,
       filter: submittedFilter,
       refreshKey,
       defaultPageSize: 5
@@ -80,12 +82,12 @@ const MainMaster = () => {
   };
 
   const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(headers.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(resetMaster(MASTER_KEY));
