@@ -10,7 +10,7 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { persistOtpSession } from "../../Utils/utils";
+import { encryptCredentials, persistOtpSession } from "../../Utils/utils";
 import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { login } from "../../Redux/Features/Auth/Thunk";
@@ -40,6 +40,9 @@ const LoginPage: React.FC = () => {
     password: string;
   }>((values) => {
     const handleAsync = async () => {
+
+      const { encryptedUsername, encryptedPassword, salt, iv } = encryptCredentials(values.username, values.password);
+
       try {
         const isDevEnv = ["localhost", "127.0.0.1"].includes(window.location.hostname) ||
           window.location.hostname.startsWith("192.168.") ||
@@ -47,8 +50,10 @@ const LoginPage: React.FC = () => {
 
         const result = await dispatch(
           login({
-            userName: values.username,
-            password: values.password,
+            userName: encryptedUsername,
+            password: encryptedPassword,
+            salt,
+            iv,
             url: isDevEnv ? "https://uat.decipay.in/" : `${window.location.origin}/`,
           })
         ).unwrap();
@@ -63,7 +68,9 @@ const LoginPage: React.FC = () => {
         });
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
-          state: { username: values.username, otpFor: "login" },
+          state: {
+            username: values.username, otpFor: "login"
+          },
         });
       } catch (error) {
         toast.error((error as string) || "Login failed");

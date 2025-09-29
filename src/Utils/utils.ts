@@ -9,9 +9,45 @@ import {
   updateMasterItem,
 } from "../Redux/Features/Masters/MastersThunk";
 import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
+import CryptoJS from "crypto-js";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.2 (18-09)";
+export const DEV_APP_VERSION_LABEL = "v1.0.2 (24-09)";
+
+export function encryptCredentials(username: string, password: string) {
+  const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
+  if (!SECRET_KEY) {
+    throw new Error(
+      "SECRET_KEY is undefined! Check your environment variables."
+    );
+  }
+  // Generate random salt
+  const salt = CryptoJS.lib.WordArray.random(16);
+  // Derive key from secret + salt
+  const key = CryptoJS.PBKDF2(SECRET_KEY, salt, {
+    keySize: 128 / 32,
+    iterations: 65536,
+    hasher: CryptoJS.algo.SHA256,
+  });
+  // Generate random IV
+  const iv = CryptoJS.lib.WordArray.random(16);
+
+  // Encrypt username & password using KEY and iv
+  const encryptedUsername = CryptoJS.AES.encrypt(username, key, {
+    iv,
+  }).toString();
+  const encryptedPassword = CryptoJS.AES.encrypt(password, key, {
+    iv,
+  }).toString();
+
+  // Send ciphertext + IV + salt to backend
+  return {
+    salt: CryptoJS.enc.Base64.stringify(salt),
+    iv: CryptoJS.enc.Base64.stringify(iv),
+    encryptedUsername,
+    encryptedPassword,
+  };
+}
 
 export const persistOtpSession = (username: string, otpFor: string) => {
   sessionStorage.setItem("otp-username", username);
