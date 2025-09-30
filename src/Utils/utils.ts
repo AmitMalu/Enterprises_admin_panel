@@ -12,7 +12,7 @@ import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 import CryptoJS from "crypto-js";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.2 (29-09)";
+export const DEV_APP_VERSION_LABEL = "v1.0.2 (30-09)";
 
 export function encryptCredentials(username: string, password: string) {
   const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;

@@ -5,7 +5,7 @@ const ProfilePersonalInfo = ({ info }: { info: any }) => (
             { label: "Member ID", value: info?.memberId },
             { label: "Mobile", value: info?.mobileNumber },
             { label: "Email", value: info?.email },
-            { label: "Date of Birth", value: info?.dob },
+            // { label: "Date of Birth", value: info?.dob },
             { label: "Status", value: info?.isBlocked ? "Blocked" : "Active" },
         ].map((item, index) => (
             <div key={index}>

@@ -75,7 +75,7 @@ export const validationSchema: Record<
   imps: Yup.boolean().required("IMPS is Required"),
   neft: Yup.boolean().required("NEFT is Required"),
   rtgs: Yup.boolean().required("RTGS is Required"),
-  logo: fileValidation("Logo", ["application/pdf", "image/png", "image/jpeg"]),
+  logo: fileValidation("Logo", ["image/png", "image/jpeg", "image/jpg"]),
   maxAccountNoLength: textField("Max Account No Length", 50, false, false),
   isActive: Yup.boolean().default(false),
   verification: Yup.boolean().default(false),

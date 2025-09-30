@@ -3,13 +3,13 @@ const ProfileBankInfo = ({ myBanks }: { myBanks: any }) => (
     {[
       { label: "Bank Name", value: myBanks?.bankName },
       { label: "Account Name", value: myBanks?.accountName },
-      { label: "Account No", value: myBanks?.accountNo.replace(/\d{8}$/, "********") },
+      { label: "Account No", value: myBanks?.accountNo?.replace(/\d{8}$/, "********") },
       { label: "IFSC Code", value: myBanks?.ifcscode },
       { label: "Verified", value: myBanks?.verified ? "Yes" : "No" },
     ].map((item, index) => (
       <div key={index}>
-        <label className="block text-sm font-medium text-gray-700">{item.label}</label>
-        <p className="mt-1 text-gray-900">{item.value}</p>
+        <label className="block text-sm font-medium text-gray-700">{item?.label}</label>
+        <p className="mt-1 text-gray-900">{item?.value}</p>
       </div>
     ))}
   </div>

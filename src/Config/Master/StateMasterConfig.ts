@@ -17,6 +17,7 @@ export interface StateMasterFormType {
   regionType: string;
   countryId?: string | number;
   blocked: boolean;
+  isActive?: boolean;
 }
 
 export interface StateMasterTableType extends StateMasterFormType {
@@ -52,6 +53,7 @@ export const initialValues: StateMasterFormType = {
   stateName: "",
   stateCode: "",
   blocked: false,
+  isActive: true,
 };
 
 export const validationSchema: Record<
@@ -64,6 +66,7 @@ export const validationSchema: Record<
   stateName: textField("State Name", 50, true, true),
   stateCode: textField("State Code", 50, true, true),
   blocked: Yup.boolean().default(false),
+  isActive: Yup.boolean().default(true),
 };
 
 export const headers: GenericTableHeader<StateMasterTableType>[] = [
@@ -84,6 +87,7 @@ export const headers: GenericTableHeader<StateMasterTableType>[] = [
   },
   { key: "countryName", label: "Country Name", filterType: "text" },
   { key: "blocked", label: "Blocked", filterType: "boolean" },
+  { key: "isActive", label: "Active", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
@@ -100,7 +104,8 @@ export const transformToStateTableType = (
     zone: raw.zone ?? "",
     regionType: raw.regionType ?? "",
     countryName: raw.countryName ?? "",
-    blocked: raw.ifscCode ?? "",
+    blocked: !!raw.blocked,
+    isActive: !!raw.isActive,
     createdBy: raw.createdBy ?? "",
     createdOn: raw.createdOn ?? "",
     editedBy: raw.editedBy ?? "",
@@ -117,7 +122,8 @@ export const transformStateListToFormData = (
   zone: raw.zone ?? "",
   regionType: raw.regionType ?? "",
   countryId: raw.countryId != null ? String(raw.countryId) : "",
-  blocked: raw.blocked ?? false,
+  blocked: !!raw.blocked,
+  isActive: !!raw.isActive,
 });
 
 export const transformFormToCreateStateMasterPayload = (

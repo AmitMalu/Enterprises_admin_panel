@@ -15,8 +15,8 @@ import { OperatorSlabData } from "../../Config/Schemes/SchemesConfig";
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import VerticalKeyValueTable from "../../Components/Organisms/VerticalKeyValueTable";
 import BackHeader from "../../Components/Molecules/BackHeader";
-// import PopupModal from "../../Components/Atoms/PopupModal";
-// import TextComponent from "../../Components/Atoms/TextComponent";
+import PopupModal from "../../Components/Atoms/PopupModal";
+import TextComponent from "../../Components/Atoms/TextComponent";
 
 const SchemeSettingsPage = () => {
 
@@ -34,7 +34,7 @@ const SchemeSettingsPage = () => {
   const isSchemeActiveRef = useRef(isSchemeActive);
   const [slabSize, setSlabSize] = useState<number>(500);
 
-  // const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const [productDetails, setProductDetails] = useState<Record<string, any> | null>(null);
   const [loadingScheme, setLoadingScheme] = useState(false);
@@ -146,6 +146,10 @@ const SchemeSettingsPage = () => {
     }
   }
 
+  const resetUpdatedOperatorValues = () => {
+    setUpdatedOperators([]);
+  }
+
   const handleSubmit = useThrottleMasterFormSubmit<SlabPayload>({
     mode: "edit",
     dispatch,
@@ -153,8 +157,9 @@ const SchemeSettingsPage = () => {
     masterKey: SCHEME_RATE_KEY,
     addUrl: `${SCHEME_RATE_URL}/save`,
     updateUrl: `${SCHEME_RATE_URL}/update-slabs`,
-    successNavigatePath: "/schemes/schemeslist",
+    // successNavigatePath: "/schemes/schemeslist",
     entityName: "SchemeRate",
+    resetFormData: resetUpdatedOperatorValues,
     delay: 5000,
   });
 
@@ -326,16 +331,24 @@ const SchemeSettingsPage = () => {
   }, [activeTab, schemeCode, productDetails]);
 
 
+  const handleBack = () => {
+    if (updatedOperators.length !== 0) {
+      setIsConfirmOpen(true)
+    } else {
+      navigate("/schemes/schemeslist")
+    }
+  }
+
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Header Section */}
       <div className="flex justify-between">
         <div>
           {/* Heading */}
-
           <BackHeader
             title={loadingScheme ? "Loading..." : schemeDetails?.schemeName || "-"}
-            backPath="/schemes/schemeslist"
+            onBack={handleBack}
+          // backPath="/schemes/schemeslist"
           />
 
           {/*Sub Heading */}
@@ -444,7 +457,7 @@ const SchemeSettingsPage = () => {
         )}
       </Grid>
 
-      {/* <PopupModal
+      <PopupModal
         opened={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
         size="sm"
@@ -469,13 +482,14 @@ const SchemeSettingsPage = () => {
               textColor="#fff"
               onClick={() => {
                 setIsConfirmOpen(false);
+                navigate("/schemes/schemeslist")
               }}
             >
               Discard
             </ButtonComponent>
           </div>
         </div>
-      </PopupModal> */}
+      </PopupModal>
     </div>
   );
 };

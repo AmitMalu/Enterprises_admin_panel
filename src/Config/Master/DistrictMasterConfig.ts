@@ -1,6 +1,4 @@
-import {
-  GenericTableHeader,
-} from "../../Utils/utils";
+import { GenericTableHeader } from "../../Utils/utils";
 import { textField } from "../../Utils/ValidationUtils";
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
@@ -14,6 +12,7 @@ export interface DistrictMasterFormType {
   districtName: string;
   districtCode: string;
   blocked: boolean;
+  isActive?: boolean;
 }
 
 export interface DistrictMasterTableType extends DistrictMasterFormType {
@@ -46,6 +45,7 @@ export const initialValues: DistrictMasterFormType = {
   districtName: "",
   districtCode: "",
   blocked: false,
+  isActive: true,
 };
 
 export const validationSchema: Record<
@@ -57,6 +57,7 @@ export const validationSchema: Record<
   districtName: textField("District Name", 50, true, true),
   districtCode: textField("District Code", 50, true, true),
   blocked: Yup.boolean().default(false),
+  isActive: Yup.boolean().default(true),
 };
 
 export const headers: GenericTableHeader<DistrictMasterTableType>[] = [
@@ -66,6 +67,7 @@ export const headers: GenericTableHeader<DistrictMasterTableType>[] = [
   { key: "stateName", label: "State Name", filterType: "text" },
   { key: "countryName", label: "Country Name", filterType: "text" },
   { key: "blocked", label: "Blocked", filterType: "boolean" },
+  { key: "isActive", label: "Active", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
@@ -81,7 +83,8 @@ export const transformToDistrictTableType = (
     districtCode: raw.districtCode ?? "",
     stateName: raw.stateName ?? "",
     countryName: raw.countryName ?? "",
-    blocked: raw.ifscCode ?? "",
+    blocked: !!raw.blocked,
+    isActive: !!raw.isActive,
     createdBy: raw.createdBy ?? "",
     createdOn: raw.createdOn ?? "",
     editedBy: raw.editedBy ?? "",
@@ -97,7 +100,8 @@ export const transformDistrictListToFormData = (
   districtCode: raw.districtCode ?? "",
   stateId: raw.stateId != null ? String(raw.stateId) : "",
   countryId: raw.countryId != null ? String(raw.countryId) : "",
-  blocked: raw.blocked ?? false,
+  blocked: !!raw.blocked,
+  isActive: !!raw.isActive,
 });
 
 export const transformFormToCreateDistrictMasterPayload = (

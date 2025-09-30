@@ -184,9 +184,10 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                 {/* Password */}
                                 <Grid.Col span={{ base: 6, md: 4, lg: 3 }}>
                                     <FormikTextInputComponent
-                                        // type="password"
+                                        type="password"
                                         name="password"
                                         label="Password"
+                                        autoComplete="new-password"
                                         withAsterisk
                                         placeholder="Password"
                                         required

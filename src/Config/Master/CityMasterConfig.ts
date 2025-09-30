@@ -13,6 +13,7 @@ export interface CityMasterFormType {
   cityName: string;
   cityCode: string;
   blocked: boolean;
+  isActive?: boolean;
 }
 
 export interface CityMasterTableType extends CityMasterFormType {
@@ -47,6 +48,7 @@ export const initialValues: CityMasterFormType = {
   cityName: "",
   cityCode: "",
   blocked: false,
+  isActive: true,
 };
 
 export const validationSchema: Record<keyof CityMasterFormType, Yup.AnySchema> =
@@ -57,6 +59,7 @@ export const validationSchema: Record<keyof CityMasterFormType, Yup.AnySchema> =
     cityName: textField("City Name", 50, true, true),
     cityCode: textField("City Code", 50, true, true),
     blocked: Yup.boolean().default(false),
+    isActive: Yup.boolean().default(true),
   };
 
 export const headers: GenericTableHeader<CityMasterTableType>[] = [
@@ -67,6 +70,7 @@ export const headers: GenericTableHeader<CityMasterTableType>[] = [
   { key: "stateName", label: "State Name", filterType: "text" },
   { key: "countryName", label: "Country Name", filterType: "text" },
   { key: "blocked", label: "Blocked", filterType: "boolean" },
+  { key: "isActive", label: "Active", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
@@ -83,7 +87,8 @@ export const transformToCityTableType = (
     districtName: raw.districtName ?? "",
     stateName: raw.stateName ?? "",
     countryName: raw.countryName ?? "",
-    blocked: raw.ifscCode ?? "",
+    blocked: !!raw.blocked,
+    isActive: !!raw.isActive,
     createdBy: raw.createdBy ?? "",
     createdOn: raw.createdOn ?? "",
     editedBy: raw.editedBy ?? "",
@@ -100,7 +105,8 @@ export const transformCityListToFormData = (
   districtId: raw.districtId != null ? String(raw.districtId) : "",
   stateId: raw.stateId != null ? String(raw.stateId) : "",
   countryId: raw.countryId != null ? String(raw.countryId) : "",
-  blocked: raw.blocked ?? false,
+  blocked: !!raw.blocked,
+  isActive: !!raw.isActive,
 });
 
 export const transformFormToCreateCityMasterPayload = (
