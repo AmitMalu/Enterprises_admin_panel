@@ -8,9 +8,16 @@ import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { useAppDispatch } from "../../Redux/hooks";
-import { booleanSelectData } from "../../Utils/utils";
+import {
+    booleanSelectData,
+    //  trimFormValues
+} from "../../Utils/utils";
 import { toast } from "react-toastify";
-import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import {
+    // createMasterItem, createNetworkBank,
+    fetchMasterById,
+    // updateMasterItem, updateNetworkBank
+} from "../../Redux/Features/Masters/MastersThunk";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import FormikFileInput from "../Molecules/FormikFileInput";
 import {
@@ -48,6 +55,78 @@ const NetworkBankMasterForm = ({ mode }: NetworkBankMasterFormProps) => {
         entityName: "NetworkBank",
     });
 
+    // const handleSubmit = async (values: NetworkBankMasterFormType) => {
+    //     try {
+    //         console.log("Formik values:", values);
+
+    //         // Build FormData payload
+    //         const payload = new FormData();
+    //         // Extract logo and put it outside of bankData
+    //         const { logo, ...bankData } = values;
+
+    //         // @ts-ignore
+    //         (bankData as any).createdBy = mode === "add" ? localStorage.getItem("username") || "system" : undefined;
+    //         // @ts-ignore
+    //         (bankData as any).editedBy = mode === "edit" ? localStorage.getItem("username") || "system" : undefined;
+
+    //         payload.append("bankData", JSON.stringify(bankData));
+
+    //         const isFile = (file: any): file is File => file instanceof File;
+
+    //         if (isFile(values.logo)) {
+    //             payload.append("logo", values.logo, values.logo.name);
+    //         }
+
+    //         // 3️⃣ Decide which API to call
+    //         if (mode === "add") {
+    //             const res = await dispatch(
+    //                 createMasterItem({
+    //                     key: "NETWORK_BANK",
+    //                     url: MASTER_URL,
+    //                     data: payload,
+    //                     useFormData: true,
+    //                 })
+    //             ).unwrap();
+    //             toast.success(res.message || "Network Bank created successfully");
+    //         } else {
+    //             const res = await dispatch(
+    //                 updateMasterItem({
+    //                     key: "NETWORK_BANK",
+    //                     url: MASTER_URL,
+    //                     id,
+    //                     data: payload,
+    //                     useFormData: true,
+    //                 })
+    //             ).unwrap();
+    //             toast.success(res.message || "Network Bank updated successfully");
+    //         }
+
+    //         // 4️⃣ Navigate and reset
+    //         navigate("/master/network-banks");
+    //         setFormData(initialValues);
+
+    //     } catch (err: any) {
+    //         console.error(`${mode === "edit" ? "Update" : "Create"} Network Bank failed:`, err);
+    //         toast.error(err || `${mode === "edit" ? "Update" : "Create"} Network Bank failed`);
+    //     }
+    // };
+
+    // const handleSubmit = async (values: NetworkBankMasterFormType) => {
+    //     try {
+    //         if (mode === "add") {
+    //             const res = await dispatch(createNetworkBank(values)).unwrap();
+    //             toast.success(res.message || "Network Bank created successfully");
+    //         } else {
+    //             const res = await dispatch(updateNetworkBank({ id: String(id), formData: values })).unwrap();
+    //             toast.success(res.message || "Network Bank updated successfully");
+    //         }
+
+    //         navigate("/master/network-banks");
+    //         setFormData(initialValues);
+    //     } catch (err: any) {
+    //         toast.error(err || `${mode === "edit" ? "Update" : "Create"} Network Bank failed`);
+    //     }
+    // };
 
     useEffect(() => {
         const fetchAndSet = async () => {
@@ -190,7 +269,6 @@ const NetworkBankMasterForm = ({ mode }: NetworkBankMasterFormProps) => {
                             <FormikFileInput
                                 name="logo"
                                 label="Add Logo"
-                                withAsterisk
                                 placeholder="Select File"
                                 accept="image/png, image/jpeg, image/jpg"
                             />

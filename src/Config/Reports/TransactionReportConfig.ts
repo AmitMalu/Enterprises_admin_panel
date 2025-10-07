@@ -43,7 +43,7 @@ export const TransactionReportSchema = Yup.object().shape({
   dateRange: dateRangeValidationSchema,
   subProduct: textField("Sub Product", 100, true, true),
   hierarchy: textField("Hierarchy", 100, true, true),
-  subHierarchy: textField("Hierarchy ID", 100, true, true),
+  subHierarchy: textField("Hierarchy ID", 100, false, true),
   walletType: textField("Wallet Type", 100, true, true),
   status: textField("Status", 100, false, true),
 });
@@ -52,10 +52,11 @@ export const transformToTransactionReportPayload = (values: any) => {
   const [fromDate, toDate] = values.dateRange || [];
 
   return {
-    hierarchyId: values.subHierarchy,
+    hierarchyType: values.hierarchy ?? "",
+    hierarchyId: values.subHierarchy ?? "",
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
-    subProductName: values?.subProduct,
+    subProductName: values?.subProduct ?? "",
     walletType: values.walletType ?? "",
     status: values.status ?? "ALL",
     page: 0,

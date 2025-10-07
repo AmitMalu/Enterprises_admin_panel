@@ -3,6 +3,7 @@ import { setPagination } from "./MastersSlice";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
 import { toast } from "react-toastify";
 import { API_ENDPOINTS } from "../../../Config/Api/EndPoints";
+import { NetworkBankMasterFormType } from "../../../Config/Master/NetworkBankMasterConfig";
 
 type FetchMasterListParams = {
   key: string;
@@ -288,9 +289,6 @@ export const createMasterItem = createAsyncThunk(
     { key, url, data, useFormData = false }: CreateMasterParams<any>,
     { rejectWithValue }
   ) => {
-    // dispatch(setLoading({ key, loading: true }));
-    // dispatch(setError({ key, error: null }));
-    // dispatch(setLoaded({ key, loaded: false }));
 
     try {
       const response = await axiosInstance.post(url, data, {
@@ -665,6 +663,94 @@ export const downloadFileThunk = createAsyncThunk(
       return { success: true, filename };
     } catch (error: any) {
       return rejectWithValue(error?.response?.data || "File download failed");
+    }
+  }
+);
+
+const isFile = (file: any): file is File => file instanceof File;
+
+// Thunk to create a Network Bank
+export const createNetworkBank = createAsyncThunk(
+  "networkBank/create",
+  async (formData: NetworkBankMasterFormType, { rejectWithValue }) => {
+    try {
+      const payload = new FormData();
+      const { logo, ...bankData } = formData;
+
+      (bankData as any).createdBy =
+        localStorage.getItem("username") || "system";
+
+      payload.append("bankData", JSON.stringify(bankData));
+
+      if (isFile(logo)) {
+        payload.append("logo", logo, logo.name);
+      }
+
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.MASTER.NETWORK_BANK_MASTER,
+        payload,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if ([200, 201].includes(response.data.statusCode)) {
+        return response.data;
+      } else {
+        throw new Error(
+          response.data?.message || "Failed to create Network Bank"
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error.message ||
+          "Failed to create Network Bank"
+      );
+    }
+  }
+);
+
+// Thunk to update a Network Bank
+export const updateNetworkBank = createAsyncThunk(
+  "networkBank/update",
+  async (
+    { id, formData }: { id: string; formData: NetworkBankMasterFormType },
+    { rejectWithValue }
+  ) => {
+    try {
+      const payload = new FormData();
+      const { logo, ...bankData } = formData;
+
+      (bankData as any).editedBy = localStorage.getItem("username") || "system";
+
+      payload.append("bankData", JSON.stringify(bankData));
+
+      if (isFile(logo)) {
+        payload.append("logo", logo, logo.name);
+      }
+
+      const response = await axiosInstance.put(
+        `${API_ENDPOINTS.MASTER.NETWORK_BANK_MASTER}/${id}`,
+        payload,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response.data.statusCode === 200) {
+        return response.data;
+      } else {
+        throw new Error(
+          response.data?.message || "Failed to update Network Bank"
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error.message ||
+          "Failed to update Network Bank"
+      );
     }
   }
 );

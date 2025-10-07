@@ -50,6 +50,7 @@ export const masterInitialValues = {
   bankHolderName: "",
   ifsc: "",
   branchName: "",
+  isBankVerified: false,
   websiteURL: "", // Enterprise-specific
   businessDesc: "", // Enterprise-specific
 
@@ -117,7 +118,8 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   ifsc: ifscValidation,
   branchName: textField("Branch Name", 50, true, true),
   bankHolderName: textField("Bank Holder Name", 100, true),
-  websiteURL: websiteValidation,
+  isBankVerified: Yup.boolean(),
+  websiteURL: websiteValidation.required("Website URL is required"),
   businessDesc: textField("Business Description", 500, true, true),
 
   // Documents
@@ -287,20 +289,14 @@ export function transformUserCreationPayload(
     zipCode: values.outletZipcode || "",
   };
 
-  const bankDetails =
-    userType === "retailer"
-      ? {
-          bankName: values.bankName || "",
-          bankAccountNumber: values.accountNumber || "",
-          ifscCode: values.ifsc || "",
-          bankHolderName: values.bankHolderName || "",
-        }
-      : {
-          bankName: values.bankName || "",
-          bankAccountNumber: values.accountNumber || "",
-          ifscCode: values.ifsc || "",
-          branchName: values.branchName || "",
-        };
+  const bankDetails = {
+    bankName: values.bankName || "",
+    bankAccountNumber: values.accountNumber || "",
+    ifscCode: values.ifsc || "",
+    bankHolderName: values.bankHolderName || "",
+    isVerified: values.isBankVerified || false,
+    // branchName: values.branchName || "",
+  };
 
   switch (userType) {
     case "partner":

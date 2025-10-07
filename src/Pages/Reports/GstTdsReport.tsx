@@ -144,8 +144,6 @@ const GstTdsReport = () => {
                     searchable={true}
                     nothingFoundMessage="Nothing Found"
                     disabled={loadingSubHierarchyList}
-                    withAsterisk
-                    required
                   />
                 </Grid.Col>
 

@@ -27,7 +27,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
     const [formData, setFormData] = useState<SchemesListFormType>(initialValues);
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
-    const { vendorDropdownData, loadingVendorList, vendorError } = useVendor();
+    const { vendorDropdownData, loadingVendorList, vendorError } = useVendor({});
     const { hierarchyList, loadingHierarchyList, hierarchyListError } = useHeirarchyCombinationList()
 
     const handleSubmit = useThrottleMasterFormSubmit<SchemesListFormType>({

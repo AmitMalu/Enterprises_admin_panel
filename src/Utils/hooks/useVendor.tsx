@@ -4,7 +4,15 @@ import { toast } from "react-toastify";
 import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 
-export const useVendor = () => {
+interface UseVendorOptions {
+    subProductId?: string;
+    waitForSubProduct?: boolean; // default false
+}
+
+export const useVendor = ({
+    subProductId,
+    waitForSubProduct = false,
+}: UseVendorOptions) => {
     const dispatch = useAppDispatch();
     const [vendorDropdownData, setVendorDropdownData] = useState([]);
     const [loadingVendorList, setLoadingVendorList] = useState(false);
@@ -12,19 +20,22 @@ export const useVendor = () => {
 
     // Fetch Vendor list (always)
     useEffect(() => {
-        const fetchVendorList = async () => {
+        if (waitForSubProduct && !subProductId) {
+            setVendorDropdownData([]); // reset if waiting and no subProductId yet
+            return;
+        }
+
+        const fetchVendorList = async (url: string) => {
             setLoadingVendorList(true);
+            setVendorDropdownData([]); // clear old while fetching new
             setVendorError(null)
             try {
-                const result = await dispatch(
-                    fetchMasterDropdown({
-                        url: `${API_ENDPOINTS?.MASTER?.VENDOR}/active`,
-                    })
-                ).unwrap();
+
+                const result = await dispatch(fetchMasterDropdown({ url })).unwrap();
 
                 const filteredData = (result || [])?.map((item: any) => ({
                     label: item.vendorName,
-                    value: String(item.id),     // dropdown binds to operatorId
+                    value: String(item.id),
                 }));
 
                 setVendorDropdownData(filteredData);
@@ -38,8 +49,19 @@ export const useVendor = () => {
             }
         };
 
-        fetchVendorList();
-    }, [dispatch]);
+        if (waitForSubProduct) {
+            // Only fetch when subProductId is provided
+            if (subProductId) {
+                fetchVendorList(
+                    `${API_ENDPOINTS?.MASTER?.VENDOR}/by-subProduct/${subProductId}`
+                );
+            }
+        } else {
+            const url = `${API_ENDPOINTS?.MASTER?.VENDOR}/active`;
+            fetchVendorList(url);
+        }
+
+    }, [dispatch, subProductId, waitForSubProduct]);
 
     return {
         vendorDropdownData,

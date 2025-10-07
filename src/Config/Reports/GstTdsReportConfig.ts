@@ -54,7 +54,7 @@ export const GstTdsReportSchema: Record<
   dateRange: dateRangeValidationSchema,
   subProduct: textField("Sub Product", 100, true, true),
   hierarchy: textField("Hierarchy", 100, true, true),
-  hierarchyId: textField("Hierarchy ID", 100, true, true),
+  hierarchyId: textField("Hierarchy ID", 100, false, true),
   walletType: textField("Wallet Type", 100, true, true),
   reportType: textField("Report Type", 100, true, true),
 };
@@ -79,6 +79,7 @@ export const transformToGstTdsReportPayload = (values: any) => {
   return {
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
+    hierarchyType: values.hierarchy ?? "",
     hierarchyId: values.hierarchyId,
     subProductName: values?.subProduct,
     walletType: values.walletType ?? "",

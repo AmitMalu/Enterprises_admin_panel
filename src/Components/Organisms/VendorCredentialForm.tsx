@@ -112,7 +112,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                         loadingProductList,
                     } = useProductSubProduct({});
 
-                    const { vendorDropdownData, loadingVendorList } = useVendor();
+                    const { vendorDropdownData, loadingVendorList } = useVendor({});
 
                     useEffect(() => {
                         const fetchAdminDropdownList = async () => {

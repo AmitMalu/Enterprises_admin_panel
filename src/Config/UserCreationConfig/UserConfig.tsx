@@ -87,7 +87,7 @@ export const UserConfig: Record<
         "outletState",
         "outletZipcode",
       ], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
+      ["bankName", "accountNumber", "ifsc", "branchName", "bankHolderName", "isBankVerified"], // Step 3
       [
         "adhaarFront",
         "adhaarBack",
@@ -150,7 +150,7 @@ export const UserConfig: Record<
         "outletState",
         "outletZipcode",
       ], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
+      ["bankName", "accountNumber", "ifsc", "branchName", "bankHolderName", "isBankVerified"],
       [
         "adhaarFront",
         "adhaarBack",
@@ -213,7 +213,7 @@ export const UserConfig: Record<
         "outletState",
         "outletZipcode",
       ], // Step 2
-      ["bankName", "accountNumber", "ifsc", "bankHolderName"], // Step 3
+      ["bankName", "accountNumber", "ifsc", "branchName", "bankHolderName", "isBankVerified"],
       [
         "adhaarFront",
         "adhaarBack",
@@ -276,7 +276,7 @@ export const UserConfig: Record<
         "outletCity",
         "outletZipcode",
       ], // Step 2
-      ["bankName", "accountNumber", "ifsc", "branchName"], // Step 3
+      ["bankName", "accountNumber", "ifsc", "branchName", "bankHolderName", "isBankVerified"],
       [
         "adhaarFront",
         "adhaarBack",
@@ -345,6 +345,8 @@ export const UserConfig: Record<
         "accountNumber",
         "ifsc",
         "branchName",
+        "bankHolderName",
+        "isBankVerified",
         "businessDesc",
         "websiteURL",
       ], // Step 3
@@ -415,6 +417,8 @@ export const UserConfig: Record<
         "accountNumber",
         "ifsc",
         "branchName",
+        "bankHolderName",
+        "isBankVerified",
         "websiteURL",
         "businessDesc",
       ], // Step 3

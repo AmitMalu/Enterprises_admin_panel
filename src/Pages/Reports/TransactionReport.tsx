@@ -142,8 +142,8 @@ const TransactionReport = () => {
                       value: String(item.id),
                     }))}
                     disabled={loadingSubHierarchyList}
-                    withAsterisk
-                    required
+                  // withAsterisk
+                  // required
                   />
                 </Grid.Col>
 

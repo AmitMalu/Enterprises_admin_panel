@@ -223,7 +223,6 @@ const SchemeSettingsPage = () => {
   };
 
   const handleRemoveRow = (operatorCode: string, slabId: string | number) => {
-    console.log(operatorCode, slabId, "remove row called");
 
     // 1. Remove from UI copy
     setEditableRows((prev) =>
