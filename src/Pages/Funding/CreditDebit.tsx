@@ -177,7 +177,6 @@ const CreditDebit = () => {
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
-
                   <FormikTextInputComponent
                     name="confirmAmount"
                     label="Confirm Amount"
@@ -185,7 +184,7 @@ const CreditDebit = () => {
                     withAsterisk
                     required
                     allowCharacter={false}
-                    allowNumber={false}
+                    allowSpecialChar={false}
                     maxLength={10}
                   />
                 </Grid.Col>
