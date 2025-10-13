@@ -17,11 +17,20 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { GST_TDS_REPORT_KEY, GST_TDS_REPORT_URL, GstTdsheaders, GstTdsReportInitialValues, GstTdsReportSchema, GstTdsReportTableType, transformToGstTdsReportPayload } from "../../Config/Reports/GstTdsReportConfig";
+import { setPagination } from "../../Redux/Features/Masters/MastersSlice";
+import { useAppDispatch } from "../../Redux/hooks";
 
 const GstTdsReport = () => {
 
+  const dispatch = useAppDispatch();
+
   const [reportPayload, setReportPayload] = useState<any>(null);
   const dataRef = useRef<GstTdsReportTableType[] | null>(null);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  // const [refreshKey, setRefreshKey] = useState(0);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
 
   const {
     data,
@@ -50,9 +59,29 @@ const GstTdsReport = () => {
     exportToCsv(currentData, "GstTds-report");
   };
 
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: GST_TDS_REPORT_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
+      })
+    );
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
+  };
+
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
+
+  useEffect(() => {
+    if (submittedFilter) {
+      setReportPayload((prev: any) => ({ ...prev, ...submittedFilter }));
+    }
+  }, [submittedFilter])
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -62,6 +91,7 @@ const GstTdsReport = () => {
 
       <GenericMasterToolbar
         onExport={handleExportClick}
+        onFilter={() => setFilterVisible((prev) => !prev)}
         loading={loading}
         error={error ? error.toString() : null}
       />
@@ -219,6 +249,10 @@ const GstTdsReport = () => {
           pageSize={pagination.pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+          filterVisible={filterVisible}
+          filterValues={filterValues}
+          onFilterChange={handleFilterChange}
+          onFilterSubmit={handleFilterSubmit}
         />
       )}
     </div>

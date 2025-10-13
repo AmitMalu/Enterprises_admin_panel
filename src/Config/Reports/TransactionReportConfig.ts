@@ -3,6 +3,7 @@ import { textField } from "../../Utils/ValidationUtils";
 import {
   dateRangeValidationSchema,
   GenericTableHeader,
+  walletTypeSelectData,
 } from "../../Utils/utils";
 import { DatesRangeValue } from "@mantine/dates";
 import moment from "moment";
@@ -82,9 +83,14 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
     ],
   },
   { key: "transactionDate", label: "Transaction Date", filterType: "date" },
-  { key: "transactionTime", label: "Transaction Time", filterType: "date" },
+  // { key: "transactionTime", label: "Transaction Time", filterType: "date" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },
-  { key: "walletType", label: "Wallet Type", filterType: "text" },
+  {
+    key: "walletType",
+    label: "Wallet Type",
+    filterType: "boolean",
+    filterOptions: walletTypeSelectData,
+  },
   {
     key: "actionOnBalanceAmount",
     label: "Action On Balance",

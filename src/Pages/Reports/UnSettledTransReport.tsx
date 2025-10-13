@@ -14,7 +14,10 @@ import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit"
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import { useVendor } from "../../Utils/hooks/useVendor";
-import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
+import {
+  //  resetMaster, 
+  setPagination
+} from "../../Redux/Features/Masters/MastersSlice";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import * as Yup from "yup"
@@ -28,9 +31,15 @@ const UnSettledTransReport = () => {
 
   const dataRef = useRef<SettlementReportTableType[] | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(
-    settlementReportHeaders.map((h) => h.key as string)
-  );
+  // const [visibleColumns, setVisibleColumns] = useState<string[]>(
+  //   settlementReportHeaders.map((h) => h.key as string)
+  // );
+
+
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
 
   const [formValues, setFormValues] = useState(settlementReportFilterInitialValues);
   const [viewSubmitted, setViewSubmitted] = useState(false);
@@ -66,31 +75,53 @@ const UnSettledTransReport = () => {
     exportToCsv(currentData, "UnSettled-Report");
   };
 
-  const handleToggleColumn = (key: string) => {
-    setVisibleColumns((prev) =>
-      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+  // const handleToggleColumn = (key: string) => {
+  //   setVisibleColumns((prev) =>
+  //     prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+  //   );
+  // };
+
+  // const handleToggleAllColumns = (selectAll: boolean) => {
+  //   if (selectAll) {
+  //     setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+  //   } else {
+  //     setVisibleColumns([]);
+  //   }
+  // };
+
+  // const handleRefresh = () => {
+  //   dispatch(resetMaster(UNSETTLED_REPORT_KEY));
+  //   setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+  //   setRefreshKey((prev) => prev + 1);
+  // };
+
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: UNSETTLED_REPORT_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
+      })
     );
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
-
-  const handleRefresh = () => {
-    dispatch(resetMaster(UNSETTLED_REPORT_KEY));
-    setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
-    setRefreshKey((prev) => prev + 1);
-  };
 
   useEffect(() => {
     return () => {
       setFormValues(settlementReportFilterInitialValues); // Reset form data on unmount
     }
   }, []);
+
+
+  useEffect(() => {
+    if (submittedFilter) {
+      setPayload((prev: any) => ({ ...prev, ...submittedFilter }));
+    }
+  }, [submittedFilter])
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -243,12 +274,13 @@ const UnSettledTransReport = () => {
       </Formik>
 
       <GenericMasterToolbar
-        onRefresh={handleRefresh}
-        onColumnChange={handleToggleColumn}
-        onToggleAll={handleToggleAllColumns}
+        // onRefresh={handleRefresh}
+        // onColumnChange={handleToggleColumn}
+        // onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
+        onFilter={() => setFilterVisible((prev) => !prev)}
         headers={settlementReportHeaders}
-        visibleColumns={visibleColumns}
+        // visibleColumns={visibleColumns}
         loading={loading}
         error={error ? error.toString() : null}
       />
@@ -259,9 +291,10 @@ const UnSettledTransReport = () => {
       ) : (
         <GenericMasterTable<SettlementReportTableType>
           data={data}
-          headers={settlementReportHeaders.filter((h) =>
-            visibleColumns.includes(h.key as string)
-          )}
+          // headers={settlementReportHeaders.filter((h) =>
+          //   visibleColumns.includes(h.key as string)
+          // )}
+          headers={settlementReportHeaders}
           pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
@@ -270,6 +303,10 @@ const UnSettledTransReport = () => {
           pageSize={pagination.pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+          filterVisible={filterVisible}
+          filterValues={filterValues}
+          onFilterChange={handleFilterChange}
+          onFilterSubmit={handleFilterSubmit}
         />
       )}
 

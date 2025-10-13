@@ -59,6 +59,7 @@ const TableFilterRow = <T,>({
                       onFilterSubmit?.(String(key), "");
                     }
                   }}
+                  clearable
                 />
               </Table.Td>
             );

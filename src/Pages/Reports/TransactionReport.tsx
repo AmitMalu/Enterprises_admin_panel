@@ -16,11 +16,19 @@ import { useEffect, useRef, useState } from "react";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../Redux/hooks";
+import { setPagination } from "../../Redux/Features/Masters/MastersSlice";
 
 const TransactionReport = () => {
+  const dispatch = useAppDispatch();
 
   const [reportPayload, setReportPayload] = useState<any>(null);
   const dataRef = useRef<TransactionReportTableType[] | null>(null);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  // const [refreshKey, setRefreshKey] = useState(0);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
 
   const {
     data,
@@ -49,9 +57,29 @@ const TransactionReport = () => {
     exportToCsv(currentData, "Transaction-report");
   };
 
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: TRANX_REPORT_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
+      })
+    );
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
+  };
+
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
+
+  useEffect(() => {
+    if (submittedFilter) {
+      setReportPayload((prev: any) => ({ ...prev, ...submittedFilter }));
+    }
+  }, [submittedFilter])
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -61,6 +89,7 @@ const TransactionReport = () => {
 
       <GenericMasterToolbar
         onExport={handleExportClick}
+        onFilter={() => setFilterVisible((prev) => !prev)}
         loading={loading}
         error={error ? error.toString() : null}
       />
@@ -203,7 +232,6 @@ const TransactionReport = () => {
             </Form>
           )
         }}
-
       </Formik>
 
       {loading ? (
@@ -221,6 +249,10 @@ const TransactionReport = () => {
           pageSize={pagination.pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+          filterVisible={filterVisible}
+          filterValues={filterValues}
+          onFilterChange={handleFilterChange}
+          onFilterSubmit={handleFilterSubmit}
         />
       )}
     </div>
