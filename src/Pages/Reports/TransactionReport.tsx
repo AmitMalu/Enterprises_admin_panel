@@ -1,6 +1,6 @@
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { Form, Formik } from "formik";
-import { Grid } from "@mantine/core";
+import { Grid, Loader } from "@mantine/core";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import FormikDateRangePicker from "../../Components/Molecules/FormikDateRangePicker";
 import { IconCalendar } from "@tabler/icons-react";
@@ -18,6 +18,8 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
 import { setPagination } from "../../Redux/Features/Masters/MastersSlice";
+import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
+import { RefreshIcon } from "../../assets/Icons";
 
 const TransactionReport = () => {
   const dispatch = useAppDispatch();
@@ -97,10 +99,16 @@ const TransactionReport = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={TransactionReportSchema}
-        onSubmit={throttledSubmit}
+        onSubmit={(values) => {
+          setFilterValues({})
+          setSubmittedFilter(null)
+          throttledSubmit(values)
+        }}
       >
         {({ values, setFieldValue }) => {
-          const { subProductDropdownData, loadingSubProductList, subProductError } = useSubProductList()
+
+          const { productDropdownData, loadingProductList, refetchProducts } = useProductSubProduct({});
+
           const { hierarchyList, loadingHierarchyList, subHierarchyList, loadingSubHierarchyList, subHierarchyKey } = useHierarchySubHierarchy({
             selectedHierarchyCode: values.hierarchy,
             onSubHierarchyReset: () => setFieldValue("subHierarchy", "")
@@ -124,19 +132,33 @@ const TransactionReport = () => {
 
                 <Grid.Col span={{ base: 3, md: 2, lg: 1.5 }}>
                   <FormikSelectComponent
-                    name="subProduct"
+                    name="productId"
+                    label="Product"
+                    placeholder="Select Product"
                     size="xs"
-                    allowDeselect={true}
-                    searchable={true}
-                    label="Sub Product"
-                    placeholder="Select Sub Product"
                     withAsterisk
                     required
-                    data={subProductDropdownData?.map(item => ({
-                      label: item?.label,
-                      value: item?.label
-                    }))}
-                    disabled={loadingSubProductList || !!subProductError}
+                    allowDeselect={false}
+                    searchable={true}
+                    data={productDropdownData}
+                    disabled={loadingProductList}
+                    rightSection={
+                      <>
+                        {loadingProductList && (
+                          <Loader size={14} color="blue" />
+                        )}
+                        {!loadingProductList && productDropdownData.length < 1 && (
+                          <div
+                            onClick={refetchProducts}
+                            className="cursor-pointer"
+                            style={{ pointerEvents: "auto", display: "flex", alignItems: "center" }}
+                            title="Refresh Products"
+                          >
+                            <RefreshIcon />
+                          </div>
+                        )}
+                      </>
+                    }
                   />
                 </Grid.Col>
 
@@ -145,7 +167,6 @@ const TransactionReport = () => {
                     name="hierarchy"
                     size="xs"
                     label="Hierarchy"
-                    allowDeselect={true}
                     searchable={true}
                     placeholder="Select Hierarchy Type"
                     nothingFoundMessage="Nothing Found"
@@ -181,7 +202,6 @@ const TransactionReport = () => {
                     name="walletType"
                     size="xs"
                     required
-                    allowDeselect={true}
                     nothingFoundMessage="Nothing Found"
                     withAsterisk
                     label="Wallet Type"
@@ -193,12 +213,11 @@ const TransactionReport = () => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
+                {/* <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
                   <FormikSelectComponent
                     name="status"
                     size="xs"
                     searchable={true}
-                    allowDeselect={true}
                     nothingFoundMessage="Nothing Found"
                     label="Status"
                     placeholder="Select Status"
@@ -209,9 +228,9 @@ const TransactionReport = () => {
                       { label: "PENDING", value: "PENDING" },
                     ]}
                   />
-                </Grid.Col>
+                </Grid.Col> */}
 
-                <Grid.Col span={{ base: 3, md: 10, lg: 1.5 }}>
+                <Grid.Col span="auto">
                   <div className="flex justify-end items-center mt-4">
                     {<ButtonComponent
                       fontSize="14"

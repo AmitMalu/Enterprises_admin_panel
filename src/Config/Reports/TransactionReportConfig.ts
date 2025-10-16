@@ -32,7 +32,7 @@ export const initialValues = {
     moment().subtract(6, "days").toDate(), // from: 6 days ago
     moment().toDate(), // to: today
   ] as DatesRangeValue,
-  subProduct: "",
+  productId: "",
   hierarchy: "",
   subHierarchy: "",
   walletType: "POSTPAID",
@@ -42,7 +42,7 @@ export const initialValues = {
 // Yup schema
 export const TransactionReportSchema = Yup.object().shape({
   dateRange: dateRangeValidationSchema,
-  subProduct: textField("Sub Product", 100, true, true),
+  productId: textField("Product", 100, true, true),
   hierarchy: textField("Hierarchy", 100, true, true),
   subHierarchy: textField("Hierarchy ID", 100, false, true),
   walletType: textField("Wallet Type", 100, true, true),
@@ -57,7 +57,7 @@ export const transformToTransactionReportPayload = (values: any) => {
     hierarchyId: values.subHierarchy ?? "",
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
-    subProductName: values?.subProduct ?? "",
+    productId: values?.productId ?? "",
     walletType: values.walletType ?? "",
     status: values.status ?? "ALL",
     page: 0,
@@ -77,9 +77,10 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
     renderType: "statusBadge",
     filterType: "boolean",
     filterOptions: [
-      { label: "PENDING", value: "PENDING" },
       { label: "SUCCESS", value: "SUCCESS" },
-      { label: "FAILED", value: "FAILED" },
+      { label: "FAILED", value: "FAILURE" },
+      { label: "PENDING", value: "PENDING" },
+      { label: "VENDOR PENDING", value: "VENDOR_PENDING" },
     ],
   },
   { key: "transactionDate", label: "Transaction Date", filterType: "date" },

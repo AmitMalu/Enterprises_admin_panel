@@ -151,7 +151,7 @@ const UnSettledTransReport = () => {
             isSettlement: true
           });
 
-          const { vendorDropdownData, loadingVendorList } = useVendor({});
+          // const { vendorDropdownData, loadingVendorList } = useVendor({});
 
           return (
             <Form className="flex flex-col gap-2 mt-4">
@@ -174,7 +174,7 @@ const UnSettledTransReport = () => {
                     name="productId"
                     label="Product"
                     value={values.productId}
-                    allowDeselect={true}
+                    // allowDeselect={true}
                     searchable={true}
                     nothingFoundMessage="No Product Found"
                     placeholder="Select Product"
@@ -215,13 +215,13 @@ const UnSettledTransReport = () => {
                     searchable={true}
                     nothingFoundMessage="No SubProduct Found for Selected Product"
                     size="xs"
-                    withAsterisk
+                    // withAsterisk
                     // required
                     disabled={loadingSubProductList}
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
+                {/* <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
                     name="vendorId"
                     label="Vendor"
@@ -234,14 +234,14 @@ const UnSettledTransReport = () => {
                     data={vendorDropdownData}
                     disabled={loadingVendorList}
                   />
-                </Grid.Col>
+                </Grid.Col> */}
 
                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
                     name="walletType"
                     size="xs"
-                    label="Wallet Type"
                     allowDeselect={true}
+                    label="Wallet Type"
                     placeholder="Select Wallet Type"
                     data={[
                       { label: "PREPAID", value: "PREPAID" },
@@ -250,7 +250,21 @@ const UnSettledTransReport = () => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 1.5 }}>
+                {/* <Grid.Col span={{ base: 4, xs: 4, md: 4, lg: 2 }}>
+                  <FormikSelectComponent
+                    name="tranStatus"
+                    size="xs"
+                    label="Transaction Status"
+                    placeholder="Select Transaction Status"
+                    allowDeselect={true}
+                    data={[
+                      { label: "ACCEPTED", value: "SUCCESS" },
+                      { label: "REJECTED", value: "FAILURE" },
+                    ]}
+                  />
+                </Grid.Col> */}
+
+                <Grid.Col span="auto">
                   <div className="flex justify-end items-center mt-4">
                     {<ButtonComponent
                       fontSize="14"

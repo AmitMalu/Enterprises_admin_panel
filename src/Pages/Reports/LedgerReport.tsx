@@ -20,7 +20,7 @@ import moment from "moment";
 
 const LedgerReport = () => {
 
-  const [reportFilter, setReportFilter] = useState<Record<string, any> | null>(null);
+  const [dateFilter, setDateFilter] = useState<Record<string, any> | null>(null);
   const dataRef = useRef<LedgerReportTableType[] | null>([]);
   const [shouldFetch, setShouldFetch] = useState(false);
   const dispatch = useAppDispatch();
@@ -39,7 +39,7 @@ const LedgerReport = () => {
     useFetchMasterList<LedgerReportTableType>({
       key: LEDGER_REPORT_KEY,
       url: shouldFetch ? `${LEDGER_REPORT_URL}/view` : "",
-      filter: shouldFetch ? reportFilter : null,
+      filter: shouldFetch ? dateFilter : null,
       method: "GET",
       refreshKey,
     });
@@ -76,11 +76,11 @@ const LedgerReport = () => {
 
   const throttledSubmit = useThrottledFormSubmit((values: any) => {
     const [fromDate, toDate] = values.dateRange || [];
-    const filterValues = {
+    const dateFilter = {
       fromDate: moment(fromDate).format("YYYY-MM-DD"),
       toDate: moment(toDate).format("YYYY-MM-DD"),
     }
-    setReportFilter(filterValues);
+    setDateFilter(dateFilter);
     setShouldFetch(true); //enable fetch only after form submit
   }, 3000);
 

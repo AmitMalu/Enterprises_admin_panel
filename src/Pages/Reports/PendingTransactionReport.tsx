@@ -147,7 +147,7 @@ const PendingTransactionReport = () => {
             onSubProductReset: () => setFieldValue("subProductId", ""),
           });
 
-          const { vendorDropdownData, loadingVendorList } = useVendor({});
+          // const { vendorDropdownData, loadingVendorList } = useVendor({});
 
           return (
             <Form className="flex flex-col gap-2 mt-4">
@@ -171,7 +171,7 @@ const PendingTransactionReport = () => {
                     label="Product"
                     value={values.productId}
                     placeholder="Select Product"
-                    allowDeselect={true}
+                    // allowDeselect={true}
                     searchable={true}
                     nothingFoundMessage="No Product Found"
                     size="xs"
@@ -211,13 +211,13 @@ const PendingTransactionReport = () => {
                     searchable={true}
                     nothingFoundMessage="No SubProduct Found for Selected Product"
                     size="xs"
-                    withAsterisk
+                    // withAsterisk
                     // required
                     disabled={loadingSubProductList}
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
+                {/* <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
                     name="vendorId"
                     label="Vendor"
@@ -230,7 +230,7 @@ const PendingTransactionReport = () => {
                     data={vendorDropdownData}
                     disabled={loadingVendorList}
                   />
-                </Grid.Col>
+                </Grid.Col> */}
 
                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
@@ -246,7 +246,7 @@ const PendingTransactionReport = () => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 1.5 }}>
+                <Grid.Col span="auto">
                   <div className="flex justify-end items-center mt-4">
                     {<ButtonComponent
                       fontSize="14"

@@ -1,6 +1,6 @@
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { Form, Formik } from "formik";
-import { Grid } from "@mantine/core";
+import { Grid, Loader } from "@mantine/core";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import FormikDateRangePicker from "../../Components/Molecules/FormikDateRangePicker";
 import { IconCalendar } from "@tabler/icons-react";
@@ -19,6 +19,8 @@ import * as Yup from "yup";
 import { GST_TDS_REPORT_KEY, GST_TDS_REPORT_URL, GstTdsheaders, GstTdsReportInitialValues, GstTdsReportSchema, GstTdsReportTableType, transformToGstTdsReportPayload } from "../../Config/Reports/GstTdsReportConfig";
 import { setPagination } from "../../Redux/Features/Masters/MastersSlice";
 import { useAppDispatch } from "../../Redux/hooks";
+import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
+import { RefreshIcon } from "../../assets/Icons";
 
 const GstTdsReport = () => {
 
@@ -99,10 +101,15 @@ const GstTdsReport = () => {
       <Formik
         initialValues={GstTdsReportInitialValues}
         validationSchema={Yup.object(GstTdsReportSchema)}
-        onSubmit={throttledSubmit}
+        onSubmit={(values) => {
+          setFilterValues({})
+          setSubmittedFilter(null)
+          throttledSubmit(values)
+        }}
       >
         {({ values, setFieldValue }) => {
-          const { subProductDropdownData, loadingSubProductList, subProductError } = useSubProductList()
+          const { productDropdownData, loadingProductList, refetchProducts } = useProductSubProduct({});
+
           const { hierarchyList, loadingHierarchyList, subHierarchyList, loadingSubHierarchyList, subHierarchyKey } = useHierarchySubHierarchy({
             selectedHierarchyCode: values.hierarchy,
             onSubHierarchyReset: () => setFieldValue("hierarchyId", "")
@@ -126,20 +133,48 @@ const GstTdsReport = () => {
 
                 <Grid.Col span={{ base: 3, md: 2, lg: 1.5 }}>
                   <FormikSelectComponent
-                    name="subProduct"
+                    name="productId"
+                    label="Product"
+                    placeholder="Select Product"
                     size="xs"
-                    label="Sub Product"
-                    placeholder="Select Sub Product"
-                    allowDeselect={true}
-                    searchable={true}
-                    nothingFoundMessage="No Sub Product found"
                     withAsterisk
                     required
-                    data={subProductDropdownData?.map(item => ({
-                      label: item?.label,
-                      value: item?.label
-                    }))}
-                    disabled={loadingSubProductList || !!subProductError}
+                    allowDeselect={false}
+                    searchable={true}
+                    data={productDropdownData}
+                    disabled={loadingProductList}
+                    rightSection={
+                      <>
+                        {loadingProductList && (
+                          <Loader size={14} color="blue" />
+                        )}
+                        {!loadingProductList && productDropdownData.length < 1 && (
+                          <div
+                            onClick={refetchProducts}
+                            className="cursor-pointer"
+                            style={{ pointerEvents: "auto", display: "flex", alignItems: "center" }}
+                            title="Refresh Products"
+                          >
+                            <RefreshIcon />
+                          </div>
+                        )}
+                      </>
+                    }
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
+                  <FormikSelectComponent
+                    name="reportType"
+                    size="xs"
+                    label="Report Type"
+                    placeholder="Select Report Type"
+                    required
+                    withAsterisk
+                    data={[
+                      { label: "GST", value: "GST" },
+                      { label: "TDS", value: "TDS" },
+                    ]}
                   />
                 </Grid.Col>
 
@@ -182,7 +217,6 @@ const GstTdsReport = () => {
                     name="walletType"
                     size="xs"
                     required
-                    withAsterisk
                     label="Wallet Type"
                     placeholder="Select Wallet Type"
                     allowDeselect={true}
@@ -190,22 +224,6 @@ const GstTdsReport = () => {
                     data={[
                       { label: "PREPAID", value: "PREPAID" },
                       { label: "POSTPAID", value: "POSTPAID" },
-                    ]}
-                  />
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
-                  <FormikSelectComponent
-                    name="reportType"
-                    size="xs"
-                    label="Report Type"
-                    placeholder="Select Report Type"
-                    allowDeselect={true}
-                    required
-                    withAsterisk
-                    data={[
-                      { label: "GST", value: "GST" },
-                      { label: "TDS", value: "TDS" },
                     ]}
                   />
                 </Grid.Col>

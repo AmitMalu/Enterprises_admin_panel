@@ -13,7 +13,7 @@ import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
-import { useVendor } from "../../Utils/hooks/useVendor";
+// import { useVendor } from "../../Utils/hooks/useVendor";
 import {
     //  resetMaster, 
     setPagination
@@ -155,7 +155,7 @@ const SettlementReport = () => {
                         isSettlement: true
                     });
 
-                    const { vendorDropdownData, loadingVendorList } = useVendor({});
+                    // const { vendorDropdownData, loadingVendorList } = useVendor({});
 
                     return (
                         <Form className="flex flex-col gap-2 mt-4">
@@ -179,7 +179,7 @@ const SettlementReport = () => {
                                         label="Product"
                                         value={values.productId}
                                         placeholder="Select Product"
-                                        allowDeselect={true}
+                                        // allowDeselect={true}
                                         searchable={true}
                                         nothingFoundMessage="No Product Found"
                                         size="xs"
@@ -219,13 +219,13 @@ const SettlementReport = () => {
                                         nothingFoundMessage="No SubProduct Found for Selected Product"
                                         placeholder="Select Sub Product"
                                         size="xs"
-                                        withAsterisk
+                                        // withAsterisk
                                         // required
                                         disabled={loadingSubProductList}
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
+                                {/* <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                                     <FormikSelectComponent
                                         name="vendorId"
                                         label="Vendor"
@@ -238,7 +238,7 @@ const SettlementReport = () => {
                                         data={vendorDropdownData}
                                         disabled={loadingVendorList}
                                     />
-                                </Grid.Col>
+                                </Grid.Col> */}
 
                                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                                     <FormikSelectComponent
@@ -250,6 +250,20 @@ const SettlementReport = () => {
                                         data={[
                                             { label: "PREPAID", value: "PREPAID" },
                                             { label: "POSTPAID", value: "POSTPAID" },
+                                        ]}
+                                    />
+                                </Grid.Col>
+
+                                <Grid.Col span={{ base: 4, xs: 4, md: 4, lg: 2 }}>
+                                    <FormikSelectComponent
+                                        name="tranStatus"
+                                        size="xs"
+                                        label="Transaction Status"
+                                        placeholder="Select Transaction Status"
+                                        allowDeselect={true}
+                                        data={[
+                                            { label: "ACCEPTED", value: "SUCCESS" },
+                                            { label: "REJECTED", value: "FAILURE" },
                                         ]}
                                     />
                                 </Grid.Col>
@@ -270,20 +284,6 @@ const SettlementReport = () => {
                                             VIEW
                                         </ButtonComponent>}
                                     </div>
-                                </Grid.Col>
-
-                                <Grid.Col span={{ base: 4, xs: 4, md: 4, lg: 2 }}>
-                                    <FormikSelectComponent
-                                        name="tranStatus"
-                                        size="xs"
-                                        label="Transaction Status"
-                                        placeholder="Select Transaction Status"
-                                        allowDeselect={true}
-                                        data={[
-                                            { label: "ACCEPTED", value: "SUCCESS" },
-                                            { label: "REJECTED", value: "FAILURE" },
-                                        ]}
-                                    />
                                 </Grid.Col>
 
                                 <Grid.Col span="auto">
