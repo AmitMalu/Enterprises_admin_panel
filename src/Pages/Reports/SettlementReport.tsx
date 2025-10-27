@@ -39,10 +39,8 @@ const SettlementReport = () => {
     const [filterValues, setFilterValues] = useState<Record<string, any>>({});
     const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
-
     const [formValues, setFormValues] = useState(settlementReportFilterInitialValues);
     const [viewSubmitted, setViewSubmitted] = useState(false);
-
 
     const { data, loading, pagination, error, setPage, setPageSize } =
         useFetchMasterList<SettlementReportTableType>({

@@ -8,15 +8,43 @@ const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
 
   const { location, loading, error } = useAddressFromZipcode(formik.values.outletZipcode)
 
-  useEffect(() => {
-    if (formik.values.outletState !== location.state) {
-      formik.setFieldValue("outletState", location.state);
-    }
+  // useEffect(() => {
+  //   if (formik.values.outletState !== location.state) {
+  //     formik.setFieldValue("outletState", location.state);
+  //   }
 
-    if (formik.values.outletCity !== location.city) {
-      formik.setFieldValue("outletCity", location.city);
+  //   if (formik.values.outletCity !== location.city) {
+  //     formik.setFieldValue("outletCity", location.city);
+  //   }
+  // }, [location.state, location.city]);
+
+  useEffect(() => {
+    if (formik.values.outletZipcode && !loading) {
+      if (location.state || location.city) {
+        // ✅ Fill values when location found
+        formik.setValues((prev: any) => ({
+          ...prev,
+          outletState: location.state || "",
+          outletCity: location.city || "",
+        }));
+
+        // ✅ Clear errors for both fields
+        formik.setFieldError("outletState", "");
+        formik.setFieldError("outletCity", "");
+      } else {
+        // ❌ Clear values if no location found for that zip
+        formik.setValues((prev: any) => ({
+          ...prev,
+          outletState: "",
+          outletCity: "",
+        }));
+
+        // Optional: mark as errors if needed
+        // formik.setFieldError("outletState", "Required");
+        // formik.setFieldError("outletCity", "Required");
+      }
     }
-  }, [location.state, location.city]);
+  }, [location.state, location.city, formik.values.outletZipcode, loading]);
 
   useEffect(() => {
     if (error) {

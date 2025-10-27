@@ -164,6 +164,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
             placeholder="Enter Your Pan Number"
             withAsterisk
             required
+            capitalize
             maxLength={15}
             allowSpace={false}
             allowSpecialChar={false}

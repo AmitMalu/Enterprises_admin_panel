@@ -9,14 +9,32 @@ const ResidentialAddressForm = ({ formik }: { formik: FormikProps<any> }) => {
   const { location, loading, error } = useAddressFromZipcode(formik.values.zipcode)
 
   useEffect(() => {
-    if (formik.values.state !== location.state) {
-      formik.setFieldValue("state", location.state);
-    }
+    if (formik.values.zipcode && !loading) {
+      if (location.state || location.city) {
+        // ✅ Fill values when location found
+        formik.setValues((prev: any) => ({
+          ...prev,
+          state: location.state || "",
+          city: location.city || "",
+        }));
 
-    if (formik.values.city !== location.city) {
-      formik.setFieldValue("city", location.city);
+        // ✅ Clear errors for both fields
+        formik.setFieldError("state", "");
+        formik.setFieldError("city", "");
+      } else {
+        // ❌ Clear values if no location found for that zip
+        formik.setValues((prev: any) => ({
+          ...prev,
+          state: "",
+          city: "",
+        }));
+
+        // Optional: mark as errors if needed
+        // formik.setFieldError("state", "Required");
+        // formik.setFieldError("city", "Required");
+      }
     }
-  }, [location.state, location.city]);
+  }, [location.state, location.city, formik.values.zipcode, loading]);
 
   useEffect(() => {
     if (error) {

@@ -12,7 +12,7 @@ import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import { useAppDispatch } from "../../Redux/hooks";
-import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
+import { resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
 import { LEDGER_REPORT_KEY, LEDGER_REPORT_URL, LedgerReportHeaders, ledgerReportInitialValues, LedgerReportTableType, LedgerReportValidationSchema } from "../../Config/Reports/LedgerReportConfig";
 import { IconCalendar } from "@tabler/icons-react";
 import FormikDateRangePicker from "../../Components/Molecules/FormikDateRangePicker";
@@ -20,12 +20,19 @@ import moment from "moment";
 
 const LedgerReport = () => {
 
-  const [dateFilter, setDateFilter] = useState<Record<string, any> | null>(null);
-  const dataRef = useRef<LedgerReportTableType[] | null>([]);
-  const [shouldFetch, setShouldFetch] = useState(false);
   const dispatch = useAppDispatch();
+  const [filter, setFilter] = useState<Record<string, any> | null>(null);
 
+  const dataRef = useRef<LedgerReportTableType[] | null>([]);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
+  const [formValues, setFormValues] = useState(ledgerReportInitialValues);
+  const [viewSubmitted, setViewSubmitted] = useState(false);
+
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     LedgerReportHeaders.map((h) => h.key as string)
   );
@@ -38,8 +45,8 @@ const LedgerReport = () => {
     setPageSize } =
     useFetchMasterList<LedgerReportTableType>({
       key: LEDGER_REPORT_KEY,
-      url: shouldFetch ? `${LEDGER_REPORT_URL}/view` : "",
-      filter: shouldFetch ? dateFilter : null,
+      url: viewSubmitted ? `${LEDGER_REPORT_URL}/view` : "",
+      filter: viewSubmitted ? filter : null,
       method: "GET",
       refreshKey,
     });
@@ -61,32 +68,70 @@ const LedgerReport = () => {
   };
 
   const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(LedgerReportHeaders.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
+    if (selectAll) {
+      setVisibleColumns(LedgerReportHeaders.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(resetMaster(LEDGER_REPORT_KEY));
     setVisibleColumns(LedgerReportHeaders.map((h) => h.key as string));
+    setFilterVisible(false);
+    setFilterValues({});
+    const [fromDate, toDate] = formValues.dateRange || [];
+    const filters = {
+      fromDate: moment(fromDate).format("YYYY-MM-DD"),
+      toDate: moment(toDate).format("YYYY-MM-DD"),
+    }
+    setFilter(filters);
+    setSubmittedFilter(null);
     setRefreshKey((prev) => prev + 1);
   };
 
   const throttledSubmit = useThrottledFormSubmit((values: any) => {
+    setFormValues(values);
     const [fromDate, toDate] = values.dateRange || [];
-    const dateFilter = {
+    const filters = {
       fromDate: moment(fromDate).format("YYYY-MM-DD"),
       toDate: moment(toDate).format("YYYY-MM-DD"),
     }
-    setDateFilter(dateFilter);
-    setShouldFetch(true); //enable fetch only after form submit
+    setFilter(filters);
+    setRefreshKey((prev) => prev + 1);
+    setViewSubmitted(true);
   }, 3000);
 
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
+
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: LEDGER_REPORT_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
+      })
+    );
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
+  };
+
+  useEffect(() => {
+    return () => {
+      setFormValues(ledgerReportInitialValues); // Reset form data on unmount
+    }
+  }, []);
+
+  useEffect(() => {
+    if (submittedFilter) {
+      setFilter((prev: any) => ({ ...prev, ...submittedFilter }));
+    }
+  }, [submittedFilter])
+
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -96,7 +141,8 @@ const LedgerReport = () => {
       </TextComponent>
 
       <Formik
-        initialValues={ledgerReportInitialValues}
+        initialValues={formValues}
+        enableReinitialize
         validationSchema={Yup.object(LedgerReportValidationSchema)}
         onSubmit={throttledSubmit}
       >
@@ -122,8 +168,9 @@ const LedgerReport = () => {
                     <GenericMasterToolbar
                       onRefresh={handleRefresh}
                       onColumnChange={handleToggleColumn}
-        onToggleAll={handleToggleAllColumns}
+                      onToggleAll={handleToggleAllColumns}
                       onExport={handleExportClick}
+                      onFilter={() => setFilterVisible((prev) => !prev)}
                       headers={LedgerReportHeaders}
                       visibleColumns={visibleColumns}
                       loading={loading}
@@ -170,6 +217,10 @@ const LedgerReport = () => {
             pageSize={pagination.pageSize}
             pageSizeOptions={pageSizeSelectData}
             message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+            filterVisible={filterVisible}
+            filterValues={filterValues}
+            onFilterChange={handleFilterChange}
+            onFilterSubmit={handleFilterSubmit}
           />
         )
       }

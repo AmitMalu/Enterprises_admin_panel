@@ -116,7 +116,7 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   bankName: textField("Bank Name", 50, true),
   accountNumber: accountNumberValidation,
   ifsc: ifscValidation,
-  branchName: textField("Branch Name", 50, true, true),
+  branchName: textField("Branch Name", 50, false, true),
   bankHolderName: textField("Bank Holder Name", 100, true),
   isBankVerified: Yup.boolean(),
   websiteURL: websiteValidation.required("Website URL is required"),
