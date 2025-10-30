@@ -12,7 +12,7 @@ import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 import CryptoJS from "crypto-js";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.2 (27-10)";
+export const DEV_APP_VERSION_LABEL = "v1.0.2 (30-10 12:00)";
 
 export function encryptCredentials(username: string, password: string) {
   const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
@@ -185,6 +185,12 @@ export const transactionStatusSelectData = [
   { label: "PENDING", value: "PENDING" },
   { label: "APPROVED", value: "APPROVED" },
   { label: "REJECTED", value: "REJECTED" },
+];
+
+export const transactionStatusSelectData2 = [
+  { label: "PENDING", value: "PENDING" },
+  { label: "SUCCESS", value: "SUCCESS" },
+  { label: "FAILURE", value: "FAILURE" },
 ];
 
 export const pageSizeSelectData = [

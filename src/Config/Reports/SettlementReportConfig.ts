@@ -127,7 +127,7 @@ export const transformToUnSettledTranxReportPayload = (values: any) => {
   return {
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
-    // productId: values?.productId ?? "",
+    productId: values?.productId ?? "",
     subProductId: values.subProductId ?? "",
     // vendorId: values.vendorId ?? "",
     walletType: values.walletType ?? "",
@@ -142,7 +142,7 @@ export const transformToPendingTranxReportPayload = (values: any) => {
   return {
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
-    // productId: values?.productId ?? "",
+    productId: values?.productId ?? "",
     subProductId: values.subProductId ?? "",
     // vendorId: values.vendorId ?? "",
     walletType: values.walletType ?? "",

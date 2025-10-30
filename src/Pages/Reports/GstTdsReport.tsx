@@ -216,7 +216,6 @@ const GstTdsReport = () => {
                   <FormikSelectComponent
                     name="walletType"
                     size="xs"
-                    required
                     label="Wallet Type"
                     placeholder="Select Wallet Type"
                     allowDeselect={true}
