@@ -8,16 +8,6 @@ const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
 
   const { location, loading, error } = useAddressFromZipcode(formik.values.outletZipcode)
 
-  // useEffect(() => {
-  //   if (formik.values.outletState !== location.state) {
-  //     formik.setFieldValue("outletState", location.state);
-  //   }
-
-  //   if (formik.values.outletCity !== location.city) {
-  //     formik.setFieldValue("outletCity", location.city);
-  //   }
-  // }, [location.state, location.city]);
-
   useEffect(() => {
     if (formik.values.outletZipcode && !loading) {
       if (location.state || location.city) {
@@ -38,10 +28,6 @@ const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           outletState: "",
           outletCity: "",
         }));
-
-        // Optional: mark as errors if needed
-        // formik.setFieldError("outletState", "Required");
-        // formik.setFieldError("outletCity", "Required");
       }
     }
   }, [location.state, location.city, formik.values.outletZipcode, loading]);

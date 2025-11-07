@@ -185,7 +185,7 @@ const PendingUserForm = () => {
                 disabled={isSubmitting}
                 bgColor="#C30305"
                 textColor="#FFFFFF"
-                style={{ padding: "10px 30px" }}
+                style={{ padding: "0px 30px", letterSpacing: 2 }}
                 onClick={() => setSelectedAction("REJECTED")}
               >
                 REJECT
@@ -200,7 +200,7 @@ const PendingUserForm = () => {
                 disabled={isSubmitting}
                 bgColor="#24d12c"
                 textColor="#FFFFFF"
-                style={{ padding: "10px 30px" }}
+                style={{ padding: "0px 30px", letterSpacing: 2 }}
                 onClick={() => setSelectedAction("APPROVED")}
               >
                 APPROVED
