@@ -229,7 +229,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
           />
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, md: 4, lg: 6 }}>
+        <Grid.Col span={{ base: 12, md: 4, lg: 3 }}>
           <FormikFileInput
             name="businessProof"
             label="Add Business Proof"
@@ -240,7 +240,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
           />
         </Grid.Col>
 
-        <Grid.Col className="" span={{ base: 12, md: 4, lg: 6 }}>
+        <Grid.Col className="" span={{ base: 12, md: 4, lg: 3 }}>
           <FormikTextInputComponent
             name="businessNumber"
             label="Business Number"
@@ -252,6 +252,34 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
             size="sm"
           />
         </Grid.Col>
+
+        <Grid.Col span={{ base: 12, md: 4, lg: 3 }}>
+          <FormikTextInputComponent
+            name="longitude"
+            label="Longitude"
+            placeholder="Enter longitude"
+            allowCharacter={false}
+            allowSpace={false}
+            fullWidth
+            withAsterisk
+            maxLength={11}
+          />
+        </Grid.Col>
+
+        <Grid.Col span={{ base: 12, md: 4, lg: 3 }}>
+          <FormikTextInputComponent
+            name="latitude"
+            label={"Latitude"}
+            placeholder="Enter latitude"
+            allowCharacter={false}
+            allowSpace={false}
+            fullWidth
+            withAsterisk
+            maxLength={11}
+          />
+        </Grid.Col>
+
+
       </Grid>
     </>
   );

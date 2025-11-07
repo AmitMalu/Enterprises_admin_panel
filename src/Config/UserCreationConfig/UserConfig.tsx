@@ -227,6 +227,8 @@ export const UserConfig: Record<
         "shopNumber",
         "businessProof",
         "businessNumber",
+        "longitude",
+        "latitude",
       ], // Step 4
     ],
     renderStepForm: (step, formik, handlers) => {
