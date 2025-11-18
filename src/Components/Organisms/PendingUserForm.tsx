@@ -11,6 +11,7 @@ import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import BackHeader from "../Molecules/BackHeader";
+import PopupModal from "../Atoms/PopupModal";
 
 const PendingUserForm = () => {
 
@@ -26,6 +27,8 @@ const PendingUserForm = () => {
   const [loading, setLoading] = useState(true);
   // const [isActionDisabled, setIsActionDisabled] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [remark, setRemark] = useState("");
+  const [isRemarkModalOpen, setIsRemarkModalOpen] = useState(false);
 
   const handleSubmit = useThrottledFormSubmit<any>(() => {
     if (isSubmitting) return;
@@ -37,10 +40,13 @@ const PendingUserForm = () => {
 
     setIsSubmitting(true);
 
-    const payload = {
+    const payload: { hierarchyId: string | undefined; isApproved: boolean; remarks?: string } = {
       hierarchyId: id,
       isApproved: selectedAction === "APPROVED" ? true : false
     };
+    if (selectedAction === "REJECTED") {
+      payload.remarks = remark;
+    }
 
     dispatch(updateMasterItem({ key: KEY, url: `${URL}/approve-or-reject`, data: payload, mode: "POST" }))
       .unwrap()
@@ -106,108 +112,168 @@ const PendingUserForm = () => {
         validationSchema={null}
         onSubmit={handleSubmit}
       >
-        <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
-          <Grid gutter="lg">
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="id"
-                label="ID"
-                placeholder=""
-                required
-                disabled={readOnly}
-              />
-            </Grid.Col>
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="parentAccount"
-                label="Parent Account"
-                placeholder="Enter Parent ID"
-                disabled={readOnly}
-                allowSpecialChar={true}
-              />
-            </Grid.Col>
+        {({ handleSubmit }) => {
 
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="type"
-                label="User Type"
-                placeholder="Select User Type"
-                disabled={readOnly}
-              />
-            </Grid.Col>
+          return (
+            <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
+              <Grid gutter="lg">
+                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="id"
+                    label="ID"
+                    placeholder=""
+                    required
+                    disabled={readOnly}
+                  />
+                </Grid.Col>
+                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="parentAccount"
+                    label="Parent Account"
+                    placeholder="Enter Parent ID"
+                    disabled={readOnly}
+                    allowSpecialChar={true}
+                  />
+                </Grid.Col>
 
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="emailId"
-                label="Email ID"
-                placeholder="Enter Email"
-                disabled={readOnly}
-                allowSpecialChar={true}
-              />
-            </Grid.Col>
+                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="type"
+                    label="User Type"
+                    placeholder="Select User Type"
+                    disabled={readOnly}
+                  />
+                </Grid.Col>
 
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="name"
-                label="Name"
-                disabled={readOnly}
-                placeholder="Enter Name"
-              />
-            </Grid.Col>
+                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="emailId"
+                    label="Email ID"
+                    placeholder="Enter Email"
+                    disabled={readOnly}
+                    allowSpecialChar={true}
+                  />
+                </Grid.Col>
 
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="mobileNumber"
-                label="Moble Number"
-                disabled={readOnly}
-                placeholder="Enter Mobile Number"
-              />
-            </Grid.Col>
+                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="name"
+                    label="Name"
+                    disabled={readOnly}
+                    placeholder="Enter Name"
+                  />
+                </Grid.Col>
 
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="status"
-                label="Status"
-                placeholder="Select Status"
-                disabled={readOnly}
-              />
-            </Grid.Col>
-          </Grid>
+                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="mobileNumber"
+                    label="Moble Number"
+                    disabled={readOnly}
+                    placeholder="Enter Mobile Number"
+                  />
+                </Grid.Col>
 
-          {!loading && !fetchError && (
-            <div className="flex justify-center mt-8 gap-4">
-              <ButtonComponent
-                fullWidth={false}
-                radius={6}
-                borderColor="#fff"
-                variant="filled"
-                type="submit"
-                disabled={isSubmitting}
-                bgColor="#C30305"
-                textColor="#FFFFFF"
-                style={{ padding: "0px 30px", letterSpacing: 2 }}
-                onClick={() => setSelectedAction("REJECTED")}
+                <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="status"
+                    label="Status"
+                    placeholder="Select Status"
+                    disabled={readOnly}
+                  />
+                </Grid.Col>
+              </Grid>
+
+              {!loading && !fetchError && (
+                <div className="flex justify-center mt-8 gap-4">
+                  <ButtonComponent
+                    fullWidth={false}
+                    radius={6}
+                    borderColor="#fff"
+                    variant="filled"
+                    // type="submit"
+                    disabled={isSubmitting}
+                    bgColor="#C30305"
+                    textColor="#FFFFFF"
+                    style={{ padding: "0px 30px", letterSpacing: 2 }}
+                    onClick={() => {
+                      setSelectedAction("REJECTED");
+                      setIsRemarkModalOpen(true);
+                    }}
+                  >
+                    REJECT
+                  </ButtonComponent>
+
+                  <ButtonComponent
+                    fullWidth={false}
+                    radius={6}
+                    borderColor="#fff"
+                    variant="filled"
+                    type="submit"
+                    disabled={isSubmitting}
+                    bgColor="#24d12c"
+                    textColor="#FFFFFF"
+                    style={{ padding: "0px 30px", letterSpacing: 2 }}
+                    onClick={() => setSelectedAction("APPROVED")}
+                  >
+                    APPROVED
+                  </ButtonComponent>
+                </div>
+              )}
+
+              <PopupModal
+                opened={isRemarkModalOpen}
+                onClose={() => {
+                  setIsRemarkModalOpen(false);
+                  setRemark(""); // optional: clear remark on close
+                }}
+                size="md"
+                padding="md"
+                title="Enter Rejection Remark "
+                titleSize="16px"
+                titleWeight={600}
               >
-                REJECT
-              </ButtonComponent>
+                <textarea
+                  value={remark}
+                  onChange={(e) => setRemark(e.target.value)}
+                  placeholder="Enter rejection reason"
+                  className="w-full border rounded p-2 text-sm max-h-20 min-h-12" // adds height of 6rem
+                  minLength={5}
+                  maxLength={100}
+                />
 
-              <ButtonComponent
-                fullWidth={false}
-                radius={6}
-                borderColor="#fff"
-                variant="filled"
-                type="submit"
-                disabled={isSubmitting}
-                bgColor="#24d12c"
-                textColor="#FFFFFF"
-                style={{ padding: "0px 30px", letterSpacing: 2 }}
-                onClick={() => setSelectedAction("APPROVED")}
-              >
-                APPROVED
-              </ButtonComponent>
-            </div>
-          )}
-        </Form>
+                <div className="flex justify-end gap-4 mt-4">
+                  <ButtonComponent
+                    onClick={() => {
+                      setIsRemarkModalOpen(false);
+                      setRemark(""); // clear remark if you want to reset after cancel
+                    }}
+                    bgColor="#ccc"
+                    textColor="#000"
+                  >
+                    Cancel
+                  </ButtonComponent>
+
+                  <ButtonComponent
+                    onClick={() => {
+                      if (!remark.trim()) {
+                        toast.error("Remark is mandatory for rejection.");
+                      } else {
+                        setIsRemarkModalOpen(false);
+                        handleSubmit(); // calls your submit logic
+                      }
+                    }}
+                    type="submit"
+                    bgColor="#BF0204"
+                    textColor="#fff"
+                  >
+                    Submit
+                  </ButtonComponent>
+                </div>
+              </PopupModal>
+
+            </Form>
+          )
+        }}
       </Formik>
     </div>
   )
