@@ -25,6 +25,12 @@ const TableFilterRow = <T,>({
         const value = filterValues?.[String(key)] ?? "";
         if (!searchable) return <Table.Td key={String(key)} />;
         switch (filterType) {
+          case "none":
+            return (
+              <Table.Td key={String(key)}>
+                
+              </Table.Td>
+            );
           case "boolean":
             return (
               <Table.Td key={String(key)}>
@@ -59,6 +65,7 @@ const TableFilterRow = <T,>({
                       onFilterSubmit?.(String(key), "");
                     }
                   }}
+                  clearable
                 />
               </Table.Td>
             );

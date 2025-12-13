@@ -139,7 +139,6 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
                                 formik.setFieldValue("cityId", "", false); // Set to empty without validating
                             },
                         });
-                        console.log(formik.values);
 
                         return (
                             <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">

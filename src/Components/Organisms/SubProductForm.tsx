@@ -170,6 +170,7 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
                     placeholder="Select Product"
                     withAsterisk
                     required
+                    searchable
                     data={productDropdownData} //this will be replace with actual api data list {productName: "abc", productCode: "123", productId: 12}
                     disabled={loadingProductList}
                   />

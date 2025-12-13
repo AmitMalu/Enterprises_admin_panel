@@ -3,6 +3,7 @@ import { textField } from "../../Utils/ValidationUtils";
 import {
   dateRangeValidationSchema,
   GenericTableHeader,
+  walletTypeSelectData,
 } from "../../Utils/utils";
 import { DatesRangeValue } from "@mantine/dates";
 import moment from "moment";
@@ -31,7 +32,7 @@ export const initialValues = {
     moment().subtract(6, "days").toDate(), // from: 6 days ago
     moment().toDate(), // to: today
   ] as DatesRangeValue,
-  subProduct: "",
+  productId: "",
   hierarchy: "",
   subHierarchy: "",
   walletType: "POSTPAID",
@@ -41,9 +42,9 @@ export const initialValues = {
 // Yup schema
 export const TransactionReportSchema = Yup.object().shape({
   dateRange: dateRangeValidationSchema,
-  subProduct: textField("Sub Product", 100, true, true),
+  productId: textField("Product", 100, true, true),
   hierarchy: textField("Hierarchy", 100, true, true),
-  subHierarchy: textField("Hierarchy ID", 100, true, true),
+  subHierarchy: textField("Hierarchy ID", 100, false, true),
   walletType: textField("Wallet Type", 100, true, true),
   status: textField("Status", 100, false, true),
 });
@@ -52,10 +53,11 @@ export const transformToTransactionReportPayload = (values: any) => {
   const [fromDate, toDate] = values.dateRange || [];
 
   return {
-    hierarchyId: values.subHierarchy,
+    hierarchyType: values.hierarchy ?? "",
+    hierarchyId: values.subHierarchy ?? "",
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
-    subProductName: values?.subProduct,
+    productId: values?.productId ?? "",
     walletType: values.walletType ?? "",
     status: values.status ?? "ALL",
     page: 0,
@@ -75,15 +77,21 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
     renderType: "statusBadge",
     filterType: "boolean",
     filterOptions: [
-      { label: "PENDING", value: "PENDING" },
       { label: "SUCCESS", value: "SUCCESS" },
-      { label: "FAILED", value: "FAILED" },
+      { label: "FAILED", value: "FAILURE" },
+      { label: "PENDING", value: "PENDING" },
+      { label: "VENDOR PENDING", value: "VENDOR_PENDING" },
     ],
   },
   { key: "transactionDate", label: "Transaction Date", filterType: "date" },
-  { key: "transactionTime", label: "Transaction Time", filterType: "date" },
+  // { key: "transactionTime", label: "Transaction Time", filterType: "date" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },
-  { key: "walletType", label: "Wallet Type", filterType: "text" },
+  {
+    key: "walletType",
+    label: "Wallet Type",
+    filterType: "boolean",
+    filterOptions: walletTypeSelectData,
+  },
   {
     key: "actionOnBalanceAmount",
     label: "Action On Balance",

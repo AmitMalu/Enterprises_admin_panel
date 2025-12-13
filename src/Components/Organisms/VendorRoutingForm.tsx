@@ -104,16 +104,22 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                 validationSchema={Yup.object(validationSchema)}
                 onSubmit={handleSubmit}
             >
-                {({ values }) => {
+                {({ values, setFieldValue }) => {
+
                     const { subProductDropdownData, loadingSubProductList } = useSubProductList();
+                    const { vendorDropdownData, loadingVendorList } = useVendor({
+                        subProductId: String(values.subProductId),
+                        waitForSubProduct: true
+                    });
 
-                    const { vendorDropdownData, loadingVendorList } = useVendor();
-
-                    // const selectedVendors = [
-                    //     values.routingPriority1,
-                    //     values.routingPriority2,
-                    //     values.routingPriority3
-                    // ].filter(Boolean);
+                    // Reset vendor fields when subProduct changes by the user
+                    useEffect(() => {
+                        if (values.subProductId !== formData.subProductId) {
+                            setFieldValue("routingPriority1", "");
+                            setFieldValue("routingPriority2", "");
+                            setFieldValue("routingPriority3", "");
+                        }
+                    }, [values.subProductId, setFieldValue]);
 
                     const optionsForPriority1 = vendorDropdownData.filter(
                         (vendor: VendorOption) =>
@@ -153,6 +159,7 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
 
                                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikSelectComponent
+                                        key={`priority1-${values.subProductId}-${values.routingPriority1}`}
                                         name="routingPriority1"
                                         label="Routing Priority 1"
                                         placeholder="Select Routing Priority 1"
@@ -168,6 +175,7 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
 
                                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikSelectComponent
+                                        key={`priority2-${values.subProductId}-${values.routingPriority2}`}
                                         name="routingPriority2"
                                         label="Routing Priority 2"
                                         placeholder="Select Routing Priority 2"
@@ -183,6 +191,7 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
 
                                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikSelectComponent
+                                        key={`priority3-${values.subProductId}-${values.routingPriority3}`}
                                         name="routingPriority3"
                                         label="Routing Priority 3"
                                         placeholder="Select Routing Priority 3"

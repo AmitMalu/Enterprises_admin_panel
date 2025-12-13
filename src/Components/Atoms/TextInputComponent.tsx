@@ -100,6 +100,10 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
     if (capitalize) {
       newValue = newValue.toUpperCase();
     }
+    // Trim start and end spaces
+    newValue = newValue.trimStart(); // prevent leading space
+    // newValue = newValue.trim();      // if you want to also prevent trailing:
+
     onChange({
       ...event,
       target: {

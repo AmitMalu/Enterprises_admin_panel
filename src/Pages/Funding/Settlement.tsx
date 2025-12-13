@@ -185,7 +185,7 @@ const Settlement = () => {
             isSettlement: true
           });
 
-          const { vendorDropdownData, loadingVendorList } = useVendor();
+          const { vendorDropdownData, loadingVendorList } = useVendor({});
 
           return (
             <Form className="flex flex-col gap-2 mt-4">

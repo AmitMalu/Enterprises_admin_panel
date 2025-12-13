@@ -62,7 +62,7 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                         fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
                     ).unwrap();
 
-                    setFormData(transformStateListToFormData(data))
+                    setFormData(transformStateListToFormData(transformStateListToFormData(data)))
                 } catch (err: any) {
                     toast.error(err);
                     setFetchError(err);
@@ -173,15 +173,27 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                 </Grid.Col>
 
                                 {mode === "edit" && (
-                                    <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                                        <FormikSelectComponent
-                                            name="blocked"
-                                            label="Blocked"
-                                            placeholder="Select"
-                                            withAsterisk
-                                            data={booleanSelectData}
-                                        />
-                                    </Grid.Col>
+                                    <>
+                                        <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                            <FormikSelectComponent
+                                                name="blocked"
+                                                label="Blocked"
+                                                placeholder="Select"
+                                                withAsterisk
+                                                data={booleanSelectData}
+                                            />
+                                        </Grid.Col>
+
+                                        <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                            <FormikSelectComponent
+                                                name="isActive"
+                                                label="Active"
+                                                placeholder="Select isActive"
+                                                withAsterisk
+                                                data={booleanSelectData}
+                                            />
+                                        </Grid.Col>
+                                    </>
                                 )}
                             </Grid>
 

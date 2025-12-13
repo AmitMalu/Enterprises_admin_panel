@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import BackHeader from "../../Components/Molecules/BackHeader";
-import { IconBuilding, IconCashBanknote, IconFile, IconUserCheck } from "@tabler/icons-react";
+import { IconUserCheck } from "@tabler/icons-react";
 import { CustomTab } from "../../Components/Molecules/CustomTab";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
 import { fetchProfileInfo } from "../../Redux/Features/Auth/Thunk";
@@ -19,10 +19,10 @@ const Profile = () => {
 
   const tabList = [
     { value: "personal", label: "Personal Info", leftSection: <IconUserCheck size={18} /> },
-    { value: "address", label: "Address", leftSection: <IconBuilding size={18} /> },
-    { value: "outlet", label: "Outlet Address", leftSection: <IconBuilding size={18} /> },
-    { value: "bank", label: "Bank Details", leftSection: <IconCashBanknote size={18} /> },
-    { value: "kyc", label: "KYC Docs", leftSection: <IconFile size={18} /> },
+    // { value: "address", label: "Address", leftSection: <IconBuilding size={18} /> },
+    // { value: "outlet", label: "Outlet Address", leftSection: <IconBuilding size={18} /> },
+    // { value: "bank", label: "Bank Details", leftSection: <IconCashBanknote size={18} /> },
+    // { value: "kyc", label: "KYC Docs", leftSection: <IconFile size={18} /> },
   ];
 
   const renderContent = () => {

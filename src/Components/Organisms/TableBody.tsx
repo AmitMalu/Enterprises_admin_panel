@@ -189,6 +189,8 @@ const TableBody = <T,>({
 
             return hasAnyValue ? (
               <Table.Tr style={{ backgroundColor: "#EBF7F6" }}>
+                {/* Add one blank column if an extra cell is rendered above */}
+                {renderExtraRowCell && <Table.Td></Table.Td>}
                 {calculatedCells}
               </Table.Tr>
             ) : null;

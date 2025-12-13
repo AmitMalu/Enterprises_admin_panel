@@ -16,6 +16,7 @@ import {
     initialValues,
     MASTER_KEY,
     MASTER_URL,
+    transformCountryListToFormData,
     transformFormToCreateCountryMasterPayload,
     transformFormToUpdateCountryMasterPayload,
     validationSchema,
@@ -59,8 +60,7 @@ const CountryMasterForm = ({ mode }: CountryMasterFormProps) => {
                     const data = await dispatch(
                         fetchMasterById({ key: MASTER_KEY, endpoint: MASTER_URL, id })
                     ).unwrap();
-
-                    setFormData(data)
+                    setFormData(transformCountryListToFormData(data))
                 } catch (err: any) {
                     toast.error(err);
                     setFetchError(err);
@@ -123,15 +123,27 @@ const CountryMasterForm = ({ mode }: CountryMasterFormProps) => {
                         </Grid.Col>
 
                         {mode === "edit" && (
-                            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                                <FormikSelectComponent
-                                    name="blocked"
-                                    label="Blocked"
-                                    placeholder="Select"
-                                    withAsterisk
-                                    data={booleanSelectData}
-                                />
-                            </Grid.Col>
+                            <>
+                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                    <FormikSelectComponent
+                                        name="blocked"
+                                        label="Blocked"
+                                        placeholder="Select isBlocked"
+                                        withAsterisk
+                                        data={booleanSelectData}
+                                    />
+                                </Grid.Col>
+
+                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                    <FormikSelectComponent
+                                        name="isActive"
+                                        label="Active"
+                                        placeholder="Select isActive"
+                                        withAsterisk
+                                        data={booleanSelectData}
+                                    />
+                                </Grid.Col>
+                            </>
                         )}
                     </Grid>
 

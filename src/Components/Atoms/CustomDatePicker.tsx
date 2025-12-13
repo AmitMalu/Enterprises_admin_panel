@@ -45,10 +45,12 @@ function CustomDatePicker({
     placeholder = "Pick date",
     minDate,
     maxDate,
+    clearable = false,
     ...rest
 }: CustomDatePickerProps) {
     return (
         <DatePickerInput
+            clearable
             size="xs"
             value={value}
             onChange={onChange}

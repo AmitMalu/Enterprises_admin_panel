@@ -10,6 +10,7 @@ export interface CountryMasterFormType {
   countryName: string;
   countryCode: string;
   blocked: boolean;
+  isActive?: boolean;
 }
 
 export interface CountryMasterTableType extends CountryMasterFormType {
@@ -41,6 +42,7 @@ export const initialValues: CountryMasterFormType = {
   countryName: "",
   countryCode: "",
   blocked: false,
+  isActive: true,
 };
 
 export const validationSchema: Record<
@@ -50,6 +52,7 @@ export const validationSchema: Record<
   countryName: textField("Country Name", 50, true, true),
   countryCode: textField("Country Code", 50, true, true),
   blocked: Yup.boolean().default(false),
+  isActive: Yup.boolean().default(true),
 };
 
 export const headers: GenericTableHeader<CountryMasterTableType>[] = [
@@ -57,6 +60,7 @@ export const headers: GenericTableHeader<CountryMasterTableType>[] = [
   { key: "countryName", label: "Country Name", filterType: "text" },
   { key: "countryCode", label: "Country Code", filterType: "text" },
   { key: "blocked", label: "Blocked", filterType: "boolean" },
+  { key: "isActive", label: "Active", filterType: "boolean" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
@@ -84,7 +88,8 @@ export const transformCountryListToFormData = (
 ): CountryMasterFormType => ({
   countryName: raw.countryName ?? "",
   countryCode: raw.countryCode ?? "",
-  blocked: raw.blocked ?? "",
+  blocked: !!raw.blocked,
+  isActive: !!raw.isActive,
 });
 
 export const transformFormToCreateCountryMasterPayload = (

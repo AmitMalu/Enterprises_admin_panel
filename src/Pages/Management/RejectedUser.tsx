@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../../Redux/hooks";
 import { useEffect, useRef, useState } from "react";
-import { headers, KEY, URL, UserAuthTableType } from "../../Config/Management/UserAuthConfig";
+import { RejectedUserHeaders, KEY, URL, UserAuthTableType } from "../../Config/Management/UserAuthConfig";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
 import { toast } from "react-toastify";
@@ -9,6 +9,10 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
+import { IoArrowUndoSharp } from "react-icons/io5";
+import PopupModal from "../../Components/Atoms/PopupModal";
+import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 
 const RejectedUsers = () => {
 
@@ -17,11 +21,13 @@ const RejectedUsers = () => {
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
-    headers.map((h) => h.key as string)
+    RejectedUserHeaders.map((h) => h.key as string)
   );
   const dataRef = useRef<UserAuthTableType[] | null>(null);
-
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, loading, error, pagination, setPage, setPageSize } =
     useFetchMasterList<UserAuthTableType>({
@@ -72,21 +78,41 @@ const RejectedUsers = () => {
   };
 
   const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(headers.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
+    if (selectAll) {
+      setVisibleColumns(RejectedUserHeaders.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(resetMaster(KEY));
     setFilterValues({});
     setSubmittedFilter(null);
-    setVisibleColumns(headers.map((h) => h.key as string));
+    setVisibleColumns(RejectedUserHeaders.map((h) => h.key as string));
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
+
+  const handleConfirmRestore = () => {
+    if (isSubmitting || !selectedUserId) return;
+    setIsSubmitting(true);
+
+    dispatch(updateMasterItem({ key: KEY, url: `${URL}/move-pending/${selectedUserId}`, mode: "PUT" }))
+      .unwrap()
+      .then(() => {
+        toast.success("User restored to Pending successfully");
+        setRefreshKey((prev) => prev + 1); // Refresh table
+        setIsModalOpen(false);
+      })
+      .catch((err: any) => {
+        toast.error(err || "Failed to restore user");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        setSelectedUserId(null);
+      });
+  }
 
   useEffect(() => {
     dataRef.current = data;
@@ -101,7 +127,7 @@ const RejectedUsers = () => {
 
       {/* Toolbar */}
       <GenericMasterToolbar
-        headers={headers}
+        headers={RejectedUserHeaders}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
         onToggleAll={handleToggleAllColumns}
@@ -115,12 +141,27 @@ const RejectedUsers = () => {
       {/*Table */}
       {loading ? (
         // Render shimmer
-        <ShimmerTableRows rowCount={6} columnCount={headers.length} />
+        <ShimmerTableRows rowCount={6} columnCount={RejectedUserHeaders.length} />
       ) : (
         <GenericMasterTable<UserAuthTableType>
           data={data}
-          headers={headers.filter((h) =>
+          headers={RejectedUserHeaders.filter((h) =>
             visibleColumns.includes(h.key as string)
+          )}
+          renderExtraHeader={() => <>Action</>} // empty header for action column/>
+          renderExtraRowCell={(item) => (
+            <div className="flex justify-center gap-2 min-w-10">
+              <span
+                onClick={() => {
+                  setSelectedUserId(item.id); // or item.id, depending on your API
+                  setIsModalOpen(true);
+                }}
+                className="cursor-pointer"
+                title="Restore to Pending"
+              >
+                <IoArrowUndoSharp />
+              </span>
+            </div>
           )}
           pagination
           currentPage={pagination.currentPage}
@@ -136,6 +177,26 @@ const RejectedUsers = () => {
           onFilterSubmit={handleFilterSubmit}
         />
       )}
+
+      <PopupModal
+        opened={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Restore User to Pending Status"
+        titleSize="18px"
+        padding="md"
+        size="lg"
+      >
+        <p>Are you sure you want to move <strong>{selectedUserId}</strong> User back to Pending?</p>
+        <div className="flex justify-end gap-4 mt-4">
+          <ButtonComponent onClick={() => setIsModalOpen(false)} bgColor="#ccc" textColor="#000">
+            Cancel
+          </ButtonComponent>
+          <ButtonComponent onClick={handleConfirmRestore} bgColor="#BF0204" textColor="#fff">
+            Confirm
+          </ButtonComponent>
+        </div>
+      </PopupModal>
+
     </div>
   );
 };

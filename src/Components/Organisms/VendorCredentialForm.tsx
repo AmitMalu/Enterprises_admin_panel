@@ -112,7 +112,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                         loadingProductList,
                     } = useProductSubProduct({});
 
-                    const { vendorDropdownData, loadingVendorList } = useVendor();
+                    const { vendorDropdownData, loadingVendorList } = useVendor({});
 
                     useEffect(() => {
                         const fetchAdminDropdownList = async () => {
@@ -277,6 +277,31 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                         placeholder="Enter Password"
                                         // withAsterisk
                                         maxLength={50}
+                                    />
+                                </Grid.Col>
+
+                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                    <FormikTextInputComponent
+                                        name="callbackUrl"
+                                        label="Callback URL"
+                                        placeholder="Enter Callback URL"
+                                        withAsterisk
+                                        required
+                                        maxLength={150}
+                                    />
+                                </Grid.Col>
+
+                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                    <FormikSelectComponent
+                                        name="tokenType"
+                                        label="Token Type"
+                                        placeholder="Select Token Type"
+                                        withAsterisk
+                                        allowDeselect={false}
+                                        data={[
+                                            { label: "AES", value: "AES" },
+                                            { label: "JWT", value: "JWT" },
+                                        ]}
                                     />
                                 </Grid.Col>
 

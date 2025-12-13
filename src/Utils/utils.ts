@@ -12,7 +12,7 @@ import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 import CryptoJS from "crypto-js";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.2 (24-09)";
+export const DEV_APP_VERSION_LABEL = "v1.0.2 (18-11 5:30)";
 
 export function encryptCredentials(username: string, password: string) {
   const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
@@ -187,6 +187,12 @@ export const transactionStatusSelectData = [
   { label: "REJECTED", value: "REJECTED" },
 ];
 
+export const transactionStatusSelectData2 = [
+  { label: "PENDING", value: "PENDING" },
+  { label: "SUCCESS", value: "SUCCESS" },
+  { label: "FAILURE", value: "FAILURE" },
+];
+
 export const pageSizeSelectData = [
   { label: "5", value: "5" },
   { label: "10", value: "10" },
@@ -268,6 +274,33 @@ export interface HandleMasterFormSubmitProps<T> {
   entityName: string;
 }
 
+// utils/normalize.ts
+export const trimFormValues = <T>(values: T): T => {
+  if (typeof values !== "object" || values === null) return values;
+
+  const cleaned: Record<string, any> = {};
+
+  for (const key in values as Record<string, any>) {
+    const val = (values as Record<string, any>)[key];
+
+    if (typeof val === "string") {
+      cleaned[key] = val.trim(); // trim string
+    } else if (Array.isArray(val)) {
+      // map arrays and trim strings inside, recurse for objects
+      cleaned[key] = val.map((item) =>
+        typeof item === "string" ? item.trim() : trimFormValues(item)
+      );
+    } else if (typeof val === "object" && val !== null) {
+      // recurse for nested objects
+      cleaned[key] = trimFormValues(val);
+    } else {
+      cleaned[key] = val; // keep other types as-is
+    }
+  }
+
+  return cleaned as T;
+};
+
 export const handleMasterFormSubmit = async <T>({
   mode = "add",
   id,
@@ -285,12 +318,15 @@ export const handleMasterFormSubmit = async <T>({
   entityName = "Item",
 }: HandleMasterFormSubmitProps<T>) => {
   try {
+    // ✅ Sanitize values here
+    const normalizedValues = trimFormValues(values);
+
     const rawPayload =
       mode === "edit" && typeof transformUpdatePayload === "function"
-        ? await transformUpdatePayload(values)
+        ? await transformUpdatePayload(normalizedValues)
         : mode === "add" && typeof transformCreatePayload === "function"
-        ? await transformCreatePayload(values)
-        : values;
+        ? await transformCreatePayload(normalizedValues)
+        : normalizedValues;
 
     const payload = useFormData
       ? toFormData(rawPayload as Record<string, any>)

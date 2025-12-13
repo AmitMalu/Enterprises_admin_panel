@@ -9,6 +9,7 @@ export const textField = (
   allowSpecialChars = false
 ) => {
   let schema = Yup.string()
+    .transform((value) => (value ? value.trim() : value)) // Trim before validation
     .max(max, `${field} cannot exceed ${max} characters`)
     .nullable()
     .notRequired(); // allow null and undefined by default

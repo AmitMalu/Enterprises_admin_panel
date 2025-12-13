@@ -187,6 +187,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                         type="password"
                                         name="password"
                                         label="Password"
+                                        autoComplete="new-password"
                                         withAsterisk
                                         placeholder="Password"
                                         required

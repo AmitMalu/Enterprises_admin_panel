@@ -19,7 +19,7 @@ interface SettlementReportFormType {
   dateRange: DatesRangeValue;
   productId: string | number;
   subProductId: string | number;
-  vendorId: string | number;
+  // vendorId: string | number;
   walletType: string;
   tranStatus: string;
 }
@@ -28,27 +28,28 @@ export interface SettlementReportTableType {
   userId: string | number;
   mobileNo: string;
   amount: string | number;
-  product: string;
+  // product: string;
   subProductName: string;
+  vendor: string;
   txId: string;
   txStatus: string;
   txType: string;
   schemeName: string;
   remarks: string;
-  walletType: string;
-  updatedAt: string;
-  updateBy: string;
-  created: string;
-  userOutletName: string;
-  refNo: string;
-  txRef: string;
-  txMode: string;
-  txStart: string;
-  txEnd: string;
-  createdBy: string;
+  // walletType: string;
+  // created: string;
+  // userOutletName: string;
+  // refNo: string;
+  // txRef: string;
+  // txMode: string;
+  // txStart: string;
+  // txEnd: string;
+  dateOfTransaction: string;
   medium: string;
-  site: string;
-  uriPath: string;
+  updateBy: string;
+  updatedAt: string;
+  // site: string;
+  // uriPath: string;
 }
 
 export const settlementReportFilterInitialValues = {
@@ -58,7 +59,7 @@ export const settlementReportFilterInitialValues = {
   ] as DatesRangeValue,
   productId: "",
   subProductId: "",
-  vendorId: "",
+  // vendorId: "",
   walletType: "",
   tranStatus: "",
 };
@@ -69,8 +70,8 @@ export const settlementReportFilterValidationSchema: Record<
 > = {
   dateRange: dateRangeValidationSchema,
   productId: textField("Product", 100, true, true),
-  subProductId: textField("Sub Product", 100, true, true),
-  vendorId: textField("Vendor", 100, false, true),
+  subProductId: textField("Sub Product", 100, false, true),
+  // vendorId: textField("Vendor", 100, false, true),
   walletType: textField("Wallet Type", 150, false, true),
   tranStatus: textField("Transaction Status", 50, false, true),
 };
@@ -81,27 +82,28 @@ export const settlementReportHeaders: GenericTableHeader<SettlementReportTableTy
     { key: "userId", label: "User ID", filterType: "text" },
     { key: "mobileNo", label: "User Mobile No", filterType: "text" },
     { key: "amount", label: "Amount", filterType: "text" },
-    { key: "product", label: "Product", filterType: "text" },
+    // { key: "product", label: "Product", filterType: "text" },
     { key: "subProductName", label: "Sub Product", filterType: "text" },
+    { key: "vendor", label: "Vendor", filterType: "text" },
     { key: "txId", label: "Transaction Id", filterType: "text" },
     { key: "txType", label: "TX Type", filterType: "text" },
-    { key: "txStatus", label: "Status", filterType: "text" },
-    { key: "txRef", label: "TX Ref", filterType: "text" },
-    { key: "txMode", label: "TX Mode", filterType: "text" },
-    { key: "txStart", label: "TX Start", filterType: "text" },
-    { key: "txEnd", label: "TX End", filterType: "text" },
-    { key: "walletType", label: "Wallet Type", filterType: "text" },
-    { key: "created", label: "Created", filterType: "text" },
-    { key: "createdBy", label: "Created By", filterType: "text" },
-    { key: "updatedAt", label: "Last Update", filterType: "text" },
-    { key: "updateBy", label: "Update By", filterType: "text" },
+    { key: "txStatus", label: "Status", filterType: "none" },
+    // { key: "txRef", label: "TX Ref", filterType: "text" },
+    // { key: "txMode", label: "TX Mode", filterType: "text" },
+    // { key: "txStart", label: "TX Start", filterType: "text" },
+    // { key: "txEnd", label: "TX End", filterType: "text" },
+    // { key: "walletType", label: "Wallet Type", filterType: "text" },
+    // { key: "createdBy", label: "Created By", filterType: "text" },
     { key: "remarks", label: "Remarks", filterType: "text" },
     { key: "schemeName", label: "Scheme Name", filterType: "text" },
-    { key: "userOutletName", label: "User Outlet Name", filterType: "text" },
-    { key: "refNo", label: "Ref No", filterType: "text" },
     { key: "medium", label: "Medium", filterType: "text" },
-    { key: "site", label: "Site", filterType: "text" },
-    { key: "uriPath", label: "URI Path", filterType: "text" },
+    // { key: "updateBy", label: "Update By", filterType: "text" },
+    { key: "dateOfTransaction", label: "Created At", filterType: "date" },
+    { key: "updatedAt", label: "Updated At", filterType: "date" },
+    // { key: "refNo", label: "Ref No", filterType: "text" },
+    // { key: "userOutletName", label: "User Outlet Name", filterType: "text" },
+    // { key: "site", label: "Site", filterType: "text" },
+    // { key: "uriPath", label: "URI Path", filterType: "text" },
   ];
 
 export const transformToViewSettlementReportPayload = (values: any) => {
@@ -110,9 +112,9 @@ export const transformToViewSettlementReportPayload = (values: any) => {
   return {
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
-    // productId: values?.productId ?? "",
+    productId: values?.productId ?? "",
     subProductId: values.subProductId ?? "",
-    vendorId: values.vendorId ?? "",
+    // vendorId: values.vendorId ?? "",
     walletType: values.walletType ?? "",
     // reportType: "PRE_SETTLEMENT",
     tranStatus: values.tranStatus ? values.tranStatus : "POST SETTLEMENT",
@@ -125,9 +127,9 @@ export const transformToUnSettledTranxReportPayload = (values: any) => {
   return {
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
-    // productId: values?.productId ?? "",
+    productId: values?.productId ?? "",
     subProductId: values.subProductId ?? "",
-    vendorId: values.vendorId ?? "",
+    // vendorId: values.vendorId ?? "",
     walletType: values.walletType ?? "",
     // reportType: "PRE_SETTLEMENT",
     tranStatus: "SETTLEMENT PENDING",
@@ -140,9 +142,9 @@ export const transformToPendingTranxReportPayload = (values: any) => {
   return {
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
-    // productId: values?.productId ?? "",
+    productId: values?.productId ?? "",
     subProductId: values.subProductId ?? "",
-    vendorId: values.vendorId ?? "",
+    // vendorId: values.vendorId ?? "",
     walletType: values.walletType ?? "",
     // reportType: "PRE_SETTLEMENT",
     tranStatus: "PENDING",

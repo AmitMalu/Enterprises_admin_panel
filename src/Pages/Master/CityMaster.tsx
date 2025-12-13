@@ -18,6 +18,7 @@ import {
   headers,
   MASTER_KEY,
   MASTER_URL,
+  transformToCityTableType,
 } from "../../Config/Master/CityMasterConfig";
 
 const CityMaster = () => {
@@ -37,6 +38,7 @@ const CityMaster = () => {
     useFetchMasterList<CityMasterTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
+      transformDataFn: transformToCityTableType,
       filter: submittedFilter,
       refreshKey,
       defaultPageSize: 5
@@ -80,12 +82,12 @@ const CityMaster = () => {
   };
 
   const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(headers.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(resetMaster(MASTER_KEY));

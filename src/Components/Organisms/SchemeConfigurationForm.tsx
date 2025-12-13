@@ -1,8 +1,13 @@
-import SelectComponent from "../Atoms/SelectComponent";
+// import SelectComponent from "../Atoms/SelectComponent";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import TextComponent from "../Atoms/TextComponent";
 
-const SchemeConfigurationForm = () => {
+interface SchemeConfigurationFormProps {
+  slabSize: number;
+  onSlabSizeChange: (slabSize: number) => void;
+}
+
+const SchemeConfigurationForm = ({ slabSize, onSlabSizeChange }: SchemeConfigurationFormProps) => {
   return (
     <>
       <TextComponent
@@ -18,12 +23,12 @@ const SchemeConfigurationForm = () => {
           name="slabSize"
           label="Slab Size"
           placeholder="10,00,00"
-          onChange={() => {}}
-          value=""
+          onChange={(e) => onSlabSizeChange(Number(e.target.value) || 0)}
+          value={slabSize.toString()}
           size="sm"
         />
 
-        <SelectComponent
+        {/* <SelectComponent
           data={[
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
@@ -47,7 +52,7 @@ const SchemeConfigurationForm = () => {
           placeholder="Select One"
           onChange={() => {}}
           value=""
-        />
+        /> */}
       </div>
     </>
   );

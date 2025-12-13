@@ -35,6 +35,7 @@ export interface UserAuthFormType {
   status: string;
   createdBy: string;
   createdOn: string;
+  remarks?: string;
 }
 
 export interface UserAuthTableType extends UserAuthFormType {}
@@ -70,6 +71,24 @@ export const headers: GenericTableHeader<UserAuthTableType>[] = [
   { key: "name", label: "Name", filterType: "text" },
   { key: "mobileNumber", label: "Mobile Number", filterType: "number" },
   { key: "status", label: "Status", filterType: "text" },
+  { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+];
+
+export const RejectedUserHeaders: GenericTableHeader<UserAuthTableType>[] = [
+  { key: "id", label: "Id", filterType: "text" },
+  { key: "parentAccount", label: "Parent Account", filterType: "text" },
+  {
+    key: "type",
+    label: "User type",
+    filterType: "boolean",
+    filterOptions: userTypeFilterOptions,
+  },
+  { key: "emailId", label: "Email", filterType: "text" },
+  { key: "name", label: "Name", filterType: "text" },
+  { key: "mobileNumber", label: "Mobile Number", filterType: "number" },
+  { key: "status", label: "Status", filterType: "text" },
+  { key: "remarks", label: "Remark", filterType: "text" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
 ];

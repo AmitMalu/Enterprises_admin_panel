@@ -18,6 +18,7 @@ import {
   headers,
   MASTER_KEY,
   MASTER_URL,
+  transformToStateTableType,
 } from "../../Config/Master/StateMasterConfig";
 
 const StateMaster = () => {
@@ -37,6 +38,7 @@ const StateMaster = () => {
     useFetchMasterList<StateMasterTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
+      transformDataFn: transformToStateTableType,
       filter: submittedFilter,
       refreshKey,
       defaultPageSize: 5
@@ -80,12 +82,12 @@ const StateMaster = () => {
   };
 
   const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(headers.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(resetMaster(MASTER_KEY));

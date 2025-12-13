@@ -263,11 +263,11 @@ export const sidebarData = [
     icon: reportsSvg,
     initiallyOpened: false,
     links: [
-      {
-        label: "Live transaction Report",
-        link: "/report/live-transaction",
-        icon: reportsSvg,
-      },
+      // {
+      //   label: "Live transaction Report",
+      //   link: "/report/live-transaction",
+      //   icon: reportsSvg,
+      // },
       {
         label: "Transaction report",
         link: "/report/transaction",
@@ -308,44 +308,44 @@ export const sidebarData = [
         link: "/report/ledger-transaction",
         icon: reportsSvg,
       },
-      {
-        label: "API Performance report",
-        link: "/report/api-performance",
-        icon: reportsSvg,
-      },
-      {
-        label: "Account summary report",
-        link: "/report/account-summary",
-        icon: reportsSvg,
-      },
-      {
-        label: "Create Order Report",
-        link: "/report/create-order",
-        icon: reportsSvg,
-      },
-      {
-        label: "Cumilative report",
-        link: "/report/cumulative",
-        icon: reportsSvg,
-      },
-      {
-        label: "Download Report",
-        link: "/report/download",
-        icon: reportsSvg,
-      },
-      { label: "Email Report", link: "/report/email", icon: reportsSvg },
-      { label: "Refund Report", link: "/report/refund", icon: reportsSvg },
-      {
-        label: "Reconcillation report",
-        link: "/report/reconciliation",
-        icon: reportsSvg,
-      },
-      { label: "SMS Report", link: "/report/sms", icon: reportsSvg },
-      {
-        label: "Invoice report",
-        link: "/report/invoice",
-        icon: reportsSvg,
-      },
+      // {
+      //   label: "API Performance report",
+      //   link: "/report/api-performance",
+      //   icon: reportsSvg,
+      // },
+      // {
+      //   label: "Account summary report",
+      //   link: "/report/account-summary",
+      //   icon: reportsSvg,
+      // },
+      // {
+      //   label: "Create Order Report",
+      //   link: "/report/create-order",
+      //   icon: reportsSvg,
+      // },
+      // {
+      //   label: "Cumilative report",
+      //   link: "/report/cumulative",
+      //   icon: reportsSvg,
+      // },
+      // {
+      //   label: "Download Report",
+      //   link: "/report/download",
+      //   icon: reportsSvg,
+      // },
+      // { label: "Email Report", link: "/report/email", icon: reportsSvg },
+      // { label: "Refund Report", link: "/report/refund", icon: reportsSvg },
+      // {
+      //   label: "Reconcillation report",
+      //   link: "/report/reconciliation",
+      //   icon: reportsSvg,
+      // },
+      // { label: "SMS Report", link: "/report/sms", icon: reportsSvg },
+      // {
+      //   label: "Invoice report",
+      //   link: "/report/invoice",
+      //   icon: reportsSvg,
+      // },
     ],
   },
   {

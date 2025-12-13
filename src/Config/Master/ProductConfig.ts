@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { textField } from "../../Utils/ValidationUtils";
-import { GenericTableHeader } from "../../Utils/utils";
+import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
 
 export const MASTER_KEY = "products";
@@ -28,6 +28,10 @@ export interface ProductFormType {
 
 export interface ProductTableType extends ProductFormType {
   id: string;
+  createdOn?: string;
+  createdBy?: string;
+  editedOn?: string;
+  editedBy?: string;
 }
 
 export type CreateProductPayload = Omit<
@@ -159,6 +163,10 @@ export const headers: GenericTableHeader<ProductTableType>[] = [
   { key: "clusterMode", label: "Cluster Mode", filterType: "boolean" },
   { key: "blocked", label: "Blocked", filterType: "boolean" },
   { key: "active", label: "Active", filterType: "boolean" },
+  { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export function transformProductToTableType(
@@ -183,6 +191,10 @@ export function transformProductToTableType(
     clusterMode: product.clusterMode ?? false,
     blocked: product.blocked ?? false,
     active: product.active ?? false,
+    createdOn: formatDateTime(product.createdOn) ?? "",
+    createdBy: product.createdBy ?? "",
+    editedOn: formatDateTime(product.editedOn) ?? "",
+    editedBy: product.editedBy ?? "",
   };
 }
 

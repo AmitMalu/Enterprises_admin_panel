@@ -18,6 +18,7 @@ import {
   headers,
   MASTER_KEY,
   MASTER_URL,
+  transformToDistrictTableType,
 } from "../../Config/Master/DistrictMasterConfig";
 
 const DistrictMaster = () => {
@@ -37,6 +38,7 @@ const DistrictMaster = () => {
     useFetchMasterList<DistrictMasterTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
+      transformDataFn: transformToDistrictTableType,
       filter: submittedFilter,
       refreshKey,
       defaultPageSize: 5
@@ -80,12 +82,12 @@ const DistrictMaster = () => {
   };
 
   const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(headers.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(resetMaster(MASTER_KEY));

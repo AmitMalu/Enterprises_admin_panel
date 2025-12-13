@@ -8,7 +8,11 @@ import {
   zipValidation,
 } from "../../Utils/ValidationUtils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
-import { buildPermissions, GenericTableHeader, getIpAddress } from "../../Utils/utils";
+import {
+  buildPermissions,
+  GenericTableHeader,
+  getIpAddress,
+} from "../../Utils/utils";
 
 export const ADMIN_USER_KEY = "admin-user";
 export const ADMIN_USER_URL = API_ENDPOINTS.MANAGEMENT.ADMIN_USER;
@@ -123,10 +127,10 @@ export const headers: GenericTableHeader<AdminUserTableType>[] = [
   { key: "emailId", label: "Email", filterType: "text" },
   { key: "mobileNumber", label: "Mobile", filterType: "text" },
   { key: "dob", label: "Date of Birth", filterType: "date" },
-  { key: "createdOn", label: "Created On", filterType: "date" },
-  { key: "lastEditedOn", label: "Edited On", filterType: "date" },
   { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "lastEditedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const transformFormToCreateAdminUserPayload = async (

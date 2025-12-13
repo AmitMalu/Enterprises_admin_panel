@@ -1,10 +1,10 @@
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { Form, Formik } from "formik";
-import { Grid } from "@mantine/core";
+import { Grid, Loader } from "@mantine/core";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import FormikDateRangePicker from "../../Components/Molecules/FormikDateRangePicker";
 import { IconCalendar } from "@tabler/icons-react";
-import { useSubProductList } from "../../Utils/hooks/useSubProductList";
+// import { useSubProductList } from "../../Utils/hooks/useSubProductList";
 import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHierarchy";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
@@ -17,11 +17,22 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { GST_TDS_REPORT_KEY, GST_TDS_REPORT_URL, GstTdsheaders, GstTdsReportInitialValues, GstTdsReportSchema, GstTdsReportTableType, transformToGstTdsReportPayload } from "../../Config/Reports/GstTdsReportConfig";
+import { setPagination } from "../../Redux/Features/Masters/MastersSlice";
+import { useAppDispatch } from "../../Redux/hooks";
+import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
+import { RefreshIcon } from "../../assets/Icons";
 
 const GstTdsReport = () => {
 
+  const dispatch = useAppDispatch();
+
   const [reportPayload, setReportPayload] = useState<any>(null);
   const dataRef = useRef<GstTdsReportTableType[] | null>(null);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  // const [refreshKey, setRefreshKey] = useState(0);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
 
   const {
     data,
@@ -50,9 +61,29 @@ const GstTdsReport = () => {
     exportToCsv(currentData, "GstTds-report");
   };
 
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: GST_TDS_REPORT_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
+      })
+    );
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
+  };
+
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
+
+  useEffect(() => {
+    if (submittedFilter) {
+      setReportPayload((prev: any) => ({ ...prev, ...submittedFilter }));
+    }
+  }, [submittedFilter])
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -62,6 +93,7 @@ const GstTdsReport = () => {
 
       <GenericMasterToolbar
         onExport={handleExportClick}
+        onFilter={() => setFilterVisible((prev) => !prev)}
         loading={loading}
         error={error ? error.toString() : null}
       />
@@ -69,10 +101,15 @@ const GstTdsReport = () => {
       <Formik
         initialValues={GstTdsReportInitialValues}
         validationSchema={Yup.object(GstTdsReportSchema)}
-        onSubmit={throttledSubmit}
+        onSubmit={(values) => {
+          setFilterValues({})
+          setSubmittedFilter(null)
+          throttledSubmit(values)
+        }}
       >
         {({ values, setFieldValue }) => {
-          const { subProductDropdownData, loadingSubProductList, subProductError } = useSubProductList()
+          const { productDropdownData, loadingProductList, refetchProducts } = useProductSubProduct({});
+
           const { hierarchyList, loadingHierarchyList, subHierarchyList, loadingSubHierarchyList, subHierarchyKey } = useHierarchySubHierarchy({
             selectedHierarchyCode: values.hierarchy,
             onSubHierarchyReset: () => setFieldValue("hierarchyId", "")
@@ -96,20 +133,48 @@ const GstTdsReport = () => {
 
                 <Grid.Col span={{ base: 3, md: 2, lg: 1.5 }}>
                   <FormikSelectComponent
-                    name="subProduct"
+                    name="productId"
+                    label="Product"
+                    placeholder="Select Product"
                     size="xs"
-                    label="Sub Product"
-                    placeholder="Select Sub Product"
-                    allowDeselect={true}
-                    searchable={true}
-                    nothingFoundMessage="No Sub Product found"
                     withAsterisk
                     required
-                    data={subProductDropdownData?.map(item => ({
-                      label: item?.label,
-                      value: item?.label
-                    }))}
-                    disabled={loadingSubProductList || !!subProductError}
+                    allowDeselect={false}
+                    searchable={true}
+                    data={productDropdownData}
+                    disabled={loadingProductList}
+                    rightSection={
+                      <>
+                        {loadingProductList && (
+                          <Loader size={14} color="blue" />
+                        )}
+                        {!loadingProductList && productDropdownData.length < 1 && (
+                          <div
+                            onClick={refetchProducts}
+                            className="cursor-pointer"
+                            style={{ pointerEvents: "auto", display: "flex", alignItems: "center" }}
+                            title="Refresh Products"
+                          >
+                            <RefreshIcon />
+                          </div>
+                        )}
+                      </>
+                    }
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
+                  <FormikSelectComponent
+                    name="reportType"
+                    size="xs"
+                    label="Report Type"
+                    placeholder="Select Report Type"
+                    required
+                    withAsterisk
+                    data={[
+                      { label: "GST", value: "GST" },
+                      { label: "TDS", value: "TDS" },
+                    ]}
                   />
                 </Grid.Col>
 
@@ -144,8 +209,6 @@ const GstTdsReport = () => {
                     searchable={true}
                     nothingFoundMessage="Nothing Found"
                     disabled={loadingSubHierarchyList}
-                    withAsterisk
-                    required
                   />
                 </Grid.Col>
 
@@ -153,8 +216,6 @@ const GstTdsReport = () => {
                   <FormikSelectComponent
                     name="walletType"
                     size="xs"
-                    required
-                    withAsterisk
                     label="Wallet Type"
                     placeholder="Select Wallet Type"
                     allowDeselect={true}
@@ -162,22 +223,6 @@ const GstTdsReport = () => {
                     data={[
                       { label: "PREPAID", value: "PREPAID" },
                       { label: "POSTPAID", value: "POSTPAID" },
-                    ]}
-                  />
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
-                  <FormikSelectComponent
-                    name="reportType"
-                    size="xs"
-                    label="Report Type"
-                    placeholder="Select Report Type"
-                    allowDeselect={true}
-                    required
-                    withAsterisk
-                    data={[
-                      { label: "GST", value: "GST" },
-                      { label: "TDS", value: "TDS" },
                     ]}
                   />
                 </Grid.Col>
@@ -221,6 +266,10 @@ const GstTdsReport = () => {
           pageSize={pagination.pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+          filterVisible={filterVisible}
+          filterValues={filterValues}
+          onFilterChange={handleFilterChange}
+          onFilterSubmit={handleFilterSubmit}
         />
       )}
     </div>

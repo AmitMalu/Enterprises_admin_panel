@@ -1,10 +1,10 @@
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { Form, Formik } from "formik";
-import { Grid } from "@mantine/core";
+import { Grid, Loader } from "@mantine/core";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import FormikDateRangePicker from "../../Components/Molecules/FormikDateRangePicker";
 import { IconCalendar } from "@tabler/icons-react";
-import { useSubProductList } from "../../Utils/hooks/useSubProductList";
+// import { useSubProductList } from "../../Utils/hooks/useSubProductList";
 import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHierarchy";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { headers, initialValues, TransactionReportSchema, TransactionReportTableType, transformToTransactionReportPayload, TRANX_REPORT_KEY, TRANX_REPORT_URL } from "../../Config/Reports/TransactionReportConfig";
@@ -16,11 +16,21 @@ import { useEffect, useRef, useState } from "react";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../Redux/hooks";
+import { setPagination } from "../../Redux/Features/Masters/MastersSlice";
+import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
+import { RefreshIcon } from "../../assets/Icons";
 
 const TransactionReport = () => {
+  const dispatch = useAppDispatch();
 
   const [reportPayload, setReportPayload] = useState<any>(null);
   const dataRef = useRef<TransactionReportTableType[] | null>(null);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  // const [refreshKey, setRefreshKey] = useState(0);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
 
   const {
     data,
@@ -49,9 +59,29 @@ const TransactionReport = () => {
     exportToCsv(currentData, "Transaction-report");
   };
 
+  const handleFilterChange = (key: string, value: any) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleFilterSubmit = (key: string, value: any) => {
+    dispatch(
+      setPagination({
+        key: TRANX_REPORT_KEY,
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
+      })
+    );
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
+  };
+
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
+
+  useEffect(() => {
+    if (submittedFilter) {
+      setReportPayload((prev: any) => ({ ...prev, ...submittedFilter }));
+    }
+  }, [submittedFilter])
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
@@ -61,6 +91,7 @@ const TransactionReport = () => {
 
       <GenericMasterToolbar
         onExport={handleExportClick}
+        onFilter={() => setFilterVisible((prev) => !prev)}
         loading={loading}
         error={error ? error.toString() : null}
       />
@@ -68,10 +99,16 @@ const TransactionReport = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={TransactionReportSchema}
-        onSubmit={throttledSubmit}
+        onSubmit={(values) => {
+          setFilterValues({})
+          setSubmittedFilter(null)
+          throttledSubmit(values)
+        }}
       >
         {({ values, setFieldValue }) => {
-          const { subProductDropdownData, loadingSubProductList, subProductError } = useSubProductList()
+
+          const { productDropdownData, loadingProductList, refetchProducts } = useProductSubProduct({});
+
           const { hierarchyList, loadingHierarchyList, subHierarchyList, loadingSubHierarchyList, subHierarchyKey } = useHierarchySubHierarchy({
             selectedHierarchyCode: values.hierarchy,
             onSubHierarchyReset: () => setFieldValue("subHierarchy", "")
@@ -95,19 +132,33 @@ const TransactionReport = () => {
 
                 <Grid.Col span={{ base: 3, md: 2, lg: 1.5 }}>
                   <FormikSelectComponent
-                    name="subProduct"
+                    name="productId"
+                    label="Product"
+                    placeholder="Select Product"
                     size="xs"
-                    allowDeselect={true}
-                    searchable={true}
-                    label="Sub Product"
-                    placeholder="Select Sub Product"
                     withAsterisk
                     required
-                    data={subProductDropdownData?.map(item => ({
-                      label: item?.label,
-                      value: item?.label
-                    }))}
-                    disabled={loadingSubProductList || !!subProductError}
+                    allowDeselect={false}
+                    searchable={true}
+                    data={productDropdownData}
+                    disabled={loadingProductList}
+                    rightSection={
+                      <>
+                        {loadingProductList && (
+                          <Loader size={14} color="blue" />
+                        )}
+                        {!loadingProductList && productDropdownData.length < 1 && (
+                          <div
+                            onClick={refetchProducts}
+                            className="cursor-pointer"
+                            style={{ pointerEvents: "auto", display: "flex", alignItems: "center" }}
+                            title="Refresh Products"
+                          >
+                            <RefreshIcon />
+                          </div>
+                        )}
+                      </>
+                    }
                   />
                 </Grid.Col>
 
@@ -116,7 +167,6 @@ const TransactionReport = () => {
                     name="hierarchy"
                     size="xs"
                     label="Hierarchy"
-                    allowDeselect={true}
                     searchable={true}
                     placeholder="Select Hierarchy Type"
                     nothingFoundMessage="Nothing Found"
@@ -142,8 +192,8 @@ const TransactionReport = () => {
                       value: String(item.id),
                     }))}
                     disabled={loadingSubHierarchyList}
-                    withAsterisk
-                    required
+                  // withAsterisk
+                  // required
                   />
                 </Grid.Col>
 
@@ -152,7 +202,6 @@ const TransactionReport = () => {
                     name="walletType"
                     size="xs"
                     required
-                    allowDeselect={true}
                     nothingFoundMessage="Nothing Found"
                     withAsterisk
                     label="Wallet Type"
@@ -164,12 +213,11 @@ const TransactionReport = () => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
+                {/* <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
                   <FormikSelectComponent
                     name="status"
                     size="xs"
                     searchable={true}
-                    allowDeselect={true}
                     nothingFoundMessage="Nothing Found"
                     label="Status"
                     placeholder="Select Status"
@@ -180,9 +228,9 @@ const TransactionReport = () => {
                       { label: "PENDING", value: "PENDING" },
                     ]}
                   />
-                </Grid.Col>
+                </Grid.Col> */}
 
-                <Grid.Col span={{ base: 3, md: 10, lg: 1.5 }}>
+                <Grid.Col span="auto">
                   <div className="flex justify-end items-center mt-4">
                     {<ButtonComponent
                       fontSize="14"
@@ -203,7 +251,6 @@ const TransactionReport = () => {
             </Form>
           )
         }}
-
       </Formik>
 
       {loading ? (
@@ -221,6 +268,10 @@ const TransactionReport = () => {
           pageSize={pagination.pageSize}
           pageSizeOptions={pageSizeSelectData}
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
+          filterVisible={filterVisible}
+          filterValues={filterValues}
+          onFilterChange={handleFilterChange}
+          onFilterSubmit={handleFilterSubmit}
         />
       )}
     </div>

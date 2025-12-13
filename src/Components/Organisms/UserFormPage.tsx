@@ -22,6 +22,8 @@ import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit"
 import BackHeader from "../Molecules/BackHeader";
 import { AdhaarPanLinkApi, AdhaarValidationApi, PanValidationApi } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
+import PopupModal from "../Atoms/PopupModal";
+import ButtonComponent from "../Atoms/ButtonComponent";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
@@ -29,6 +31,8 @@ const UserFormPage = () => {
   const { type } = useParams<{ type: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
 
   const isValidType = (type: string): type is UserType => {
     return type in UserConfig;
@@ -131,23 +135,27 @@ const UserFormPage = () => {
     handleFormSubmit(args);
   }, 5000); // 3 seconds delay
 
+  const handleBack = (formik?: FormikProps<any>) => {
+    // Check if form is dirty (user has modified anything)
+    if (formik && formik.dirty) {
+      setIsConfirmOpen(true);
+    } else {
+      navigate("/management/user/create");
+    }
+  };
+
+  const storedUser = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  const hierarchyId = storedUser?.hierarchyId || "";
+
   return (
     <div className="p-4 w-full h-[calc(100vh-90px)] flex flex-col">
-      {/* Header Form Type */}
-      <BackHeader
-        title={`${capitalizeWords(type)} Form`}
-        backPath="/management/user/create"
-      />
-
-      {/* Sub Heading */}
-      <BreadCrumb type={`${type} Form`} text="Management" />
-
-      {/* Stepper */}
-      <FormStepper steps={config.steps} activeStep={activeStep} />
-
       {/* Formik Wrapper */}
       <Formik
-        initialValues={masterInitialValues}
+        initialValues={{
+          ...masterInitialValues,
+          parentAccount: hierarchyId, // ✅ dynamically inject before Formik mounts
+        }}
+        enableReinitialize
         validationSchema={getValidationSchema(userType, activeStep)}
         // validationSchema={null}
         onSubmit={async (values, formikHelpers) => {
@@ -173,32 +181,50 @@ const UserFormPage = () => {
           }
         }}
       >
-        {(formik: FormikProps<any>) => (
-          // Scrollable Form Content area
-          <Form className="flex-1 overflow-auto scrollbar-hide py-2 xl:py-4 px-4 bg-white rounded-2xl">
-            {/* Form Heading */}
-            <div className="mb-4">
-              <TextComponent fontFamily="Inter" fontSize={20} fontWeight={500}>
-                {config.steps[activeStep]}
-              </TextComponent>
-            </div>
+        {(formik: FormikProps<any>) => {
+          console.log(formik.errors);
 
-            {/* Render the actual form for current step */}
-            {config.renderStepForm(activeStep, formik, {
-              onAadhaarVerify: handleAadhaarVerify,
-              onPanVerify: handlePanVerify,
-            })}
+          return (
+            // Scrollable Form Content area
+            <>
+              {/* Header Form Type */}
+              <BackHeader
+                title={`${capitalizeWords(type)} Form`}
+                onBack={() => handleBack(formik)}
+              />
 
-            {/* Buttons */}
-            <FormStepperButton
-              activeStep={activeStep}
-              maxSteps={config.steps.length}
-              onBack={() => setActiveStep((prev) => prev - 1)}
-              onNext={() => formik.handleSubmit()}
-              onFinalStep={() => formik.handleSubmit()}
-            />
-          </Form>
-        )}
+              {/* Sub Heading */}
+              <BreadCrumb type={`${type} Form`} text="Management" />
+
+              {/* Stepper */}
+              <FormStepper steps={config.steps} activeStep={activeStep} />
+
+              <Form className="flex-1 overflow-auto scrollbar-hide py-2 xl:py-4 px-4 bg-white rounded-2xl">
+                {/* Form Heading */}
+                <div className="mb-4">
+                  <TextComponent fontFamily="Inter" fontSize={20} fontWeight={500}>
+                    {config.steps[activeStep]}
+                  </TextComponent>
+                </div>
+
+                {/* Render the actual form for current step */}
+                {config.renderStepForm(activeStep, formik, {
+                  onAadhaarVerify: handleAadhaarVerify,
+                  onPanVerify: handlePanVerify,
+                })}
+
+                {/* Buttons */}
+                <FormStepperButton
+                  activeStep={activeStep}
+                  maxSteps={config.steps.length}
+                  onBack={() => setActiveStep((prev) => prev - 1)}
+                  onNext={() => formik.handleSubmit()}
+                  onFinalStep={() => formik.handleSubmit()}
+                />
+              </Form>
+            </>
+          )
+        }}
       </Formik>
 
       {/* Success Modal */}
@@ -206,6 +232,42 @@ const UserFormPage = () => {
         opened={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
       />
+
+      <PopupModal
+        opened={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        size="lg"
+        padding="md"
+      >
+        <div className="flex flex-col gap-4">
+          <TextComponent fontSize={18} color="gray" align="center">
+            Do you really want to go back? All entered details will be lost.
+          </TextComponent>
+
+          <div className="flex justify-end gap-3 mt-4">
+            <ButtonComponent
+              variant="outline"
+              bgColor="#f1f1f1"
+              fontSize="16"
+              textColor="#333"
+              onClick={() => setIsConfirmOpen(false)}
+            >
+              Stay on Page
+            </ButtonComponent>
+            <ButtonComponent
+              bgColor="#C30305"
+              textColor="#fff"
+              fontSize="16"
+              onClick={() => {
+                setIsConfirmOpen(false);
+                navigate("/management/user/create")
+              }}
+            >
+              Discard & Go Back
+            </ButtonComponent>
+          </div>
+        </div>
+      </PopupModal>
     </div>
   );
 };

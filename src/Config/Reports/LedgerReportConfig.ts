@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import {
   dateRangeValidationSchema,
   GenericTableHeader,
-  transactionStatusSelectData,
+  transactionStatusSelectData2,
 } from "../../Utils/utils";
 import { DatesRangeValue } from "@mantine/dates";
 import moment from "moment";
@@ -103,7 +103,7 @@ export const LedgerReportHeaders: GenericTableHeader<LedgerReportTableType>[] =
       key: "tranStatus",
       label: "Transaction Status",
       filterType: "boolean",
-      filterOptions: transactionStatusSelectData,
+      filterOptions: transactionStatusSelectData2,
     },
     {
       key: "actionOnBalanceAmount",

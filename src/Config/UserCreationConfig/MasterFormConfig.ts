@@ -50,6 +50,7 @@ export const masterInitialValues = {
   bankHolderName: "",
   ifsc: "",
   branchName: "",
+  isBankVerified: false,
   websiteURL: "", // Enterprise-specific
   businessDesc: "", // Enterprise-specific
 
@@ -77,6 +78,10 @@ export const masterInitialValues = {
   allowPostpaidCards: false,
   postpaidCardName: "",
   isAdmin: false,
+
+  //Retailer Specific
+  longitude: "",
+  latitude: "",
 
   // Admin-only
   userName: "",
@@ -115,9 +120,10 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   bankName: textField("Bank Name", 50, true),
   accountNumber: accountNumberValidation,
   ifsc: ifscValidation,
-  branchName: textField("Branch Name", 50, true, true),
+  branchName: textField("Branch Name", 50, false, true),
   bankHolderName: textField("Bank Holder Name", 100, true),
-  websiteURL: websiteValidation,
+  isBankVerified: Yup.boolean(),
+  websiteURL: websiteValidation.required("Website URL is required"),
   businessDesc: textField("Business Description", 500, true, true),
 
   // Documents
@@ -166,6 +172,20 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   allowPostpaidCards: Yup.boolean(),
   postpaidCardName: textField("Postpaid Card Name", 50, true),
   isAdmin: Yup.boolean(),
+
+  // Retailer Specific
+  longitude: Yup.string()
+    .matches(
+      /^-?(180(\.0{1,6})?|1?[0-7]?\d(\.\d{1,6})?)$/,
+      "Longitude must be between -180 and 180 with up to 6 decimal places"
+    )
+    .required("Longitude is required"),
+  latitude: Yup.string()
+    .matches(
+      /^-?(90(\.0{1,6})?|[1-8]?\d(\.\d{1,6})?)$/,
+      "Latitude must be between -90 and 90 with up to 6 decimal places"
+    )
+    .required("Latitude is required"),
 
   // Admin-only
   userName: usernamePhoneEmailValidation,
@@ -287,24 +307,18 @@ export function transformUserCreationPayload(
     zipCode: values.outletZipcode || "",
   };
 
-  const bankDetails =
-    userType === "retailer"
-      ? {
-          bankName: values.bankName || "",
-          bankAccountNumber: values.accountNumber || "",
-          ifscCode: values.ifsc || "",
-          bankHolderName: values.bankHolderName || "",
-        }
-      : {
-          bankName: values.bankName || "",
-          bankAccountNumber: values.accountNumber || "",
-          ifscCode: values.ifsc || "",
-          branchName: values.branchName || "",
-        };
+  const bankDetails = {
+    bankName: values.bankName || "",
+    bankAccountNumber: values.accountNumber || "",
+    ifscCode: values.ifsc || "",
+    bankHolderName: values.bankHolderName || "",
+    isVerified: values.isBankVerified || false,
+    // branchName: values.branchName || "",
+  };
 
   switch (userType) {
     case "partner":
-    case "retailer":
+    // case "retailer":
     case "distributor":
     case "super-distributor":
       return {
@@ -315,6 +329,19 @@ export function transformUserCreationPayload(
           outletName: values.outletName || "",
         },
         bankDetails,
+      };
+
+    case "retailer":
+      return {
+        ...basePayload,
+        address,
+        outletAddress: {
+          ...outletAddress,
+          outletName: values.outletName || "",
+        },
+        bankDetails,
+        longitude: values.longitude || "",
+        latitude: values.latitude || "",
       };
 
     case "enterprise":
