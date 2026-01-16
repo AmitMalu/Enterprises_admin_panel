@@ -18,10 +18,14 @@ export interface PrefundingFormType {
   ipAddress: string;
   mobileNumber: string;
   status: string;
+  remarks: string;
 }
 
 export interface PrefundingTableType extends PrefundingFormType {
   id: string | number;
+  createDateTime: string;
+  approveOrRejectDate: string;
+  approveOrRejectTime: string;
 }
 
 export const initialValues: PrefundingFormType = {
@@ -36,6 +40,7 @@ export const initialValues: PrefundingFormType = {
   ipAddress: "",
   mobileNumber: "",
   status: "pending",
+  remarks: "",
 };
 
 export const validationSchema: Record<keyof PrefundingFormType, Yup.AnySchema> =
@@ -51,6 +56,7 @@ export const validationSchema: Record<keyof PrefundingFormType, Yup.AnySchema> =
     ipAddress: textField("Client IP", 150, false, true),
     mobileNumber: textField("Partner Mobile Number", 150, false, true),
     status: textField("Request Status", 150, false, true).default("pending"),
+    remarks: textField("Remark", 250, false, true),
   };
 
 export const headers: GenericTableHeader<PrefundingTableType>[] = [
@@ -78,5 +84,17 @@ export const headers: GenericTableHeader<PrefundingTableType>[] = [
       { label: "APPROVE", value: "approve" },
       { label: "REJECT", value: "reject" },
     ],
+  },
+  { key: "remarks", label: "Remark", filterType: "text", copyable: true },
+  { key: "createDateTime", label: "Created Date Time", filterType: "date" },
+  {
+    key: "approveOrRejectDate",
+    label: "Approve Or Reject Date ",
+    filterType: "date",
+  },
+  {
+    key: "approveOrRejectTime",
+    label: "Approve Or Reject Time",
+    filterType: "text",
   },
 ];
