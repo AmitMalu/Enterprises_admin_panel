@@ -13,6 +13,7 @@ export interface ProductFormType {
   isShow: false;
   hasCharges: false;
   isCommissions: false;
+  transactionType?: "CREDIT" | "DEBIT" | "";
   isInventory: false;
   isSettlement: false;
   isVirtual: false;
@@ -39,7 +40,7 @@ export type CreateProductPayload = Omit<
   "isInventory" | "isVirtual" | "isShow"
 > & {
   selectIsCommission: string;
-  transactionType: string;
+  transactionType?: "CREDIT" | "DEBIT" | "";
   dashboardUrl: string;
   dashboardUrlForApk: string;
   dashboardImage: string;
@@ -69,7 +70,7 @@ export type UpdateProductPayload = Omit<
   "isInventory" | "isVirtual" | "isShow"
 > & {
   selectIsCommission: string;
-  transactionType: string;
+  transactionType?: "CREDIT" | "DEBIT" | "";
   dashboardUrl: string;
   dashboardUrlForApk: string;
   dashboardImage: string;
@@ -107,6 +108,7 @@ export const initialValues: ProductFormType = {
   isShow: false,
   hasCharges: false,
   isCommissions: false,
+  transactionType: "",
   isInventory: false,
   isSettlement: false,
   isVirtual: false,
@@ -127,6 +129,9 @@ export const validationSchema: Record<keyof ProductFormType, Yup.AnySchema> = {
   isShow: Yup.boolean().required("Is Show is required"),
   hasCharges: Yup.boolean().required("Has Charges is required"),
   isCommissions: Yup.boolean().required("Is Commissions is required"),
+  transactionType: Yup.string()
+    .oneOf(["CREDIT", "DEBIT"], "Invalid Transaction Type")
+    .required("Transaction Type is required"),
   isInventory: Yup.boolean().required("Is Inventory is required"),
   isSettlement: Yup.boolean().required("Is Settlement is required"),
   isVirtual: Yup.boolean().required("Is Virtual is required"),
@@ -152,6 +157,15 @@ export const headers: GenericTableHeader<ProductTableType>[] = [
   { key: "isShow", label: "Is Show", filterType: "boolean" },
   { key: "hasCharges", label: "Has Charges", filterType: "boolean" },
   { key: "isCommissions", label: "Is Commissions", filterType: "boolean" },
+  {
+    key: "transactionType",
+    label: "Transaction Type",
+    filterType: "boolean",
+    filterOptions: [
+      { label: "CREDIT", value: "CREDIT" },
+      { label: "DEBIT", value: "DEBIT" },
+    ],
+  },
   { key: "isInventory", label: "Is Inventory", filterType: "boolean" },
   { key: "isSettlement", label: "Is Settlement", filterType: "boolean" },
   { key: "isVirtual", label: "Is Virtual", filterType: "boolean" },
@@ -180,6 +194,7 @@ export function transformProductToTableType(
     isShow: product.inventory?.isShow ?? false,
     hasCharges: product.hasCharges ?? false,
     isCommissions: product.isCommissions ?? false,
+    transactionType: product.transactionType || "",
     isInventory: product.inventory?.isInventory ?? false,
     isSettlement: product.isSettlement ?? false,
     isVirtual: product.inventory?.isVirtual ?? false,
@@ -208,6 +223,7 @@ export function transformProductToFormData(
     isShow: product.inventory?.isShow ?? false,
     hasCharges: product.hasCharges ?? false,
     isCommissions: product.isCommissions ?? false,
+    transactionType: product.transactionType ?? "",
     isInventory: product.inventory?.isInventory ?? false,
     isSettlement: product.isSettlement ?? false,
     isVirtual: product.inventory?.isVirtual ?? false,
@@ -230,7 +246,7 @@ export const transformFormToCreateProductPayload = (
     ...rest, // this brings all remaining fields from formData
     isCommissions: formData.isCommissions,
     selectIsCommission: "Fixed",
-    transactionType: "UPI",
+    transactionType: formData.transactionType || "",
     dashboardUrl: "https://google.com/", // Dummy default
     dashboardUrlForApk: "https://google.com/apk", // Dummy default
     dashboardImage: "https://google.com/image.png", // Dummy default
@@ -264,7 +280,7 @@ export const transformFormToUpdateProductPayload = (
     ...rest, // this brings all remaining fields from formData
     isCommissions: formData.isCommissions,
     selectIsCommission: "Fixed",
-    transactionType: "UPI",
+    transactionType: formData.transactionType || "",
     dashboardUrl: "https://google.com/", // Dummy default
     dashboardUrlForApk: "https://google.com/apk", // Dummy default
     dashboardImage: "https://google.com/image.png", // Dummy default

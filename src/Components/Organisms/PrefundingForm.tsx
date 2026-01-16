@@ -37,7 +37,7 @@ const PrefundingForm = () => {
   const [isActionDisabled, setIsActionDisabled] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleSubmit = useThrottledFormSubmit<any>(() => {
+  const handleSubmit = useThrottledFormSubmit<any>((values) => {
     if (isSubmitting) return;
 
     if (!selectedAction) {
@@ -58,6 +58,7 @@ const PrefundingForm = () => {
       approveOrRejectHierarchyId: String(adminHierarchyId),
       fundRequestId: id,
       status: selectedAction,
+      remarks: values.remarks || ""
     };
 
     dispatch(submitFundRequest(payload))
@@ -87,7 +88,10 @@ const PrefundingForm = () => {
           if (data.status !== "PENDING") {
             setIsActionDisabled(true);
           }
-          setFormData(data);
+          setFormData({
+            ...data,
+            remarks: data.remarks === "-" ? "" : data.remarks
+          });
         } catch (err: any) {
           const errorMessage = err || "Something went wrong";
           toast.error(errorMessage);
@@ -182,7 +186,7 @@ const PrefundingForm = () => {
               />
             </Grid.Col>
 
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+            {/* <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
                 name="depositImage"
                 label="Deposit Slip"
@@ -191,7 +195,7 @@ const PrefundingForm = () => {
                 accept="image/png, image/jpeg, application/pdf"
                 size="sm"
               />
-            </Grid.Col>
+            </Grid.Col> */}
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
@@ -237,6 +241,17 @@ const PrefundingForm = () => {
                   { label: "APPROVED", value: "APPROVED" },
                   { label: "REJECTED", value: "REJECTED" },
                 ]}
+              />
+            </Grid.Col>
+
+            <Grid.Col className="" span={{ base: 12, md: 12, lg: 12 }}>
+              <FormikTextInputComponent
+                name="remarks"
+                label="Remark"
+                placeholder="Enter Remark"
+                maxLength={250}
+                disabled={isSubmitting || isActionDisabled}
+                size="md"
               />
             </Grid.Col>
           </Grid>
