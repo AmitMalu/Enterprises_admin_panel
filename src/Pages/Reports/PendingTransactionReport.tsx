@@ -171,12 +171,12 @@ const PendingTransactionReport = () => {
                     label="Product"
                     value={values.productId}
                     placeholder="Select Product"
-                    // allowDeselect={true}
+                    allowDeselect={true}
                     searchable={true}
                     nothingFoundMessage="No Product Found"
                     size="xs"
-                    withAsterisk
-                    required
+                    // withAsterisk
+                    // required
                     data={productDropdownData}
                     disabled={loadingProductList}
                     rightSection={

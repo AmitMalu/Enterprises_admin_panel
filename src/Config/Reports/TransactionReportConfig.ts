@@ -20,6 +20,8 @@ export interface TransactionReportTableType {
   balBefore: string;
   balAfter: string;
   amount: string;
+  hierarchyId: string;
+  productName: string;
   subProductName: string;
   status: string;
   walletType: string;
@@ -35,17 +37,17 @@ export const initialValues = {
   productId: "",
   hierarchy: "",
   subHierarchy: "",
-  walletType: "POSTPAID",
-  status: "ALL",
+  walletType: "",
+  status: "",
 };
 
 // Yup schema
 export const TransactionReportSchema = Yup.object().shape({
   dateRange: dateRangeValidationSchema,
-  productId: textField("Product", 100, true, true),
-  hierarchy: textField("Hierarchy", 100, true, true),
+  productId: textField("Product", 100, false, true),
+  hierarchy: textField("Hierarchy", 100, false, true),
   subHierarchy: textField("Hierarchy ID", 100, false, true),
-  walletType: textField("Wallet Type", 100, true, true),
+  walletType: textField("Wallet Type", 100, false, true),
   status: textField("Status", 100, false, true),
 });
 
@@ -59,9 +61,7 @@ export const transformToTransactionReportPayload = (values: any) => {
     toDate: moment(toDate).format("YYYY-MM-DD"),
     productId: values?.productId ?? "",
     walletType: values.walletType ?? "",
-    status: values.status ?? "ALL",
-    page: 0,
-    size: 10,
+    status: values.status ?? "",
   };
 };
 
@@ -83,8 +83,9 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
       { label: "VENDOR PENDING", value: "VENDOR_PENDING" },
     ],
   },
-  { key: "transactionDate", label: "Transaction Date", filterType: "date" },
-  // { key: "transactionTime", label: "Transaction Time", filterType: "date" },
+  { key: "transactionDate", label: "Transaction Date", filterType: "none" },
+  { key: "hierarchyId", label: "Hierarchy Id", filterType: "text" },
+  { key: "productName", label: "Product", filterType: "text" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },
   {
     key: "walletType",

@@ -15,6 +15,7 @@ import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 // import { useVendor } from "../../Utils/hooks/useVendor";
 import {
+    resetMaster,
     //  resetMaster, 
     setPagination
 } from "../../Redux/Features/Masters/MastersSlice";
@@ -31,15 +32,14 @@ const SettlementReport = () => {
 
     const dataRef = useRef<SettlementReportTableType[] | null>(null);
     const [refreshKey, setRefreshKey] = useState(0);
-    // const [visibleColumns, setVisibleColumns] = useState<string[]>(
-    //     settlementReportHeaders.map((h) => h.key as string)
-    // );
 
+    const [visibleColumns, setVisibleColumns] = useState<string[]>(
+        settlementReportHeaders.map((h) => h.key as string)
+    );
     const [filterVisible, setFilterVisible] = useState(false);
     const [filterValues, setFilterValues] = useState<Record<string, any>>({});
     const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
-    const [formValues, setFormValues] = useState(settlementReportFilterInitialValues);
     const [viewSubmitted, setViewSubmitted] = useState(false);
 
     const { data, loading, pagination, error, setPage, setPageSize } =
@@ -52,16 +52,12 @@ const SettlementReport = () => {
         });
 
     const throttledSubmit = useThrottledFormSubmit((values: any) => {
-        setFormValues(values);
-        const payload = transformToViewSettlementReportPayload(values);
-        setPayload(payload);
-        setRefreshKey((prev) => prev + 1);
+        setPayload(() => ({
+            ...transformToViewSettlementReportPayload(values), // top filters
+            ...(submittedFilter || {}),                      // 🔴 keep inline filters
+        }));
         setViewSubmitted(true);
     }, 3000);
-
-    useEffect(() => {
-        dataRef.current = data;
-    }, [data]);
 
     const handleExportClick = () => {
         const currentData = dataRef.current;
@@ -72,31 +68,34 @@ const SettlementReport = () => {
         exportToCsv(currentData, "Settlement-Report");
     };
 
-    // const handleToggleColumn = (key: string) => {
-    //     setVisibleColumns((prev) =>
-    //         prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
-    //     );
-    // };
+    const handleToggleColumn = (key: string) => {
+        setVisibleColumns((prev) =>
+            prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+        );
+    };
 
-    // const handleToggleAllColumns = (selectAll: boolean) => {
-    //     if (selectAll) {
-    //         setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
-    //     } else {
-    //         setVisibleColumns([]);
-    //     }
-    // };
+    const handleToggleAllColumns = (selectAll: boolean) => {
+        if (selectAll) {
+            setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+        } else {
+            setVisibleColumns([]);
+        }
+    };
 
-    // const handleRefresh = () => {
-    //     // Reset redux pagination / master state
-    //     dispatch(resetMaster(SETTLEMENT_REPORT_KEY));
+    const handleRefresh = () => {
+        // Reset redux pagination / master state
+        dispatch(resetMaster(SETTLEMENT_REPORT_KEY));
 
-    //     // Reset table view state
-    //     setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
-    //     setFilterVisible(false);
-    //     setFilterValues({});
-    //     setSubmittedFilter(null);
-    //     setRefreshKey((prev) => prev + 1);
-    // };
+        // Reset table view state
+        setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+        setFilterVisible(false);
+        setFilterValues({});
+        setSubmittedFilter(null);
+
+        setPayload(transformToViewSettlementReportPayload(settlementReportFilterInitialValues));
+
+        setRefreshKey((prev) => prev + 1);
+    };
 
 
     const handleFilterChange = (key: string, value: any) => {
@@ -114,10 +113,8 @@ const SettlementReport = () => {
     };
 
     useEffect(() => {
-        return () => {
-            setFormValues(settlementReportFilterInitialValues); // Reset form data on unmount
-        }
-    }, []);
+        dataRef.current = data;
+    }, [data]);
 
     useEffect(() => {
         if (submittedFilter) {
@@ -133,9 +130,10 @@ const SettlementReport = () => {
             </TextComponent>
 
             <Formik
-                initialValues={formValues}
-                enableReinitialize
+                key={refreshKey}
+                initialValues={settlementReportFilterInitialValues}
                 validationSchema={Yup.object(settlementReportFilterValidationSchema)}
+                enableReinitialize
                 onSubmit={throttledSubmit}
             >
                 {({ values, setFieldValue }) => {
@@ -152,8 +150,6 @@ const SettlementReport = () => {
                         onSubProductReset: () => setFieldValue("subProductId", ""),
                         isSettlement: true
                     });
-
-                    // const { vendorDropdownData, loadingVendorList } = useVendor({});
 
                     return (
                         <Form className="flex flex-col gap-2 mt-4">
@@ -181,8 +177,9 @@ const SettlementReport = () => {
                                         searchable={true}
                                         nothingFoundMessage="No Product Found"
                                         size="xs"
-                                        withAsterisk
-                                        required
+                                        // withAsterisk
+                                        // required
+                                        allowDeselect={true}
                                         data={productDropdownData}
                                         disabled={loadingProductList}
                                         rightSection={
@@ -212,36 +209,23 @@ const SettlementReport = () => {
                                         value={values.subProductId}
                                         data={subProductDropdownData}
                                         label="Sub Product"
-                                        allowDeselect={true}
                                         searchable={true}
                                         nothingFoundMessage="No SubProduct Found for Selected Product"
                                         placeholder="Select Sub Product"
                                         size="xs"
                                         // withAsterisk
                                         // required
+                                        allowDeselect={true}
                                         disabled={loadingSubProductList}
                                     />
                                 </Grid.Col>
-
-                                {/* <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
-                                    <FormikSelectComponent
-                                        name="vendorId"
-                                        label="Vendor"
-                                        value={values.vendorId}
-                                        allowDeselect={true}
-                                        searchable={true}
-                                        nothingFoundMessage="No Vendor found"
-                                        placeholder="Select Vendor"
-                                        size="xs"
-                                        data={vendorDropdownData}
-                                        disabled={loadingVendorList}
-                                    />
-                                </Grid.Col> */}
 
                                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                                     <FormikSelectComponent
                                         name="walletType"
                                         size="xs"
+                                        // withAsterisk
+                                        // required
                                         allowDeselect={true}
                                         label="Wallet Type"
                                         placeholder="Select Wallet Type"
@@ -258,6 +242,8 @@ const SettlementReport = () => {
                                         size="xs"
                                         label="Transaction Status"
                                         placeholder="Select Transaction Status"
+                                        // withAsterisk
+                                        // required
                                         allowDeselect={true}
                                         data={[
                                             { label: "ACCEPTED", value: "SUCCESS" },
@@ -287,13 +273,13 @@ const SettlementReport = () => {
                                 <Grid.Col span="auto">
                                     <div className="flex justify-end items-end h-full">
                                         <GenericMasterToolbar
-                                            // onRefresh={handleRefresh}
-                                            // onColumnChange={handleToggleColumn}
-                                            // onToggleAll={handleToggleAllColumns}
+                                            onRefresh={handleRefresh}
+                                            onColumnChange={handleToggleColumn}
+                                            onToggleAll={handleToggleAllColumns}
                                             onExport={handleExportClick}
                                             onFilter={() => setFilterVisible((prev) => !prev)}
                                             headers={settlementReportHeaders}
-                                            // visibleColumns={visibleColumns}
+                                            visibleColumns={visibleColumns}
                                             loading={loading}
                                             error={error ? error.toString() : null}
                                         />
@@ -311,10 +297,9 @@ const SettlementReport = () => {
             ) : (
                 <GenericMasterTable<SettlementReportTableType>
                     data={data}
-                    // headers={settlementReportHeaders.filter((h) =>
-                    //     visibleColumns.includes(h.key as string)
-                    // )}
-                    headers={settlementReportHeaders}
+                    headers={settlementReportHeaders.filter((h) =>
+                        visibleColumns.includes(h.key as string)
+                    )}
                     pagination
                     currentPage={pagination.currentPage}
                     totalPages={pagination.totalPages}

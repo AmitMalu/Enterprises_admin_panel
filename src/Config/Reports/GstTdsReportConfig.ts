@@ -25,6 +25,7 @@ export interface GstTdsReportTableType {
   id: string | number;
   transactionDate: string;
   transactionTime: string;
+  productName: string;
   subProductName: string;
   walletType: string | null;
   txType: string;
@@ -43,7 +44,7 @@ export const GstTdsReportInitialValues: GstTdsReportFormType = {
   productId: "",
   hierarchy: "",
   hierarchyId: "",
-  reportType: "GST",
+  reportType: "",
   walletType: "",
 };
 
@@ -53,10 +54,10 @@ export const GstTdsReportSchema: Record<
   Yup.AnySchema
 > = {
   dateRange: dateRangeValidationSchema,
-  productId: textField("Product", 100, true, true),
-  hierarchy: textField("Hierarchy", 100, true, true),
+  productId: textField("Product", 100, false, true),
+  hierarchy: textField("Hierarchy", 100, false, true),
   hierarchyId: textField("Hierarchy ID", 100, false, true),
-  reportType: textField("Report Type", 100, true, true),
+  reportType: textField("Report Type", 100, false, true),
   walletType: textField("Wallet Type", 100, false, true),
 };
 
@@ -67,6 +68,7 @@ export const GstTdsheaders: GenericTableHeader<GstTdsReportTableType>[] = [
   { key: "balBefore", label: "Balance Before", filterType: "number" },
   { key: "balAfter", label: "Balance After", filterType: "number" },
   { key: "amount", label: "Amount", filterType: "number" },
+  { key: "productName", label: "Product", filterType: "text" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },
   { key: "operator", label: "Operator", filterType: "text" },
   {

@@ -137,9 +137,9 @@ const GstTdsReport = () => {
                     label="Product"
                     placeholder="Select Product"
                     size="xs"
-                    withAsterisk
-                    required
-                    allowDeselect={false}
+                    // withAsterisk
+                    // required
+                    allowDeselect={true}
                     searchable={true}
                     data={productDropdownData}
                     disabled={loadingProductList}
@@ -169,8 +169,9 @@ const GstTdsReport = () => {
                     size="xs"
                     label="Report Type"
                     placeholder="Select Report Type"
-                    required
-                    withAsterisk
+                    // withAsterisk
+                    // required
+                    allowDeselect={true}
                     data={[
                       { label: "GST", value: "GST" },
                       { label: "TDS", value: "TDS" },
@@ -184,13 +185,13 @@ const GstTdsReport = () => {
                     size="xs"
                     label="Hierarchy"
                     placeholder="Select Hierarchy"
-                    allowDeselect={true}
                     searchable={true}
                     nothingFoundMessage="Nothing Found"
                     data={hierarchyList}
                     disabled={loadingHierarchyList}
-                    withAsterisk
-                    required
+                    // withAsterisk
+                    // required
+                    allowDeselect={true}
                   />
                 </Grid.Col>
 
