@@ -8,7 +8,6 @@ import { IconCalendar } from "@tabler/icons-react";
 import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHierarchy";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
-import { useFetchReportList } from "../../Utils/hooks/useFetchReportList";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import { useEffect, useRef, useState } from "react";
@@ -17,39 +16,47 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { GST_TDS_REPORT_KEY, GST_TDS_REPORT_URL, GstTdsheaders, GstTdsReportInitialValues, GstTdsReportSchema, GstTdsReportTableType, transformToGstTdsReportPayload } from "../../Config/Reports/GstTdsReportConfig";
-import { setPagination } from "../../Redux/Features/Masters/MastersSlice";
+import { resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { RefreshIcon } from "../../assets/Icons";
+import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 
 const GstTdsReport = () => {
 
   const dispatch = useAppDispatch();
+  const [payload, setPayload] = useState<any>(null);
 
-  const [reportPayload, setReportPayload] = useState<any>(null);
   const dataRef = useRef<GstTdsReportTableType[] | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(
+    GstTdsheaders.map((h) => h.key as string)
+  );
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
-  // const [refreshKey, setRefreshKey] = useState(0);
   const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
+  const [viewSubmitted, setViewSubmitted] = useState(false);
 
-  const {
-    data,
-    loading,
-    pagination,
-    error,
-    setPage,
-    setPageSize
-  } = useFetchReportList<GstTdsReportTableType>({
-    key: GST_TDS_REPORT_KEY,
-    url: `${GST_TDS_REPORT_URL}/view`,
-    payload: reportPayload,
-  });
+  const { data, loading, pagination, error, setPage, setPageSize } =
+    useFetchMasterList<GstTdsReportTableType>({
+      method: "POST",
+      key: GST_TDS_REPORT_KEY,
+      url: viewSubmitted ? `${GST_TDS_REPORT_URL}/view` : undefined,
+      payload,
+      refreshKey,
+    });
 
   const throttledSubmit = useThrottledFormSubmit((values: any) => {
-    const payload = transformToGstTdsReportPayload(values);
-    setReportPayload(payload);
+
+    setPayload(() => ({
+      ...transformToGstTdsReportPayload(values), // top filters
+      ...(submittedFilter || {}),                      // 🔴 keep inline filters
+    }));
+
+    // setRefreshKey((prev) => prev + 1);
+    setViewSubmitted(true);
   }, 3000);
 
   const handleExportClick = () => {
@@ -59,6 +66,35 @@ const GstTdsReport = () => {
       return;
     }
     exportToCsv(currentData, "GstTds-report");
+  };
+
+  const handleToggleColumn = (key: string) => {
+    setVisibleColumns((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(GstTdsheaders.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
+
+  const handleRefresh = () => {
+    // Reset redux pagination / master state
+    dispatch(resetMaster(GST_TDS_REPORT_KEY));
+
+    // Reset table view state
+    setVisibleColumns(GstTdsheaders.map((h) => h.key as string));
+    setFilterVisible(false);
+    setFilterValues({});
+    setSubmittedFilter(null);
+
+    setPayload(transformToGstTdsReportPayload(GstTdsReportInitialValues));
+
+    setRefreshKey((prev) => prev + 1);
   };
 
   const handleFilterChange = (key: string, value: any) => {
@@ -81,7 +117,7 @@ const GstTdsReport = () => {
 
   useEffect(() => {
     if (submittedFilter) {
-      setReportPayload((prev: any) => ({ ...prev, ...submittedFilter }));
+      setPayload((prev: any) => ({ ...prev, ...submittedFilter }));
     }
   }, [submittedFilter])
 
@@ -92,20 +128,23 @@ const GstTdsReport = () => {
       </TextComponent>
 
       <GenericMasterToolbar
+        onRefresh={handleRefresh}
+        onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
+        headers={GstTdsheaders}
+        visibleColumns={visibleColumns}
         loading={loading}
         error={error ? error.toString() : null}
       />
 
       <Formik
+        key={refreshKey}
         initialValues={GstTdsReportInitialValues}
         validationSchema={Yup.object(GstTdsReportSchema)}
-        onSubmit={(values) => {
-          setFilterValues({})
-          setSubmittedFilter(null)
-          throttledSubmit(values)
-        }}
+        enableReinitialize
+        onSubmit={throttledSubmit}
       >
         {({ values, setFieldValue }) => {
           const { productDropdownData, loadingProductList, refetchProducts } = useProductSubProduct({});
@@ -137,9 +176,9 @@ const GstTdsReport = () => {
                     label="Product"
                     placeholder="Select Product"
                     size="xs"
-                    withAsterisk
-                    required
-                    allowDeselect={false}
+                    // withAsterisk
+                    // required
+                    allowDeselect={true}
                     searchable={true}
                     data={productDropdownData}
                     disabled={loadingProductList}
@@ -169,8 +208,9 @@ const GstTdsReport = () => {
                     size="xs"
                     label="Report Type"
                     placeholder="Select Report Type"
-                    required
-                    withAsterisk
+                    // withAsterisk
+                    // required
+                    allowDeselect={true}
                     data={[
                       { label: "GST", value: "GST" },
                       { label: "TDS", value: "TDS" },
@@ -184,13 +224,13 @@ const GstTdsReport = () => {
                     size="xs"
                     label="Hierarchy"
                     placeholder="Select Hierarchy"
-                    allowDeselect={true}
                     searchable={true}
                     nothingFoundMessage="Nothing Found"
                     data={hierarchyList}
                     disabled={loadingHierarchyList}
-                    withAsterisk
-                    required
+                    // withAsterisk
+                    // required
+                    allowDeselect={true}
                   />
                 </Grid.Col>
 
@@ -257,7 +297,9 @@ const GstTdsReport = () => {
       ) : (
         <GenericMasterTable<GstTdsReportTableType>
           data={data}
-          headers={GstTdsheaders}
+          headers={GstTdsheaders.filter((h) =>
+            visibleColumns.includes(h.key as string)
+          )}
           pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}

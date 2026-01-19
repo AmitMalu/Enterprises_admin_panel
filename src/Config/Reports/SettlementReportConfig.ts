@@ -28,7 +28,7 @@ export interface SettlementReportTableType {
   userId: string | number;
   mobileNo: string;
   amount: string | number;
-  // product: string;
+  productName: string;
   subProductName: string;
   vendor: string;
   txId: string;
@@ -36,7 +36,7 @@ export interface SettlementReportTableType {
   txType: string;
   schemeName: string;
   remarks: string;
-  // walletType: string;
+  walletType: string;
   // created: string;
   // userOutletName: string;
   // refNo: string;
@@ -69,7 +69,7 @@ export const settlementReportFilterValidationSchema: Record<
   Yup.AnySchema
 > = {
   dateRange: dateRangeValidationSchema,
-  productId: textField("Product", 100, true, true),
+  productId: textField("Product", 100, false, true),
   subProductId: textField("Sub Product", 100, false, true),
   // vendorId: textField("Vendor", 100, false, true),
   walletType: textField("Wallet Type", 150, false, true),
@@ -83,6 +83,7 @@ export const settlementReportHeaders: GenericTableHeader<SettlementReportTableTy
     { key: "mobileNo", label: "User Mobile No", filterType: "text" },
     { key: "amount", label: "Amount", filterType: "text" },
     // { key: "product", label: "Product", filterType: "text" },
+    { key: "productName", label: "Product", filterType: "text" },
     { key: "subProductName", label: "Sub Product", filterType: "text" },
     { key: "vendor", label: "Vendor", filterType: "text" },
     { key: "txId", label: "Transaction Id", filterType: "text" },
@@ -92,7 +93,7 @@ export const settlementReportHeaders: GenericTableHeader<SettlementReportTableTy
     // { key: "txMode", label: "TX Mode", filterType: "text" },
     // { key: "txStart", label: "TX Start", filterType: "text" },
     // { key: "txEnd", label: "TX End", filterType: "text" },
-    // { key: "walletType", label: "Wallet Type", filterType: "text" },
+    { key: "walletType", label: "Wallet Type", filterType: "text" },
     // { key: "createdBy", label: "Created By", filterType: "text" },
     { key: "remarks", label: "Remarks", filterType: "text" },
     { key: "schemeName", label: "Scheme Name", filterType: "text" },
