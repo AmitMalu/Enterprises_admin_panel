@@ -15,6 +15,7 @@ import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 // import { useVendor } from "../../Utils/hooks/useVendor";
 import {
+  resetMaster,
   //  resetMaster,
   setPagination
 } from "../../Redux/Features/Masters/MastersSlice";
@@ -31,17 +32,15 @@ const PendingTransactionReport = () => {
 
   const dataRef = useRef<SettlementReportTableType[] | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  // const [visibleColumns, setVisibleColumns] = useState<string[]>(
-  //   settlementReportHeaders.map((h) => h.key as string)
-  // );
 
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(
+    settlementReportHeaders.map((h) => h.key as string)
+  );
   const [filterVisible, setFilterVisible] = useState(false);
   const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
-  const [formValues, setFormValues] = useState(settlementReportFilterInitialValues);
   const [viewSubmitted, setViewSubmitted] = useState(false);
-
 
   const { data, loading, pagination, error, setPage, setPageSize } =
     useFetchMasterList<SettlementReportTableType>({
@@ -53,16 +52,15 @@ const PendingTransactionReport = () => {
     });
 
   const throttledSubmit = useThrottledFormSubmit((values: any) => {
-    setFormValues(values);
-    const payload = transformToPendingTranxReportPayload(values);
-    setPayload(payload);
-    setRefreshKey((prev) => prev + 1);
+
+    setPayload(() => ({
+      ...transformToPendingTranxReportPayload(values), // top filters
+      ...(submittedFilter || {}),                      // 🔴 keep inline filters
+    }));
+
+    // setRefreshKey((prev) => prev + 1);
     setViewSubmitted(true);
   }, 3000);
-
-  useEffect(() => {
-    dataRef.current = data;
-  }, [data]);
 
   const handleExportClick = () => {
     const currentData = dataRef.current;
@@ -73,25 +71,34 @@ const PendingTransactionReport = () => {
     exportToCsv(currentData, "Pending-trans-Report");
   };
 
-  // const handleToggleColumn = (key: string) => {
-  //   setVisibleColumns((prev) =>
-  //     prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
-  //   );
-  // };
+  const handleToggleColumn = (key: string) => {
+    setVisibleColumns((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
 
-  // const handleToggleAllColumns = (selectAll: boolean) => {
-  //   if (selectAll) {
-  //     setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
-  //   } else {
-  //     setVisibleColumns([]);
-  //   }
-  // };
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
-  // const handleRefresh = () => {
-  //   dispatch(resetMaster(PENDING_TRANSCATION_REPORT_KEY));
-  //   setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
-  //   setRefreshKey((prev) => prev + 1);
-  // };
+  const handleRefresh = () => {
+    // Reset redux pagination / master state
+    dispatch(resetMaster(PENDING_TRANSCATION_REPORT_KEY));
+
+    // Reset table view state
+    setVisibleColumns(settlementReportHeaders.map((h) => h.key as string));
+    setFilterVisible(false);
+    setFilterValues({});
+    setSubmittedFilter(null);
+
+    setPayload(transformToPendingTranxReportPayload(settlementReportFilterInitialValues));
+
+    setRefreshKey((prev) => prev + 1);
+  };
 
   const handleFilterChange = (key: string, value: any) => {
     setFilterValues((prev) => ({ ...prev, [key]: value }));
@@ -108,11 +115,8 @@ const PendingTransactionReport = () => {
   };
 
   useEffect(() => {
-    return () => {
-      setFormValues(settlementReportFilterInitialValues); // Reset form data on unmount
-    }
-  }, []);
-
+    dataRef.current = data;
+  }, [data]);
 
   useEffect(() => {
     if (submittedFilter) {
@@ -128,9 +132,10 @@ const PendingTransactionReport = () => {
       </TextComponent>
 
       <Formik
-        initialValues={formValues}
-        enableReinitialize
+        key={refreshKey}
+        initialValues={settlementReportFilterInitialValues}
         validationSchema={Yup.object(settlementReportFilterValidationSchema)}
+        enableReinitialize
         onSubmit={throttledSubmit}
       >
         {({ values, setFieldValue }) => {
@@ -146,8 +151,6 @@ const PendingTransactionReport = () => {
             selectedSubProductId: values.subProductId,
             onSubProductReset: () => setFieldValue("subProductId", ""),
           });
-
-          // const { vendorDropdownData, loadingVendorList } = useVendor({});
 
           return (
             <Form className="flex flex-col gap-2 mt-4">
@@ -217,21 +220,6 @@ const PendingTransactionReport = () => {
                   />
                 </Grid.Col>
 
-                {/* <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
-                  <FormikSelectComponent
-                    name="vendorId"
-                    label="Vendor"
-                    value={values.vendorId}
-                    allowDeselect={true}
-                    searchable={true}
-                    nothingFoundMessage="No Vendor found"
-                    placeholder="Select Vendor"
-                    size="xs"
-                    data={vendorDropdownData}
-                    disabled={loadingVendorList}
-                  />
-                </Grid.Col> */}
-
                 <Grid.Col span={{ base: 6, xs: 4, md: 4, lg: 2 }}>
                   <FormikSelectComponent
                     name="walletType"
@@ -270,13 +258,13 @@ const PendingTransactionReport = () => {
       </Formik>
 
       <GenericMasterToolbar
-        // onRefresh={handleRefresh}
-        // onColumnChange={handleToggleColumn}
-        // onToggleAll={handleToggleAllColumns}
+        onRefresh={handleRefresh}
+        onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={settlementReportHeaders}
-        // visibleColumns={visibleColumns}
+        visibleColumns={visibleColumns}
         loading={loading}
         error={error ? error.toString() : null}
       />
@@ -287,10 +275,9 @@ const PendingTransactionReport = () => {
       ) : (
         <GenericMasterTable<SettlementReportTableType>
           data={data}
-          // headers={settlementReportHeaders.filter((h) =>
-          //   visibleColumns.includes(h.key as string)
-          // )}
-          headers={settlementReportHeaders}
+          headers={settlementReportHeaders.filter((h) =>
+            visibleColumns.includes(h.key as string)
+          )}
           pagination
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}

@@ -92,7 +92,5 @@ export const transformToGstTdsReportPayload = (values: any) => {
     productId: values?.productId ?? "",
     reportType: values.reportType ?? "",
     walletType: values.walletType ?? "",
-    page: 0,
-    size: 10,
   };
 };
