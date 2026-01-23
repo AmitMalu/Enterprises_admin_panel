@@ -16,6 +16,7 @@ export interface SchemesListFormType {
   subProductId: string;
   vendorId: string;
   schemeHierarchySelectionId: string;
+  isActive: boolean;
 }
 
 export interface SchemesListTableType {
@@ -43,6 +44,7 @@ export const initialValues: SchemesListFormType = {
   subProductId: "",
   vendorId: "",
   schemeHierarchySelectionId: "",
+  isActive: false,
 };
 
 export const validationSchema: Record<
@@ -55,6 +57,7 @@ export const validationSchema: Record<
   subProductId: textField("sub Product", 150, true, true),
   vendorId: textField("Vendor", 150, false, true),
   schemeHierarchySelectionId: textField("Scheme Hierarchy", 150, false, true),
+  isActive: Yup.boolean().required("Active status is required"),
 };
 
 export const headers: GenericTableHeader<SchemesListTableType>[] = [
@@ -69,7 +72,7 @@ export const headers: GenericTableHeader<SchemesListTableType>[] = [
 
 // Transform form data to Create payload
 export const transformFormToCreateSchemesPayload = (
-  formData: SchemesListFormType
+  formData: SchemesListFormType,
 ): SchemeListCreatePayload => ({
   ...formData,
   createdBy: localStorage.getItem("username") || "system",
@@ -77,7 +80,7 @@ export const transformFormToCreateSchemesPayload = (
 
 // Transform form data to Update payload
 export const transformFormToUpdateSchemesPayload = (
-  formData: SchemesListFormType
+  formData: SchemesListFormType,
 ): SchemeListUpdatePayload => ({
   schemeName: formData.schemeName,
   schemeCode: formData.schemeCode,
@@ -86,6 +89,19 @@ export const transformFormToUpdateSchemesPayload = (
   vendorId: formData.vendorId,
   schemeHierarchySelectionId: formData.schemeHierarchySelectionId,
   editedBy: localStorage.getItem("username") || "system",
+  isActive: !!formData.isActive,
+});
+
+export const transformSchemeListToFormData = (
+  raw: Record<string, any>,
+): SchemesListFormType => ({
+  schemeName: raw.schemeName ?? "",
+  schemeCode: raw.schemeCode ?? "",
+  productId: raw.productId ?? "",
+  subProductId: raw.subProductId ?? "",
+  vendorId: raw.vendorId ?? "",
+  schemeHierarchySelectionId: raw.schemeHierarchySelectionId ?? "",
+  isActive: !!raw.isActive,
 });
 
 export type SlabStructureTableType = {
@@ -130,7 +146,7 @@ export interface OperatorSlabData {
 export const buildSlabPayload = (
   schemeCode: string,
   schemeName: string,
-  operators: OperatorSlabData[]
+  operators: OperatorSlabData[],
 ) => {
   const editedBy = localStorage.getItem("username") || "system";
 
@@ -200,17 +216,17 @@ export const getFilteredSlabHeaders = (slabs: any[]) => {
     ({ key }) =>
       // Always include these base fields
       ["slabStart", "slabEnd", "rateType", "gross", "im"].includes(
-        key as string
+        key as string,
       ) ||
       // Include only if any slab has a non-null, non-undefined value
-      slabs.some((slab) => slab[key] !== null && slab[key] !== undefined)
+      slabs.some((slab) => slab[key] !== null && slab[key] !== undefined),
   );
 };
 
 export const makeBlankSlab = (
   headers: GenericTableHeader<SlabStructureTableType>[],
   slabStart: number,
-  slabEnd: number
+  slabEnd: number,
 ): SlabStructureTableType => {
   const blankRow: SlabStructureTableType = {
     id: `new-${Date.now()}`, // Easier to recognize in the payload
