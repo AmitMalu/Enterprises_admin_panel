@@ -103,7 +103,8 @@ export const transformToViewSettlementPayload = (values: any) => {
     subProductId: values.subProductId ?? "",
     vendorId: values.vendorId ?? "",
     walletType: values.walletType ?? "PREPAID",
-    reportType: "PRE_SETTLEMENT",
-    tranStatus: "SETTLEMENT PENDING",
+    reportType: "",
+    tranStatus: "",
+    actionOnBalanceAmount: "SETTLEMENT PENDING",
   };
 };
