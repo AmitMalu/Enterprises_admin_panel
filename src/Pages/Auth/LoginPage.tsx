@@ -58,6 +58,14 @@ const LoginPage: React.FC = () => {
           })
         ).unwrap();
 
+        const AllowedRoles = ["AD", "AU"]
+
+        const role = result?.data?.role;
+        if (!AllowedRoles.includes(role)) {
+          toast.error("Invalid credentials");
+          return;
+        }
+
         toast.success(result.message);
         toast.success(result.data.otp, {
           toastId: "otp-toast",

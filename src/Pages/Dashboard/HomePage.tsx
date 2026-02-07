@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import ComingSoonPage from "../../Components/Atoms/ComingSoonPage";
-import { Dashboard_Api } from "../../Redux/Features/Auth/Thunk";
-import { useAppDispatch } from "../../Redux/hooks";
+// import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { Grid } from "@mantine/core";
@@ -88,7 +86,7 @@ const data = {
 }
 
 const HomePage = () => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DatesRangeValue>(
@@ -100,6 +98,7 @@ const HomePage = () => {
   const today = new Date();
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(today.getMonth() - 6);
+  console.log(isLoading);
 
   const colors = [
     "#D82226",
@@ -135,6 +134,8 @@ const HomePage = () => {
         fromDate: moment(fromDate).format("YYYY-MM-DD"),
         toDate: moment(toDate).format("YYYY-MM-DD"),
       };
+      console.log(payload);
+      
       // const response = await dispatch(Dashboard_Api(payload)).unwrap();
       // setDashboardData(response.data?.data)
       setDashboardData(data)
