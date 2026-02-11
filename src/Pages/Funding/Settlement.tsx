@@ -46,7 +46,7 @@ const Settlement = () => {
     useFetchMasterList<PreSettlementTableType>({
       method: "POST",
       key: SETTLEMENT_KEY,
-      url: viewSubmitted ? `${SETTLEMENT_URL}/settlement` : undefined,
+      url: viewSubmitted ? `${SETTLEMENT_URL}/settlement-updated` : undefined,
       payload,
       refreshKey,
     });
@@ -109,7 +109,7 @@ const Settlement = () => {
     }
   };
 
-  const handleSettlementAction = async (action: "APPROVE" | "REJECT") => {
+  const handleSettlementAction = async (action: "SUCCESS" | "REJECT") => {
     if (!selectedIds.length) return;
     setLoadingActionSubmit(true); // set which row is loading
     if (!walletType) {
@@ -128,7 +128,7 @@ const Settlement = () => {
         mode: "POST",
       })).unwrap();
 
-      toast.success(`Settlement ${action === "APPROVE" ? "APPROVED" : "REJECTED"} successfully!`);
+      toast.success(`Settlement ${action === "SUCCESS" ? "SUCCESS" : "REJECTED"} successfully!`);
       setSelectedIds([]);
       handleRefresh()
     } catch (err: any) {
@@ -344,7 +344,7 @@ const Settlement = () => {
                 fontSize="16"
                 throttleMs={5000}
                 bgColor="#28A745"
-                onClick={() => handleSettlementAction("APPROVE")}
+                onClick={() => handleSettlementAction("SUCCESS")}
                 leftIcon={<GiCheckMark size={16} color="#FFF" />}
                 disabled={
                   loadingActionSubmit ||
@@ -395,8 +395,8 @@ const Settlement = () => {
               renderExtraRowCell={(item) => (
                 <div className="flex justify-center gap-2 min-w-10">
                   <Checkbox
-                    checked={selectedIds.includes(item.id)}
-                    onChange={(e) => handleToggleRow(e.currentTarget.checked, item.id)}
+                    checked={selectedIds.includes(item.txId)}
+                    onChange={(e) => handleToggleRow(e.currentTarget.checked, item.txId)}
                     disabled={loadingActionSubmit}
                   />
                 </div>

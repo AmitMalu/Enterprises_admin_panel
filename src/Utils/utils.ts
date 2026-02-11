@@ -12,13 +12,13 @@ import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 import CryptoJS from "crypto-js";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.2 (19-01 2026 06:00)";
+export const DEV_APP_VERSION_LABEL = "v1.0.2 (07-02 2026 06:15 AM)";
 
 export function encryptCredentials(username: string, password: string) {
   const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
   if (!SECRET_KEY) {
     throw new Error(
-      "SECRET_KEY is undefined! Check your environment variables."
+      "SECRET_KEY is undefined! Check your environment variables.",
     );
   }
   // Generate random salt
@@ -66,7 +66,7 @@ export const redirectTo = (path: string) => {
 };
 
 export const logoutUser = (
-  message = "Session expired. Redirecting to login page."
+  message = "Session expired. Redirecting to login page.",
 ) => {
   clearStorage();
   toast.warning(`${message}`);
@@ -213,7 +213,7 @@ export type GenericTableHeader<T> = {
 
 export function exportToCsv<T extends Record<string, any>>(
   data: T[],
-  filename: string
+  filename: string,
 ) {
   if (!data || data.length === 0) {
     console.warn("No data available to export.");
@@ -288,7 +288,7 @@ export const trimFormValues = <T>(values: T): T => {
     } else if (Array.isArray(val)) {
       // map arrays and trim strings inside, recurse for objects
       cleaned[key] = val.map((item) =>
-        typeof item === "string" ? item.trim() : trimFormValues(item)
+        typeof item === "string" ? item.trim() : trimFormValues(item),
       );
     } else if (typeof val === "object" && val !== null) {
       // recurse for nested objects
@@ -325,8 +325,8 @@ export const handleMasterFormSubmit = async <T>({
       mode === "edit" && typeof transformUpdatePayload === "function"
         ? await transformUpdatePayload(normalizedValues)
         : mode === "add" && typeof transformCreatePayload === "function"
-        ? await transformCreatePayload(normalizedValues)
-        : normalizedValues;
+          ? await transformCreatePayload(normalizedValues)
+          : normalizedValues;
 
     const payload = useFormData
       ? toFormData(rawPayload as Record<string, any>)
@@ -354,7 +354,7 @@ export const handleMasterFormSubmit = async <T>({
 
     toast.success(
       res.message ||
-        `${entityName} ${mode === "edit" ? "updated" : "created"} successfully`
+        `${entityName} ${mode === "edit" ? "updated" : "created"} successfully`,
     );
     if (successNavigatePath) {
       navigate(successNavigatePath);
@@ -365,10 +365,10 @@ export const handleMasterFormSubmit = async <T>({
   } catch (err: any) {
     console.error(
       `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`,
-      err
+      err,
     );
     toast.error(
-      err || `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`
+      err || `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`,
     );
   }
 };
@@ -425,7 +425,7 @@ export const singleDateValidationSchema = Yup.date()
 
 export function buildPermissions(
   menus: string[],
-  subMenus: string[]
+  subMenus: string[],
 ): string[] {
   const permissions: string[] = [...subMenus]; // start with all selected submenus
 
@@ -472,9 +472,11 @@ export interface VerificationApiData {
 
 export const extractVerificationApiMessage = (
   response: VerificationApiData,
-  fallback = "Something went wrong"
+  fallback = "Something went wrong",
 ): string => {
   if (!response) return fallback;
+
+  if (response.data?.aadhaar_number) return "Aadhaar verification successful";
 
   // Error messages first
   if (response.message && response.message.trim() !== "") {

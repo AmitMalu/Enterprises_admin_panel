@@ -10,12 +10,13 @@ import FormikSelectComponent from "../../Components/Molecules/FormikSelectCompon
 import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
-import { initialValues, SCHEMES_KEY, SCHEMES_URL, SchemesListFormType, transformFormToCreateSchemesPayload, transformFormToUpdateSchemesPayload, validationSchema } from "../../Config/Schemes/SchemesConfig";
+import { initialValues, SCHEMES_KEY, SCHEMES_URL, SchemesListFormType, transformFormToCreateSchemesPayload, transformFormToUpdateSchemesPayload, transformSchemeListToFormData, validationSchema } from "../../Config/Schemes/SchemesConfig";
 import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { useVendor } from "../../Utils/hooks/useVendor";
 import { useHeirarchyCombinationList } from "../../Utils/hooks/useHeirarchyCombinationList";
 import BackHeader from "../Molecules/BackHeader";
+import { booleanSelectData } from "../../Utils/utils";
 
 type SchemesFormPageProps = { mode: "add" | "edit" };
 
@@ -56,7 +57,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                         fetchSchemeById({ key: SCHEMES_KEY, endpoint: `${SCHEMES_URL}/get-by-id`, id })
                     ).unwrap();
 
-                    setFormData(data)
+                    setFormData(transformSchemeListToFormData(data))
                 } catch (err: any) {
                     toast.error(err);
                     setFetchError(err);
@@ -190,6 +191,16 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         required
                                         data={hierarchyList}
                                         disabled={loadingHierarchyList}
+                                    />
+                                </Grid.Col>
+
+                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                    <FormikSelectComponent
+                                        name="isActive"
+                                        label="Active"
+                                        placeholder="Select"
+                                        withAsterisk
+                                        data={booleanSelectData}
                                     />
                                 </Grid.Col>
                             </Grid>
