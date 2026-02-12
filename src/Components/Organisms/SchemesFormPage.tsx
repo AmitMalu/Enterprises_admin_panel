@@ -125,17 +125,6 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                 </Grid.Col>
 
                                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                                    <FormikTextInputComponent
-                                        name="schemeCode"
-                                        label="Scheme Code"
-                                        placeholder="Enter Scheme Code"
-                                        withAsterisk
-                                        maxLength={30}
-                                        allowSpecialChar={false}
-                                    />
-                                </Grid.Col>
-
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikSelectComponent
                                         name="productId"
                                         label="Product"
@@ -194,7 +183,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                {mode === "edit" && <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikSelectComponent
                                         name="isActive"
                                         label="Active"
@@ -202,7 +191,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         withAsterisk
                                         data={booleanSelectData}
                                     />
-                                </Grid.Col>
+                                </Grid.Col>}
                             </Grid>
 
                             <div className="flex justify-end mt-4">

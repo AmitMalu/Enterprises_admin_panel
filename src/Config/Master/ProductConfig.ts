@@ -8,27 +8,29 @@ export const MASTER_URL = API_ENDPOINTS.MASTER.PRODUCTS; // Replace with actual 
 
 export interface ProductFormType {
   name: string;
-  productCode: string;
-  productCodeForScheme: string;
-  isShow: false;
-  hasCharges: false;
-  isCommissions: false;
+  // productCode: string;
+  // productCodeForScheme: string;
+  isShow: boolean;
+  hasCharges: boolean;
+  isCommissions: boolean;
   transactionType?: "CREDIT" | "DEBIT" | "";
-  isInventory: false;
-  isSettlement: false;
-  isVirtual: false;
-  isVisible: false;
-  reverseTx: false;
+  isInventory: boolean;
+  isSettlement: boolean;
+  isVirtual: boolean;
+  isVisible: boolean;
+  reverseTx: boolean;
   // walletType: "",
   // subProducts: "",
   productGroup: string;
-  clusterMode: false;
-  blocked: false;
-  active: false;
+  clusterMode: boolean;
+  blocked: boolean;
+  active: boolean;
 }
 
 export interface ProductTableType extends ProductFormType {
   id: string;
+  productCode: string;
+  productCodeForScheme: string;
   createdOn?: string;
   createdBy?: string;
   editedOn?: string;
@@ -44,24 +46,24 @@ export type CreateProductPayload = Omit<
   dashboardUrl: string;
   dashboardUrlForApk: string;
   dashboardImage: string;
-  priority: Number | string;
-  minimumPostpaidBalance: Number;
-  minimumPrepaidBalance: Number;
-  minimumGullakBalance: Number;
-  minimumSingleTransactionAmount: Number;
-  maximumSingleTransactionAmount: Number;
-  sgst: Number;
-  tds: Number;
+  priority: number | string;
+  minimumPostpaidBalance: number;
+  minimumPrepaidBalance: number;
+  minimumGullakBalance: number;
+  minimumSingleTransactionAmount: number;
+  maximumSingleTransactionAmount: number;
+  sgst: number;
+  tds: number;
   createdBy: string;
   inventory: {
-    isInventory: Boolean; // Omit, because it is nested inside object
+    isInventory: boolean; // Omit, because it is nested inside object
     inventoryPrice: number;
-    isVirtual: Boolean; // Same
-    isShow: Boolean; //Same
+    isVirtual: boolean; // Same
+    isShow: boolean; //Same
   };
   cluster: {
-    surcharge: Boolean;
-    schemeEngine: Boolean;
+    surcharge: boolean;
+    schemeEngine: boolean;
   };
 };
 
@@ -74,24 +76,24 @@ export type UpdateProductPayload = Omit<
   dashboardUrl: string;
   dashboardUrlForApk: string;
   dashboardImage: string;
-  priority: Number | string;
-  minimumPostpaidBalance: Number;
-  minimumPrepaidBalance: Number;
-  minimumGullakBalance: Number;
-  minimumSingleTransactionAmount: Number;
-  maximumSingleTransactionAmount: Number;
-  sgst: Number;
-  tds: Number;
+  priority: number | string;
+  minimumPostpaidBalance: number;
+  minimumPrepaidBalance: number;
+  minimumGullakBalance: number;
+  minimumSingleTransactionAmount: number;
+  maximumSingleTransactionAmount: number;
+  sgst: number;
+  tds: number;
   editedBy: string;
   inventory: {
-    isInventory: Boolean;
+    isInventory: boolean;
     inventoryPrice: number;
-    isVirtual: Boolean;
-    isShow: Boolean;
+    isVirtual: boolean;
+    isShow: boolean;
   };
   cluster: {
-    surcharge: Boolean;
-    schemeEngine: Boolean;
+    surcharge: boolean;
+    schemeEngine: boolean;
   };
 };
 
@@ -103,29 +105,29 @@ export type FetchProductParams = {
 
 export const initialValues: ProductFormType = {
   name: "",
-  productCode: "",
-  productCodeForScheme: "",
-  isShow: false,
+  // productCode: "",
+  // productCodeForScheme: "",
+  isShow: true,
   hasCharges: false,
   isCommissions: false,
   transactionType: "",
   isInventory: false,
   isSettlement: false,
   isVirtual: false,
-  isVisible: false,
+  isVisible: true,
   reverseTx: false,
   // walletType: "",
   // subProducts: "",
   productGroup: "",
   clusterMode: false,
   blocked: false,
-  active: false,
+  active: true,
 };
 
 export const validationSchema: Record<keyof ProductFormType, Yup.AnySchema> = {
   name: textField("Name", 50, true),
-  productCode: textField("Product Code", 30, true),
-  productCodeForScheme: textField("Product Code For Scheme", 30, true),
+  // productCode: textField("Product Code", 30, true),
+  // productCodeForScheme: textField("Product Code For Scheme", 30, true),
   isShow: Yup.boolean().required("Is Show is required"),
   hasCharges: Yup.boolean().required("Has Charges is required"),
   isCommissions: Yup.boolean().required("Is Commissions is required"),
@@ -184,7 +186,7 @@ export const headers: GenericTableHeader<ProductTableType>[] = [
 ];
 
 export function transformProductToTableType(
-  product: Record<string, any>
+  product: Record<string, any>,
 ): ProductTableType {
   return {
     id: String(product.id),
@@ -214,12 +216,12 @@ export function transformProductToTableType(
 }
 
 export function transformProductToFormData(
-  product: Record<string, any>
+  product: Record<string, any>,
 ): ProductFormType {
   return {
     name: product.name ?? "",
-    productCode: product.productCode ?? "",
-    productCodeForScheme: product.productCodeForScheme ?? "",
+    // productCode: product.productCode ?? "",
+    // productCodeForScheme: product.productCodeForScheme ?? "",
     isShow: product.inventory?.isShow ?? false,
     hasCharges: product.hasCharges ?? false,
     isCommissions: product.isCommissions ?? false,
@@ -239,7 +241,7 @@ export function transformProductToFormData(
 }
 
 export const transformFormToCreateProductPayload = (
-  formData: ProductFormType
+  formData: ProductFormType,
 ): CreateProductPayload => {
   const { isInventory, isVirtual, isShow, ...rest } = formData;
   return {
@@ -256,7 +258,7 @@ export const transformFormToCreateProductPayload = (
     minimumGullakBalance: 0.0,
     minimumSingleTransactionAmount: 1.0,
     maximumSingleTransactionAmount: 500100,
-    sgst: 0.0,
+    sgst: 18.0,
     tds: 5.0,
     createdBy: localStorage.getItem("username") || "system",
     inventory: {
@@ -273,7 +275,7 @@ export const transformFormToCreateProductPayload = (
 };
 
 export const transformFormToUpdateProductPayload = (
-  formData: ProductFormType
+  formData: ProductFormType,
 ): UpdateProductPayload => {
   const { isInventory, isVirtual, isShow, ...rest } = formData;
   return {
@@ -290,7 +292,7 @@ export const transformFormToUpdateProductPayload = (
     minimumGullakBalance: 0.0,
     minimumSingleTransactionAmount: 1.0,
     maximumSingleTransactionAmount: 500100,
-    sgst: 0.0,
+    sgst: 18.0,
     tds: 5.0,
     editedBy: localStorage.getItem("username") || "system",
     inventory: {

@@ -154,16 +154,6 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikTextInputComponent
-                    name="subProductCode"
-                    label="Sub Product Code"
-                    placeholder="Enter Sub Product Code"
-                    withAsterisk
-                    maxLength={50}
-                  />
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikSelectComponent
                     name="product"
                     label="Product"

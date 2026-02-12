@@ -114,22 +114,25 @@ const ProductForm = ({ mode }: ProductFormProps) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="productCode"
-                label="Product Code"
-                placeholder="Enter Product Code"
+              <FormikSelectComponent
+                name="transactionType"
+                label="Transaction Type"
+                placeholder="Select Transaction Type"
                 withAsterisk
-                maxLength={30}
+                data={[
+                  { label: "CREDIT", value: "CREDIT" },
+                  { label: "DEBIT", value: "DEBIT" },
+                ]}
               />
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="productCodeForScheme"
-                label="Product Code For Scheme"
-                placeholder="Enter Product Code For Scheme"
+                name="productGroup"
+                label="Product Group"
+                placeholder="Enter Product Group"
                 withAsterisk
-                maxLength={30}
+                maxLength={50}
               />
             </Grid.Col>
 
@@ -160,19 +163,6 @@ const ProductForm = ({ mode }: ProductFormProps) => {
                 placeholder="Select"
                 withAsterisk
                 data={booleanSelectData}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikSelectComponent
-                name="transactionType"
-                label="Transaction Type"
-                placeholder="Select Transaction Type"
-                withAsterisk
-                data={[
-                  { label: "CREDIT", value: "CREDIT" },
-                  { label: "DEBIT", value: "DEBIT" },
-                ]}
               />
             </Grid.Col>
 
@@ -223,16 +213,6 @@ const ProductForm = ({ mode }: ProductFormProps) => {
                 placeholder="Select Reverse Tx"
                 withAsterisk
                 data={booleanSelectData}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="productGroup"
-                label="Product Group"
-                placeholder="Enter Product Group"
-                withAsterisk
-                maxLength={50}
               />
             </Grid.Col>
 
