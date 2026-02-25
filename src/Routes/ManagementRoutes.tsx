@@ -25,7 +25,8 @@ export const ManagementRoutes = (
     <Route path="/management/user/create" element={<UserCreation />} />
     <Route path="/management/user/create/:type" element={<UserFormPage />} />
     <Route path="/management/user/pending" element={<PendingUser />} />
-    <Route path="/management/user/pending/edit/:id" element={<PendingUserForm />} />
+    <Route path="/management/user/pending/:type/:id" element={<PendingUserForm />} />
+    <Route path="/management/user/pending/edit/:type/:id" element={<PendingUserForm />} />
     <Route path="/management/user/onboarded" element={<OnboardedUsers />} />
     <Route path="/management/user/rejected" element={<RejectedUser />} />
     <Route path="/management/user-configuration" element={<UserConfiguration />} />

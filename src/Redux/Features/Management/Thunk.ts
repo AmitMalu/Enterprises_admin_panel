@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../Config/Api/EndPoints";
-import { CreateUserPayload } from "./Types";
+import { CreateUserPayload, UpdateUserPayload } from "./Types";
 
 export const createUser = createAsyncThunk(
   "management/create",
@@ -11,7 +11,7 @@ export const createUser = createAsyncThunk(
 
       if (!endPoint) {
         return rejectWithValue(
-          `No endpoint configured for userType: ${userType}`
+          `No endpoint configured for userType: ${userType}`,
         );
       }
 
@@ -26,7 +26,7 @@ export const createUser = createAsyncThunk(
       } else {
         // If not 200, treat as failure
         return rejectWithValue(
-          response.data.message || "Failed to Create User"
+          response.data.message || "Failed to Create User",
         );
       }
     } catch (error: any) {
@@ -41,5 +41,49 @@ export const createUser = createAsyncThunk(
 
       return rejectWithValue(serverMessage || "Failed to Create User");
     }
-  }
+  },
+);
+
+export const updateUser = createAsyncThunk(
+  "management/update",
+  async ({ userType, payload, id }: UpdateUserPayload, { rejectWithValue }) => {
+    try {
+      const endPoint = `${API_ENDPOINTS?.MANAGEMENT.USER_CREATE[userType]}/${id}`;
+
+      if (!endPoint) {
+        return rejectWithValue(
+          `No endpoint configured for userType: ${userType}`,
+        );
+      }
+
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(payload));
+
+      const response = await axiosInstance.put(endPoint, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data.statusCode == 200 || response.data.statusCode == 201) {
+        return response.data;
+      } else {
+        // If not 200, treat as failure
+        return rejectWithValue(
+          response.data.message || "Failed to Update User",
+        );
+      }
+    } catch (error: any) {
+      console.error(error, "error");
+
+      const serverMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.messages?.[0] ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Error while Updating User";
+
+      return rejectWithValue(serverMessage);
+    }
+  },
 );

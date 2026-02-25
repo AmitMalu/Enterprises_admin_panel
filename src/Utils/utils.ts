@@ -257,6 +257,11 @@ export const toFormData = (obj: Record<string, any>): FormData => {
 
 // Masters form submit Handler
 type TransformPayloadFn<T> = (data: T) => Record<string, any>;
+
+type ToastOptions = {
+  successAutoClose?: number | false;
+  errorAutoClose?: number | false;
+};
 export interface HandleMasterFormSubmitProps<T> {
   mode?: "add" | "edit";
   id?: string;
@@ -272,6 +277,7 @@ export interface HandleMasterFormSubmitProps<T> {
   transformUpdatePayload?: TransformPayloadFn<T>;
   successNavigatePath?: string;
   entityName: string;
+  toastOptions?: ToastOptions;
 }
 
 // utils/normalize.ts
@@ -316,6 +322,7 @@ export const handleMasterFormSubmit = async <T>({
   transformUpdatePayload,
   successNavigatePath,
   entityName = "Item",
+  toastOptions,
 }: HandleMasterFormSubmitProps<T>) => {
   try {
     // ✅ Sanitize values here
@@ -355,6 +362,9 @@ export const handleMasterFormSubmit = async <T>({
     toast.success(
       res.message ||
         `${entityName} ${mode === "edit" ? "updated" : "created"} successfully`,
+      {
+        autoClose: toastOptions?.successAutoClose ?? 3000, // default
+      },
     );
     if (successNavigatePath) {
       navigate(successNavigatePath);
@@ -369,6 +379,12 @@ export const handleMasterFormSubmit = async <T>({
     );
     toast.error(
       err || `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`,
+      {
+        autoClose: toastOptions?.errorAutoClose ?? 3000,
+        pauseOnHover: true,
+        closeOnClick: false,
+        draggable: true,
+      },
     );
   }
 };

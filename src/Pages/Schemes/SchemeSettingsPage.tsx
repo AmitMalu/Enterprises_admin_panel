@@ -161,6 +161,9 @@ const SchemeSettingsPage = () => {
     entityName: "SchemeRate",
     resetFormData: resetUpdatedOperatorValues,
     delay: 5000,
+    toastOptions: {
+      errorAutoClose: 10000, 
+    },
   });
 
   const handleSave = () => {
