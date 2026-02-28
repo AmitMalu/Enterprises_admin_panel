@@ -22,6 +22,7 @@ import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import { RefreshIcon } from "../../assets/Icons";
 import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 import { transformToUpdateTransPayload, UPDATE_TRANS_KEY, UPDATE_TRANS_URL, updateTransHeaders, updateTransInitialValues, UpdateTransTableType, UpdateTransValidationSchema } from "../../Config/Funding/UpdateTransConfig";
+import { colors } from "../../theme/colors";
 
 const UpdateTransaction = () => {
 
@@ -287,11 +288,11 @@ const UpdateTransaction = () => {
                       fullWidth={false}
                       radius={6}
                       size="sm"
-                      borderColor="#fff"
+                      borderColor={colors.text.inverse}
                       variant="filled"
                       type="submit"
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                     >
                       VIEW
                     </ButtonComponent>
@@ -307,11 +308,11 @@ const UpdateTransaction = () => {
         <ButtonComponent
           style={{ padding: "4px 20px", height: 32 }}
           radius={2}
-          textColor="#fff"
-          borderColor="#fff"
+          textColor={colors.text.inverse}
+          borderColor={colors.text.inverse}
           fontSize="16"
           throttleMs={5000}
-          bgColor="#BF0204"
+          bgColor={colors.status.danger}
           onClick={() => handleSettlementAction("REJECT")}
           leftIcon={<IconCancel />}
           disabled={
@@ -327,13 +328,13 @@ const UpdateTransaction = () => {
         <ButtonComponent
           style={{ padding: "4px 20px", height: 32 }}
           radius={2}
-          textColor="#FFF"
-          borderColor="#fff"
+          textColor={colors.text.inverse}
+          borderColor={colors.text.inverse}
           fontSize="16"
           throttleMs={5000}
-          bgColor="#28A745"
+          bgColor={colors.status.successAlt}
           onClick={() => handleSettlementAction("APPROVE")}
-          leftIcon={<GiCheckMark size={16} color="#FFF" />}
+          leftIcon={<GiCheckMark size={16} color={colors.text.inverse} />}
           disabled={
             loadingActionSubmit ||
             !!loading ||

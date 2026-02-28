@@ -17,6 +17,7 @@ import { createMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 import PopupModal from "../../Components/Atoms/PopupModal";
 import { CustomCarousel } from "../../Components/Atoms/CustomCarousel";
+import { colors } from "../../theme/colors";
 
 const switchClassNames = {
   label: "mantine-Switch-label text-[14px] font-medium w-[180px] ", // fixed width outer label
@@ -223,11 +224,11 @@ const UserMapping = () => {
                     fullWidth={false}
                     radius={6}
                     fontSize="14"
-                    borderColor="#fff"
+                    borderColor={colors.text.inverse}
                     variant="filled"
                     // type="submit"
-                    bgColor="#C30305"
-                    textColor="#FFFFFF"
+                    bgColor={colors.brand.primary}
+                    textColor={colors.text.inverse}
                     rightIcon={<IconArrowLeftFromArc />}
                     style={{ padding: "5px 10px" }}
                     onClick={async () => {
@@ -328,15 +329,15 @@ const UserMapping = () => {
                   <div className="flex justify-end gap-3 mt-4">
                     <ButtonComponent
                       variant="outline"
-                      bgColor="#f1f1f1"
-                      textColor="#333"
+                      bgColor={colors.surface.muted}
+                      textColor={colors.text.secondary}
                       onClick={() => setIsConfirmOpen(false)}
                     >
                       Cancel
                     </ButtonComponent>
                     <ButtonComponent
-                      bgColor="#C30305"
-                      textColor="#fff"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                       onClick={() => {
                         setIsConfirmOpen(false);
                         submitForm(); // <-- call Formik submit programmatically

@@ -41,9 +41,9 @@
 //           <ButtonComponent
 //             style={{ padding: "5px 16px", height: 36 }}
 //             radius={1}
-//             textColor="#000000"
-//             borderColor="#CACACA"
-//             bgColor="#ffffff"
+//             textColor={colors.text.primary}
+//             borderColor={colors.border.strong}
+//             bgColor={colors.text.inverse}
 //             leftIcon={<FilterIcon />}
 //           >
 //             Filter
@@ -53,9 +53,9 @@
 //           <ButtonComponent
 //             style={{ padding: "5px 16px", height: 36 }}
 //             radius={1}
-//             textColor="#000000"
-//             borderColor="#CACACA"
-//             bgColor="#ffffff"
+//             textColor={colors.text.primary}
+//             borderColor={colors.border.strong}
+//             bgColor={colors.text.inverse}
 //             leftIcon={<DownloadIcon />}
 //           >
 //             Export
@@ -65,9 +65,9 @@
 //           <ButtonComponent
 //             style={{ height: 36, width: 10, paddingLeft: "28px" }}
 //             radius={1}
-//             textColor="#000000"
-//             borderColor="#CACACA"
-//             bgColor="#ffffff"
+//             textColor={colors.text.primary}
+//             borderColor={colors.border.strong}
+//             bgColor={colors.text.inverse}
 //             leftIcon={<GridIcon />}
 //           >
 //             <></>
@@ -77,9 +77,9 @@
 //           <ButtonComponent
 //             style={{ padding: "5px 10px", height: 36 }}
 //             radius={1}
-//             textColor="#000000"
-//             borderColor="#CACACA"
-//             bgColor="#ffffff"
+//             textColor={colors.text.primary}
+//             borderColor={colors.border.strong}
+//             bgColor={colors.text.inverse}
 //             leftIcon={<ColIcon />}
 //           >
 //             Cols
@@ -89,9 +89,9 @@
 //           <ButtonComponent
 //             style={{ height: 36, padding: "5px" }}
 //             radius={1}
-//             textColor="#000000"
-//             borderColor="#CACACA"
-//             bgColor="#ffffff"
+//             textColor={colors.text.primary}
+//             borderColor={colors.border.strong}
+//             bgColor={colors.text.inverse}
 //             leftIcon={<SettingIcon />}
 //           >
 //             <DropDownArrowIcon />
@@ -103,9 +103,9 @@
 //           <ButtonComponent
 //             style={{ height: 36, width: 10, paddingLeft: "28px" }}
 //             radius={1}
-//             textColor="#000000"
-//             bgColor="#ffffff"
-//             borderColor="#CACACA"
+//             textColor={colors.text.primary}
+//             bgColor={colors.text.inverse}
+//             borderColor={colors.border.strong}
 //             leftIcon={<RefreshIcon />}
 //           >
 //             <></>

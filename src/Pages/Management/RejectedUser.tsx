@@ -13,6 +13,7 @@ import { IoArrowUndoSharp } from "react-icons/io5";
 import PopupModal from "../../Components/Atoms/PopupModal";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
+import { colors } from "../../theme/colors";
 
 const RejectedUsers = () => {
 
@@ -153,7 +154,7 @@ const RejectedUsers = () => {
             <div className="flex justify-center gap-2 min-w-10">
               <span
                 onClick={() => {
-                  setSelectedUserId(item.id); // or item.id, depending on your API
+                  setSelectedUserId(item.id ?? null); // or item.id, depending on your API
                   setIsModalOpen(true);
                 }}
                 className="cursor-pointer"
@@ -188,10 +189,10 @@ const RejectedUsers = () => {
       >
         <p>Are you sure you want to move <strong>{selectedUserId}</strong> User back to Pending?</p>
         <div className="flex justify-end gap-4 mt-4">
-          <ButtonComponent onClick={() => setIsModalOpen(false)} bgColor="#ccc" textColor="#000">
+          <ButtonComponent onClick={() => setIsModalOpen(false)} bgColor={colors.border.strong} textColor={colors.text.primary}>
             Cancel
           </ButtonComponent>
-          <ButtonComponent onClick={handleConfirmRestore} bgColor="#BF0204" textColor="#fff">
+          <ButtonComponent onClick={handleConfirmRestore} bgColor={colors.status.danger} textColor={colors.text.inverse}>
             Confirm
           </ButtonComponent>
         </div>

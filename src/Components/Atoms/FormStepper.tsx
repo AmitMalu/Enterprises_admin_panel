@@ -18,8 +18,8 @@ const FormStepper: React.FC<FormStepperProps> = ({ steps, activeStep }) => {
             <span
               className={`text-[12px] sm:text-[14px] md:text-[16px] xl:text-[18px] font-['Inter'] whitespace-nowrap ${
                 index <= activeStep
-                  ? "text-[#D82226] font-medium"
-                  : "text-[#91929F] font-normal"
+                  ? "text-brand-emphasis font-medium"
+                  : "text-text-disabled font-normal"
               }`}
             >
               {step}
@@ -30,10 +30,10 @@ const FormStepper: React.FC<FormStepperProps> = ({ steps, activeStep }) => {
 
       <div className="relative w-full h-[5px]">
         {/* Outer line */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[#EBEEF2] rounded" />
+        <div className="absolute top-0 left-0 w-full h-full bg-surface-track rounded" />
         {/* Progress line */}
         <div
-          className="absolute top-0 left-0 h-full bg-[#D82226] rounded transition-all duration-300"
+          className="absolute top-0 left-0 h-full bg-brand-emphasis rounded transition-all duration-300"
           style={{ width: `${progressPercent}%` }}
         />
       </div>

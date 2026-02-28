@@ -1,5 +1,6 @@
 import { Card } from "@mantine/core";
 import { BarChart, ResponsiveContainer, CartesianGrid, XAxis, YAxis, Bar, Tooltip } from "recharts";
+import { colors } from "../../theme/colors";
 
 const DashboardBarGraph = ({ graphData }: any) => {
     return (
@@ -10,7 +11,7 @@ const DashboardBarGraph = ({ graphData }: any) => {
                     <XAxis dataKey="product" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="volume" fill="#6892ed" />
+                    <Bar dataKey="volume" fill={colors.chart.primary} />
                 </BarChart>
             </ResponsiveContainer>
         </Card>

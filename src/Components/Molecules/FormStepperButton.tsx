@@ -1,4 +1,5 @@
 import ButtonComponent from "../Atoms/ButtonComponent";
+import { colors } from "../../theme/colors";
 
 interface FormStepperButtonProps {
   activeStep: number;
@@ -21,8 +22,8 @@ const FormStepperButton: React.FC<FormStepperButtonProps> = ({
         fullWidth={false}
         radius={6}
         variant="filled"
-        bgColor="#FDE4E4"
-        textColor="#C30305"
+        bgColor={colors.status.dangerSoft}
+        textColor={colors.brand.primary}
         style={{ padding: "10px 30px" }}
         onClick={onBack}
       >
@@ -33,8 +34,8 @@ const FormStepperButton: React.FC<FormStepperButtonProps> = ({
       fullWidth={false}
       radius={6}
       variant="filled"
-      bgColor="#C30305"
-      textColor="#FFFFFF"
+      bgColor={colors.brand.primary}
+      textColor={colors.text.inverse}
       style={{ padding: "10px 30px" }}
       onClick={() => {
         if (onFinalStep && activeStep === maxSteps - 1) {

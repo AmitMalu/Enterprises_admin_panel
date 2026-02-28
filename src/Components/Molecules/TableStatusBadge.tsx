@@ -1,16 +1,24 @@
-const statusColorMap: Record<string, string> = {
-    PENDING: "bg-yellow-200 text-yellow-900",
-    SUCCESS: "bg-green-200 text-green-900",
-    FAILED: "bg-red-200 text-red-900",
-    REJECTED: "bg-red-200 text-red-900",
+import { colors } from "../../theme/colors";
+
+const statusColorMap: Record<string, { backgroundColor: string; color: string }> = {
+    PENDING: { backgroundColor: colors.status.warning, color: colors.text.inverse },
+    SUCCESS: { backgroundColor: colors.status.successAlt, color: colors.text.inverse },
+    REJECTED: { backgroundColor: colors.status.dangerVivid, color: colors.text.inverse },
+    REFUNDED: { backgroundColor: colors.status.dangerVivid, color: colors.text.inverse },
+    FAILED: { backgroundColor: colors.status.dangerSoft, color: colors.text.disabled },
+    FAILURE: { backgroundColor: colors.status.dangerSoft, color: colors.text.disabled },
 };
 
 const TableStatusBadge = ({ status }: { status: string }) => {
-    const classes = statusColorMap[status.toUpperCase()] || "bg-gray-200 text-gray-900";
+    const badgeStyle = statusColorMap[status.toUpperCase()] || {
+        backgroundColor: colors.surface.muted,
+        color: colors.text.secondary,
+    };
 
     return (
         <span
-            className={`px-2 py-[2px] rounded-full text-xs font-medium inline-block whitespace-nowrap ${classes}`}
+            className="px-2 py-[2px] rounded-full text-xs font-medium inline-block whitespace-nowrap"
+            style={badgeStyle}
         >
             {status}
         </span>

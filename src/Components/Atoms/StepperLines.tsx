@@ -14,7 +14,7 @@ const StepperLines: React.FC<StepperLinesPrope> = ({
       {Array.from({ length: totalSteps }).map((_, index) => (
         <div
           key={index}
-          className={`w-[6px] bg-[#FF4D4D] rounded-full
+          className={`w-[6px] bg-status-danger-vivid rounded-full
                 ${index === activeStep - 1 ? "h-[12vh]" : "h-[4vh]"}`}
         />
       ))}

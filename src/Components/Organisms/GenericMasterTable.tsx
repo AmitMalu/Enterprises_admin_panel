@@ -4,10 +4,11 @@ import { GenericTableHeader } from "../../Utils/utils";
 import TableFilterRow from "../Molecules/TableFilterRow";
 import TableBody from "./TableBody";
 import TableFooter from "./TableFooter";
+import { colors } from "../../theme/colors";
 
 const thStyle = {
-  backgroundColor: "#BF0204",
-  color: "white",
+  backgroundColor: colors.status.danger,
+  color: colors.text.inverse,
   textAlign: "center" as const,
   padding: "6px 12px",
   fontWeight: 600,

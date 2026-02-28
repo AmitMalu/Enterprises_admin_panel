@@ -11,6 +11,7 @@ import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit"
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { IconArrowLeft } from "@tabler/icons-react";
+import { colors } from "../../theme/colors";
 
 const validationSchema = Yup.object({
   otp: Yup.string().length(6, "OTP must be 6 digits").required("OTP is required"),
@@ -124,11 +125,11 @@ const OtpVerify = () => {
 
   return (
     <div className="w-full px-4 flex flex-col text-left">
-      <h2 className="pl-4 mb-8 text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
+      <h2 className="pl-4 mb-8 text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
         Enter OTP
       </h2>
 
-      <div className="pl-4 mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-[#BF0204]">
+      <div className="pl-4 mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-status-danger">
         Please Enter Your OTP
       </div>
 
@@ -159,7 +160,7 @@ const OtpVerify = () => {
             >
               <ButtonComponent
                 onClick={handleResendOtp}
-                textColor="#BF0204"
+                textColor={colors.status.danger}
                 fontSize="14"
                 font="poppins"
                 throttleMs={10000}
@@ -172,8 +173,8 @@ const OtpVerify = () => {
             <div className="flex justify-between items-center">
               <ButtonComponent
                 size="md"
-                bgColor="#DB2729"
-                textColor="#fff"
+                bgColor={colors.brand.accent}
+                textColor={colors.text.inverse}
                 radius={12}
                 leftIcon={<IconArrowLeft />}
                 onClick={() => {
@@ -192,8 +193,8 @@ const OtpVerify = () => {
               </ButtonComponent>
               <ButtonComponent
                 size="md"
-                bgColor="#DB2729"
-                textColor="#fff"
+                bgColor={colors.brand.accent}
+                textColor={colors.text.inverse}
                 radius={12}
                 type="submit"
               >

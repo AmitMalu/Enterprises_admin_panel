@@ -22,6 +22,7 @@ import {
   submitFundRequest,
 } from "../../Redux/Features/Fundings/thunks";
 import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 const PrefundingForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -116,7 +117,7 @@ const PrefundingForm = () => {
   const readOnly = true;
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
       <BackHeader
         title={"Prefunding Form"}
@@ -261,12 +262,12 @@ const PrefundingForm = () => {
               <ButtonComponent
                 fullWidth={false}
                 radius={6}
-                borderColor="#fff"
+                borderColor={colors.text.inverse}
                 variant="filled"
                 type="submit"
                 disabled={isSubmitting || isActionDisabled}
-                bgColor="#BF0204"
-                textColor="#FFFFFF"
+                bgColor={colors.status.danger}
+                textColor={colors.text.inverse}
                 style={{ padding: "0px 30px" }}
                 onClick={() => setSelectedAction("REJECTED")}
               >
@@ -276,12 +277,12 @@ const PrefundingForm = () => {
               <ButtonComponent
                 fullWidth={false}
                 radius={6}
-                borderColor="#fff"
+                borderColor={colors.text.inverse}
                 variant="filled"
                 type="submit"
-                bgColor="#28a745"
+                bgColor={colors.status.successAlt}
                 disabled={isSubmitting || isActionDisabled}
-                textColor="#FFFFFF"
+                textColor={colors.text.inverse}
                 style={{ padding: "0px 30px" }}
                 onClick={() => setSelectedAction("APPROVED")}
               >

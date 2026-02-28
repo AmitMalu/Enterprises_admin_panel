@@ -1,11 +1,12 @@
 import TextComponent from "../Atoms/TextComponent";
 import { capitalizeWords } from "../../Utils/utils";
 import { BreadCrumbIcon } from "../../assets/Icons";
+import { colors } from "../../theme/colors";
 
 const BreadCrumb = ({
   type,
   text = "Management",
-  color = "#CA4343",
+  color = colors.brand.highlight,
   gap = 2,
 }: {
   type: string;

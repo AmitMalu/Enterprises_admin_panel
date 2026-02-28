@@ -6,6 +6,7 @@ import {
 } from "../../assets/Icons";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import TextInputComponent from "../Atoms/TextInputComponent";
+import { colors } from "../../theme/colors";
 
 const SchemeListToolbar = ({
   handleSearchChange,
@@ -16,7 +17,7 @@ const SchemeListToolbar = ({
 }) => {
   return (
     <div className="flex justify-between mt-8">
-      <div className="border border-[#E0E2E7] rounded-md">
+      <div className="border border-border-light rounded-md">
         <ButtonComponent
           style={{
             padding: "5px 14px",
@@ -24,8 +25,8 @@ const SchemeListToolbar = ({
           }}
           radius={6}
           font="Inter"
-          textColor="#000000"
-          bgColor="#E6EAED"
+          textColor={colors.text.primary}
+          bgColor={colors.surface.accentMuted}
           fontSize="14"
           fw="600"
         >
@@ -51,9 +52,9 @@ const SchemeListToolbar = ({
           }}
           radius={8}
           font="Inter"
-          textColor="#667085"
-          borderColor="#E0E2E7"
-          bgColor="#fff"
+          textColor={colors.text.subtle}
+          borderColor={colors.border.light}
+          bgColor={colors.text.inverse}
           fontSize="14"
           fw="600"
           leftIcon={<SelectDateIcon />}
@@ -68,9 +69,9 @@ const SchemeListToolbar = ({
           }}
           radius={8}
           font="Inter"
-          textColor="#667085"
-          borderColor="#E0E2E7"
-          bgColor="#fff"
+          textColor={colors.text.subtle}
+          borderColor={colors.border.light}
+          bgColor={colors.text.inverse}
           fontSize="14"
           fw="600"
           leftIcon={<FilterIcon2 />}
@@ -85,9 +86,9 @@ const SchemeListToolbar = ({
           }}
           radius={8}
           font="Inter"
-          textColor="#667085"
-          borderColor="#E0E2E7"
-          bgColor="#fff"
+          textColor={colors.text.subtle}
+          borderColor={colors.border.light}
+          bgColor={colors.text.inverse}
           fontSize="14"
           fw="600"
           leftIcon={<ExportIcon width={18} height={18} />}

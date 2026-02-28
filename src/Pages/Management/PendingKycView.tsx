@@ -19,6 +19,7 @@ import ButtonComponent from '../../Components/Atoms/ButtonComponent';
 import FilePreviewModal from '../../Components/Atoms/FilePreviewModal';
 import { extractVerificationApiMessage } from '../../Utils/utils';
 import { API_ENDPOINTS } from '../../Config/Api/EndPoints';
+import { colors } from "../../theme/colors";
 
 const documents = [
     { label: "AADHAAR FRONT", value: "AADHAAR_FRONT" },
@@ -159,7 +160,7 @@ const PendingKycView = () => {
     }, [dispatch, id]);
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title="PENDING KYC DETAILS"
@@ -225,8 +226,8 @@ const PendingKycView = () => {
                                             size="sm"
                                             fontSize="14"
                                             radius={6}
-                                            bgColor="#C30305"
-                                            textColor="#FFFFFF"
+                                            bgColor={colors.brand.primary}
+                                            textColor={colors.text.inverse}
                                             disabled={!!fetchError || !!loading || verifying}
                                         >
                                             {verifying ? "Verifying..." : "Verify"}

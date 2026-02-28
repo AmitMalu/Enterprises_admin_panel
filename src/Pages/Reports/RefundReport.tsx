@@ -19,6 +19,7 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import { resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
 import { useAppDispatch } from "../../Redux/hooks";
 import { RefreshIcon } from "../../assets/Icons";
+import { colors } from "../../theme/colors";
 
 const RefundReport = () => {
 
@@ -195,12 +196,12 @@ const RefundReport = () => {
                       radius={6}
                       style={{ height: 30 }}
                       size="sm"
-                      borderColor="#fff"
+                      borderColor={colors.text.inverse}
                       variant="filled"
                       type="submit"
                       disabled={loading}
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                     >
                       VIEW
                     </ButtonComponent>

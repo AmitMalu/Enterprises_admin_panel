@@ -2,6 +2,7 @@
 import React from "react";
 import { Select } from "@mantine/core";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
+import { colors } from "../../theme/colors";
 
 interface SelectComponentProps {
   label?: string;
@@ -86,7 +87,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         rightSection={rightSection}
         styles={{
           input: {
-            color: "#282828",
+            color: colors.text.body,
             fontWeight: 500,
             whiteSpace: "nowrap",
             overflow: "hidden",

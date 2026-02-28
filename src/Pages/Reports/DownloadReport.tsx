@@ -19,6 +19,7 @@ import FormikDatePicker from "../../Components/Molecules/FormikDatePicker";
 import { DownloadIcon } from "../../assets/Icons";
 import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
 import { downloadFileThunk } from "../../Redux/Features/Masters/MastersThunk";
+import { colors } from "../../theme/colors";
 
 const DownloadReport = () => {
 
@@ -138,12 +139,12 @@ const DownloadReport = () => {
                       radius={6}
                       style={{ height: 30 }}
                       size="sm"
-                      borderColor="#fff"
+                      borderColor={colors.text.inverse}
                       variant="filled"
                       type="submit"
                       disabled={loading}
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                     >
                       VIEW
                     </ButtonComponent>

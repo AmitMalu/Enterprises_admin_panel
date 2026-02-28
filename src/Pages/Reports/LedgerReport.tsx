@@ -17,6 +17,7 @@ import { LEDGER_REPORT_KEY, LEDGER_REPORT_URL, LedgerReportHeaders, ledgerReport
 import { IconCalendar } from "@tabler/icons-react";
 import FormikDateRangePicker from "../../Components/Molecules/FormikDateRangePicker";
 import moment from "moment";
+import { colors } from "../../theme/colors";
 
 const LedgerReport = () => {
 
@@ -182,12 +183,12 @@ const LedgerReport = () => {
                       radius={6}
                       style={{ height: 34 }}
                       size="sm"
-                      borderColor="#fff"
+                      borderColor={colors.text.inverse}
                       variant="filled"
                       type="submit"
                       disabled={loading}
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                     >
                       VIEW
                     </ButtonComponent>

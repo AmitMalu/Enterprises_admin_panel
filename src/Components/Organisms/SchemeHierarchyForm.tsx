@@ -13,6 +13,7 @@ import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikMultiSelectComponent from "../Molecules/FormikMultiSelectComponent";
 import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 
 type SchemeHierarchyFormProps = { mode: "add" | "edit" };
@@ -80,7 +81,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
 
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title={mode === "edit" ? "Edit Scheme Hierarchy" : "Add Scheme Hierarchy"}
@@ -132,11 +133,11 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     disabled={!!fetchError || !!loading}
                                     style={{ padding: "10px 30px" }}
                                 >

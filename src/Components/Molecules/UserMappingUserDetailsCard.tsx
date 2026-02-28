@@ -1,5 +1,6 @@
 import { Card, Table } from "@mantine/core";
 import TextComponent from "../Atoms/TextComponent";
+import { colors } from "../../theme/colors";
 
 interface UserDetails {
     parentName?: string;
@@ -28,7 +29,7 @@ export const UserMappingUserDetailsCard = ({ title = "User Details", userDetails
     } = userDetails;
 
     return (
-        <Card shadow="lg" padding="xs" radius="md" withBorder mt="md" style={{ backgroundColor: "#F9FAFB" }}>
+        <Card shadow="lg" padding="xs" radius="md" withBorder mt="md" style={{ backgroundColor: colors.surface.elevated }}>
             <TextComponent fontWeight={600} fontSize="sm" mb="sm">
                 {title}
             </TextComponent>

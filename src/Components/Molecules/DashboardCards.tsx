@@ -1,4 +1,5 @@
 import TextComponent from "../Atoms/TextComponent";
+import { colors } from "../../theme/colors";
 
 type DashboardCardProps = {
     label: string;
@@ -20,11 +21,11 @@ export default function DashboardCard({
             className="p-5 rounded-xl shadow-sm bg-white border"
             style={{ borderColor }}
         >
-            <TextComponent fontSize={20} fontWeight={600} color="#2B3241">
+            <TextComponent fontSize={20} fontWeight={600} color={colors.text.title}>
                 {prefix} {value} {suffix}
             </TextComponent>
             <div>
-                <TextComponent fontSize={14} fontWeight={500} color="#777777">
+                <TextComponent fontSize={14} fontWeight={500} color={colors.text.tertiary}>
                     {label}
                 </TextComponent>
             </div>

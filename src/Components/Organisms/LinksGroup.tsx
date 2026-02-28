@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { IconChevronRight } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { colors } from "../../theme/colors";
 
 interface linksGroupProps {
   icon: React.FC<any>;
@@ -77,8 +78,8 @@ const LinksGroup: React.FC<linksGroupProps> = ({
 
 
   const paddingLeft = `${level * 8}px`;
-  const backgroundColor = isOpened ? "#BDC4C3" : "transparent";
-  const textColor = isActive ? "text-[#c30000]" : "text-[#1D1F2C]";
+  const backgroundColor = isOpened ? colors.surface.softActive : "transparent";
+  const textColor = isActive ? "text-brand-primary" : "text-text-heading";
   const fontSize = level === 1 ? "text-[14px]" : level === 2 ? "text-[13px]" : "text-[12px]";
   const fontWeight = level === 1 ? "font-normal" : "font-normal";
   const lineHeight = level === 1 ? "leading-[24px]" : level === 2 ? "leading-[21px]" : "leading-[19px]";

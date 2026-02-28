@@ -13,7 +13,7 @@ const LeftSideLayout: React.FC<LeftSideLayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="hidden lg:block lg:w-[65%] h-full relative bg-[#F2ECEC]">
+    <div className="hidden lg:block lg:w-[65%] h-full relative bg-surface-auth">
       {/* Background Image */}
       <img
         src={bgImage}

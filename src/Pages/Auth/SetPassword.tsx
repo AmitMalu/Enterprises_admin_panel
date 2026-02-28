@@ -8,6 +8,7 @@ import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { passwordValidation } from "../../Utils/ValidationUtils";
+import { colors } from "../../theme/colors";
 
 const validationSchema = Yup.object().shape({
   newPassword: passwordValidation,
@@ -71,11 +72,11 @@ const SetPassword: React.FC = () => {
 
   return (
     <div className="w-full px-10 flex flex-col text-left">
-      <h2 className="mb-8 text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
+      <h2 className="mb-8 text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
         Set Password
       </h2>
 
-      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-[#BF0204]">
+      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-status-danger">
         Please Enter new Password
       </div>
 
@@ -115,8 +116,8 @@ const SetPassword: React.FC = () => {
           <ButtonComponent
             fullWidth
             size="md"
-            bgColor="#DB2729"
-            textColor="#fff"
+            bgColor={colors.brand.accent}
+            textColor={colors.text.inverse}
             radius={12}
             type="submit"
           >

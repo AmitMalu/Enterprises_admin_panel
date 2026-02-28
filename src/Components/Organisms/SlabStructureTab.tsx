@@ -8,6 +8,7 @@ import CenteredMessage from "../Molecules/CenteredMessage";
 import ShimmerTableRows from "../Atoms/ShimmerTableRows";
 import { Skeleton, Table } from "@mantine/core";
 import { DeleteIcon } from "../../assets/Icons";
+import { colors } from "../../theme/colors";
 
 interface SlabStructureTabProps {
   data: any[];
@@ -53,7 +54,7 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, h
           <div key={operator?.operatorCode} className="mb-6">
             {/* Operator Heading */}
             <TextComponent
-              color="#1D1F2C"
+              color={colors.text.heading}
               fontFamily="Inter"
               fontWeight={600}
               fontSize={18}

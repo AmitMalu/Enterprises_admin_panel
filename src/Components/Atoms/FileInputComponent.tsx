@@ -4,6 +4,7 @@ import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { IconEye } from "@tabler/icons-react";
 import * as XLSX from "xlsx";
 import { ellipsisCellStyle } from "../../Utils/utils";
+import { colors } from "../../theme/colors";
 
 interface FileInputComponentProps {
   label?: string;
@@ -94,7 +95,7 @@ const FileInputComponent: React.FC<FileInputComponentProps> = ({
 
   const defaultStyles: FileInputComponentProps["styles"] = {
     input: {
-      color: "#282828",
+      color: colors.text.body,
       fontWeight: 500,
     },
   };

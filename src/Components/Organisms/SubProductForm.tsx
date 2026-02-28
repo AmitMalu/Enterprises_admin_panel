@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { fetchMasterById, fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 type SubProductFormProps = { mode: "add" | "edit" };
 
@@ -90,7 +91,7 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
   }, [dispatch, id, mode]);
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
       <BackHeader
         title={mode === "edit" ? "Edit Sub Product" : "Add Sub Product"}
@@ -292,11 +293,11 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
                 {!loading && !fetchError && <ButtonComponent
                   fullWidth={false}
                   radius={6}
-                  borderColor="#fff"
+                  borderColor={colors.text.inverse}
                   variant="filled"
                   type="submit"
-                  bgColor="#C30305"
-                  textColor="#FFFFFF"
+                  bgColor={colors.brand.primary}
+                  textColor={colors.text.inverse}
                   style={{ padding: "10px 30px" }}
                 >
                   SUBMIT

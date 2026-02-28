@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { PasswordInput, PinInput, TextInput } from "@mantine/core";
+import { colors } from "../../theme/colors";
 
 type InputType = "text" | "password" | "number" | "email";
 
@@ -138,7 +139,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
     length,
     styles: {
       input: {
-        color: "#282828",
+        color: colors.text.body,
         fontWeight: 500,
       },
     },

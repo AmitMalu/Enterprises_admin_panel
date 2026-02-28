@@ -15,6 +15,7 @@ import * as Yup from "yup";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { DownloadIcon } from "../../assets/Icons";
+import { colors } from "../../theme/colors";
 
 const Logs = () => {
 
@@ -113,11 +114,11 @@ const Logs = () => {
                     <ButtonComponent
                       style={{ padding: "4px 8px", height: 28 }}
                       radius={1}
-                      textColor="#000000"
-                      borderColor="#CACACA"
+                      textColor={colors.text.primary}
+                      borderColor={colors.border.strong}
                       fontSize="14"
                       throttleMs={5000}
-                      bgColor="#ffffff"
+                      bgColor={colors.text.inverse}
                       onClick={handleExportClick}
                       leftIcon={<DownloadIcon />}
                       disabled={!!loading || !!error}
@@ -131,12 +132,12 @@ const Logs = () => {
                       radius={6}
                       style={{ height: 30 }}
                       size="sm"
-                      borderColor="#fff"
+                      borderColor={colors.text.inverse}
                       variant="filled"
                       type="submit"
                       disabled={loading}
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                     >
                       VIEW
                     </ButtonComponent>

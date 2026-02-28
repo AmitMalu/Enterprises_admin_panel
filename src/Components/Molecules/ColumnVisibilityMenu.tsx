@@ -2,6 +2,7 @@ import { Menu, ScrollArea, Checkbox } from "@mantine/core";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import { ColIcon } from "../../assets/Icons";
 import { GenericTableHeader } from "../../Utils/utils";
+import { colors } from "../../theme/colors";
 
 interface ColumnVisibilityMenuProps {
   headers: GenericTableHeader<any>[];
@@ -25,10 +26,10 @@ const ColumnVisibilityMenu: React.FC<ColumnVisibilityMenuProps> = ({
         <ButtonComponent
           style={{ padding: "4px 8px", height: 32 }}
           radius={1}
-          textColor="#000000"
-          borderColor="#CACACA"
+          textColor={colors.text.primary}
+          borderColor={colors.border.strong}
           fontSize="16"
-          bgColor="#ffffff"
+          bgColor={colors.text.inverse}
           throttleMs={0}
           leftIcon={<ColIcon />}
         >
@@ -39,7 +40,7 @@ const ColumnVisibilityMenu: React.FC<ColumnVisibilityMenuProps> = ({
       <Menu.Dropdown>
         <ScrollArea.Autosize mah={200} px="xs">
           {/* ✅ Select All / Deselect All */}
-          <Menu.Label style={{ fontWeight: "bold", color: "#4D4E4E", marginLeft: "-10px" }}>
+          <Menu.Label style={{ fontWeight: "bold", color: colors.text.dim, marginLeft: "-10px" }}>
             <Checkbox
               label={allSelected ? "Deselect All" : "Select All"}
               checked={allSelected}

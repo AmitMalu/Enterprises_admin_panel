@@ -17,6 +17,7 @@ import { UserType } from "../../Config/UserCreationConfig/UserConfig";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { booleanSelectData } from "../../Utils/utils";
 import { updateUser } from "../../Redux/Features/Management/Thunk";
+import { colors } from "../../theme/colors";
 
 type FieldVisibilityConfig = {
   basic: string[];
@@ -207,9 +208,9 @@ const PendingUserForm = () => {
           const errorMessage = err || "Something went wrong";
           toast.error(errorMessage);
           setFetchError(errorMessage);
-          // setTimeout(() => {
-          //   navigate("/management/user/pending");
-          // }, 2000);
+          setTimeout(() => {
+            navigate("/management/user/pending");
+          }, 2000);
         } finally {
           setLoading(false);
         }
@@ -225,7 +226,7 @@ const PendingUserForm = () => {
   }, [dispatch, id]);
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
       <BackHeader
         title={isEditMode ? "Edit User Details" : "Pending User Form"}
@@ -724,11 +725,11 @@ const PendingUserForm = () => {
                       <ButtonComponent
                         fullWidth={false}
                         radius={6}
-                        borderColor="#fff"
+                        borderColor={colors.text.inverse}
                         variant="filled"
                         disabled={isSubmitting}
-                        bgColor="#ccc"
-                        textColor="#000"
+                        bgColor={colors.border.strong}
+                        textColor={colors.text.primary}
                         style={{ padding: "0px 30px", letterSpacing: 2 }}
                         onClick={() => {
                           if (dirty) cancelChanges(resetForm);
@@ -740,12 +741,12 @@ const PendingUserForm = () => {
                       <ButtonComponent
                         fullWidth={false}
                         radius={6}
-                        borderColor="#fff"
+                        borderColor={colors.text.inverse}
                         variant="filled"
                         type="button"
                         disabled={isSubmitting}
-                        bgColor="#24d12c"
-                        textColor="#FFFFFF"
+                        bgColor={colors.status.success}
+                        textColor={colors.text.inverse}
                         style={{ padding: "0px 30px", letterSpacing: 2 }}
                         onClick={() => saveChanges(values, resetForm)}
                       >
@@ -757,11 +758,11 @@ const PendingUserForm = () => {
                       <ButtonComponent
                         fullWidth={false}
                         radius={6}
-                        borderColor="#fff"
+                        borderColor={colors.text.inverse}
                         variant="filled"
                         disabled={isSubmitting}
-                        bgColor="#C30305"
-                        textColor="#FFFFFF"
+                        bgColor={colors.brand.primary}
+                        textColor={colors.text.inverse}
                         style={{ padding: "0px 30px", letterSpacing: 2 }}
                         onClick={() => {
                           setSelectedAction("REJECTED");
@@ -773,11 +774,11 @@ const PendingUserForm = () => {
                       <ButtonComponent
                         fullWidth={false}
                         radius={6}
-                        borderColor="#fff"
+                        borderColor={colors.text.inverse}
                         variant="filled"
                         disabled={isSubmitting}
-                        bgColor="#24d12c"
-                        textColor="#FFFFFF"
+                        bgColor={colors.status.success}
+                        textColor={colors.text.inverse}
                         style={{ padding: "0px 30px", letterSpacing: 2 }}
                         onClick={() => {
                           setSelectedAction("APPROVED");
@@ -819,8 +820,8 @@ const PendingUserForm = () => {
                       setIsRemarkModalOpen(false);
                       setRemark("");
                     }}
-                    bgColor="#ccc"
-                    textColor="#000"
+                    bgColor={colors.border.strong}
+                    textColor={colors.text.primary}
                   >
                     Cancel
                   </ButtonComponent>
@@ -835,8 +836,8 @@ const PendingUserForm = () => {
                       }
                     }}
                     type="submit"
-                    bgColor="#BF0204"
-                    textColor="#fff"
+                    bgColor={colors.status.danger}
+                    textColor={colors.text.inverse}
                   >
                     Submit
                   </ButtonComponent>

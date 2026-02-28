@@ -15,7 +15,7 @@ const CreateUserTypeSelector = () => {
   return (
     <div className="flex-1 flex items-center justify-center relative cursor-pointer">
       {/* Center Logo */}
-      <div className="w-fit h-fit p-8 pl-10 border-[14px] border-[#F0F3FF] bg-white rounded-full p-2 z-10 ">
+      <div className="w-fit h-fit p-8 pl-10 border-[14px] border-border-ring bg-white rounded-full p-2 z-10 ">
         <IMLogoWhiteBGSvg />
       </div>
 

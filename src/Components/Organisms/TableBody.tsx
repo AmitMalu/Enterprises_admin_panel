@@ -9,6 +9,7 @@ import { calculateCommission } from "../../Config/Schemes/SchemesConfig";
 import React from "react";
 import TableStatusBadge from "../Molecules/TableStatusBadge";
 import { EllipsisPopoverCell } from "../Molecules/EllipsisPopoverCell";
+import { colors } from "../../theme/colors";
 
 const TableBody = <T,>({
   data,
@@ -189,7 +190,7 @@ const TableBody = <T,>({
             );
 
             return hasAnyValue ? (
-              <Table.Tr style={{ backgroundColor: "#EBF7F6" }}>
+              <Table.Tr style={{ backgroundColor: colors.surface.nav }}>
                 {/* Add one blank column if an extra cell is rendered above */}
                 {renderExtraRowCell && <Table.Td></Table.Td>}
                 {calculatedCells}

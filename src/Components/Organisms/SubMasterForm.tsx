@@ -14,6 +14,7 @@ import { initialValues, SubMasterFormType, transformFormToCreateSubMasterPayload
 import { MASTER_KEY, MASTER_URL } from "../../Config/Master/MainMasterConfig";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 
 interface MasterDropdownItem {
@@ -116,7 +117,7 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
     }, [])
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title={mode === "edit" ? "Edit Sub Master" : "Add Sub Master"}
@@ -161,11 +162,11 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
                         {!loading && !fetchError && <ButtonComponent
                             fullWidth={false}
                             radius={6}
-                            borderColor="#fff"
+                            borderColor={colors.text.inverse}
                             variant="filled"
                             type="submit"
-                            bgColor="#C30305"
-                            textColor="#FFFFFF"
+                            bgColor={colors.brand.primary}
+                            textColor={colors.text.inverse}
                             style={{ padding: "10px 30px" }}
                         >
                             SUBMIT

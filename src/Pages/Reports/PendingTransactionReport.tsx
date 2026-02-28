@@ -24,6 +24,7 @@ import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import * as Yup from "yup"
 import { RefreshIcon } from "../../assets/Icons";
 import { SETTLEMENT_REPORT_URL, settlementReportFilterInitialValues, settlementReportFilterValidationSchema, settlementReportHeaders, SettlementReportTableType, transformToPendingTranxReportPayload, PENDING_TRANSCATION_REPORT_KEY } from "../../Config/Reports/SettlementReportConfig";
+import { colors } from "../../theme/colors";
 
 const PendingTransactionReport = () => {
 
@@ -241,11 +242,11 @@ const PendingTransactionReport = () => {
                       fullWidth={false}
                       radius={6}
                       size="sm"
-                      borderColor="#fff"
+                      borderColor={colors.text.inverse}
                       variant="filled"
                       type="submit"
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                     >
                       VIEW
                     </ButtonComponent>}

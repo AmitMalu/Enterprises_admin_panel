@@ -17,6 +17,7 @@ import FormikMultiSelectComponent from "../Molecules/FormikMultiSelectComponent"
 import BackHeader from "../Molecules/BackHeader";
 import { useMenuListFromSidebar } from "../../Utils/hooks/useMenuListFromSidebar";
 import { transformPermissionsToMenus } from "../../Utils/utils";
+import { colors } from "../../theme/colors";
 
 type UserConfigFormProps = { mode: "add" | "edit" };
 
@@ -89,7 +90,7 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
 
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title={mode === "edit" ? "Edit User Configuration" : "Add User Configuration"}
@@ -215,11 +216,11 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     disabled={!!fetchError || !!loading}
                                     style={{ padding: "10px 30px" }}
                                 >

@@ -27,6 +27,7 @@ import { fetchMasterById, fetchMasterDropdown } from "../../Redux/Features/Maste
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
 import { useVendor } from "../../Utils/hooks/useVendor";
+import { colors } from "../../theme/colors";
 
 type VendorCredentialFormProps = { mode: "add" | "edit" };
 
@@ -92,7 +93,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
     }, [dispatch, id, mode]);
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
             <BackHeader
                 title={mode === "edit" ? "Edit Vendor Credential" : "Add Vendor Credential"}
                 backPath="/master/vendor-credential"
@@ -343,11 +344,11 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     style={{ padding: "10px 30px" }}
                                 >
                                     SUBMIT
