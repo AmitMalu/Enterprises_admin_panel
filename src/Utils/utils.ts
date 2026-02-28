@@ -12,7 +12,7 @@ import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 import CryptoJS from "crypto-js";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.2 (12-02 2026 10:00 AM)";
+export const DEV_APP_VERSION_LABEL = "v1.0.2 (28-02 2026 05:00 AM)";
 
 export function encryptCredentials(username: string, password: string) {
   const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
@@ -532,4 +532,31 @@ export const extractVerificationApiMessage = (
 
   // Default fallback
   return fallback;
+};
+
+export const formatIndianNumber = (input: any) => {
+  if (input === null || input === undefined) return "";
+
+  let value = input;
+
+  // Convert to string
+  if (typeof value === "number") {
+    value = value.toString();
+  }
+
+  if (typeof value !== "string") return value;
+
+  // Remove ₹, commas, spaces
+  const cleaned = value.replace(/₹|,/g, "").trim();
+
+  // Check if it's a valid number
+  if (isNaN(Number(cleaned))) return input;
+
+  const number = Number(cleaned);
+
+  // Format in Indian style
+  return new Intl.NumberFormat("en-IN", {
+    minimumFractionDigits: cleaned.includes(".") ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(number);
 };

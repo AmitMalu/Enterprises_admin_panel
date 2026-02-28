@@ -43,7 +43,7 @@ export const validationSchema: Record<
     .test(
       "decimal-places",
       "Amount can have at most 3 decimal places",
-      (value) => value === undefined || /^\d+(\.\d{1,3})?$/.test(String(value))
+      (value) => value === undefined || /^\d+(\.\d{1,3})?$/.test(String(value)),
     )
     .min(0.001, "Amount must be greater than 0"),
   confirmAmount: Yup.number()
@@ -52,7 +52,7 @@ export const validationSchema: Record<
     .test(
       "decimal-places",
       "Confirm Amount can have at most 3 decimal places",
-      (value) => value === undefined || /^\d+(\.\d{1,3})?$/.test(String(value))
+      (value) => value === undefined || /^\d+(\.\d{1,3})?$/.test(String(value)),
     )
     .test(
       "match-amount",
@@ -60,7 +60,7 @@ export const validationSchema: Record<
       function (value) {
         const { amount } = this.parent;
         return String(value) === String(amount);
-      }
+      },
     ),
   narrationType: textField("Narration", 150, true, true),
   remark: textField("Partner Name", 150, false, true),
@@ -68,6 +68,8 @@ export const validationSchema: Record<
 
 export const transformToCreditDebitPayload = (values: any) => ({
   fundingType: values.type ?? "",
+  adminId:
+    JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId || "",
   userAccountId: values.accountNo ?? "",
   walletType: values.walletType ?? "PREPAID", // PREPAID / POSTPAID
   amount: Number(values.amount) ?? 0, // ensure number

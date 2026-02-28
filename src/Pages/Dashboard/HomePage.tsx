@@ -13,6 +13,7 @@ import moment from "moment";
 import DashboardBarGraph from "../../Components/Molecules/DashboardBarGraph";
 import { Dashboard_Api } from "../../Redux/Features/Auth/Thunk";
 import { colors } from "../../theme/colors";
+import { formatIndianNumber } from "../../Utils/utils";
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +33,7 @@ const HomePage = () => {
   const cards =
     dashboardData?.cards?.map((card: any, index: number) => ({
       label: card.label,       // from API
-      value: card.value,       // from API
+      value: formatIndianNumber(card.value),       // from API
       prefix: card.prefix,             // always ₹
       borderColor: card.color || colors.chart.series[index % colors.chart.series.length], // rotate colors
     })) || [];
