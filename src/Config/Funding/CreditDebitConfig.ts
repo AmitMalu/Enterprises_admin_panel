@@ -76,4 +76,4 @@ export const transformToCreditDebitPayload = (values: any) => ({
   confirmAmount: Number(values.confirmAmount) ?? 0, // ensure number
   narrationType: values.narrationType ?? "", // commission → Fund Debit
   remarks: values.remark ?? "",
-});
+}); 
