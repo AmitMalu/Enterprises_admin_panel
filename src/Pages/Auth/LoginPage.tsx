@@ -78,7 +78,7 @@ const LoginPage: React.FC = () => {
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
           state: {
-            username: values.username, otpFor: "login"
+            username: values.username, otpFor: "login", otp: result.data.otp
           },
         });
       } catch (error) {
@@ -168,10 +168,14 @@ const LoginPage: React.FC = () => {
 
       {/* Forgot Password? */}
       <div
-        onClick={handleForgetPassword}
-        className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl cursor-pointer text-right text-text-muted"
+        className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl text-right text-text-muted"
       >
-        Forget Password?
+        <span
+          className="cursor-pointer "
+          onClick={handleForgetPassword}
+        >
+          Forget Password?
+        </span>
       </div>
 
       {/* Divider */}

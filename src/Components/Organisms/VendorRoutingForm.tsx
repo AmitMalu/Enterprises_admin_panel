@@ -180,8 +180,8 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                         name="routingPriority2"
                                         label="Routing Priority 2"
                                         placeholder="Select Routing Priority 2"
-                                        withAsterisk
-                                        required
+                                        // withAsterisk
+                                        // required
                                         allowDeselect={true}
                                         searchable={true}
                                         nothingFoundMessage="Nothing Found"
@@ -196,11 +196,11 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                         name="routingPriority3"
                                         label="Routing Priority 3"
                                         placeholder="Select Routing Priority 3"
-                                        withAsterisk
+                                        // withAsterisk
+                                        // required
                                         allowDeselect={true}
                                         searchable={true}
                                         nothingFoundMessage="Nothing Found"
-                                        required
                                         data={optionsForPriority3}
                                         disabled={loadingVendorList}
                                     />

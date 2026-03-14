@@ -99,8 +99,8 @@ export const validationSchema: Record<
 > = {
   subProductId: textField("Sub Product", 50, true),
   routingPriority1: textField("Routing Priority 1", 150, true, true),
-  routingPriority2: textField("Routing Priority 2", 150, true, true),
-  routingPriority3: textField("Routing Priority 3", 150, true, true),
+  routingPriority2: textField("Routing Priority 2", 150, false, true),
+  routingPriority3: textField("Routing Priority 3", 150, false, true),
 };
 
 export const headers: GenericTableHeader<VendorRoutingTableType>[] = [

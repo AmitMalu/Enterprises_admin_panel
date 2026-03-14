@@ -33,6 +33,7 @@ interface TextInputComponentProps {
   allowCharacter?: boolean;
   allowSpecialChar?: boolean;
   allowSpace?: boolean;
+  autoFocus?: boolean;
 }
 
 const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>(({
@@ -63,6 +64,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
   allowCharacter = true,
   allowSpecialChar = true,
   allowSpace = true,
+  autoFocus = false,
 }, ref) => {
   const screenSize = useScreenSize();
   // const [isFocused, setIsFocused] = useState(false);
@@ -130,6 +132,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
     minLength,
     radius: defaultRadius,
     size: defaultSize,
+    autoFocus,
     withAsterisk,
     disabled,
     leftSection,
@@ -160,6 +163,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
       type="number"
       error={typeof error === "string" ? true : !!error}
       placeholder=""
+      autoFocus
     />
   ) : type === "password" ? (
     <PasswordInput {...sharedProps} />

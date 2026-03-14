@@ -28,11 +28,14 @@ const OtpVerify = () => {
   const locationState = location.state as {
     username?: string;
     otpFor?: string;
+    otp?: string;
   };
   const username =
     locationState?.username ?? sessionStorage.getItem("otp-username") ?? "";
   const otpFor =
     locationState?.otpFor ?? sessionStorage.getItem("otpFor") ?? "";
+  const otp =
+    locationState?.otp ?? sessionStorage.getItem("otp") ?? "";
 
   const pinSize =
     screenSize === "sm"
@@ -114,12 +117,17 @@ const OtpVerify = () => {
       locationState?.username ?? sessionStorage.getItem("otp-username");
     const resolvedOtpFor =
       locationState?.otpFor ?? sessionStorage.getItem("otpFor");
+    const resolvedOtp =
+      locationState?.otp ?? sessionStorage.getItem("otp");
 
     if (!resolvedUsername || !resolvedOtpFor) {
       logoutUser();
     } else {
       sessionStorage.setItem("otp-username", resolvedUsername);
       sessionStorage.setItem("otpFor", resolvedOtpFor);
+      if (resolvedOtp) {
+        sessionStorage.setItem("otp", resolvedOtp);
+      }
     }
   }, []);
 
@@ -136,73 +144,85 @@ const OtpVerify = () => {
       <Formik
         enableReinitialize
         validateOnBlur={false}
-        initialValues={{ otp: "" }}
+        initialValues={{ otp: otp || "" }}
         validationSchema={validationSchema}
         onSubmit={handleOTPSubmit}
       >
-        {({ values, handleChange, errors, submitCount }) => (
-          <Form>
-            <div className="flex justify-center items-center ">
-              <TextInputComponent
-                name="otp"
-                value={values.otp}
-                onChange={handleChange}
-                oneTimeCode
-                size={pinSize}
-                length={6}
-                error={!!errors.otp && submitCount > 0 ? errors.otp : undefined} // Show error only after submission attempt
-                type="text"
-              />
-            </div>
+        {({ values, handleChange, errors, submitCount, submitForm }) => {
+          useEffect(() => {
+            if (values.otp && values.otp.length === 6) {
+              submitForm();
+            }
+          }, [values.otp]);
 
-            <div
-              className="pl-4 py-4 text-center"
-            >
-              <ButtonComponent
-                onClick={handleResendOtp}
-                textColor={colors.status.danger}
-                fontSize="14"
-                font="poppins"
-                throttleMs={10000}
-                disabled={timer > 0} // disable while counting
-              >
-                {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
-              </ButtonComponent>
-            </div>
+          return (
+            <Form>
+              <div className="flex justify-center items-center ">
+                <TextInputComponent
+                  name="otp"
+                  value={values.otp}
+                  onChange={handleChange}
+                  oneTimeCode
+                  size={pinSize}
+                  length={6}
+                  error={!!errors.otp && submitCount > 0 ? errors.otp : undefined} // Show error only after submission attempt
+                  type="text"
+                />
+              </div>
 
-            <div className="flex justify-between items-center">
-              <ButtonComponent
-                size="md"
-                bgColor={colors.brand.accent}
-                textColor={colors.text.inverse}
-                radius={12}
-                leftIcon={<IconArrowLeft />}
-                onClick={() => {
-                  if (otpFor === "forgetPassword") {
-                    sessionStorage.setItem("from-login-forget", "true");
-                    navigate("/forget-password");
-                  } else {
-                    navigate("/login");
-                  }
-                  toast.dismiss();
-                  sessionStorage.removeItem("otpFor");
-                  sessionStorage.removeItem("otp-username");
-                }}
+              <div
+                className="pl-4 py-4 text-center"
               >
-                Back
-              </ButtonComponent>
-              <ButtonComponent
-                size="md"
-                bgColor={colors.brand.accent}
-                textColor={colors.text.inverse}
-                radius={12}
-                type="submit"
-              >
-                VERIFY
-              </ButtonComponent>
-            </div>
-          </Form>
-        )}
+                <ButtonComponent
+                  onClick={handleResendOtp}
+                  textColor={colors.status.danger}
+                  fontSize="14"
+                  font="poppins"
+                  throttleMs={10000}
+                  disabled={timer > 0} // disable while counting
+                >
+                  {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
+                </ButtonComponent>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <ButtonComponent
+                  size="md"
+                  bgColor={colors.brand.accent}
+                  textColor={colors.text.inverse}
+                  radius={12}
+                  leftIcon={<IconArrowLeft />}
+                  onClick={() => {
+                    if (otpFor === "forgetPassword") {
+                      sessionStorage.setItem("from-login-forget", "true");
+                      navigate("/forget-password");
+                    } else {
+                      navigate("/login");
+                    }
+                    toast.dismiss();
+                    sessionStorage.removeItem("otpFor");
+                    sessionStorage.removeItem("otp-username");
+                  }}
+                >
+                  Back
+                </ButtonComponent>
+                <ButtonComponent
+                  size="md"
+                  bgColor={colors.brand.accent}
+                  textColor={colors.text.inverse}
+                  radius={12}
+                  type="submit"
+                >
+                  {values.otp.length === 6 && (
+                    <div>
+                      Verifying OTP...
+                    </div>
+                  )}
+                </ButtonComponent>
+              </div>
+            </Form>
+          )
+        }}
       </Formik>
     </div>
   );

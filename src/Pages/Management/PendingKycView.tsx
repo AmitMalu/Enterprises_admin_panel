@@ -77,22 +77,23 @@ const PendingKycView = () => {
                 imageFile,
             })).unwrap();
 
-            // Update local data
-            setData(prevData =>
-                prevData.map(item =>
-                    item.docName?.toLowerCase() === values.doc_name?.toLowerCase()
-                        ? {
-                            ...item,
-                            docNumber: values.doc_number,
-                            docImage: values.doc_image && typeof values.doc_image === "string"
-                                ? values.doc_image
-                                : item.docImage,
-                            // Keep as boolean
-                            docStatus: !!verificationResult.success,
-                        }
-                        : item
-                )
-            );
+            // // Update local data
+            // setData(prevData =>
+            //     prevData.map(item =>
+            //         item.docName?.toLowerCase() === values.doc_name?.toLowerCase()
+            //             ? {
+            //                 ...item,
+            //                 docNumber: values.doc_number,
+            //                 docImage: values.doc_image && typeof values.doc_image === "string"
+            //                     ? values.doc_image
+            //                     : item.docImage,
+            //                 // Keep as boolean
+            //                 docStatus: !!verificationResult.success,
+            //             }
+            //             : item
+            //     )
+            // );
+            await fetchAndSet();
 
             // Reset form
             formik.resetForm();
@@ -117,46 +118,46 @@ const PendingKycView = () => {
             ).unwrap();
 
             // Update the docImage field to ""
-            setData(prevData =>
-                prevData.map(d =>
-                    d.docName?.toLowerCase() === item.docName?.toLowerCase()
-                        ? { ...d, docImage: "" }
-                        : d
-                )
-            );
+            // setData(prevData =>
+            //     prevData.map(d =>
+            //         d.docName?.toLowerCase() === item.docName?.toLowerCase()
+            //             ? { ...d, docImage: "" }
+            //             : d
+            //     )
+            // );
 
+            fetchAndSet();
         } catch (err: any) {
             console.error("Delete failed", err);
         }
     };
 
-    useEffect(() => {
-        const fetchAndSet = async () => {
-            if (id) {
-                setLoading(true);
-                setFetchError(null);
-                try {
-                    const data = await dispatch(
-                        fetchMasterById({ key: KYC_VIEW_KEY, endpoint: `${PENDING_KYC_URL}/details`, id, method: "POST" })
-                    ).unwrap();
+    const fetchAndSet = async () => {
+        if (id) {
+            setLoading(true);
+            setFetchError(null);
+            try {
+                const data = await dispatch(
+                    fetchMasterById({ key: KYC_VIEW_KEY, endpoint: `${PENDING_KYC_URL}/details`, id, method: "POST" })
+                ).unwrap();
 
-                    setData(data);
+                setData(data);
 
-                } catch (err: any) {
-                    toast.error(err);
-                    setFetchError(err);
-                    setTimeout(() => {
-                        navigate("/management/kyc-pending/");
-                    }, 2000);
-                }
-                finally {
-                    setLoading(false);
-                }
+            } catch (err: any) {
+                toast.error(err);
+                setFetchError(err);
+                setTimeout(() => {
+                    navigate("/management/kyc-pending/");
+                }, 2000);
             }
-        };
+            finally {
+                setLoading(false);
+            }
+        }
+    };
 
+    useEffect(() => {
         fetchAndSet();
-
     }, [dispatch, id]);
 
     return (
