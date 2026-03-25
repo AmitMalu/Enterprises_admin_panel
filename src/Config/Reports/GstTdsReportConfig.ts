@@ -34,6 +34,10 @@ export interface GstTdsReportTableType {
   balAfter: string | number;
   operator: string | null;
   txId: string;
+  latitude: string | null;
+  longitude: string | null;
+  vendorName: string | null;
+  vendorTransactionId: string | null;
 }
 
 export const GstTdsReportInitialValues: GstTdsReportFormType = {
@@ -79,6 +83,10 @@ export const GstTdsheaders: GenericTableHeader<GstTdsReportTableType>[] = [
   },
   { key: "transactionDate", label: "Transaction Date", filterType: "date" },
   { key: "transactionTime", label: "Transaction Time", filterType: "text" },
+  { key: "latitude", label: "Latitude", filterType: "text" },
+  { key: "longitude", label: "Longitude", filterType: "text" },
+  { key: "vendorName", label: "Vendor Name", filterType: "text" },
+  { key: "vendorTransactionId", label: "Vendor TxnId", filterType: "text" },
 ];
 
 export const transformToGstTdsReportPayload = (values: any) => {

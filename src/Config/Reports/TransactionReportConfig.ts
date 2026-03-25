@@ -27,6 +27,10 @@ export interface TransactionReportTableType {
   walletType: string;
   actionOnBalanceAmount: string;
   narration: string;
+  latitude: string | null;
+  longitude: string | null;
+  vendorName: string | null;
+  vendorTransactionId: string | null;
 }
 
 export const initialValues = {
@@ -99,4 +103,8 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
     filterType: "text",
   },
   { key: "narration", label: "Narration", filterType: "text" },
+  { key: "latitude", label: "Latitude", filterType: "text" },
+  { key: "longitude", label: "Longitude", filterType: "text" },
+  { key: "vendorName", label: "Vendor Name", filterType: "text" },
+  { key: "vendorTransactionId", label: "Vendor TxnId", filterType: "text" },
 ];

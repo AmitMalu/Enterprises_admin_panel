@@ -50,6 +50,10 @@ export interface SettlementReportTableType {
   updatedAt: string;
   // site: string;
   // uriPath: string;
+  latitude: string | null;
+  longitude: string | null;
+  vendorName: string | null;
+  vendorTransactionId: string | null;
 }
 
 export const settlementReportFilterInitialValues = {
@@ -105,6 +109,10 @@ export const settlementReportHeaders: GenericTableHeader<SettlementReportTableTy
     // { key: "userOutletName", label: "User Outlet Name", filterType: "text" },
     // { key: "site", label: "Site", filterType: "text" },
     // { key: "uriPath", label: "URI Path", filterType: "text" },
+    { key: "latitude", label: "Latitude", filterType: "text" },
+    { key: "longitude", label: "Longitude", filterType: "text" },
+    { key: "vendorName", label: "Vendor Name", filterType: "text" },
+    { key: "vendorTransactionId", label: "Vendor TxnId", filterType: "text" },
   ];
 
 export const transformToViewSettlementReportPayload = (values: any) => {

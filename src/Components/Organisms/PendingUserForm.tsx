@@ -317,7 +317,7 @@ const PendingUserForm = () => {
                           maxLength={10}
                           allowSpecialChar={false}
                           allowCharacter={false}
-                          disabled={readOnly}
+                          disabled={true}
                         />
                       </Grid.Col>
                     )}

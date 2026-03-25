@@ -57,7 +57,10 @@ export const updateUser = createAsyncThunk(
       }
 
       const formData = new FormData();
-      formData.append("data", JSON.stringify(payload));
+      formData.append(
+        "data",
+        new Blob([JSON.stringify(payload)], { type: "application/json" }),
+      );
 
       const response = await axiosInstance.put(endPoint, formData, {
         headers: {
