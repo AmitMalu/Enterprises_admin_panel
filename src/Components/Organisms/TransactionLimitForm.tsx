@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
 import { initialValues, TRANSACTION_LIMIT_KEY, TRANSACTION_LIMIT_URL, TransactionLimitFormType, transformFormToCreateTransactionLimitPayload, transformFormToUpdateTransactionLimitPayload, transformTransactionLimitToFormData, validationSchema } from "../../Config/Schemes/TransactionLimitConfig";
+import { colors } from "../../theme/colors";
 
 type TransactionLimitFormProps = { mode: "add" | "edit" };
 
@@ -77,7 +78,7 @@ const TransactionLimitForm = ({ mode }: TransactionLimitFormProps) => {
     }, [dispatch, id, mode]);
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
             <BackHeader
                 title={mode === "edit" ? "Edit Transaction Limit" : "Add Transaction Limit"}
                 backPath="/schemes/transaction-limit"
@@ -245,11 +246,11 @@ const TransactionLimitForm = ({ mode }: TransactionLimitFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     style={{ padding: "10px 30px" }}
                                 >
                                     SUBMIT

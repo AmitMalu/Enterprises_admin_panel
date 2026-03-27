@@ -1,5 +1,6 @@
 // CenteredMessage.tsx
 import TextComponent from "../Atoms/TextComponent"; // adjust the path as needed
+import { colors } from "../../theme/colors";
 
 type CenteredMessageProps = {
     message: string;
@@ -9,7 +10,7 @@ type CenteredMessageProps = {
 
 const CenteredMessage = ({
     message,
-    color = "#CA4343",
+    color = colors.brand.highlight,
     fontSize = 16,
 }: CenteredMessageProps) => {
     return (

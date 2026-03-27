@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { PasswordInput, PinInput, TextInput } from "@mantine/core";
+import { colors } from "../../theme/colors";
 
 type InputType = "text" | "password" | "number" | "email";
 
@@ -32,6 +33,7 @@ interface TextInputComponentProps {
   allowCharacter?: boolean;
   allowSpecialChar?: boolean;
   allowSpace?: boolean;
+  autoFocus?: boolean;
 }
 
 const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>(({
@@ -62,6 +64,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
   allowCharacter = true,
   allowSpecialChar = true,
   allowSpace = true,
+  autoFocus = false,
 }, ref) => {
   const screenSize = useScreenSize();
   // const [isFocused, setIsFocused] = useState(false);
@@ -129,6 +132,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
     minLength,
     radius: defaultRadius,
     size: defaultSize,
+    autoFocus,
     withAsterisk,
     disabled,
     leftSection,
@@ -138,7 +142,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
     length,
     styles: {
       input: {
-        color: "#282828",
+        color: colors.text.body,
         fontWeight: 500,
       },
     },
@@ -159,6 +163,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
       type="number"
       error={typeof error === "string" ? true : !!error}
       placeholder=""
+      autoFocus
     />
   ) : type === "password" ? (
     <PasswordInput {...sharedProps} />

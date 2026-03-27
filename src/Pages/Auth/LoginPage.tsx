@@ -20,6 +20,7 @@ import {
 } from "../../Utils/ValidationUtils";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { colors } from "../../theme/colors";
 
 const validationSchema = Yup.object().shape({
   username: usernamePhoneEmailValidation,
@@ -77,7 +78,7 @@ const LoginPage: React.FC = () => {
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
           state: {
-            username: values.username, otpFor: "login"
+            username: values.username, otpFor: "login", otp: result.data.otp
           },
         });
       } catch (error) {
@@ -96,10 +97,10 @@ const LoginPage: React.FC = () => {
   return (
     <div className="w-full px-10 flex flex-col text-left">
       {/* Welcome Text */}
-      <p className="text-[#747483] font-extralight font-geologica text-xl md:text-sm xl:text-2xl 2xl:text-3xl mb-1">
+      <p className="text-text-soft font-extralight font-geologica text-xl md:text-sm xl:text-2xl 2xl:text-3xl mb-1">
         Welcome Back
       </p>
-      <h2 className="text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-medium mb-6">
+      <h2 className="text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-medium mb-6">
         Login to Your Account
       </h2>
 
@@ -153,8 +154,8 @@ const LoginPage: React.FC = () => {
               <ButtonComponent
                 fullWidth
                 size="md"
-                bgColor="#DB2729"
-                textColor="#fff"
+                bgColor={colors.brand.accent}
+                textColor={colors.text.inverse}
                 radius={8}
                 type="submit"
               >
@@ -167,10 +168,14 @@ const LoginPage: React.FC = () => {
 
       {/* Forgot Password? */}
       <div
-        onClick={handleForgetPassword}
-        className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl cursor-pointer text-right text-[#4C4C57]"
+        className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl text-right text-text-muted"
       >
-        Forget Password?
+        <span
+          className="cursor-pointer "
+          onClick={handleForgetPassword}
+        >
+          Forget Password?
+        </span>
       </div>
 
       {/* Divider */}
@@ -190,9 +195,9 @@ const LoginPage: React.FC = () => {
       </div> */}
 
       {/* Sign Up Prompt */}
-      {/* <p className="text-center text-sm xl:text-lg 2xl:text-xl font-lora text-[#747483] ">
+      {/* <p className="text-center text-sm xl:text-lg 2xl:text-xl font-lora text-text-soft ">
         Don't have an account?
-        <span className="text-[#BF0204] cursor-pointer"> Sign up here</span>
+        <span className="text-status-danger cursor-pointer"> Sign up here</span>
       </p> */}
     </div>
   );

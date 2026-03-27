@@ -2,6 +2,7 @@ import { Modal, Paper } from "@mantine/core";
 import React from "react";
 import TextComponent from "./TextComponent";
 import checkSvg from "../../assets/Icons/checkIcon.gif";
+import { colors } from "../../theme/colors";
 
 interface FormSuccessModelProps {
   opened: boolean;
@@ -37,7 +38,7 @@ const FormSuccessModel: React.FC<FormSuccessModelProps> = ({
           fontSize={32}
           weight={500}
           align="center"
-          color="#47AF0C"
+          color={colors.status.successBright}
           style={{ margin: "2rem" }}
         >
           You're good to go!
@@ -49,7 +50,7 @@ const FormSuccessModel: React.FC<FormSuccessModelProps> = ({
           fontSize={18}
           weight={500}
           align="center"
-          color="#3D3D3D"
+          color={colors.text.neutral}
         >
           Submission received. We’ll get back to you shortly.
         </TextComponent>

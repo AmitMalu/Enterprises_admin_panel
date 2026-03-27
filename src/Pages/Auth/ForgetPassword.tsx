@@ -11,6 +11,7 @@ import { UsernameSvg } from "../../assets/Icons/Svgs";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { usernamePhoneEmailValidation } from "../../Utils/ValidationUtils";
 import { IconArrowLeft } from "@tabler/icons-react";
+import { colors } from "../../theme/colors";
 
 const validationSchema = Yup.object().shape({
   username: usernamePhoneEmailValidation,
@@ -64,11 +65,11 @@ const ForgetPassword: React.FC = () => {
 
   return (
     <div className="w-full px-10 flex flex-col text-left">
-      <h2 className="mb-8 text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
+      <h2 className="mb-8 text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
         Forget Password
       </h2>
 
-      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-[#BF0204]">
+      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-status-danger">
         Please Enter Your Username
       </div>
 
@@ -90,8 +91,8 @@ const ForgetPassword: React.FC = () => {
         <div className="flex justify-between items-center">
           <ButtonComponent
             size="md"
-            bgColor="#DB2729"
-            textColor="#fff"
+            bgColor={colors.brand.accent}
+            textColor={colors.text.inverse}
             radius={12}
             leftIcon={<IconArrowLeft />}
             onClick={() => navigate("/login")}
@@ -100,8 +101,8 @@ const ForgetPassword: React.FC = () => {
           </ButtonComponent>
           <ButtonComponent
             size="md"
-            bgColor="#DB2729"
-            textColor="#fff"
+            bgColor={colors.brand.accent}
+            textColor={colors.text.inverse}
             radius={12}
             type="submit"
           >

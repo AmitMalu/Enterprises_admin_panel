@@ -2,6 +2,7 @@ import { Group, Pagination, Table } from "@mantine/core";
 import TextComponent from "../Atoms/TextComponent";
 import SelectComponent from "../Atoms/SelectComponent";
 import { paginationBackIcon, paginationFrontIcon } from "../../assets/Icons";
+import { colors } from "../../theme/colors";
 
 const TableFooter = ({
   headersLength,
@@ -29,7 +30,7 @@ const TableFooter = ({
       <Table.Td colSpan={headersLength + (renderExtraRowCell ? 1 : 0)}>
         <Group justify="space-between" px="md">
           {message && (
-            <TextComponent color="#667085" fontFamily="Inter" fontSize={14}>
+            <TextComponent color={colors.text.subtle} fontFamily="Inter" fontSize={14}>
               {message}
             </TextComponent>
           )}
@@ -54,15 +55,15 @@ const TableFooter = ({
               total={totalPages || 0}
               value={currentPage}
               onChange={onPageChange}
-              styles={{ control: { borderColor: "#fff" } }}
-              color="#BF0204"
+              styles={{ control: { borderColor: colors.text.inverse } }}
+              color={colors.status.danger}
               size="sm"
               radius="md"
               previousIcon={(props) =>
-                paginationBackIcon({ ...props, color: "#BF0204" })
+                paginationBackIcon({ ...props, color: colors.status.danger })
               }
               nextIcon={(props) =>
-                paginationFrontIcon({ ...props, color: "#BF0204" })
+                paginationFrontIcon({ ...props, color: colors.status.danger })
               }
             />
           </div>

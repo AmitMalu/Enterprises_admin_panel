@@ -12,7 +12,7 @@ import { setToken, setUserInfo } from "../Redux/Features/Auth/Reducer";
 import CryptoJS from "crypto-js";
 
 // constants/version.ts
-export const DEV_APP_VERSION_LABEL = "v1.0.2 (07-02 2026 06:15 AM)";
+export const DEV_APP_VERSION_LABEL = "v1.0.2 (27-03-2026 05:35 AM)";
 
 export function encryptCredentials(username: string, password: string) {
   const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
@@ -257,6 +257,11 @@ export const toFormData = (obj: Record<string, any>): FormData => {
 
 // Masters form submit Handler
 type TransformPayloadFn<T> = (data: T) => Record<string, any>;
+
+type ToastOptions = {
+  successAutoClose?: number | false;
+  errorAutoClose?: number | false;
+};
 export interface HandleMasterFormSubmitProps<T> {
   mode?: "add" | "edit";
   id?: string;
@@ -272,6 +277,7 @@ export interface HandleMasterFormSubmitProps<T> {
   transformUpdatePayload?: TransformPayloadFn<T>;
   successNavigatePath?: string;
   entityName: string;
+  toastOptions?: ToastOptions;
 }
 
 // utils/normalize.ts
@@ -316,6 +322,7 @@ export const handleMasterFormSubmit = async <T>({
   transformUpdatePayload,
   successNavigatePath,
   entityName = "Item",
+  toastOptions,
 }: HandleMasterFormSubmitProps<T>) => {
   try {
     // ✅ Sanitize values here
@@ -355,6 +362,9 @@ export const handleMasterFormSubmit = async <T>({
     toast.success(
       res.message ||
         `${entityName} ${mode === "edit" ? "updated" : "created"} successfully`,
+      {
+        autoClose: toastOptions?.successAutoClose ?? 3000, // default
+      },
     );
     if (successNavigatePath) {
       navigate(successNavigatePath);
@@ -369,6 +379,12 @@ export const handleMasterFormSubmit = async <T>({
     );
     toast.error(
       err || `${mode === "edit" ? "Update" : "Create"} ${entityName} failed:`,
+      {
+        autoClose: toastOptions?.errorAutoClose ?? 3000,
+        pauseOnHover: true,
+        closeOnClick: false,
+        draggable: true,
+      },
     );
   }
 };
@@ -516,4 +532,31 @@ export const extractVerificationApiMessage = (
 
   // Default fallback
   return fallback;
+};
+
+export const formatIndianNumber = (input: any) => {
+  if (input === null || input === undefined) return "";
+
+  let value = input;
+
+  // Convert to string
+  if (typeof value === "number") {
+    value = value.toString();
+  }
+
+  if (typeof value !== "string") return value;
+
+  // Remove ₹, commas, spaces
+  const cleaned = value.replace(/₹|,/g, "").trim();
+
+  // Check if it's a valid number
+  if (isNaN(Number(cleaned))) return input;
+
+  const number = Number(cleaned);
+
+  // Format in Indian style
+  return new Intl.NumberFormat("en-IN", {
+    minimumFractionDigits: cleaned.includes(".") ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(number);
 };

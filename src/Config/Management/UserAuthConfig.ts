@@ -1,41 +1,88 @@
 import { GenericTableHeader } from "../../Utils/utils";
 import { API_ENDPOINTS } from "../Api/EndPoints";
+import { UserType } from "../UserCreationConfig/UserConfig";
 
 export const KEY = "user-auth";
 export const URL = API_ENDPOINTS.MANAGEMENT.USER_AUTH;
 
+export const USER_TYPE_KEBAB_CASE_MAP: Record<
+  UserTypeUpperSnakeCase,
+  UserType
+> = {
+  RETAILER: "retailer",
+  DISTRIBUTOR: "distributor",
+  PARTNER: "partner",
+  SUPER_DISTRIBUTOR: "super-distributor",
+  WHITE_LABEL: "white-label",
+  ENTERPRISE: "enterprise",
+  IM_ADMIN: "im-admin",
+};
+
 // 1. Union type of user types
-export type UserType =
+export type UserTypeUpperSnakeCase =
   | "RETAILER"
-  | "ENTERPRISE"
-  | "ADMIN"
   | "DISTRIBUTOR"
   | "PARTNER"
   | "SUPER_DISTRIBUTOR"
-  | "WHITE_LABEL";
+  | "ENTERPRISE"
+  | "WHITE_LABEL"
+  | "IM_ADMIN";
 
 // 2. Filter options for a Select/Dropdown
-export const userTypeFilterOptions: { label: string; value: UserType }[] = [
+export const userTypeFilterOptions: {
+  label: string;
+  value: UserTypeUpperSnakeCase;
+}[] = [
   { label: "Retailer", value: "RETAILER" },
   { label: "Enterprise", value: "ENTERPRISE" },
-  { label: "Admin", value: "ADMIN" },
+  { label: "Admin", value: "IM_ADMIN" },
   { label: "Distributor", value: "DISTRIBUTOR" },
   { label: "Partner", value: "PARTNER" },
   { label: "Super Distributor", value: "SUPER_DISTRIBUTOR" },
   { label: "White Label", value: "WHITE_LABEL" },
 ];
 
+export interface Address {
+  outletName: string;
+  companyType: string;
+  companyName: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+}
+
+export interface BankDetails {
+  bankName: string;
+  bankAccountNumber: string;
+  bankHolderName: string;
+  ifscCode: string;
+  isVerified: boolean;
+}
+
 export interface UserAuthFormType {
-  id: string;
-  parentAccount: string;
-  type: string;
+  id?: string;
+  parentAccount?: string;
+  type?: string;
   emailId: string;
   name: string;
   mobileNumber: string;
-  status: string;
-  createdBy: string;
-  createdOn: string;
+  status?: string;
+  createdBy?: string;
+  createdOn?: string;
   remarks?: string;
+  // Additional fields for retailer/user edit
+  title?: string;
+  abbreviation?: string;
+  dob?: string;
+  aadhaarNumber?: string;
+  panNumber?: string;
+  shopNumber?: string;
+  businessNumber?: string;
+  address?: Address;
+  outletAddress?: Address;
+  bankDetails?: BankDetails;
+  rejectionReason?: string;
 }
 
 export interface UserAuthTableType extends UserAuthFormType {}
@@ -56,6 +103,39 @@ export const initialValues: UserAuthFormType = {
   status: "",
   createdBy: "",
   createdOn: "",
+  title: "",
+  abbreviation: "",
+  dob: "",
+  aadhaarNumber: "",
+  panNumber: "",
+  shopNumber: "",
+  businessNumber: "",
+  address: {
+    outletName: "",
+    companyType: "",
+    companyName: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+  },
+  outletAddress: {
+    outletName: "",
+    companyType: "",
+    companyName: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+  },
+  bankDetails: {
+    bankName: "",
+    bankAccountNumber: "",
+    bankHolderName: "",
+    ifscCode: "",
+    isVerified: false,
+  },
+  rejectionReason: "",
 };
 
 export const headers: GenericTableHeader<UserAuthTableType>[] = [
@@ -94,7 +174,7 @@ export const RejectedUserHeaders: GenericTableHeader<UserAuthTableType>[] = [
 ];
 
 export const transformToUpdateUserAuthPayload = (
-  raw: any
+  raw: any,
 ): UserAuthUpdatePayload => ({
   hierarchyId: raw.id,
   isApproved: raw.isApproved,

@@ -17,6 +17,7 @@ import { LockIconSvg } from "../../assets/Icons";
 import { useAddressFromZipcode } from "../../Utils/hooks/useAddressFromZipcode";
 import { ADMIN_USER_KEY, ADMIN_USER_URL, AdminUserFormType, initialValues, transformFormToCreateAdminUserPayload, transformFormToUpdateAdminUserPayload, transformResponseToFormData, validationSchema } from "../../Config/Management/AdminUserConfig";
 import { transformPermissionsToMenus } from "../../Utils/utils";
+import { colors } from "../../theme/colors";
 
 interface AdminUserFormProps {
     mode: 'add' | 'edit';
@@ -94,7 +95,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
     }, [dispatch, id, mode]);
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title={mode === "edit" ? "Edit Admin User" : "Add Admin User"}
@@ -309,11 +310,11 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     disabled={!!fetchError || !!fetchLoading || !!loadingMenus || !!loading}
                                     style={{ padding: "10px 30px" }}
                                 >

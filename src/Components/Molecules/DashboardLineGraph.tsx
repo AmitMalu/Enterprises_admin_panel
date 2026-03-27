@@ -1,5 +1,6 @@
 import { Card } from "@mantine/core"
 import { LineChart, ResponsiveContainer, CartesianGrid, XAxis, YAxis, Line, Tooltip } from 'recharts'
+import { colors } from "../../theme/colors";
 
 const DashboardLineGraph = ({ graphData }: any) => {
 
@@ -17,7 +18,7 @@ const DashboardLineGraph = ({ graphData }: any) => {
                     <Line
                         type="monotone"
                         dataKey="transaction"
-                        stroke="#DC2626"
+                        stroke={colors.status.dangerLine}
                         strokeWidth={3}
                         dot={{ r: 4 }}
                     />

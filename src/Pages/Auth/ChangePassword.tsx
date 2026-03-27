@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import PopupModal from "../../Components/Atoms/PopupModal";
 import TextComponent from "../../Components/Atoms/TextComponent";
+import { colors } from "../../theme/colors";
 
 const validationSchema = Yup.object().shape({
     oldPassword: passwordValidation,
@@ -120,10 +121,10 @@ const ChangePassword = () => {
                                 <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     style={{ padding: "5px 10px" }}
                                     onClick={async () => {
                                         const errors = await validateForm(); // run validation
@@ -165,18 +166,18 @@ const ChangePassword = () => {
                                     <div className="flex justify-end gap-3 mt-4">
                                         <ButtonComponent
                                             variant="outline"
-                                            bgColor="#f1f1f1"
+                                            bgColor={colors.surface.muted}
                                             fontSize="14"
                                             radius={10}
                                             style={{ padding: "5px 10px" }}
-                                            textColor="#333"
+                                            textColor={colors.text.secondary}
                                             onClick={() => setIsConfirmOpen(false)}
                                         >
                                             Cancel
                                         </ButtonComponent>
                                         <ButtonComponent
-                                            bgColor="#C30305"
-                                            textColor="#fff"
+                                            bgColor={colors.brand.primary}
+                                            textColor={colors.text.inverse}
                                             fontSize="14"
                                             radius={10}
                                             style={{ padding: "5px 10px" }}

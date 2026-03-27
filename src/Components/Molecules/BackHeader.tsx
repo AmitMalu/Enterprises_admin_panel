@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
 import TextComponent from "../Atoms/TextComponent";
+import { colors } from "../../theme/colors";
 
 interface BackHeaderProps {
     title: string;
@@ -31,7 +32,7 @@ const BackHeader = ({ title, backPath, onBack, tooltipLabel = "Go Back" }: BackH
                         className="p-1 rounded hover:bg-gray-100 transition"
                         aria-label={tooltipLabel}
                     >
-                        <IconArrowLeft size={22} stroke={1.8} color="#C30305" />
+                        <IconArrowLeft size={22} stroke={1.8} color={colors.brand.primary} />
                     </button>
                 </Tooltip>
             )}

@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { logoutUser } from "../../Utils/utils";
 import { useAppDispatch } from "../../Redux/hooks";
 import { fetchWalletBalance } from "../../Redux/Features/Auth/Thunk";
+import { colors } from "../../theme/colors";
 
 const MainLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -65,21 +66,21 @@ const MainLayout: React.FC = () => {
       navbar={{ width: 250, breakpoint: "sm", collapsed: { mobile: !opened } }}
       padding="xs"
     >
-      <AppShell.Header style={{ backgroundColor: "#F8F8F8" }}>
+      <AppShell.Header style={{ backgroundColor: colors.surface.app }}>
         <Group justify="between" style={{ flexWrap: "nowrap", width: "100%" }} h="100%" px="md">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Navbar />
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="sm" style={{ backgroundColor: "#EBF7F6" }}>
+      <AppShell.Navbar p="sm" style={{ backgroundColor: colors.surface.nav }}>
         <Group>
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Sidebar />
         </Group>
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ backgroundColor: "#F8F8F8" }}>
+      <AppShell.Main style={{ backgroundColor: colors.surface.app }}>
         <Outlet />
       </AppShell.Main>
     </AppShell>

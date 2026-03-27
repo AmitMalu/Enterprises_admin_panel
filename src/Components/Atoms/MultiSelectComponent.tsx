@@ -2,6 +2,7 @@
 import React from "react";
 import { MultiSelect } from "@mantine/core";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
+import { colors } from "../../theme/colors";
 
 interface MultiSelectComponentProps {
     label?: string;
@@ -109,7 +110,7 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({
                         scrollbarWidth: "none"
                     },
                     input: {
-                        color: "#282828",
+                        color: colors.text.body,
                         fontWeight: 500,
                     },
                 }}

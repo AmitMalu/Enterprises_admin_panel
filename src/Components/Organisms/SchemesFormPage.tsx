@@ -17,6 +17,7 @@ import { useVendor } from "../../Utils/hooks/useVendor";
 import { useHeirarchyCombinationList } from "../../Utils/hooks/useHeirarchyCombinationList";
 import BackHeader from "../Molecules/BackHeader";
 import { booleanSelectData } from "../../Utils/utils";
+import { colors } from "../../theme/colors";
 
 type SchemesFormPageProps = { mode: "add" | "edit" };
 
@@ -82,7 +83,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
     }, [dispatch, id, mode]);
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title={mode === "edit" ? "Edit Scheme" : "Add Scheme"}
@@ -121,17 +122,6 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         placeholder="Enter Scheme Name"
                                         withAsterisk
                                         maxLength={50}
-                                    />
-                                </Grid.Col>
-
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                                    <FormikTextInputComponent
-                                        name="schemeCode"
-                                        label="Scheme Code"
-                                        placeholder="Enter Scheme Code"
-                                        withAsterisk
-                                        maxLength={30}
-                                        allowSpecialChar={false}
                                     />
                                 </Grid.Col>
 
@@ -194,7 +184,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                     />
                                 </Grid.Col>
 
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                {mode === "edit" && <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikSelectComponent
                                         name="isActive"
                                         label="Active"
@@ -202,18 +192,18 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         withAsterisk
                                         data={booleanSelectData}
                                     />
-                                </Grid.Col>
+                                </Grid.Col>}
                             </Grid>
 
                             <div className="flex justify-end mt-4">
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     disabled={!!productSubproductError || !!vendorError || !!hierarchyListError}
                                     style={{ padding: "10px 30px" }}
                                 >

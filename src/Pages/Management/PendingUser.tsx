@@ -37,10 +37,9 @@ const PendingUser = () => {
       defaultPageSize: 5
     });
 
-  const handleEdit = (id: any) => {
-    navigate(`/management/user/pending/edit/${id}`, { state: id });
+  const handleEdit = (item: any) => {
+    navigate(`/management/user/pending/edit/${item.type}/${item.id}`);
   };
-
   // const handleAdd = () => {
   //   // navigate("/management/userconfig/add");
   // };
@@ -76,12 +75,12 @@ const PendingUser = () => {
   };
 
   const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(headers.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(resetMaster(KEY));
@@ -130,7 +129,7 @@ const PendingUser = () => {
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2 min-w-10">
               <span
-                onClick={() => handleEdit(item.id)}
+                onClick={() => handleEdit(item)}
                 className="cursor-pointer"
               >
                 <EditIcon />

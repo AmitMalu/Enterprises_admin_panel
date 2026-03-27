@@ -12,6 +12,7 @@ import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHiera
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { createMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
+import { colors } from "../../theme/colors";
 
 const CreditDebit = () => {
 
@@ -46,7 +47,7 @@ const CreditDebit = () => {
   );
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
       {/* Heading */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
@@ -222,11 +223,11 @@ const CreditDebit = () => {
                 <ButtonComponent
                   fullWidth={false}
                   radius={6}
-                  borderColor="#fff"
+                  borderColor={colors.text.inverse}
                   variant="filled"
                   type="submit"
-                  bgColor="#C30305"
-                  textColor="#FFFFFF"
+                  bgColor={colors.brand.primary}
+                  textColor={colors.text.inverse}
                   style={{ padding: "10px 30px" }}
                 >
                   SUBMIT

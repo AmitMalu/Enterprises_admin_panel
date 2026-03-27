@@ -51,7 +51,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           <FormikTextInputComponent
             name="prefix"
             label="Prefix"
-            placeholder="Type Prefix"
+            placeholder="Enter Prefix"
             withAsterisk
             capitalize
             maxLength={3}

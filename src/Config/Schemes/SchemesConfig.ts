@@ -11,7 +11,6 @@ export const SCHEME_RATE_URL = API_ENDPOINTS.SCHEMES.SCHEME_RATE;
 
 export interface SchemesListFormType {
   schemeName: string;
-  schemeCode: string;
   productId: string;
   subProductId: string;
   vendorId: string;
@@ -23,10 +22,19 @@ export interface SchemesListTableType {
   id: string | number;
   schemeName: string;
   schemeCode: string;
+  productId: string | number;
   productName: string;
+  subProductId: string | number;
   subProductName: string;
+  vendorId: string | number;
   vendorName: string;
+  schemeHierarchySelectionId: string | number;
   schemeCombinationHashCode: string;
+  isActive: boolean;
+  createdBy: string;
+  createdOn?: string;
+  editedBy?: string;
+  editedOn?: string;
 }
 
 export interface SchemeListCreatePayload extends SchemesListFormType {
@@ -39,12 +47,11 @@ export interface SchemeListUpdatePayload extends SchemesListFormType {
 
 export const initialValues: SchemesListFormType = {
   schemeName: "",
-  schemeCode: "",
   productId: "",
   subProductId: "",
   vendorId: "",
   schemeHierarchySelectionId: "",
-  isActive: false,
+  isActive: true,
 };
 
 export const validationSchema: Record<
@@ -52,7 +59,6 @@ export const validationSchema: Record<
   Yup.AnySchema
 > = {
   schemeName: textField("Scheme Name", 150, true, true),
-  schemeCode: textField("Scheme Code", 150, true, true),
   productId: textField("Product", 150, true, true),
   subProductId: textField("sub Product", 150, true, true),
   vendorId: textField("Vendor", 150, false, true),
@@ -64,10 +70,23 @@ export const headers: GenericTableHeader<SchemesListTableType>[] = [
   { key: "id", label: "Scheme ID", filterType: "number" },
   { key: "schemeName", label: "Scheme Name" },
   { key: "schemeCode", label: "Scheme Code" },
-  { key: "productName", label: "Product" },
-  { key: "subProductName", label: "Sub Product" },
+  { key: "productId", label: "Product ID", filterType: "text" },
+  { key: "productName", label: "Product Name" },
+  { key: "subProductId", label: "Sub Product ID", filterType: "text" },
+  { key: "subProductName", label: "Sub Product Name" },
+  { key: "vendorId", label: "vendor ID", filterType: "text" },
   { key: "vendorName", label: "Vendor Name" },
+  {
+    key: "schemeHierarchySelectionId",
+    label: "scheme Hierarchy Selection ID",
+    filterType: "text",
+  },
+  { key: "isActive", label: "Is Active", filterType: "boolean" },
   { key: "schemeCombinationHashCode", label: "Scheme HashCode" },
+  { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 // Transform form data to Create payload
@@ -83,7 +102,6 @@ export const transformFormToUpdateSchemesPayload = (
   formData: SchemesListFormType,
 ): SchemeListUpdatePayload => ({
   schemeName: formData.schemeName,
-  schemeCode: formData.schemeCode,
   productId: formData.productId,
   subProductId: formData.subProductId,
   vendorId: formData.vendorId,
@@ -96,7 +114,6 @@ export const transformSchemeListToFormData = (
   raw: Record<string, any>,
 ): SchemesListFormType => ({
   schemeName: raw.schemeName ?? "",
-  schemeCode: raw.schemeCode ?? "",
   productId: raw.productId ?? "",
   subProductId: raw.subProductId ?? "",
   vendorId: raw.vendorId ?? "",

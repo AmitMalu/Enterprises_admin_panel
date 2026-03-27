@@ -16,6 +16,7 @@ import { CustomTab } from "../../Components/Molecules/CustomTab";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import { useAppDispatch } from "../../Redux/hooks";
 import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
+import { colors } from "../../theme/colors";
 
 const SearchTransactionReport = () => {
 
@@ -132,12 +133,12 @@ const SearchTransactionReport = () => {
                       radius={6}
                       style={{ height: 34 }}
                       size="sm"
-                      borderColor="#fff"
+                      borderColor={colors.text.inverse}
                       variant="filled"
                       type="submit"
                       disabled={loading}
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                     >
                       VIEW
                     </ButtonComponent>
@@ -159,9 +160,9 @@ const SearchTransactionReport = () => {
           }
         }}
         grow={true}
-        borderColor="#ccc"
-        activeBg="#fff"
-        activeColor="#CA4343"
+        borderColor={colors.border.strong}
+        activeBg={colors.text.inverse}
+        activeColor={colors.brand.highlight}
       />
 
       {

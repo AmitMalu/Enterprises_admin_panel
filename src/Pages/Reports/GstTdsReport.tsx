@@ -21,6 +21,7 @@ import { useAppDispatch } from "../../Redux/hooks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { RefreshIcon } from "../../assets/Icons";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
+import { colors } from "../../theme/colors";
 
 const GstTdsReport = () => {
 
@@ -274,11 +275,11 @@ const GstTdsReport = () => {
                       fullWidth={false}
                       radius={6}
                       size="sm"
-                      borderColor="#fff"
+                      borderColor={colors.text.inverse}
                       variant="filled"
                       type="submit"
-                      bgColor="#C30305"
-                      textColor="#FFFFFF"
+                      bgColor={colors.brand.primary}
+                      textColor={colors.text.inverse}
                     >
                       VIEW
                     </ButtonComponent>}

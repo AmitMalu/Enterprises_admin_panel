@@ -24,6 +24,7 @@ import {
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import { useLocationDropdowns } from "../../Utils/hooks/useLocationDropdowns";
 import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 type PincodeMasterFormProps = { mode: "add" | "edit" };
 
@@ -89,7 +90,7 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
 
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title={mode === "edit" ? "Edit Pincode" : "Add Pincode"}
@@ -248,11 +249,11 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
                                     {!loading && !fetchError && <ButtonComponent
                                         fullWidth={false}
                                         radius={6}
-                                        borderColor="#fff"
+                                        borderColor={colors.text.inverse}
                                         variant="filled"
                                         type="submit"
-                                        bgColor="#C30305"
-                                        textColor="#FFFFFF"
+                                        bgColor={colors.brand.primary}
+                                        textColor={colors.text.inverse}
                                         style={{ padding: "10px 30px" }}
                                     >
                                         SUBMIT

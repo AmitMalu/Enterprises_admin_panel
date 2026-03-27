@@ -86,7 +86,7 @@
 //     <Table.ScrollContainer minWidth={1000} style={{ marginTop: "20px" }}>
 //       <Table
 //         withColumnBorders
-//         style={{ borderRadius: 8, overflow: "hidden", background: "#fff" }}
+//         style={{ borderRadius: 8, overflow: "hidden", background: colors.text.inverse }}
 //         styles={{
 //           th: {
 //             background:
@@ -124,7 +124,7 @@
 //                   justifyContent: "space-between",
 //                 }}
 //               >
-//                 <TextComponent color="#667085" fontFamily="Inter" fontSize={14}>
+//                 <TextComponent color={colors.text.subtle} fontFamily="Inter" fontSize={14}>
 //                   {message}
 //                 </TextComponent>
 
@@ -133,10 +133,10 @@
 //                   onChange={setPage}
 //                   styles={{
 //                     control: {
-//                       borderColor: "#fff",
+//                       borderColor: colors.text.inverse,
 //                     },
 //                   }}
-//                   color="#12B5F1"
+//                   color={colors.chart.primary}
 //                   size="sm"
 //                   radius="md"
 //                   previousIcon={paginationBackIcon}

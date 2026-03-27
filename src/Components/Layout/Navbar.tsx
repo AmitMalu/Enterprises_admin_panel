@@ -53,14 +53,15 @@ const Navbar: React.FC = () => {
 
   return (
     <Group justify="flex-end" w="100%" gap="lg">
-      {/* Postpaid Balance */}
-      <TextComponent fontWeight={600} fontSize={14}>
-        Postpaid: ₹{postpaid}
-      </TextComponent>
-
+      
       {/* Prepaid Balance */}
       <TextComponent fontWeight={600} fontSize={14}>
         Prepaid: ₹{prepaid}
+      </TextComponent>
+
+      {/* Postpaid Balance */}
+      <TextComponent fontWeight={600} fontSize={14}>
+        Postpaid: ₹{postpaid}
       </TextComponent>
 
       {/* Refresh Button */}

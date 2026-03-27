@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 type ProductFormProps = { mode: "add" | "edit" };
 
@@ -85,7 +86,7 @@ const ProductForm = ({ mode }: ProductFormProps) => {
   }, [dispatch, id, mode]);
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
       <BackHeader
         title={mode === "edit" ? "Edit Product" : "Add Product"}
@@ -114,22 +115,25 @@ const ProductForm = ({ mode }: ProductFormProps) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="productCode"
-                label="Product Code"
-                placeholder="Enter Product Code"
+              <FormikSelectComponent
+                name="transactionType"
+                label="Transaction Type"
+                placeholder="Select Transaction Type"
                 withAsterisk
-                maxLength={30}
+                data={[
+                  { label: "CREDIT", value: "CREDIT" },
+                  { label: "DEBIT", value: "DEBIT" },
+                ]}
               />
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
-                name="productCodeForScheme"
-                label="Product Code For Scheme"
-                placeholder="Enter Product Code For Scheme"
+                name="productGroup"
+                label="Product Group"
+                placeholder="Enter Product Group"
                 withAsterisk
-                maxLength={30}
+                maxLength={50}
               />
             </Grid.Col>
 
@@ -160,19 +164,6 @@ const ProductForm = ({ mode }: ProductFormProps) => {
                 placeholder="Select"
                 withAsterisk
                 data={booleanSelectData}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikSelectComponent
-                name="transactionType"
-                label="Transaction Type"
-                placeholder="Select Transaction Type"
-                withAsterisk
-                data={[
-                  { label: "CREDIT", value: "CREDIT" },
-                  { label: "DEBIT", value: "DEBIT" },
-                ]}
               />
             </Grid.Col>
 
@@ -227,16 +218,6 @@ const ProductForm = ({ mode }: ProductFormProps) => {
             </Grid.Col>
 
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="productGroup"
-                label="Product Group"
-                placeholder="Enter Product Group"
-                withAsterisk
-                maxLength={50}
-              />
-            </Grid.Col>
-
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
               <FormikSelectComponent
                 name="clusterMode"
                 label="Cluster Mode"
@@ -276,11 +257,11 @@ const ProductForm = ({ mode }: ProductFormProps) => {
             {!loading && !fetchError && <ButtonComponent
               fullWidth={false}
               radius={6}
-              borderColor="#fff"
+              borderColor={colors.text.inverse}
               variant="filled"
               type="submit"
-              bgColor="#C30305"
-              textColor="#FFFFFF"
+              bgColor={colors.brand.primary}
+              textColor={colors.text.inverse}
               style={{ padding: "10px 30px" }}
             >
               SUBMIT

@@ -1,6 +1,7 @@
 // import SelectComponent from "../Atoms/SelectComponent";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import TextComponent from "../Atoms/TextComponent";
+import { colors } from "../../theme/colors";
 
 interface SchemeConfigurationFormProps {
   slabSize: number;
@@ -11,7 +12,7 @@ const SchemeConfigurationForm = ({ slabSize, onSlabSizeChange }: SchemeConfigura
   return (
     <>
       <TextComponent
-        color="#1D1F2C"
+        color={colors.text.heading}
         fontFamily="Inter"
         fontWeight={500}
         fontSize={18}

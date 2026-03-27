@@ -24,6 +24,7 @@ import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 type OperatorFormProps = { mode: "add" | "edit" };
 
@@ -86,7 +87,7 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
   }, [dispatch, id, mode]);
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
       <BackHeader
         title={mode === "edit" ? "Edit Operator" : "Add Operator"}
         backPath="/master/operator"
@@ -116,12 +117,14 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
           return (
             <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
               <Grid gutter="lg">
+
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikTextInputComponent
-                    name="operatorAlias"
-                    label="Operator Alias"
-                    placeholder="Enter Operator Alias"
+                    name="operatorName"
+                    label="Operator Name"
+                    placeholder="Enter Operator Name"
                     withAsterisk
+                    required
                     maxLength={51}
                     allowSpecialChar={false}
                   />
@@ -135,30 +138,6 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                     data={[{ label: "CARD", value: "CARD" }, { label: "ONLINE", value: "ONLINE" }]}
                     withAsterisk
                     required
-                  />
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikTextInputComponent
-                    name="operatorCode"
-                    label="Operator Code"
-                    placeholder="Enter Operator Code"
-                    withAsterisk
-                    required
-                    maxLength={31}
-                    allowSpecialChar={false}
-                  />
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikTextInputComponent
-                    name="operatorName"
-                    label="Operator Name"
-                    placeholder="Enter Operator Name"
-                    withAsterisk
-                    required
-                    maxLength={51}
-                    allowSpecialChar={false}
                   />
                 </Grid.Col>
 
@@ -196,10 +175,10 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikTextInputComponent
                     name="alias"
-                    label="Alias"
-                    placeholder="Enter Alias"
-                    withAsterisk
-                    required
+                    label="Description"
+                    placeholder="Enter Description"
+                    // withAsterisk
+                    // required
                     maxLength={51}
                     allowSpecialChar={false}
                   />
@@ -235,11 +214,11 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
                 {!loading && !fetchError && <ButtonComponent
                   fullWidth={false}
                   radius={6}
-                  borderColor="#fff"
+                  borderColor={colors.text.inverse}
                   variant="filled"
                   type="submit"
-                  bgColor="#C30305"
-                  textColor="#FFFFFF"
+                  bgColor={colors.brand.primary}
+                  textColor={colors.text.inverse}
                   style={{ padding: "10px 30px" }}
                 >
                   SUBMIT

@@ -10,6 +10,7 @@ import FormikFileInput from "../../Components/Molecules/FormikFileInput";
 import { DownloadIcon } from "../../assets/Icons";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { toast } from "react-toastify";
+import { colors } from "../../theme/colors";
 
 const BulkCreditDebit = () => {
 
@@ -56,7 +57,7 @@ const BulkCreditDebit = () => {
   );
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
       {/* Heading */}
       <div className="mb-4">
         <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
@@ -84,7 +85,7 @@ const BulkCreditDebit = () => {
                   textColor="white"
                   fontSize="14px"
                   onClick={handleSampleFileDownload}
-                  rightIcon={<DownloadIcon color="#4D4E4E" />}
+                  rightIcon={<DownloadIcon color={colors.text.dim} />}
                 >
                   Click to Download Sample file
                 </ButtonComponent>
@@ -97,7 +98,7 @@ const BulkCreditDebit = () => {
                 withAsterisk
                 styles={{
                   input: {
-                    color: "#282828",
+                    color: colors.text.body,
                     fontWeight: 500,
                     fontSize: 24,
                     textAlign: "center" as const,
@@ -122,11 +123,11 @@ const BulkCreditDebit = () => {
                 <ButtonComponent
                   fullWidth={false}
                   radius={6}
-                  borderColor="#fff"
+                  borderColor={colors.text.inverse}
                   variant="filled"
                   type="submit"
-                  bgColor="#C30305"
-                  textColor="#FFFFFF"
+                  bgColor={colors.brand.primary}
+                  textColor={colors.text.inverse}
                   style={{ padding: "10px 30px" }}
                   disabled={isSubmitting}
                 >

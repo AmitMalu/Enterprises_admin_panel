@@ -10,6 +10,7 @@ import ProfileBankInfo from "../../Components/Organisms/ProfileBankInfo";
 import ProfileAddressInfo from "../../Components/Organisms/ProfileAddressInfo";
 import ProfileKycDocuments from "../../Components/Organisms/ProfileKycDocuments";
 import { toast } from "react-toastify";
+import { colors } from "../../theme/colors";
 
 const Profile = () => {
   const profileData = useAppSelector((state) => state.auth.profileInfo); // Assuming you store it in auth slice
@@ -70,9 +71,9 @@ const Profile = () => {
           }
         }}
         grow={false}
-        borderColor="#ccc"
-        activeBg="#fff"
-        activeColor="#CA4343"
+        borderColor={colors.border.strong}
+        activeBg={colors.text.inverse}
+        activeColor={colors.brand.highlight}
       />
 
       <div className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl" >

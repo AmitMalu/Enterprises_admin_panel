@@ -10,6 +10,7 @@ import { Grid, Loader } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import BackHeader from "../../Components/Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 
 const EditSchemeAllocation = () => {
@@ -145,7 +146,7 @@ const EditSchemeAllocation = () => {
     }, [modifiedSchemes])
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title={"Edit Scheme Allocation"}
@@ -222,10 +223,10 @@ const EditSchemeAllocation = () => {
                         fullWidth={false}
                         radius={6}
                         onClick={handleUpdate}
-                        borderColor="#fff"
+                        borderColor={colors.text.inverse}
                         variant="filled"
-                        bgColor="#C30305"
-                        textColor="#FFFFFF"
+                        bgColor={colors.brand.primary}
+                        textColor={colors.text.inverse}
                         style={{ padding: "10px 30px" }}
                     >
                         UPDATE

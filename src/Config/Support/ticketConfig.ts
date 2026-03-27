@@ -53,7 +53,7 @@ export const validationSchema: Record<keyof TicketFormType, Yup.AnySchema> = {
     "Document",
     ["image/png", "image/jpeg"],
     1.5,
-    false
+    false,
   ),
   raisedBy: textField("Raised By", 150, false, true),
   status: textField("Status", 100, false, true),
@@ -72,6 +72,8 @@ export const headers: GenericTableHeader<TicketTableType>[] = [
       { label: "PENDING", value: "PENDING" },
       { label: "SUCCESS", value: "SUCCESS" },
       { label: "REJECTED", value: "REJECTED" },
+      { label: "FAILED", value: "FAILED" },
+      { label: "FAILURE", value: "FAILURE" },
     ],
   },
   { key: "raisedBy", label: "Raised By", filterType: "text" },
@@ -84,7 +86,9 @@ export const headers: GenericTableHeader<TicketTableType>[] = [
     filterOptions: [
       { label: "PENDING", value: "PENDING" },
       { label: "SUCCESS", value: "SUCCESS" },
+      { label: "REJECTED", value: "REJECTED" },
       { label: "FAILED", value: "FAILED" },
+      { label: "FAILURE", value: "FAILURE" },
     ],
   },
   { key: "amount", label: "Amount", filterType: "number" },
@@ -102,7 +106,7 @@ export const headers: GenericTableHeader<TicketTableType>[] = [
 ];
 
 export const transformToTicketTableType = (
-  raw: Record<string, any>
+  raw: Record<string, any>,
 ): TicketTableType => {
   return {
     id: raw.id ?? "",
@@ -124,7 +128,7 @@ export const transformToTicketTableType = (
 };
 
 export const transformTicketListToFormData = (
-  raw: Record<string, any>
+  raw: Record<string, any>,
 ): TicketFormType => ({
   id: raw.id ?? "",
   issueType: raw.issueType ?? "",

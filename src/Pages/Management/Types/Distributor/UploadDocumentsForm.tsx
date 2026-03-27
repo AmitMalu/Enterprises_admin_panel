@@ -4,6 +4,7 @@ import ButtonComponent from "../../../../Components/Atoms/ButtonComponent";
 import { Grid, Loader } from "@mantine/core";
 import { UploadDocumentsFormProps } from "../../../../Config/UserCreationConfig/UserConfig";
 import { useEffect, useState } from "react";
+import { colors } from "../../../../theme/colors";
 
 const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDocumentsFormProps) => {
 
@@ -110,7 +111,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    color: "#28a745",
+                    color: colors.status.successAlt,
                     fontSize: "12px",
                     fontWeight: 500,
                   }}
@@ -120,7 +121,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
               ) : showVerifyButton ? (
                 aadhaarVerifying ? (
                   <div style={{ display: "flex", alignItems: "center", height: "24px" }}>
-                    <Loader size="xs" color="#007B55" />
+                    <Loader size="xs" color={colors.status.successStrong} />
                   </div>
                 ) : (
                   <ButtonComponent
@@ -132,8 +133,8 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                       cursor: "pointer",
                       fontSize: "12px",
                     }}
-                    bgColor="#007B55"
-                    textColor="white"
+                    bgColor={colors.status.successStrong}
+                    textColor={colors.text.inverse}
                     fontSize="12"
                     size="xs"
                     onClick={async () => {
@@ -176,7 +177,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    color: "#28a745",
+                    color: colors.status.successAlt,
                     fontSize: "12px",
                     fontWeight: 500,
                   }}
@@ -186,7 +187,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
               ) : showPanVerifyButton ? (
                 panVerifying ? (
                   <div style={{ display: "flex", alignItems: "center", height: "24px" }}>
-                    <Loader size="xs" color="#007B55" />
+                    <Loader size="xs" color={colors.status.successStrong} />
                   </div>
                 ) : (
                   <ButtonComponent
@@ -198,8 +199,8 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                       cursor: "pointer",
                       fontSize: "12px",
                     }}
-                    bgColor="#007B55"
-                    textColor="white"
+                    bgColor={colors.status.successStrong}
+                    textColor={colors.text.inverse}
                     fontSize="12"
                     size="xs"
                     onClick={async () => {

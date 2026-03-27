@@ -17,6 +17,7 @@ import VerticalKeyValueTable from "../../Components/Organisms/VerticalKeyValueTa
 import BackHeader from "../../Components/Molecules/BackHeader";
 import PopupModal from "../../Components/Atoms/PopupModal";
 import TextComponent from "../../Components/Atoms/TextComponent";
+import { colors } from "../../theme/colors";
 
 const SchemeSettingsPage = () => {
 
@@ -161,6 +162,9 @@ const SchemeSettingsPage = () => {
     entityName: "SchemeRate",
     resetFormData: resetUpdatedOperatorValues,
     delay: 5000,
+    toastOptions: {
+      errorAutoClose: 10000, 
+    },
   });
 
   const handleSave = () => {
@@ -373,8 +377,8 @@ const SchemeSettingsPage = () => {
               radius={8}
               onClick={toggleSchemeStatus}
               font="Inter"
-              textColor="#fff"
-              bgColor={isSchemeActive ? "#BF0204" : "#28a745"}
+              textColor={colors.text.inverse}
+              bgColor={isSchemeActive ? colors.status.danger : colors.status.successAlt}
               fontSize="14"
               leftIcon={isSchemeActive ? <DeactivateIcon /> : null}
               disabled={!!loadingScheme || updatedOperators.length !== 0}
@@ -400,17 +404,17 @@ const SchemeSettingsPage = () => {
             defaultValue="slab"
             value={activeTab}
             classNames={{
-              list: "flex w-full border border-[#DCDCDC] overflow-hidden",
+              list: "flex w-full border border-border-soft overflow-hidden",
               tab: `
       text-sm font-medium px-4 py-2 transition-all cursor-pointer 
-      data-[active=true]:bg-white data-[active=true]:text-[#CA4343]
-      data-[active=false]:bg-[#F7F7F7] data-[active=false]:text-[#3D3D3D]
+      data-[active=true]:bg-white data-[active=true]:text-brand-highlight
+      data-[active=false]:bg-surface-subtle data-[active=false]:text-text-neutral
     `,
             }}
           >
             <Tabs.List grow>
               <Tabs.Tab
-                style={{ borderRight: "1px solid #DCDCDC" }}
+                style={{ borderRight: `1px solid ${colors.border.soft}` }}
                 value="slab"
               >
                 Slab Structure
@@ -449,7 +453,7 @@ const SchemeSettingsPage = () => {
 
         {updatedOperators.length !== 0 && (
           <div className="absolute bottom-0 right-0 p-4">
-            <ButtonComponent onClick={handleSave} bgColor="#BF0204" textColor="#fff" radius={8} font="Inter" fontSize="14">
+            <ButtonComponent onClick={handleSave} bgColor={colors.status.danger} textColor={colors.text.inverse} radius={8} font="Inter" fontSize="14">
               Save Changes
             </ButtonComponent>
           </div>
@@ -470,15 +474,15 @@ const SchemeSettingsPage = () => {
           <div className="flex justify-end gap-3 mt-4">
             <ButtonComponent
               variant="outline"
-              bgColor="#f1f1f1"
-              textColor="#333"
+              bgColor={colors.surface.muted}
+              textColor={colors.text.secondary}
               onClick={() => setIsConfirmOpen(false)}
             >
               Cancel
             </ButtonComponent>
             <ButtonComponent
-              bgColor="#C30305"
-              textColor="#fff"
+              bgColor={colors.brand.primary}
+              textColor={colors.text.inverse}
               onClick={() => {
                 setIsConfirmOpen(false);
                 navigate("/schemes/schemeslist")

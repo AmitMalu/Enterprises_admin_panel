@@ -50,7 +50,7 @@
 //         style={{ borderRadius: 8, overflow: "hidden" }}
 //         styles={{
 //           th: {
-//             backgroundColor: "#BF0204",
+//             backgroundColor: colors.status.danger,
 //             color: "white",
 //             textAlign: "center",
 //             padding: "6px 12px",

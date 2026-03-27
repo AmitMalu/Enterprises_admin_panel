@@ -23,6 +23,7 @@ import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMaster
 import BackHeader from "../Molecules/BackHeader";
 import { useVendor } from "../../Utils/hooks/useVendor";
 import { useSubProductList } from "../../Utils/hooks/useSubProductList";
+import { colors } from "../../theme/colors";
 
 type VendorRoutingFormProps = { mode: "add" | "edit" };
 
@@ -90,7 +91,7 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
     }, [dispatch, id, mode]);
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
             <BackHeader
                 title={mode === "edit" ? "Edit Vendor Routing" : "Add Vendor Routing"}
                 backPath="/master/vendor-routing"
@@ -179,8 +180,8 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                         name="routingPriority2"
                                         label="Routing Priority 2"
                                         placeholder="Select Routing Priority 2"
-                                        withAsterisk
-                                        required
+                                        // withAsterisk
+                                        // required
                                         allowDeselect={true}
                                         searchable={true}
                                         nothingFoundMessage="Nothing Found"
@@ -195,11 +196,11 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                         name="routingPriority3"
                                         label="Routing Priority 3"
                                         placeholder="Select Routing Priority 3"
-                                        withAsterisk
+                                        // withAsterisk
+                                        // required
                                         allowDeselect={true}
                                         searchable={true}
                                         nothingFoundMessage="Nothing Found"
-                                        required
                                         data={optionsForPriority3}
                                         disabled={loadingVendorList}
                                     />
@@ -210,11 +211,11 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     style={{ padding: "10px 30px" }}
                                 >
                                     SUBMIT

@@ -24,6 +24,7 @@ import {
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import { useLocationDropdowns } from "../../Utils/hooks/useLocationDropdowns";
 import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 type StateMasterFormProps = { mode: "add" | "edit" };
 
@@ -88,7 +89,7 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
 
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
 
             <BackHeader
                 title={mode === "edit" ? "Edit State" : "Add State"}
@@ -201,11 +202,11 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     style={{ padding: "10px 30px" }}
                                 >
                                     SUBMIT

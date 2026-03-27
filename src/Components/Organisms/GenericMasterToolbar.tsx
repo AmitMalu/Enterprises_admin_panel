@@ -9,6 +9,7 @@ import { GenericTableHeader } from "../../Utils/utils";
 import ColumnVisibilityMenu from "../Molecules/ColumnVisibilityMenu";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import { useEffect, useRef } from "react";
+import { colors } from "../../theme/colors";
 
 type GenericMasterToolbarProps = {
   addButtonText?: string;
@@ -64,10 +65,10 @@ const GenericMasterToolbar = ({
               style={{ padding: "4px 8px", height: 32, margin: 0 }}
               radius={1}
               onClick={onAdd}
-              textColor="#fff"
+              textColor={colors.text.inverse}
               fontSize="14"
-              bgColor="#BF0204"
-              borderColor="#FFFFFF"
+              bgColor={colors.status.danger}
+              borderColor={colors.text.inverse}
               leftIcon={<AddIconSvg />}
               disabled={!!loading}
 
@@ -98,11 +99,11 @@ const GenericMasterToolbar = ({
           {onFilter && <ButtonComponent
             style={{ padding: "4px 8px", height: 32 }}
             radius={1}
-            textColor="#000000"
-            borderColor="#CACACA"
+            textColor={colors.text.primary}
+            borderColor={colors.border.strong}
             fontSize="16"
             throttleMs={0}
-            bgColor="#ffffff"
+            bgColor={colors.text.inverse}
             onClick={onFilter}
             leftIcon={<FilterIcon />}
             disabled={!!loading || !!error}
@@ -114,11 +115,11 @@ const GenericMasterToolbar = ({
           {onExport && <ButtonComponent
             style={{ padding: "4px 8px", height: 32 }}
             radius={1}
-            textColor="#000000"
-            borderColor="#CACACA"
+            textColor={colors.text.primary}
+            borderColor={colors.border.strong}
             fontSize="16"
             throttleMs={5000}
-            bgColor="#ffffff"
+            bgColor={colors.text.inverse}
             onClick={onExport}
             leftIcon={<DownloadIcon />}
             disabled={!!loading || !!error}
@@ -138,11 +139,11 @@ const GenericMasterToolbar = ({
           {onRefresh && <ButtonComponent
             style={{ height: 32, width: 6, paddingLeft: "28px" }}
             radius={1}
-            textColor="#000000"
-            bgColor="#ffffff"
+            textColor={colors.text.primary}
+            bgColor={colors.text.inverse}
             fontSize="16"
             throttleMs={5000}
-            borderColor="#CACACA"
+            borderColor={colors.border.strong}
             leftIcon={<RefreshIcon />}
             onClick={onRefresh}
             disabled={!!loading}

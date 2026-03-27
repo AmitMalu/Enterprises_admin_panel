@@ -24,6 +24,7 @@ import { AdhaarPanLinkApi, AdhaarValidationApi, PanValidationApi } from "../../R
 import { toast } from "react-toastify";
 import PopupModal from "../Atoms/PopupModal";
 import ButtonComponent from "../Atoms/ButtonComponent";
+import { colors } from "../../theme/colors";
 
 const UserFormPage = () => {
   const dispatch = useAppDispatch();
@@ -247,16 +248,16 @@ const UserFormPage = () => {
           <div className="flex justify-end gap-3 mt-4">
             <ButtonComponent
               variant="outline"
-              bgColor="#f1f1f1"
+              bgColor={colors.surface.muted}
               fontSize="16"
-              textColor="#333"
+              textColor={colors.text.secondary}
               onClick={() => setIsConfirmOpen(false)}
             >
               Stay on Page
             </ButtonComponent>
             <ButtonComponent
-              bgColor="#C30305"
-              textColor="#fff"
+              bgColor={colors.brand.primary}
+              textColor={colors.text.inverse}
               fontSize="16"
               onClick={() => {
                 setIsConfirmOpen(false);

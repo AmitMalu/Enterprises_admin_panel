@@ -11,7 +11,7 @@ export const MASTER_KEY = "sub-products";
 export const MASTER_URL = API_ENDPOINTS.MASTER.SUB_PRODUCT; // Replace with actual URL or API_ENDPOINTS.MASTER.PRODUCTS
 export interface SubProductFormType {
   subProductTitle: string;
-  subProductCode: string;
+  // subProductCode: string;
   product: string | { id: string };
   walletType: string;
   isSettlement: boolean;
@@ -27,6 +27,7 @@ export interface SubProductFormType {
 }
 export interface SubProductTableType extends SubProductFormType {
   id?: string;
+  subProductCode: string;
   productName: string;
   productCode: string;
   createdOn?: string;
@@ -52,7 +53,6 @@ export type FetchSubProductParams = {
 
 export const initialValues: SubProductFormType = {
   subProductTitle: "",
-  subProductCode: "",
   product: "",
   walletType: "",
   isSettlement: false,
@@ -70,7 +70,6 @@ export const initialValues: SubProductFormType = {
 export const validationSchema: Record<keyof SubProductFormType, Yup.AnySchema> =
   {
     subProductTitle: textField("Sub Product Title", 100, true),
-    subProductCode: textField("Sub Product Code", 50, true),
     product: textField("Product", 50, true),
     walletType: textField("Wallet Type", 50, true),
     isSettlement: Yup.boolean().required("Is Settlement is Required"),
@@ -115,7 +114,7 @@ export const headers: GenericTableHeader<SubProductTableType>[] = [
 
 // Util to safely transform raw API data into SubProductTableType
 export const mapToSubProductTableType = (
-  raw: Record<string, any>
+  raw: Record<string, any>,
 ): SubProductTableType => {
   return {
     id: raw?.id ?? "",
@@ -143,11 +142,10 @@ export const mapToSubProductTableType = (
 };
 
 export const transformSubProductToFormData = (
-  raw: Record<string, any>
+  raw: Record<string, any>,
 ): SubProductFormType => {
   return {
     subProductTitle: raw.subProductTitle,
-    subProductCode: raw.subProductCode,
     product: String(raw.productId), // assuming it's productId (you may need to adjust this)
     walletType: raw.walletType,
     isSettlement: !!raw.isSettlement,
@@ -170,25 +168,25 @@ export const transformSubProductToFormData = (
 };
 
 export const transformFormToCreateSubProductPayload = (
-  formData: SubProductFormType
+  formData: SubProductFormType,
 ): CreateSubProductPayload => ({
   ...formData,
   product: { id: String(formData.product) },
-  settlementTime: formData.isSettlement ? formData.settlementTime ?? "" : "",
+  settlementTime: formData.isSettlement ? (formData.settlementTime ?? "") : "",
   whiteLabelAdminId: formData.isWhiteLabelAdmin
-    ? formData.whiteLabelAdminId ?? ""
+    ? (formData.whiteLabelAdminId ?? "")
     : "",
   createdBy: localStorage.getItem("username") || "system",
 });
 
 export const transformFormToUpdateSubProductPayload = (
-  formData: SubProductFormType
+  formData: SubProductFormType,
 ): UpdateSubProductPayload => ({
   ...formData,
   product: { id: String(formData.product) },
-  settlementTime: formData.isSettlement ? formData.settlementTime ?? "" : "",
+  settlementTime: formData.isSettlement ? (formData.settlementTime ?? "") : "",
   whiteLabelAdminId: formData.isWhiteLabelAdmin
-    ? formData.whiteLabelAdminId ?? ""
+    ? (formData.whiteLabelAdminId ?? "")
     : "",
   editedBy: localStorage.getItem("username") || "system",
 });

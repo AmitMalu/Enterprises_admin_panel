@@ -1,5 +1,6 @@
 import { Tabs, TabsProps } from "@mantine/core";
 import { ReactNode } from "react";
+import { colors } from "../../theme/colors";
 
 interface TabItem {
     value: string;
@@ -35,11 +36,11 @@ export function CustomTab({
     orientation = "horizontal",
     grow = false,
     justify = "flex-start",
-    borderColor = "#DCDCDC",
+    borderColor = colors.border.soft,
     listClassName = "",
     tabClassName = "",
-    activeBg = "#ffffff",
-    activeColor = "#CA4343",
+    activeBg = colors.text.inverse,
+    activeColor = colors.brand.accent,
     inactiveBg = "",
     inactiveColor = "",
     ...rest
