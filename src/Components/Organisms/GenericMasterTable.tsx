@@ -7,7 +7,7 @@ import TableFooter from "./TableFooter";
 import { colors } from "../../theme/colors";
 
 const thStyle = {
-  backgroundColor: colors.status.danger,
+  backgroundColor: colors.brand.primary,
   color: colors.text.inverse,
   textAlign: "center" as const,
   padding: "6px 12px",

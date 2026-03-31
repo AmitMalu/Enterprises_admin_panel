@@ -4,11 +4,18 @@
 
 :root {
   /* Brand */
-  --color-brand-primary: #c30305;
-  --color-brand-primary-hover: #a30002;
+  /* --color-brand-primary: #c30305; */
+  /* --color-brand-primary-hover: #a30002;
   --color-brand-accent: #db2729;
   --color-brand-highlight: #ca4343;
-  --color-brand-emphasis: #d82226;
+  --color-brand-emphasis: #d82226; */
+
+  --color-brand-emphasis: #151a4d;
+  --color-brand-primary-hover: #1e2480;
+  --color-brand-primary: #2f3691;
+  --color-brand-accent: #4c54d9;
+  --color-brand-highlight: #8088f8;
+  --color-brand-light: #96addf;
 
   /* Layout surfaces */
   --color-surface-app: #f8f8f8;
@@ -55,13 +62,6 @@
   --color-status-danger-vivid: #ff4d4d;
   --color-status-danger-soft: #fde4e4;
   --color-status-warning: #d97706;
-
-  /* Charts */
-  --color-chart-primary: #6892ed;
-  --color-chart-series-1: #d82226;
-  --color-chart-series-2: #1e6f65;
-  --color-chart-series-3: #b37305;
-  --color-chart-series-4: #d97706;
 }
 
 .segoe-text {

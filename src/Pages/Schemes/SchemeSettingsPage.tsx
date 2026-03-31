@@ -453,7 +453,7 @@ const SchemeSettingsPage = () => {
 
         {updatedOperators.length !== 0 && (
           <div className="absolute bottom-0 right-0 p-4">
-            <ButtonComponent onClick={handleSave} bgColor={colors.status.danger} textColor={colors.text.inverse} radius={8} font="Inter" fontSize="14">
+            <ButtonComponent onClick={handleSave} bgColor={colors.brand.primary} textColor={colors.text.inverse} radius={8} font="Inter" fontSize="14">
               Save Changes
             </ButtonComponent>
           </div>

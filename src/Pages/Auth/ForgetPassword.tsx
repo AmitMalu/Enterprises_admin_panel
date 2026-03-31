@@ -48,7 +48,7 @@ const ForgetPassword: React.FC = () => {
       });
       persistOtpSession(values.username, "forgetPassword"); //set both values in Session storage
       navigate("/otp-verify", {
-        state: { username: values.username, otpFor: "forgetPassword" },
+        state: { username: values.username, otpFor: "forgetPassword", otp: result.data.OTP },
       });
     } catch (error) {
       console.error("Forget Password Error:", error);
@@ -65,11 +65,11 @@ const ForgetPassword: React.FC = () => {
 
   return (
     <div className="w-full px-10 flex flex-col text-left">
-      <h2 className="mb-8 text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
+      <h2 className="mb-8 text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium">
         Forget Password
       </h2>
 
-      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-status-danger">
+      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-brand-primary">
         Please Enter Your Username
       </div>
 

@@ -133,11 +133,11 @@ const OtpVerify = () => {
 
   return (
     <div className="w-full px-4 flex flex-col text-left">
-      <h2 className="pl-4 mb-8 text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
+      <h2 className="pl-4 mb-6 text-text-muted font-geologica text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium">
         Enter OTP
       </h2>
 
-      <div className="pl-4 mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-status-danger">
+      <div className="pl-4 mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-brand-accent">
         Please Enter Your OTP
       </div>
 
@@ -175,7 +175,7 @@ const OtpVerify = () => {
               >
                 <ButtonComponent
                   onClick={handleResendOtp}
-                  textColor={colors.status.danger}
+                  textColor={colors.brand.accent}
                   fontSize="14"
                   font="poppins"
                   throttleMs={10000}
@@ -213,9 +213,13 @@ const OtpVerify = () => {
                   radius={12}
                   type="submit"
                 >
-                  {values.otp.length === 6 && (
+                  {values.otp.length === 6 ? (
                     <div>
                       Verifying OTP...
+                    </div>
+                  ) : (
+                    <div>
+                      Verify
                     </div>
                   )}
                 </ButtonComponent>
