@@ -761,7 +761,7 @@ const PendingUserForm = () => {
                         borderColor={colors.text.inverse}
                         variant="filled"
                         disabled={isSubmitting}
-                        bgColor={colors.brand.primary}
+                        bgColor={colors.status.danger}
                         textColor={colors.text.inverse}
                         style={{ padding: "0px 30px", letterSpacing: 2 }}
                         onClick={() => {

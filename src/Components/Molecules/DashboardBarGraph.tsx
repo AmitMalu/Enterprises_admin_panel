@@ -11,7 +11,7 @@ const DashboardBarGraph = ({ graphData }: any) => {
                     <XAxis dataKey="product" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="volume" fill={colors.chart.primary} />
+                    <Bar dataKey="volume" fill={colors.brand.accent} />
                 </BarChart>
             </ResponsiveContainer>
         </Card>

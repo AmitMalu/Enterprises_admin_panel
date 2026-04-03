@@ -18,7 +18,7 @@ const DashboardLineGraph = ({ graphData }: any) => {
                     <Line
                         type="monotone"
                         dataKey="transaction"
-                        stroke={colors.status.dangerLine}
+                        stroke={colors.brand.accent}
                         strokeWidth={3}
                         dot={{ r: 4 }}
                     />

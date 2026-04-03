@@ -9,6 +9,7 @@ import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { passwordValidation } from "../../Utils/ValidationUtils";
 import { colors } from "../../theme/colors";
+import { IconArrowLeft } from "@tabler/icons-react";
 
 const validationSchema = Yup.object().shape({
   newPassword: passwordValidation,
@@ -72,11 +73,11 @@ const SetPassword: React.FC = () => {
 
   return (
     <div className="w-full px-10 flex flex-col text-left">
-      <h2 className="mb-8 text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
+      <h2 className="text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
         Set Password
       </h2>
 
-      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-status-danger">
+      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-brand-primary">
         Please Enter new Password
       </div>
 
@@ -84,6 +85,7 @@ const SetPassword: React.FC = () => {
         {/*New Password */}
         <TextInputComponent
           className="mb-8"
+          type="password"
           value={formik.values.newPassword}
           onChange={formik.handleChange}
           placeholder="New Password"
@@ -99,6 +101,7 @@ const SetPassword: React.FC = () => {
 
         <TextInputComponent
           className="mb-8"
+          type="password"
           value={formik.values.reEnteredPassword}
           onChange={formik.handleChange}
           placeholder="Re-Enter New Password"
@@ -112,9 +115,18 @@ const SetPassword: React.FC = () => {
           }
         />
 
-        <div className="flex justify-center items-center">
+        <div className="flex justify-between items-center">
           <ButtonComponent
-            fullWidth
+            size="md"
+            bgColor={colors.brand.accent}
+            textColor={colors.text.inverse}
+            radius={12}
+            leftIcon={<IconArrowLeft />}
+            onClick={() => navigate("/login")}
+          >
+            Back
+          </ButtonComponent>
+          <ButtonComponent
             size="md"
             bgColor={colors.brand.accent}
             textColor={colors.text.inverse}

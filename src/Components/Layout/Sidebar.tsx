@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import orgLogo from "../../assets/Images/orgLogo.png";
 import LinksGroup from "../Organisms/LinksGroup";
 import { filterSidebarByPermissions } from "../../Utils/filterSidebarByPermissions";
-import { DEV_APP_VERSION_LABEL } from "../../Utils/utils";
+import { BUILD_INFO } from "../../buildInfo";
 
 const Sidebar: React.FC = () => {
   const [openMap, setOpenMap] = useState<Record<string, { level: number }>>({});
@@ -37,7 +37,7 @@ const Sidebar: React.FC = () => {
   return (
     <Box w="100%" className="h-[98vh] flex flex-col">
       <Box mb="sm">
-        <Tooltip label={DEV_APP_VERSION_LABEL}
+        <Tooltip label={`${BUILD_INFO.version} (${BUILD_INFO.builtAt})`}
           withArrow={false}
           position="top"
           offset={-20}

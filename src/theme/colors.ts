@@ -5,6 +5,7 @@ export const colors = {
     accent: "var(--color-brand-accent)",
     highlight: "var(--color-brand-highlight)",
     emphasis: "var(--color-brand-emphasis)",
+    light: "var(--color-brand-light)",
   },
   surface: {
     app: "var(--color-surface-app)",
@@ -53,12 +54,11 @@ export const colors = {
     warning: "var(--color-status-warning)",
   },
   chart: {
-    primary: "var(--color-chart-primary)",
     series: [
-      "var(--color-chart-series-1)",
-      "var(--color-chart-series-2)",
-      "var(--color-chart-series-3)",
-      "var(--color-chart-series-4)",
+      "var(--color-brand-primary)",
+      "var(--color-status-success-strong)",
+      "var(--color-brand-primary)",
+      "var(--color-status-success-strong)",
     ] as const,
   },
 } as const;

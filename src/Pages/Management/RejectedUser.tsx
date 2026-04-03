@@ -192,7 +192,7 @@ const RejectedUsers = () => {
           <ButtonComponent onClick={() => setIsModalOpen(false)} bgColor={colors.border.strong} textColor={colors.text.primary}>
             Cancel
           </ButtonComponent>
-          <ButtonComponent onClick={handleConfirmRestore} bgColor={colors.status.danger} textColor={colors.text.inverse}>
+          <ButtonComponent onClick={handleConfirmRestore} bgColor={colors.brand.primary} textColor={colors.text.inverse}>
             Confirm
           </ButtonComponent>
         </div>

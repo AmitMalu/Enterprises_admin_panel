@@ -56,14 +56,14 @@ const TableFooter = ({
               value={currentPage}
               onChange={onPageChange}
               styles={{ control: { borderColor: colors.text.inverse } }}
-              color={colors.status.danger}
+              color={colors.brand.primary}
               size="sm"
               radius="md"
               previousIcon={(props) =>
-                paginationBackIcon({ ...props, color: colors.status.danger })
+                paginationBackIcon({ ...props })
               }
               nextIcon={(props) =>
-                paginationFrontIcon({ ...props, color: colors.status.danger })
+                paginationFrontIcon({ ...props })
               }
             />
           </div>
