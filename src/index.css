@@ -39,6 +39,13 @@
 
   /* Text */
   --color-text-primary: #000000;
+  --color-text-brand-emphasis: #151a4d;
+  --color-text-brand-dark: #151a4d;
+  --color-text-brand-hover: #1e2480;
+  --color-text-brand: #2f3691;
+  --color-text-brand-accent: #4c54d9;
+  --color-text-brand-highlight: #8088f8;
+  --color-text-brand-light: #96addf;
   --color-text-secondary: #333333;
   --color-text-muted: #4c4c57;
   --color-text-soft: #747483;

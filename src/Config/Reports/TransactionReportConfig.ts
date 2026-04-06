@@ -23,6 +23,7 @@ export interface TransactionReportTableType {
   hierarchyId: string;
   productName: string;
   subProductName: string;
+  schemeName: string;
   status: string;
   walletType: string;
   actionOnBalanceAmount: string;
@@ -91,6 +92,7 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
   { key: "hierarchyId", label: "Hierarchy Id", filterType: "text" },
   { key: "productName", label: "Product", filterType: "text" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },
+  { key: "schemeName", label: "Scheme Name", filterType: "text" },
   {
     key: "walletType",
     label: "Wallet Type",
