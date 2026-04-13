@@ -9,4 +9,5 @@ export type UpdateUserPayload = {
   userType: UserType; // e.g., "distributor", "retailer", etc.
   payload: any; // The form data being submitted
   id: string;
+  files?: any; // New field for file uploads
 };

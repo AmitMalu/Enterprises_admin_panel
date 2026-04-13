@@ -229,6 +229,16 @@ const TransactionLimitForm = ({ mode }: TransactionLimitFormProps) => {
                                     />
                                 </Grid.Col>
 
+                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                    <FormikTextInputComponent
+                                        name="minAmount"
+                                        label="Min Amount"
+                                        placeholder="Enter Min Amount"
+                                        required={false}
+                                        maxLength={10}
+                                    />
+                                </Grid.Col>
+
                                 {mode === "edit" &&
                                     <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                         <FormikSelectComponent

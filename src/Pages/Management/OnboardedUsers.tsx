@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useEffect, useRef, useState } from "react";
 import { headers, KEY, URL, UserAuthTableType } from "../../Config/Management/UserAuthConfig";
@@ -9,9 +10,11 @@ import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
+import { EditIcon } from "../../assets/Icons";
 
 const OnboardedUsers = () => {
 
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const [filterVisible, setFilterVisible] = useState(false);
@@ -34,9 +37,9 @@ const OnboardedUsers = () => {
             defaultPageSize: 5
         });
 
-    // const handleEdit = (id: any) => {
-    //     navigate(`/management/user/pending/edit/${id}`, { state: id });
-    // };
+    const handleEdit = (item: any) => {
+        navigate(`/management/user/onboarded/edit/${item.type}/${item.id}`);
+    };
 
     // const handleAdd = () => {
     //     // navigate("/management/userconfig/add");
@@ -122,6 +125,17 @@ const OnboardedUsers = () => {
                     data={data}
                     headers={headers.filter((h) =>
                         visibleColumns.includes(h.key as string)
+                    )}
+                    renderExtraHeader={() => <>Action</>}
+                    renderExtraRowCell={(item) => (
+                        <div className="flex justify-center gap-2 min-w-10">
+                            <span
+                                onClick={() => handleEdit(item)}
+                                className="cursor-pointer"
+                            >
+                                <EditIcon width={16} height={16} />
+                            </span>
+                        </div>
                     )}
                     pagination
                     currentPage={pagination.currentPage}

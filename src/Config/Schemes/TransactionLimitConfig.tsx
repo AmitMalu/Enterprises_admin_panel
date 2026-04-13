@@ -18,6 +18,7 @@ export interface TransactionLimitFormType {
     checkAmountPattern: boolean;
     // maxAmountSMSCollect: string;
     maxAmount: string;
+    minAmount: string;
     blocked: boolean;
 }
 
@@ -34,6 +35,7 @@ export interface TransactionLimitTableType {
     checkAmountPattern: boolean;
     // maxAmountSMSCollect: string;
     maxAmount: string;
+    minAmount: string;
     blocked: boolean;
     createdOn: string;
     createdBy: string;
@@ -61,6 +63,7 @@ export const initialValues: TransactionLimitFormType = {
     checkAmountPattern: false,
     // maxAmountSMSCollect"",string;
     maxAmount: "",
+    minAmount: "",
     blocked: false,
 };
 
@@ -101,7 +104,11 @@ export const validationSchema: Record<
     }),
     maxAmount: Yup.string()
         .required("Max Amount is required")
-        .max(50, "Max Amount must be at most 50 characters")
+        .max(10, "Max Amount must be at most 10 characters")
+        .matches(/^\d+(\.\d+)?$/, "Must be a valid number"),
+    minAmount: Yup.string()
+        .required("Min Amount is required")
+        .max(10, "Min Amount must be at most 10 characters")
         .matches(/^\d+(\.\d+)?$/, "Must be a valid number"),
     isAllowPerDayCardLimit: Yup.boolean().default(false),
     isAllowMonthlyCardLimit: Yup.boolean().default(false),
@@ -122,6 +129,7 @@ export const headers: GenericTableHeader<TransactionLimitTableType>[] = [
     { key: "checkAmountPattern", label: "Check Amount Pattern", filterType: "boolean" },
     // { key: "maxAmountSMSCollect", label: "Max Amount (SMS Collect)" },
     { key: "maxAmount", label: "Max Amount", filterType: "number" },
+    { key: "minAmount", label: "Min Amount", filterType: "number" },
     { key: "blocked", label: "Blocked", filterType: "boolean" },
     { key: "createdBy", label: "Created By" },
     { key: "createdOn", label: "Created On", filterType: "date" },
@@ -144,6 +152,7 @@ export const transformTransactionLimitToFormData = (
         raw.monthlyTransactionLimit === "-" ? "0" : raw.monthlyTransactionLimit ?? "0",
     checkAmountPattern: raw.checkAmountPattern ?? false,
     maxAmount: raw.maxAmount ?? "",
+    minAmount: raw.minAmount ?? "",
     blocked: raw.blocked ?? false,
 })
 
