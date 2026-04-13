@@ -154,16 +154,16 @@ export const sidebarData = [
         link: "/funding/credit-debit",
         icon: fundingSvg,
       },
-      {
-        label: "Manage Payment",
-        link: "/funding/manage-payment",
-        icon: fundingSvg,
-      },
-      {
-        label: "Manage Settlement",
-        link: "/funding/manage-settlement",
-        icon: fundingSvg,
-      },
+      // {
+      //   label: "Manage Payment",
+      //   link: "/funding/manage-payment",
+      //   icon: fundingSvg,
+      // },
+      // {
+      //   label: "Manage Settlement",
+      //   link: "/funding/manage-settlement",
+      //   icon: fundingSvg,
+      // },
       {
         label: "Settlement",
         link: "/funding/settlement",
@@ -386,16 +386,16 @@ export const sidebarData = [
     initiallyOpened: false,
     links: [
       { label: "Profile", link: "/account/profile", icon: MyProfileIcon },
-      {
-        label: "Design Receipts",
-        link: "/account/design-receipts",
-        icon: MyProfileIcon,
-      },
-      {
-        label: "Design Documents",
-        link: "/account/design-documents",
-        icon: MyProfileIcon,
-      },
+      // {
+      //   label: "Design Receipts",
+      //   link: "/account/design-receipts",
+      //   icon: MyProfileIcon,
+      // },
+      // {
+      //   label: "Design Documents",
+      //   link: "/account/design-documents",
+      //   icon: MyProfileIcon,
+      // },
     ],
   },
   {
@@ -415,23 +415,23 @@ export const sidebarData = [
       // },
     ],
   },
-  {
-    label: "Website Settings",
-    icon: MenuSettingIcon,
-    initiallyOpened: false,
-    links: [
-      { label: "Brandings", link: "/website/brandings", icon: MenuSettingIcon },
-      {
-        label: "Website Settings",
-        link: "/website/settings",
-        icon: MenuSettingIcon,
-      },
-      {
-        label: "News Update",
-        link: "/website/news-update",
-        icon: MenuSettingIcon,
-      },
-    ],
-  },
+  // {
+  //   label: "Website Settings",
+  //   icon: MenuSettingIcon,
+  //   initiallyOpened: false,
+  //   links: [
+  //     { label: "Brandings", link: "/website/brandings", icon: MenuSettingIcon },
+  //     {
+  //       label: "Website Settings",
+  //       link: "/website/settings",
+  //       icon: MenuSettingIcon,
+  //     },
+  //     {
+  //       label: "News Update",
+  //       link: "/website/news-update",
+  //       icon: MenuSettingIcon,
+  //     },
+  //   ],
+  // },
   { label: "Logs", icon: LogsIcon, initiallyOpened: false, link: "/logs" },
 ];

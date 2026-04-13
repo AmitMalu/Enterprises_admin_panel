@@ -71,4 +71,9 @@ export const API_ENDPOINTS = {
     TRANSACTION: "api/transaction",
     DASHBOARD_API: `api/dashboard/data`,
   },
+  NOTIFICATIONS: {
+    DROPDOWNS: "api/notification/dropdowns",
+    LIST: "api/notification/list",
+    CREATE: "api/notification/create",
+  },
 };

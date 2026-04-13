@@ -6,10 +6,12 @@ import {
   SmsTemplate,
 } from "../Pages/Notification";
 import EmailReportNotification from "../Pages/Notification/EmailReportNotification";
+import AlertTypeForm from "../Pages/Notification/AlertTypeForm";
 
 export const NotificationRoutes = (
   <>
     <Route path="/notification/alert-type" element={<AlertType />} />
+    <Route path="/notification/alert-type/add" element={<AlertTypeForm />} />
     <Route path="/notification/sms-template" element={<SmsTemplate />} />
     <Route
       path="/notification/email-report"

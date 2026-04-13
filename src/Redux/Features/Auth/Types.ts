@@ -5,6 +5,7 @@ export interface AuthState {
   token: string | null;
   walletBalance: WalletBalance | null;
   profileInfo: profileInfo | null;
+  notificationDropdowns: any;
 }
 
 export type profileInfo = {

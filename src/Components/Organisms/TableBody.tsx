@@ -147,7 +147,8 @@ const TableBody = <T,>({
                         "requestdatetime",
                         "createdatetime",
                         "responsedatetime",
-                        "timestamp"
+                        "timestamp",
+                        "scheduletime",
                       ];
 
                       const finalValue = dateKeys.includes(key.toString().toLowerCase())

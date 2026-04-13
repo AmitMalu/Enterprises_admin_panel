@@ -40,6 +40,7 @@ const SchemeSettingsPage = () => {
   const [productDetails, setProductDetails] = useState<Record<string, any> | null>(null);
   const [loadingScheme, setLoadingScheme] = useState(false);
   const [loadingProduct, setLoadingProduct] = useState(false);
+  const [hasSavedChanges, setHasSavedChanges] = useState(false);
 
   const handleRowChange = (
     operatorCode: string,
@@ -60,6 +61,9 @@ const SchemeSettingsPage = () => {
           }
       )
     );
+
+    /* ---------- Reset hasSavedChanges when new changes are made ---------- */
+    setHasSavedChanges(false);
 
     /* ---------- 2. build / merge diff ---------- */
     setUpdatedOperators(prev => {
@@ -149,6 +153,7 @@ const SchemeSettingsPage = () => {
 
   const resetUpdatedOperatorValues = () => {
     setUpdatedOperators([]);
+    setHasSavedChanges(true);
   }
 
   const handleSubmit = useThrottleMasterFormSubmit<SlabPayload>({
@@ -434,6 +439,7 @@ const SchemeSettingsPage = () => {
                 onAddRow={(opCode) => handleAddRow(opCode, slabSize)}
                 handleRemoveRow={handleRemoveRow}
                 isSchemeActive={!isSchemeActive}
+                hasSavedChanges={hasSavedChanges}
               />
             </Tabs.Panel>
 

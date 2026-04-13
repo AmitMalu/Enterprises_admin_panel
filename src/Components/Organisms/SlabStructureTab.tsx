@@ -24,9 +24,10 @@ interface SlabStructureTabProps {
   onAddRow?: (operatorCode: string) => void;
   handleRemoveRow: (operatorCode: string, id: string | number) => void;
   tdsRate?: number | string;
+  hasSavedChanges?: boolean;
 }
 
-const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, handleRemoveRow, isSchemeActive, tdsRate }: SlabStructureTabProps) => {
+const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, handleRemoveRow, isSchemeActive, tdsRate, hasSavedChanges = false }: SlabStructureTabProps) => {
 
   if (loading) {
     return (
@@ -81,7 +82,7 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, h
                 onAddRow={() => onAddRow?.(operator.operatorCode)}
                 renderExtraHeader={() => <Table.Th></Table.Th>}
                 renderExtraRowCell={(item) =>
-                  typeof item.id === "string" && item.id.startsWith("new-") ? (
+                  !hasSavedChanges && typeof item.id === "string" && item.id.startsWith("new-") ? (
                     <span
                       onClick={() => handleRemoveRow(operator.operatorCode, String(item.id))}
                       className="cursor-pointer flex items-center justify-center"
