@@ -7,7 +7,6 @@ import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import FormikTextInputComponent from "../../Components/Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
-import FormikDateTimePicker from "../../Components/Molecules/FormikDateTimePicker";
 import {
   initialValues,
   validationSchema,

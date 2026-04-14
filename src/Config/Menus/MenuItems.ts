@@ -4,7 +4,7 @@ import {
   LogsIcon,
   managementSvg,
   MastersIcon,
-  MenuSettingIcon,
+  // MenuSettingIcon,
   MyProfileIcon,
   NotificationIcon,
   reportsSvg,

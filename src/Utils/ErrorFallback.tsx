@@ -6,8 +6,9 @@ export default function ErrorFallback({
   resetErrorBoundary,
 }: FallbackProps) {
 
+  const errorMessage = error instanceof Error ? error.message : String(error);
   const isChunkLoadError = /Loading chunk [\d]+ failed|ChunkLoadError/i.test(
-    error?.message || ""
+    errorMessage
   );
 
   const handleRecover = () => {
@@ -33,7 +34,7 @@ export default function ErrorFallback({
         </p>
 
         <pre className="bg-gray-100 text-red-600 text-xs p-3 rounded-md overflow-auto max-h-40">
-          {error.message}
+          {errorMessage}
         </pre>
 
         <button
