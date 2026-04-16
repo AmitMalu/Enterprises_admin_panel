@@ -10,6 +10,7 @@ import FormikSelectComponent from "../../Components/Molecules/FormikSelectCompon
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useHierarchySubHierarchy } from "../../Utils/hooks/useHierarchySubHierarchy";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useTransactionCooldown } from "../../Utils/hooks/useTransactionCooldown";
 import { createMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 import { colors } from "../../theme/colors";
@@ -17,12 +18,21 @@ import { colors } from "../../theme/colors";
 const CreditDebit = () => {
 
   const dispatch = useAppDispatch();
+  const { checkDuplicate, store } = useTransactionCooldown("credit_debit");
 
   const [formKey, setFormKey] = useState(0);
 
 
   const throttledSubmit = useThrottledFormSubmit(
     async (values: any, { resetForm }: any) => {
+      // Check for duplicate transaction within 120 seconds
+      if (checkDuplicate(values.accountNo || "", Number(values.amount) || 0)) {
+        toast.error(
+          "You cannot repeat the same transaction within 2 minutes. Please try a different amount or try again shortly."
+        );
+        return;
+      }
+
       const payload = await transformToCreditDebitPayload(values)
 
       try {
@@ -34,6 +44,8 @@ const CreditDebit = () => {
           })
         ).unwrap();
 
+        // Store successful transaction to prevent duplicates
+        store(values.accountNo || "", Number(values.amount) || 0);
         toast.success(res.message || "Transaction Successfull");
         resetForm();
         setFormKey(k => k + 1);

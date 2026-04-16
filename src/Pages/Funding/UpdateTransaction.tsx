@@ -12,6 +12,7 @@ import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useTransactionCooldown } from "../../Utils/hooks/useTransactionCooldown";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
@@ -27,6 +28,7 @@ import { colors } from "../../theme/colors";
 const UpdateTransaction = () => {
 
   const dispatch = useAppDispatch();
+  const { checkDuplicate, store } = useTransactionCooldown("update_transaction");
   const [payload, setPayload] = useState<any>(null);
 
   const dataRef = useRef<UpdateTransTableType[] | null>(null);
@@ -110,6 +112,20 @@ const UpdateTransaction = () => {
   const handleSettlementAction = async (action: "APPROVE" | "REJECT") => {
     if (!selectedIds.length) return;
     setLoadingActionSubmit(true); // set which row is loading
+
+    // For bulk actions, check if any transaction is a duplicate
+    const duplicateIds = selectedIds.filter(id => 
+      checkDuplicate(String(id), 0) // Using 0 as amount since update actions don't have amounts
+    );
+
+    if (duplicateIds.length > 0) {
+      toast.error(
+        "You cannot repeat the same update action within 2 minutes. Please try again shortly."
+      );
+      setLoadingActionSubmit(false);
+      return;
+    }
+
     try {
       await dispatch(updateMasterItem({
         key: UPDATE_TRANS_KEY,
@@ -121,6 +137,11 @@ const UpdateTransaction = () => {
         },
         mode: "POST",
       })).unwrap();
+
+      // Store successful update actions
+      selectedIds.forEach(id => {
+        store(String(id), 0);
+      });
 
       toast.success(`Settlement ${action === "APPROVE" ? "APPROVED" : "REJECTED"} successfully!`);
       setSelectedIds([]);

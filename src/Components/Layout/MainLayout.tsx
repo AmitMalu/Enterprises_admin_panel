@@ -59,6 +59,40 @@ const MainLayout: React.FC = () => {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [navigate, location.pathname]);
 
+  // Detect reload using performance.navigation
+  useEffect(() => {
+    const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
+
+    if (navEntries.length > 0 && navEntries[0].type === "reload") {
+      const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+
+      if (justLoggedIn !== "true") {
+        sessionStorage.removeItem("justLoggedIn");
+        logoutUser(); // logout after reload
+      }
+    }
+  }, []);
+
+  // Prevent browser hard reload and show logout prompt
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      const intentionalLogout = sessionStorage.getItem("intentionalLogout");
+      
+      // Don't show prompt if logout is intentional
+      if (intentionalLogout === "true") {
+        // Clear the flag after using it
+        sessionStorage.removeItem("intentionalLogout");
+        return;
+      }
+      
+      event.preventDefault();
+      (event as any).returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
+
   return (
     <AppShell
       layout="alt"

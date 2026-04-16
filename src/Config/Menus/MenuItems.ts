@@ -354,28 +354,28 @@ export const sidebarData = [
     initiallyOpened: false,
     links: [
       {
-        label: "Alert Type",
+        label: "Alert Notification",
         link: "/notification/alert-type",
         icon: NotificationIcon,
       },
-      {
-        label: "SMS Template",
-        link: "/notification/sms-template",
-        icon: NotificationIcon,
-      },
+      // {
+      //   label: "SMS Template",
+      //   link: "/notification/sms-template",
+      //   icon: NotificationIcon,
+      // },
       // {
       //   label: "Email Report",
       //   link: "/notification/email-report",
       //   icon: NotificationIcon,
       // },
       {
-        label: "Send SMS",
+        label: "SMS",
         link: "/notification/send-sms",
         icon: NotificationIcon,
       },
       {
-        label: "Send Mail",
-        link: "/notification/send-mail",
+        label: "Mail",
+        link: "/notification/email-credentials",
         icon: NotificationIcon,
       },
     ],

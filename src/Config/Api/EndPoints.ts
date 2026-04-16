@@ -75,5 +75,6 @@ export const API_ENDPOINTS = {
     DROPDOWNS: "api/notification/dropdowns",
     LIST: "api/notification/list",
     CREATE: "api/notification/create",
+    EMAIL_CREDENTIALS: "api/notification/email",
   },
 };

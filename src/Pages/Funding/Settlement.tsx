@@ -13,6 +13,7 @@ import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { preSettlementHeaders, PreSettlementTableType, SETTLEMENT_KEY, SETTLEMENT_URL, settlementFilterInitialValues, settlementFilterValidationSchema, transformToViewSettlementPayload } from "../../Config/Funding/SettlementConfig";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useTransactionCooldown } from "../../Utils/hooks/useTransactionCooldown";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import { useVendor } from "../../Utils/hooks/useVendor";
@@ -29,6 +30,7 @@ import { colors } from "../../theme/colors";
 const Settlement = () => {
 
   const dispatch = useAppDispatch();
+  const { checkDuplicate, store } = useTransactionCooldown("settlement");
   const [payload, setPayload] = useState<any>(null);
 
   const dataRef = useRef<PreSettlementTableType[] | null>(null);
@@ -117,6 +119,20 @@ const Settlement = () => {
       toast.error("Wallet Type is required!");
       return;
     }
+
+    // For bulk actions, check if any transaction is a duplicate
+    const duplicateIds = selectedIds.filter(id => 
+      checkDuplicate(String(id), 0) // Using 0 as amount since settlement actions don't have amounts
+    );
+
+    if (duplicateIds.length > 0) {
+      toast.error(
+        "You cannot repeat the same settlement action within 2 minutes. Please try again shortly."
+      );
+      setLoadingActionSubmit(false);
+      return;
+    }
+
     try {
       await dispatch(updateMasterItem({
         key: SETTLEMENT_KEY,
@@ -128,6 +144,11 @@ const Settlement = () => {
         },
         mode: "POST",
       })).unwrap();
+
+      // Store successful settlement actions
+      selectedIds.forEach(id => {
+        store(String(id), 0);
+      });
 
       toast.success(`Settlement ${action === "SUCCESS" ? "SUCCESS" : "REJECTED"} successfully!`);
       setSelectedIds([]);

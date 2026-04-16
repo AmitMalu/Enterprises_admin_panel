@@ -69,6 +69,11 @@ export const logoutUser = (
   message = "Session expired. Redirecting to login page.",
 ) => {
   clearStorage();
+  
+  // Set flag to prevent beforeunload prompt during intentional logout
+  // This must be set after clearStorage to avoid being cleared
+  sessionStorage.setItem("intentionalLogout", "true");
+  
   toast.warning(`${message}`);
   setTimeout(() => {
     redirectTo("/login");

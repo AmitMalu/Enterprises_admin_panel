@@ -7,6 +7,7 @@ import {
 } from "../Pages/Notification";
 import EmailReportNotification from "../Pages/Notification/EmailReportNotification";
 import AlertTypeForm from "../Pages/Notification/AlertTypeForm";
+import EmailCredentialsForm from "../Components/Organisms/EmailCredentialsForm";
 
 export const NotificationRoutes = (
   <>
@@ -18,6 +19,8 @@ export const NotificationRoutes = (
       element={<EmailReportNotification />}
     />
     <Route path="/notification/send-sms" element={<SendSms />} />
-    <Route path="/notification/send-mail" element={<SendMail />} />
+    <Route path="/notification/email-credentials" element={<SendMail />} />
+    <Route path="/notification/email-credentials/add" element={<EmailCredentialsForm mode="add" />} />
+    <Route path="/notification/email-credentials/edit/:id" element={<EmailCredentialsForm mode="edit" />} />
   </>
 );
