@@ -8,6 +8,7 @@ export const EMAIL_CREDENTIALS_URL = API_ENDPOINTS.NOTIFICATIONS.EMAIL_CREDENTIA
 export const EMAIL_CREDENTIALS_CREATE_URL = API_ENDPOINTS.NOTIFICATIONS.EMAIL_CREDENTIALS;
 
 export interface EmailCredentialsFormType {
+  whitelabelId: string;
   smtpHost: string;
   smtpPort: string;
   email: string;
@@ -16,21 +17,27 @@ export interface EmailCredentialsFormType {
 
 export interface EmailCredentialsTableType {
   id: string;
+  whitelabelId: string;
   smtpHost: string;
   smtpPort: string;
   email: string;
   password: string;
-  createdAt?: string;
+  createdOn?: string;
+  createdBy?: string;
+  editedOn?: string;
+  editedBy?: string;
 }
 
-export interface EmailCredentialsCreatePayload {
-  smtpHost: string;
-  smtpPort: string;
-  email: string;
-  password: string;
+
+export interface EmailCredentialsCreatePayload extends EmailCredentialsFormType {
+  createdBy: string;
+}
+export interface EmailCredentialsUpdatePayload extends EmailCredentialsFormType {
+  editedBy: string;
 }
 
 export const initialValues: EmailCredentialsFormType = {
+  whitelabelId: "",
   smtpHost: "",
   smtpPort: "",
   email: "",
@@ -38,6 +45,7 @@ export const initialValues: EmailCredentialsFormType = {
 };
 
 export const validationSchema: Record<keyof EmailCredentialsFormType, Yup.AnySchema> = {
+  whitelabelId: Yup.string().required("White Label is required"),
   smtpHost: textField("Host", 255, true, true),
   smtpPort: Yup.string()
     .required("Port is required")
@@ -54,20 +62,39 @@ export const validationSchema: Record<keyof EmailCredentialsFormType, Yup.AnySch
 
 export const headers: GenericTableHeader<EmailCredentialsTableType>[] = [
   { key: "id", label: "Id", filterType: "number" },
+  { key: "whitelabelId", label: "White Label", filterType: "text" },
   { key: "smtpHost", label: "Host", filterType: "text" },
   { key: "smtpPort", label: "Port", filterType: "text" },
   { key: "email", label: "Email", filterType: "text" },
-  { key: "createdAt", label: "Created At", filterType: "date" },
+  { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const transformFormToCreateEmailCredentialsPayload = (
   formData: EmailCredentialsFormType
 ): EmailCredentialsCreatePayload => {
   return {
+    whitelabelId: formData.whitelabelId,
     smtpHost: formData.smtpHost,
     smtpPort: formData.smtpPort,
     email: formData.email,
     password: formData.password,
+    createdBy: localStorage.getItem("username") || "system",
+  };
+};
+
+export const transformFormToUpdateEmailCredentialsPayload = (
+  formData: EmailCredentialsFormType
+): EmailCredentialsUpdatePayload => {
+  return {
+    whitelabelId: formData.whitelabelId,
+    smtpHost: formData.smtpHost,
+    smtpPort: formData.smtpPort,
+    email: formData.email,
+    password: formData.password,
+    editedBy: localStorage.getItem("username") || "system",
   };
 };
 
@@ -75,9 +102,27 @@ export const transformEmailCredentialsToFormData = (
   data: EmailCredentialsTableType
 ): EmailCredentialsFormType => {
   return {
+    whitelabelId: data.whitelabelId || "",
     smtpHost: data.smtpHost || "",
     smtpPort: data.smtpPort || "",
     email: data.email || "",
     password: data.password || "",
   };
 };
+
+// export const mapToEmailCredentialsTableType = (
+//   raw: Record<string, any>,
+// ): EmailCredentialsTableType => {
+//   return {
+//     id: raw?.id ?? "",
+//     whitelabelId: raw.whitelabelId ?? "",
+//     smtpHost: raw.smtpHost ?? "",
+//     smtpPort: raw.smtpPort ?? "",
+//     email: raw.email ?? "",
+//     password: raw.password ?? "",
+//     createdOn: formatDateTime(raw.createdOn) ?? "",
+//     createdBy: raw.createdBy ?? "",
+//     editedOn: formatDateTime(raw.editedOn) ?? "",
+//     editedBy: raw.editedBy ?? "",
+//   };
+// };

@@ -76,5 +76,6 @@ export const API_ENDPOINTS = {
     LIST: "api/notification/list",
     CREATE: "api/notification/create",
     EMAIL_CREDENTIALS: "api/notification/email",
+    EMAIL_CREDENTIALS_WL_DROPDOWN: "api/notification/whitelabel/dropdown",
   },
 };
