@@ -370,7 +370,7 @@ export const sidebarData = [
       // },
       {
         label: "SMS",
-        link: "/notification/send-sms",
+        link: "/notification/sms-credentials",
         icon: NotificationIcon,
       },
       {

@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import {
-  EMAIL_CREDENTIALS_KEY,
-  EMAIL_CREDENTIALS_URL,
-  EmailCredentialsTableType,
+  SMS_CREDENTIALS_KEY,
+  SMS_CREDENTIALS_URL,
+  SmsCredentialsTableType,
   headers,
-} from "../../Config/Notifications/EmailCredentialsConfig";
+} from "../../Config/Notifications/SmsCredentialsConfig";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
@@ -15,16 +15,16 @@ import { exportToCsv } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import { EditIcon } from "../../assets/Icons";
 
-const SendMail = () => {
+const SmsCredentials = () => {
   const navigate = useNavigate();
 
   const [refreshKey, setRefreshKey] = useState(0);
-  const dataRef = useRef<EmailCredentialsTableType[] | null>(null);
+  const dataRef = useRef<SmsCredentialsTableType[] | null>(null);
 
   const { data, loading, error, pagination, setPage, setPageSize } =
-    useFetchMasterList<EmailCredentialsTableType>({
-      key: EMAIL_CREDENTIALS_KEY,
-      url: EMAIL_CREDENTIALS_URL,
+    useFetchMasterList<SmsCredentialsTableType>({
+      key: SMS_CREDENTIALS_KEY,
+      url: SMS_CREDENTIALS_URL,
       refreshKey,
     });
 
@@ -34,17 +34,16 @@ const SendMail = () => {
       toast.warning("No data available to export.");
       return;
     }
-    exportToCsv(currentData, "email-credentials");
+    exportToCsv(currentData, "sms-credentials");
   };
 
   const handleAdd = () => {
-    navigate("/notification/email-credentials/add");
+    navigate("/notification/sms-credentials/add");
   };
 
   const handleEdit = (id: string) => {
-    navigate(`/notification/email-credentials/edit/${id}`, { state: id });
+    navigate(`/notification/sms-credentials/edit/${id}`, { state: id });
   };
-
 
   useEffect(() => {
     dataRef.current = data;
@@ -52,9 +51,8 @@ const SendMail = () => {
 
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
-      {/* Heading + Add Button */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        Mail Credentials
+        SMS Credentials
       </TextComponent>
 
       <GenericMasterToolbar
@@ -66,14 +64,13 @@ const SendMail = () => {
         error={error ? error.toString() : null}
       />
 
-      {/* Table */}
       {loading ? (
         <ShimmerTableRows rowCount={4} columnCount={headers.length} />
       ) : (
-        <GenericMasterTable<EmailCredentialsTableType>
+        <GenericMasterTable<SmsCredentialsTableType>
           data={data}
           headers={headers}
-          renderExtraHeader={() => <></>} // empty header for action column
+          renderExtraHeader={() => <></>}
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2">
               <span
@@ -93,9 +90,8 @@ const SendMail = () => {
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}
-
-          </div>
+    </div>
   );
 };
 
-export default SendMail;
+export default SmsCredentials;

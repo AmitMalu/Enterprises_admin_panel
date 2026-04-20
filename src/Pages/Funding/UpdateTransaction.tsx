@@ -114,7 +114,7 @@ const UpdateTransaction = () => {
     setLoadingActionSubmit(true); // set which row is loading
 
     // For bulk actions, check if any transaction is a duplicate
-    const duplicateIds = selectedIds.filter(id => 
+    const duplicateIds = selectedIds.filter(id =>
       checkDuplicate(String(id), 0) // Using 0 as amount since update actions don't have amounts
     );
 
@@ -197,7 +197,6 @@ const UpdateTransaction = () => {
             selectedProductId: values.productId,
             selectedSubProductId: values.subProductId,
             onSubProductReset: () => setFieldValue("subProductId", ""),
-            isSettlement: true
           });
 
           // const { vendorDropdownData, loadingVendorList } = useVendor();

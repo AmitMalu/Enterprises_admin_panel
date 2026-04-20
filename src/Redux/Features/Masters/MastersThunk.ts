@@ -776,3 +776,25 @@ export const fetchWLDropdown = createAsyncThunk(
     }
   }
 );
+
+export const fetchSmsCredentialDropdown = createAsyncThunk(
+  "masters/fetchSmsCredentialDropdown",
+  async (_, { rejectWithValue }) => {
+    try {
+      let response;
+      response = await axiosInstance.get(API_ENDPOINTS.NOTIFICATIONS.SMS_TYPE);
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(responseData?.message || "Failed to fetch data");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "No list found"
+      );
+    }
+  }
+);
