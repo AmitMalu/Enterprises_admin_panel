@@ -330,7 +330,7 @@ export const handleMasterFormSubmit = async <T>({
   toastOptions,
 }: HandleMasterFormSubmitProps<T>) => {
   try {
-    // ✅ Sanitize values here
+    // Sanitize values here
     const normalizedValues = trimFormValues(values);
 
     const rawPayload =

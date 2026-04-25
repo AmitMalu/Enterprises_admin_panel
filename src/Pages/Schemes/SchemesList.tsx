@@ -11,6 +11,7 @@ import { fetchSchemesList } from "../../Redux/Features/Schemes/thunks";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
+import { useTableStatePreservation } from "../../Utils/hooks/useTableStatePreservation";
 
 const SchemesList = () => {
   const navigate = useNavigate();
@@ -29,23 +30,40 @@ const SchemesList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filterVisible, setFilterVisible] = useState(false);
-  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(
-    headers.map((h) => h.key as string)
-  );
 
-  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+  const {
+    filterValues,
+    setFilterValues,
+    visibleColumns,
+    setVisibleColumns,
+    submittedFilter,
+    setSubmittedFilter,
+    saveStateBeforeNavigation,
+    resetToDefaults,
+  } = useTableStatePreservation({
+    tableKey: 'schemesList',
+    defaultVisibleColumns: headers.map((h) => h.key as string),
+    defaultFilterValues: {},
+    defaultSubmittedFilter: null,
+  });
 
   const handleEdit = (id: any) => {
+    // Save current state to sessionStorage before navigating
+    saveStateBeforeNavigation();
     navigate(`/schemes/schemeslist/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
+    // Save current state to sessionStorage before navigating
+    saveStateBeforeNavigation();
     navigate("/schemes/schemeslist/add");
   };
 
   const handleSetting = (item: any) => {
+    // Save current state to sessionStorage before navigating
+    saveStateBeforeNavigation();
+    
     navigate(`/schemes/schemeslist/setting`, {
       state: {
         schemeCode: item.schemeCode,
@@ -121,14 +139,15 @@ const SchemesList = () => {
     };
 
   const handleRefresh = () => {
+    // Clear saved state and reset to defaults
+    resetToDefaults();
+    
     dispatch(resetSingleSchemesData(SCHEMES_KEY));
-    setFilterValues({});
-    setSubmittedFilter(null);
-    setVisibleColumns(headers.map((h) => h.key as string));
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
