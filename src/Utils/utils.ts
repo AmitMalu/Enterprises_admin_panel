@@ -137,6 +137,16 @@ export const formatDateTime = (dateString: string) => {
   return parsed.format("DD-MM-YYYY HH:mm:ss");
 };
 
+export const formatTime = (time: string) => {
+  if (!time) return "-";
+
+  const cleanTime = time.split(".")[0];
+
+  const parsed = moment(cleanTime, ["HH:mm:ss", "HH:mm"], true);
+
+  return parsed.isValid() ? parsed.format("HH:mm:ss") : time;
+};
+
 export const booleanSelectData = [
   { label: "Yes", value: "true" },
   { label: "No", value: "false" },

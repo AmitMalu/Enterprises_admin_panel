@@ -89,6 +89,7 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
     ],
   },
   { key: "transactionDate", label: "Transaction Date", filterType: "none" },
+  { key: "transactionTime", label: "Transaction Time", filterType: "text" },
   { key: "hierarchyId", label: "Hierarchy Id", filterType: "text" },
   { key: "productName", label: "Product", filterType: "text" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },
