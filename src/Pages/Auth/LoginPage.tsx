@@ -58,7 +58,7 @@ const LoginPage: React.FC = () => {
             password: encryptedPassword,
             salt,
             iv,
-            url: isDevEnv ? "https://uat.decipay.in/" : `${window.location.origin}/`,
+            url: isDevEnv ? "https://uat.nfttech.in/" : `${window.location.origin}/`,
           })
         ).unwrap();
 
@@ -71,17 +71,17 @@ const LoginPage: React.FC = () => {
         }
 
         toast.success(result.message);
-        toast.success(result.data.otp, {
-          toastId: "otp-toast",
-          autoClose: false, // Do not close automatically
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-        });
+        // toast.success(result.data.otp, {
+        //   toastId: "otp-toast",
+        //   autoClose: false, // Do not close automatically
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: false,
+        // });
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
           state: {
-            username: values.username, otpFor: "login", otp: result.data.otp
+            username: values.username, otpFor: "login" //, otp: result.data.otp
           },
         });
       } catch (error) {

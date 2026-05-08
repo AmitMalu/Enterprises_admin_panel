@@ -80,8 +80,11 @@ axiosInstance.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401) {
-      // Optionally check if token is expired
-      logoutUser("Session Expired, please try again after 5 minutes");
+      // Only trigger logout if user is actually authenticated (has valid token)
+      const token = localStorage.getItem("token");
+      if (checkTokenValidity(token)) {
+        logoutUser("Session Expired, please try again after 5 minutes");
+      }
     }
 
     return Promise.reject(error);

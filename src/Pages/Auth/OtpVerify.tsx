@@ -25,20 +25,22 @@ const OtpVerify = () => {
   const navigate = useNavigate();
 
   const [timer, setTimer] = useState(0);
+  const [hasError, setHasError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const dispatch = useAppDispatch();
   const location = useLocation();
   const locationState = location.state as {
     username?: string;
     otpFor?: string;
-    otp?: string;
+    // otp?: string;
   };
   const username =
     locationState?.username ?? sessionStorage.getItem("otp-username") ?? "";
   const otpFor =
     locationState?.otpFor ?? sessionStorage.getItem("otpFor") ?? "";
-  const otp =
-    locationState?.otp ?? sessionStorage.getItem("otp") ?? "";
+  // const otp =
+  //   locationState?.otp ?? sessionStorage.getItem("otp") ?? "";
 
   const pinSize =
     screenSize === "sm"
@@ -54,13 +56,13 @@ const OtpVerify = () => {
       const result = await dispatch(resendOtp({ userName: username })).unwrap();
       toast.dismiss();
       toast.success(result.message);
-      toast.success(result.data.otp, {
-        toastId: "resend-otp-toast",
-        autoClose: false, // Do not close automatically
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-      });
+      // toast.success(result.data.otp, {
+      //   toastId: "resend-otp-toast",
+      //   autoClose: false, // Do not close automatically
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: false,
+      // });
       setTimer(30);
     } catch (error: any) {
       toast.error(error.message || "OTP resend failed");
@@ -72,6 +74,8 @@ const OtpVerify = () => {
 
     const handleAsync = async () => {
       try {
+        setIsSubmitting(true); // Start loading
+        setHasError(false); // Reset error state on new submission
         const result = await dispatch(
           otpVerify({ userName: username, otp: values.otp })
         ).unwrap();
@@ -94,7 +98,10 @@ const OtpVerify = () => {
           navigate("/");
         }
       } catch (error: any) {
+        setHasError(true); // Set error state on failure
         toast.error(error.message || "OTP verification failed");
+      } finally {
+        setIsSubmitting(false); // Stop loading
       }
     }
 
@@ -120,17 +127,17 @@ const OtpVerify = () => {
       locationState?.username ?? sessionStorage.getItem("otp-username");
     const resolvedOtpFor =
       locationState?.otpFor ?? sessionStorage.getItem("otpFor");
-    const resolvedOtp =
-      locationState?.otp ?? sessionStorage.getItem("otp");
+    // const resolvedOtp =
+    //   locationState?.otp ?? sessionStorage.getItem("otp");
 
     if (!resolvedUsername || !resolvedOtpFor) {
       logoutUser();
     } else {
       sessionStorage.setItem("otp-username", resolvedUsername);
       sessionStorage.setItem("otpFor", resolvedOtpFor);
-      if (resolvedOtp) {
-        sessionStorage.setItem("otp", resolvedOtp);
-      }
+      // if (resolvedOtp) {
+      //   sessionStorage.setItem("otp", resolvedOtp);
+      // }
     }
   }, []);
 
@@ -165,16 +172,23 @@ const OtpVerify = () => {
       <Formik
         enableReinitialize
         validateOnBlur={false}
-        initialValues={{ otp: otp || "" }}
+        initialValues={{ otp: "" }}
         validationSchema={validationSchema}
         onSubmit={handleOTPSubmit}
       >
         {({ values, handleChange, errors, submitCount, submitForm }) => {
           useEffect(() => {
-            if (values.otp && values.otp.length === 6) {
+            if (values.otp && values.otp.length === 6 && !hasError) {
               submitForm();
             }
-          }, [values.otp]);
+          }, [values.otp, hasError]);
+
+          // Reset error state when user changes OTP
+          useEffect(() => {
+            if (hasError && values.otp.length < 6) {
+              setHasError(false);
+            }
+          }, [values.otp, hasError]);
 
           return (
             <Form>
@@ -253,7 +267,7 @@ const OtpVerify = () => {
                   radius={24}
                   type="submit"
                 >
-                  {values.otp.length === 6 ? (
+                  {isSubmitting ? (
                     <div>
                       Verifying OTP...
                     </div>

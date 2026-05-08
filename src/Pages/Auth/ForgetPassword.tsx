@@ -41,16 +41,17 @@ const ForgetPassword: React.FC = () => {
       ).unwrap();
       toast.success(result.message);
       sessionStorage.removeItem("from-login-forget");
-      toast.success(result.data.otp, {
-        toastId: "forget-otp-toast",
-        autoClose: false, // Do not close automatically
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-      });
+      // toast.success(result.data.otp, {
+      //   toastId: "forget-otp-toast",
+      //   autoClose: false, // Do not close automatically
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: false,
+      // });
       persistOtpSession(values.username, "forgetPassword"); //set both values in Session storage
       navigate("/otp-verify", {
-        state: { username: values.username, otpFor: "forgetPassword", otp: result.data.OTP },
+        state: { username: values.username, otpFor: "forgetPassword" //, otp: result.data.OTP 
+        },
       });
     } catch (error) {
       console.error("Forget Password Error:", error);
