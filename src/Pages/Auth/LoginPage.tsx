@@ -58,7 +58,7 @@ const LoginPage: React.FC = () => {
             password: encryptedPassword,
             salt,
             iv,
-            url: isDevEnv ? "https://uat.nfttech.in/" : `${window.location.origin}/`,
+            url: isDevEnv ? "https://admin.nfttech.in/" : `${window.location.origin}/`,
           })
         ).unwrap();
 
