@@ -49,7 +49,7 @@ export const useAddressFromZipcode = (zipcode: string) => {
                     district: districtName,
                     city: cityName,
                 });
-                lastFetchedZipRef.current = zipcode; // ✅ update after success
+                lastFetchedZipRef.current = zipcode; //update after success
 
             } catch (err: any) {
                 console.error("Failed to fetch address from zipcode", err);

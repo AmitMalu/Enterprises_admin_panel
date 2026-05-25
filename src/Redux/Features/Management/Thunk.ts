@@ -46,7 +46,7 @@ export const createUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "management/update",
-  async ({ userType, payload, id }: UpdateUserPayload, { rejectWithValue }) => {
+  async ({ userType, payload, id, files }: UpdateUserPayload, { rejectWithValue }) => {
     try {
       const endPoint = `${API_ENDPOINTS?.MANAGEMENT.USER_CREATE[userType]}/${id}`;
 
@@ -61,6 +61,14 @@ export const updateUser = createAsyncThunk(
         "data",
         new Blob([JSON.stringify(payload)], { type: "application/json" }),
       );
+
+      if (files) {
+        Object.entries(files).forEach(([key, file]) => {
+          if (file instanceof File || file instanceof Blob) {
+            formData.append(key, file);
+          }
+        });
+      }
 
       const response = await axiosInstance.put(endPoint, formData, {
         headers: {

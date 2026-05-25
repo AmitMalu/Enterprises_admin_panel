@@ -229,7 +229,6 @@ export const handleFormSubmit = async ({
   // 1. Transforming form values to the payload structure
   const ip = await getIpAddress();
   const payload = transformUserCreationPayload(userType, values, ip);
-  console.log(payload, " Payload to be sent to the server");
 
   const formData = new FormData();
   formData.append("data", JSON.stringify(payload));

@@ -82,7 +82,7 @@ const UserFormPage = () => {
         // Save PAN linking status
         formik.setFieldValue("aadhaarPanVerified", isLinked);
 
-        // ✅ Only now mark Aadhaar as fully verified
+        // Only now mark Aadhaar as fully verified
         formik.setFieldValue("isAadhaarVerified", true);
         formik.setFieldError("aadhaarNumber", "");
       } catch (error) {
@@ -183,7 +183,7 @@ const UserFormPage = () => {
         }}
       >
         {(formik: FormikProps<any>) => {
-          console.log(formik.errors);
+          console.log(formik.errors, "formik-errors");
 
           return (
             // Scrollable Form Content area

@@ -45,7 +45,7 @@ export const CustomCarousel = ({
             onMouseLeave={shouldAutoPlay ? () => autoplay.current.play() : undefined}
             getEmblaApi={(embla) => {
                 embla.on("init", () => {
-                    console.log("Embla initialized 🚀");
+                    console.log("Embla initialized");
                 });
             }}
             styles={{

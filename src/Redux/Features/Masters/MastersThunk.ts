@@ -457,8 +457,8 @@ export const AdhaarValidationApi = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-          error.message ||
-          "Error in Aadhaar verification"
+        error.message ||
+        "Error in Aadhaar verification"
       );
     }
   }
@@ -484,8 +484,8 @@ export const PanValidationApi = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-          error.message ||
-          "Error in Pancard Number verification"
+        error.message ||
+        "Error in Pancard Number verification"
       );
     }
   }
@@ -511,8 +511,8 @@ export const AdhaarPanLinkApi = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-          error.message ||
-          "Error in Aadhaar Pan Link verification"
+        error.message ||
+        "Error in Aadhaar Pan Link verification"
       );
     }
   }
@@ -562,8 +562,8 @@ export const DocumentValidationApi = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-          error.message ||
-          "Error in verification"
+        error.message ||
+        "Error in verification"
       );
     }
   }
@@ -704,8 +704,8 @@ export const createNetworkBank = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data?.message ||
-          error.message ||
-          "Failed to create Network Bank"
+        error.message ||
+        "Failed to create Network Bank"
       );
     }
   }
@@ -748,8 +748,52 @@ export const updateNetworkBank = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data?.message ||
-          error.message ||
-          "Failed to update Network Bank"
+        error.message ||
+        "Failed to update Network Bank"
+      );
+    }
+  }
+);
+
+export const fetchWLDropdown = createAsyncThunk(
+  "masters/fetchWLDropdown",
+  async (_, { rejectWithValue }) => {
+    try {
+      let response;
+      response = await axiosInstance.get(API_ENDPOINTS.NOTIFICATIONS.EMAIL_CREDENTIALS_WL_DROPDOWN);
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(responseData?.message || "Failed to fetch data");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "No list found"
+      );
+    }
+  }
+);
+
+export const fetchSmsCredentialDropdown = createAsyncThunk(
+  "masters/fetchSmsCredentialDropdown",
+  async (_, { rejectWithValue }) => {
+    try {
+      let response;
+      response = await axiosInstance.get(API_ENDPOINTS.NOTIFICATIONS.SMS_TYPE);
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(responseData?.message || "Failed to fetch data");
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "No list found"
       );
     }
   }

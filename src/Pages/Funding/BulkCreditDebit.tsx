@@ -9,12 +9,14 @@ import { useState } from "react";
 import FormikFileInput from "../../Components/Molecules/FormikFileInput";
 import { DownloadIcon } from "../../assets/Icons";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useTransactionCooldown } from "../../Utils/hooks/useTransactionCooldown";
 import { toast } from "react-toastify";
 import { colors } from "../../theme/colors";
 
 const BulkCreditDebit = () => {
 
   const dispatch = useAppDispatch();
+  const { checkDuplicate, store } = useTransactionCooldown("bulk_credit_debit");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formKey, setFormKey] = useState(0);
 
@@ -29,6 +31,16 @@ const BulkCreditDebit = () => {
 
   const throttledSubmit = useThrottledFormSubmit(
     async (values: any, { resetForm }: any) => {
+      // Check for duplicate transaction within 120 seconds
+      // For bulk upload, we use the file name as identifier
+      const fileName = values.file?.name || "bulk_file";
+      if (checkDuplicate(fileName, 0)) {
+        toast.error(
+          "You cannot repeat the same bulk upload within 2 minutes. Please try again shortly."
+        );
+        return;
+      }
+
       setIsSubmitting(true)
 
       try {
@@ -41,6 +53,8 @@ const BulkCreditDebit = () => {
           })
         ).unwrap();
 
+        // Store successful bulk upload
+        store(fileName, 0);
         toast.success(res.message || "Transaction Successfull");
         resetForm();
         setFormKey(k => k + 1);

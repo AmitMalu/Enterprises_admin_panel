@@ -98,7 +98,7 @@ export const transformToGstTdsReportPayload = (values: any) => {
     hierarchyType: values.hierarchy ?? "",
     hierarchyId: values.hierarchyId ?? "",
     productId: values?.productId ?? "",
-    reportType: values.reportType ?? "",
+    reportType: values.reportType ? values.reportType : "GST_TDS",
     walletType: values.walletType ?? "",
   };
 };

@@ -69,6 +69,11 @@ export const logoutUser = (
   message = "Session expired. Redirecting to login page.",
 ) => {
   clearStorage();
+  
+  // Set flag to prevent beforeunload prompt during intentional logout
+  // This must be set after clearStorage to avoid being cleared
+  sessionStorage.setItem("intentionalLogout", "true");
+  
   toast.warning(`${message}`);
   setTimeout(() => {
     redirectTo("/login");
@@ -130,6 +135,16 @@ export const formatDateTime = (dateString: string) => {
   if (!parsed.isValid()) return dateString;
 
   return parsed.format("DD-MM-YYYY HH:mm:ss");
+};
+
+export const formatTime = (time: string) => {
+  if (!time) return "-";
+
+  const cleanTime = time.split(".")[0];
+
+  const parsed = moment(cleanTime, ["HH:mm:ss", "HH:mm"], true);
+
+  return parsed.isValid() ? parsed.format("HH:mm:ss") : time;
 };
 
 export const booleanSelectData = [
@@ -325,7 +340,7 @@ export const handleMasterFormSubmit = async <T>({
   toastOptions,
 }: HandleMasterFormSubmitProps<T>) => {
   try {
-    // ✅ Sanitize values here
+    // Sanitize values here
     const normalizedValues = trimFormValues(values);
 
     const rawPayload =

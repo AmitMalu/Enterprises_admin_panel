@@ -41,6 +41,15 @@ export const colors = {
     tertiary: "var(--color-text-tertiary)",
     heading: "var(--color-text-heading)",
     inverse: "var(--color-text-inverse)",
+    brand: {
+      emphasis: "var(--color-text-brand-emphasis)",
+      dark: "var(--color-text-brand-dark)",
+      hover: "var(--color-text-brand-hover)",
+      primary: "var(--color-text-brand)",
+      accent: "var(--color-text-brand-accent)",
+      highlight: "var(--color-text-brand-highlight)",
+      light: "var(--color-text-brand-light)",
+    },
   },
   status: {
     success: "var(--color-status-success)",

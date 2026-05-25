@@ -12,6 +12,8 @@ import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { usernamePhoneEmailValidation } from "../../Utils/ValidationUtils";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { colors } from "../../theme/colors";
+import forgotPassText from '../../assets/Images/ForgotPassText.png'
+import { Card } from "@mantine/core";
 
 const validationSchema = Yup.object().shape({
   username: usernamePhoneEmailValidation,
@@ -39,16 +41,17 @@ const ForgetPassword: React.FC = () => {
       ).unwrap();
       toast.success(result.message);
       sessionStorage.removeItem("from-login-forget");
-      toast.success(result.data.otp, {
-        toastId: "forget-otp-toast",
-        autoClose: false, // Do not close automatically
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-      });
+      // toast.success(result.data.otp, {
+      //   toastId: "forget-otp-toast",
+      //   autoClose: false, // Do not close automatically
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: false,
+      // });
       persistOtpSession(values.username, "forgetPassword"); //set both values in Session storage
       navigate("/otp-verify", {
-        state: { username: values.username, otpFor: "forgetPassword", otp: result.data.OTP },
+        state: { username: values.username, otpFor: "forgetPassword" //, otp: result.data.OTP 
+        },
       });
     } catch (error) {
       console.error("Forget Password Error:", error);
@@ -64,11 +67,20 @@ const ForgetPassword: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full px-10 flex flex-col text-left">
-      <h2 className="mb-8 text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium">
-        Forget Password
-      </h2>
-
+    <Card
+      shadow="xl"
+      p="xl"
+      radius="xl"
+      // withBorder
+      className="w-95 bg-white/95 backdrop-blur-sm border-gray-100"
+    >
+      <div className="flex justify-center mb-4">
+        <img
+          src={forgotPassText}
+          alt="Forgot Password"
+          className="max-w-full h-auto"
+        />
+      </div>
       <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-brand-primary">
         Please Enter Your Username
       </div>
@@ -84,33 +96,37 @@ const ForgetPassword: React.FC = () => {
           required
           error={formik.touched.username && formik.errors.username}
           maxLength={51}
+          radius="lg"
           leftSection={<UsernameSvg />}
           leftSectionWidth={36}
         />
 
-        <div className="flex justify-between items-center">
+        <div className="flex justify-around items-center">
           <ButtonComponent
             size="md"
             bgColor={colors.brand.accent}
             textColor={colors.text.inverse}
-            radius={12}
+            radius={24}
             leftIcon={<IconArrowLeft />}
             onClick={() => navigate("/login")}
           >
             Back
           </ButtonComponent>
+          <div className="font-poppins font-normal text-sm text-brand-primary">
+            OR
+          </div>
           <ButtonComponent
             size="md"
             bgColor={colors.brand.accent}
             textColor={colors.text.inverse}
-            radius={12}
+            radius={24}
             type="submit"
           >
             CONTINUE
           </ButtonComponent>
         </div>
       </form>
-    </div>
+    </Card>
   );
 };
 

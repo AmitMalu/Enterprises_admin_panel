@@ -14,7 +14,16 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: basePath,
-    plugins: [react(), svgr()],
+    plugins: [
+      react(), 
+      svgr({
+        svgrOptions: {
+          exportType: "default",
+          ref: true,
+        },
+        include: "**/*.svg",
+      })
+    ],
     build: {
       rollupOptions: {
         output: {

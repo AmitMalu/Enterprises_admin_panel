@@ -19,6 +19,7 @@ import UserConfigForm from "../Components/Organisms/UserConfigForm";
 import PendingUserForm from "../Components/Organisms/PendingUserForm";
 import AdminUserForm from "../Components/Organisms/AdminUserForm";
 import PendingKycView from "../Pages/Management/PendingKycView";
+import OnboardedUserForm from "../Components/Organisms/OnboardedUserForm";
 
 export const ManagementRoutes = (
   <>
@@ -28,6 +29,7 @@ export const ManagementRoutes = (
     <Route path="/management/user/pending/:type/:id" element={<PendingUserForm />} />
     <Route path="/management/user/pending/edit/:type/:id" element={<PendingUserForm />} />
     <Route path="/management/user/onboarded" element={<OnboardedUsers />} />
+    <Route path="/management/user/onboarded/edit/:type/:id" element={<OnboardedUserForm />} />
     <Route path="/management/user/rejected" element={<RejectedUser />} />
     <Route path="/management/user-configuration" element={<UserConfiguration />} />
     <Route path="/management/user-configuration/edit/:id" element={<UserConfigForm mode="edit" />} />

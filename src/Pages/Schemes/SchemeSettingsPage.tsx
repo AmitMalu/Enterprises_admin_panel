@@ -40,6 +40,7 @@ const SchemeSettingsPage = () => {
   const [productDetails, setProductDetails] = useState<Record<string, any> | null>(null);
   const [loadingScheme, setLoadingScheme] = useState(false);
   const [loadingProduct, setLoadingProduct] = useState(false);
+  const [hasSavedChanges, setHasSavedChanges] = useState(false);  
 
   const handleRowChange = (
     operatorCode: string,
@@ -60,6 +61,9 @@ const SchemeSettingsPage = () => {
           }
       )
     );
+
+    /* ---------- Reset hasSavedChanges when new changes are made ---------- */
+    setHasSavedChanges(false);
 
     /* ---------- 2. build / merge diff ---------- */
     setUpdatedOperators(prev => {
@@ -149,6 +153,10 @@ const SchemeSettingsPage = () => {
 
   const resetUpdatedOperatorValues = () => {
     setUpdatedOperators([]);
+    updatedOperatorsRef.current = [];
+    setHasSavedChanges(true);
+    // Fetch latest data after successful save
+    fetchSchemeData();
   }
 
   const handleSubmit = useThrottleMasterFormSubmit<SlabPayload>({
@@ -169,7 +177,7 @@ const SchemeSettingsPage = () => {
 
   const handleSave = () => {
     const currentOperators = updatedOperatorsRef.current;
-
+    
     if (currentOperators.length === 0) {
       toast.info("No changes to save");
       return;
@@ -275,29 +283,28 @@ const SchemeSettingsPage = () => {
     }
   }, [schemeCode, navigate]);
 
-  useEffect(() => {
+  const fetchSchemeData = async () => {
     if (!schemeCode) return;
-
-    const schemeRates = async () => {
-      setLoadingScheme(true);
-      try {
-        const data = await dispatch(
-          fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}/get-scheme-details-by-scheme-code`, id: schemeCode })
-        ).unwrap();
-        setSchemeDetails(data);
-        setIsSchemeActive(data.isActive);
-
-      } catch (err: any) {
-        toast.error(err);
-        setTimeout(() => {
-          navigate("/schemes/schemeslist");
-        }, 2000);
-      }
-      finally {
-        setLoadingScheme(false);
-      }
+    
+    setLoadingScheme(true);
+    try {
+      const data = await dispatch(
+        fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}/get-scheme-details-by-scheme-code`, id: schemeCode })
+      ).unwrap();
+      setSchemeDetails(data);
+      setIsSchemeActive(data.isActive);
+    } catch (err: any) {
+      toast.error(err);
+      setTimeout(() => {
+        navigate("/schemes/schemeslist");
+      }, 2000);
+    } finally {
+      setLoadingScheme(false);
     }
-    schemeRates()
+  };
+
+  useEffect(() => {
+    fetchSchemeData();
   }, [schemeCode])
 
   useEffect(() => {
@@ -434,6 +441,7 @@ const SchemeSettingsPage = () => {
                 onAddRow={(opCode) => handleAddRow(opCode, slabSize)}
                 handleRemoveRow={handleRemoveRow}
                 isSchemeActive={!isSchemeActive}
+                hasSavedChanges={hasSavedChanges}
               />
             </Tabs.Panel>
 

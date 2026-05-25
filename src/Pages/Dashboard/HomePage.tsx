@@ -18,7 +18,7 @@ import { formatIndianNumber } from "../../Utils/utils";
 const HomePage = () => {
   const dispatch = useAppDispatch();
   const [dashboardData, setDashboardData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DatesRangeValue>(
     getRangeFromLabel("Last 7 Days")
   );
@@ -28,7 +28,6 @@ const HomePage = () => {
   const today = new Date();
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(today.getMonth() - 6);
-  console.log(isLoading);
 
   const cards =
     dashboardData?.cards?.map((card: any, index: number) => ({
@@ -49,16 +48,14 @@ const HomePage = () => {
     if (!selectedDate) return;
     const [fromDate, toDate] = selectedDate;
     if (!fromDate || !toDate) return;
-    console.log("api hit", selectedDate);
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       // Format dates as YYYY-MM-DD (or your API format)
       const payload = {
         fromDate: moment(fromDate).format("YYYY-MM-DD"),
         toDate: moment(toDate).format("YYYY-MM-DD"),
         hierarchyId: JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId || ""
       };
-      console.log(payload);
 
       const response = await dispatch(Dashboard_Api(payload)).unwrap();
       setDashboardData(response.data)
@@ -67,7 +64,7 @@ const HomePage = () => {
     } catch (error: any) {
       await toast.error(error.message || "Error Fetching Dashboard data");
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -80,9 +77,6 @@ const HomePage = () => {
   useEffect(() => {
     dashboardDataReq();
   }, [selectedDate]);
-
-  console.log(dashboardData, "das");
-
 
   return (
     <div className="h-[calc(100vh-90px)] mx-auto p-4 items-center justify-center">

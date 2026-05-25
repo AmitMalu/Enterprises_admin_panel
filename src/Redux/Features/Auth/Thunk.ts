@@ -215,6 +215,30 @@ export const Dashboard_Api = createAsyncThunk(
   },
 );
 
+export const NotificationDropdowns_Api = createAsyncThunk(
+  "auth/NotificationDropdowns_Api",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        API_ENDPOINTS.NOTIFICATIONS.DROPDOWNS,
+      );
+      if (response.data.statusCode == 200 || response.data.statusCode == 201) {
+        return response.data;
+      } else {
+        return rejectWithValue(
+          response.data.message || "Failed to Fetch Notification Dropdowns",
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error Fetching Notification Dropdowns",
+      );
+    }
+  },
+);
+
 export const changePassword = createAsyncThunk(
   "auth/changePassword",
   async (payload: changePasswordPayload, { rejectWithValue }) => {

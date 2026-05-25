@@ -30,8 +30,8 @@ const defaultClassNames = {
 };
 
 interface CustomDatePickerProps extends Omit<DatePickerInputProps<"default">, "type" | "value" | "onChange"> {
-    value: DateValue;
-    onChange: (value: DateValue) => void;
+    value?: DateValue | null;
+    onChange: (value: DateValue | null) => void;
     minDate?: Date;
     maxDate?: Date;
 };

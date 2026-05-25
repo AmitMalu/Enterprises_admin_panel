@@ -12,6 +12,7 @@ import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useTransactionCooldown } from "../../Utils/hooks/useTransactionCooldown";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import FormikSelectComponent from "../../Components/Molecules/FormikSelectComponent";
 import { resetMaster } from "../../Redux/Features/Masters/MastersSlice";
@@ -27,6 +28,7 @@ import { colors } from "../../theme/colors";
 const UpdateTransaction = () => {
 
   const dispatch = useAppDispatch();
+  const { checkDuplicate, store } = useTransactionCooldown("update_transaction");
   const [payload, setPayload] = useState<any>(null);
 
   const dataRef = useRef<UpdateTransTableType[] | null>(null);
@@ -107,13 +109,27 @@ const UpdateTransaction = () => {
     }
   };
 
-  const handleSettlementAction = async (action: "APPROVE" | "REJECT") => {
+  const handleSettlementAction = async (action: "SUCCESS" | "FAILED") => {
     if (!selectedIds.length) return;
     setLoadingActionSubmit(true); // set which row is loading
+
+    // For bulk actions, check if any transaction is a duplicate
+    const duplicateIds = selectedIds.filter(id =>
+      checkDuplicate(String(id), 0) // Using 0 as amount since update actions don't have amounts
+    );
+
+    if (duplicateIds.length > 0) {
+      toast.error(
+        "You cannot repeat the same update action within 2 minutes. Please try again shortly."
+      );
+      setLoadingActionSubmit(false);
+      return;
+    }
+
     try {
       await dispatch(updateMasterItem({
         key: UPDATE_TRANS_KEY,
-        url: `${API_ENDPOINTS.COMMON.TRANSACTION}/update-status`,
+        url: `${API_ENDPOINTS.COMMON.TRANSACTION}/update-pending-status/bulk`,
         data: {
           transactionIds: selectedIds,
           newStatus: action,
@@ -122,7 +138,12 @@ const UpdateTransaction = () => {
         mode: "POST",
       })).unwrap();
 
-      toast.success(`Settlement ${action === "APPROVE" ? "APPROVED" : "REJECTED"} successfully!`);
+      // Store successful update actions
+      selectedIds.forEach(id => {
+        store(String(id), 0);
+      });
+
+      toast.success(`Settlement ${action === "SUCCESS" ? "SUCCESS" : "FAILED"} successfully!`);
       setSelectedIds([]);
       handleRefresh()
     } catch (err: any) {
@@ -176,7 +197,6 @@ const UpdateTransaction = () => {
             selectedProductId: values.productId,
             selectedSubProductId: values.subProductId,
             onSubProductReset: () => setFieldValue("subProductId", ""),
-            isSettlement: true
           });
 
           // const { vendorDropdownData, loadingVendorList } = useVendor();
@@ -313,7 +333,7 @@ const UpdateTransaction = () => {
           fontSize="16"
           throttleMs={5000}
           bgColor={colors.status.danger}
-          onClick={() => handleSettlementAction("REJECT")}
+          onClick={() => handleSettlementAction("FAILED")}
           leftIcon={<IconCancel />}
           disabled={
             loadingActionSubmit ||
@@ -323,7 +343,7 @@ const UpdateTransaction = () => {
             !selectedIds?.length
           }
         >
-          REJECT
+          FAILED
         </ButtonComponent>
         <ButtonComponent
           style={{ padding: "4px 20px", height: 32 }}
@@ -333,7 +353,7 @@ const UpdateTransaction = () => {
           fontSize="16"
           throttleMs={5000}
           bgColor={colors.status.successAlt}
-          onClick={() => handleSettlementAction("APPROVE")}
+          onClick={() => handleSettlementAction("SUCCESS")}
           leftIcon={<GiCheckMark size={16} color={colors.text.inverse} />}
           disabled={
             loadingActionSubmit ||
@@ -343,7 +363,7 @@ const UpdateTransaction = () => {
             !selectedIds?.length
           }
         >
-          ACCEPT
+          SUCCESS
         </ButtonComponent>
       </div> : null}
 

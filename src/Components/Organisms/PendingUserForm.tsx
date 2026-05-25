@@ -446,10 +446,10 @@ const PendingUserForm = () => {
                       <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                         <FormikTextInputComponent
                           name="address.city"
-                          label="Zip Code"
-                          placeholder="Enter Your Zipcode"
+                          label="City"
+                          placeholder="Enter Your City"
                           withAsterisk
-                          maxLength={6}
+                          maxLength={50}
                           allowSpecialChar={false}
                           allowCharacter={false}
                           allowSpace={false}

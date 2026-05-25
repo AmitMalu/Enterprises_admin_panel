@@ -151,6 +151,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
 
   const InputComponent = oneTimeCode ? (
     <PinInput
+      radius={radius}
       oneTimeCode
       value={value}
       onChange={(val) =>

@@ -4,7 +4,7 @@ import {
   LogsIcon,
   managementSvg,
   MastersIcon,
-  MenuSettingIcon,
+  // MenuSettingIcon,
   MyProfileIcon,
   NotificationIcon,
   reportsSvg,
@@ -154,16 +154,16 @@ export const sidebarData = [
         link: "/funding/credit-debit",
         icon: fundingSvg,
       },
-      {
-        label: "Manage Payment",
-        link: "/funding/manage-payment",
-        icon: fundingSvg,
-      },
-      {
-        label: "Manage Settlement",
-        link: "/funding/manage-settlement",
-        icon: fundingSvg,
-      },
+      // {
+      //   label: "Manage Payment",
+      //   link: "/funding/manage-payment",
+      //   icon: fundingSvg,
+      // },
+      // {
+      //   label: "Manage Settlement",
+      //   link: "/funding/manage-settlement",
+      //   icon: fundingSvg,
+      // },
       {
         label: "Settlement",
         link: "/funding/settlement",
@@ -354,28 +354,28 @@ export const sidebarData = [
     initiallyOpened: false,
     links: [
       {
-        label: "Alert Type",
+        label: "Alert Notification",
         link: "/notification/alert-type",
         icon: NotificationIcon,
       },
-      {
-        label: "SMS Template",
-        link: "/notification/sms-template",
-        icon: NotificationIcon,
-      },
+      // {
+      //   label: "SMS Template",
+      //   link: "/notification/sms-template",
+      //   icon: NotificationIcon,
+      // },
       // {
       //   label: "Email Report",
       //   link: "/notification/email-report",
       //   icon: NotificationIcon,
       // },
       {
-        label: "Send SMS",
-        link: "/notification/send-sms",
+        label: "SMS",
+        link: "/notification/sms-credentials",
         icon: NotificationIcon,
       },
       {
-        label: "Send Mail",
-        link: "/notification/send-mail",
+        label: "Mail",
+        link: "/notification/email-credentials",
         icon: NotificationIcon,
       },
     ],
@@ -386,16 +386,16 @@ export const sidebarData = [
     initiallyOpened: false,
     links: [
       { label: "Profile", link: "/account/profile", icon: MyProfileIcon },
-      {
-        label: "Design Receipts",
-        link: "/account/design-receipts",
-        icon: MyProfileIcon,
-      },
-      {
-        label: "Design Documents",
-        link: "/account/design-documents",
-        icon: MyProfileIcon,
-      },
+      // {
+      //   label: "Design Receipts",
+      //   link: "/account/design-receipts",
+      //   icon: MyProfileIcon,
+      // },
+      // {
+      //   label: "Design Documents",
+      //   link: "/account/design-documents",
+      //   icon: MyProfileIcon,
+      // },
     ],
   },
   {
@@ -415,23 +415,23 @@ export const sidebarData = [
       // },
     ],
   },
-  {
-    label: "Website Settings",
-    icon: MenuSettingIcon,
-    initiallyOpened: false,
-    links: [
-      { label: "Brandings", link: "/website/brandings", icon: MenuSettingIcon },
-      {
-        label: "Website Settings",
-        link: "/website/settings",
-        icon: MenuSettingIcon,
-      },
-      {
-        label: "News Update",
-        link: "/website/news-update",
-        icon: MenuSettingIcon,
-      },
-    ],
-  },
+  // {
+  //   label: "Website Settings",
+  //   icon: MenuSettingIcon,
+  //   initiallyOpened: false,
+  //   links: [
+  //     { label: "Brandings", link: "/website/brandings", icon: MenuSettingIcon },
+  //     {
+  //       label: "Website Settings",
+  //       link: "/website/settings",
+  //       icon: MenuSettingIcon,
+  //     },
+  //     {
+  //       label: "News Update",
+  //       link: "/website/news-update",
+  //       icon: MenuSettingIcon,
+  //     },
+  //   ],
+  // },
   { label: "Logs", icon: LogsIcon, initiallyOpened: false, link: "/logs" },
 ];

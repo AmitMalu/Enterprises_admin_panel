@@ -17,10 +17,6 @@ import { NotFoundRoute } from "./NotFoundRoute";
 import { LogsRoute } from "./LogsRoute";
 import FullPageLoader from "../Components/Layout/FullPageLoader";
 import TestComponent from "../Pages/TestComponent";
-// import { ChangePassword } from "../Pages/Auth";
-// import { Profile } from "../Pages/Account";
-// import HomePage from "../Pages/Dashboard/HomePage";
-// import TestComponent from "../Pages/TestComponent";
 
 const HomePage = lazy(() => import("../Pages/Dashboard/HomePage"));
 const Profile = lazy(() => import("../Pages/Account/Profile"));

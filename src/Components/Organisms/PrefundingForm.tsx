@@ -14,6 +14,7 @@ import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import { Grid } from "@mantine/core";
 import * as Yup from "yup";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useTransactionCooldown } from "../../Utils/hooks/useTransactionCooldown";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
@@ -28,6 +29,7 @@ const PrefundingForm = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { checkDuplicate, store } = useTransactionCooldown("prefunding");
 
   const [formData, setFormData] = useState<PrefundingFormType>(initialValues);
   const [selectedAction, setSelectedAction] = useState<
@@ -43,6 +45,14 @@ const PrefundingForm = () => {
 
     if (!selectedAction) {
       toast.error("Please select APPROVE or REJECT.");
+      return;
+    }
+
+    // Check for duplicate transaction within 120 seconds
+    if (checkDuplicate(id || "", Number(values.depositAmount) || 0)) {
+      toast.error(
+        "You cannot repeat the same transaction within 2 minutes. Please try a different amount or try again shortly."
+      );
       return;
     }
 
@@ -65,6 +75,8 @@ const PrefundingForm = () => {
     dispatch(submitFundRequest(payload))
       .unwrap()
       .then(() => {
+        // Store successful transaction to prevent duplicates
+        store(id || "", Number(values.depositAmount));
         toast.success(`Fund request ${selectedAction} successfully`);
         navigate("/funding/authorization");
       })

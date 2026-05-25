@@ -6,6 +6,8 @@ import {
   LockIconSvg,
   UsernameSvg,
 } from "../../assets/Icons/Svgs";
+import welcomeTextImage from "../../assets/Images/welcomeText.png";
+import loginAccountTextImage from "../../assets/Images/loginAccountText.png";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +23,7 @@ import {
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { colors } from "../../theme/colors";
+import { Card } from "@mantine/core";
 
 const validationSchema = Yup.object().shape({
   username: usernamePhoneEmailValidation,
@@ -55,7 +58,7 @@ const LoginPage: React.FC = () => {
             password: encryptedPassword,
             salt,
             iv,
-            url: isDevEnv ? "https://uat.decipay.in/" : `${window.location.origin}/`,
+            url: isDevEnv ? "https://admin.nfttech.in/" : `${window.location.origin}/`,
           })
         ).unwrap();
 
@@ -68,17 +71,17 @@ const LoginPage: React.FC = () => {
         }
 
         toast.success(result.message);
-        toast.success(result.data.otp, {
-          toastId: "otp-toast",
-          autoClose: false, // Do not close automatically
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-        });
+        // toast.success(result.data.otp, {
+        //   toastId: "otp-toast",
+        //   autoClose: false, // Do not close automatically
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: false,
+        // });
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
           state: {
-            username: values.username, otpFor: "login", otp: result.data.otp
+            username: values.username, otpFor: "login" //, otp: result.data.otp
           },
         });
       } catch (error) {
@@ -95,14 +98,28 @@ const LoginPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full px-10 flex flex-col text-left">
+    <Card
+      shadow="xl"
+      p="xl"
+      radius="xl"
+      // withBorder
+      className="w-95 bg-white/95 backdrop-blur-sm border-gray-100"
+    >
       {/* Welcome Text */}
-      <p className="text-text-soft font-extralight font-geologica text-xl md:text-sm xl:text-2xl 2xl:text-3xl mb-1">
-        Welcome Back
-      </p>
-      <h2 className="text-text-muted font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-medium mb-6">
-        Login to Your Account
-      </h2>
+      <div className="flex justify-center mb-4">
+        <img
+          src={welcomeTextImage}
+          alt="Welcome Back"
+          className="max-w-full h-auto"
+        />
+      </div>
+      <div className="flex justify-center mb-6">
+        <img
+          src={loginAccountTextImage}
+          alt="Login to Your Account"
+          className="max-w-full h-auto"
+        />
+      </div>
 
       <Formik
         enableReinitialize
@@ -126,6 +143,7 @@ const LoginPage: React.FC = () => {
               required
               error={formik.touched.username && formik.errors.username}
               maxLength={51}
+              radius="lg"
               leftSection={<UsernameSvg />}
               leftSectionWidth={36}
             />
@@ -136,8 +154,9 @@ const LoginPage: React.FC = () => {
               name="password"
               value={formik.values.password}
               onChange={formik.handleChange}
-              placeholder="Password"
+              placeholder="********"
               required
+              radius="lg"
               leftSection={<LockIconSvg />}
               leftSectionWidth={36}
               rightSectionWidth={48}
@@ -149,14 +168,25 @@ const LoginPage: React.FC = () => {
               maxLength={51}
             />
 
+            {/* Forgot Password? */}
+            <div
+              className="mt-1 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl text-right text-text-brand-light"
+            >
+              <span
+                className="cursor-pointer hover:underline"
+                onClick={handleForgetPassword}
+              >
+                Forget Password?
+              </span>
+            </div>
+
             {/* Login Button */}
-            <div className="flex justify-center items-center mt-5">
+            <div className="flex justify-center items-center mt-3">
               <ButtonComponent
-                fullWidth
                 size="md"
                 bgColor={colors.brand.accent}
                 textColor={colors.text.inverse}
-                radius={8}
+                radius={24}
                 type="submit"
               >
                 LOGIN NOW
@@ -165,18 +195,6 @@ const LoginPage: React.FC = () => {
           </Form>
         )}
       </Formik>
-
-      {/* Forgot Password? */}
-      <div
-        className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl text-right text-text-muted"
-      >
-        <span
-          className="cursor-pointer "
-          onClick={handleForgetPassword}
-        >
-          Forget Password?
-        </span>
-      </div>
 
       {/* Divider */}
       {/* <div className="flex items-center w-full">
@@ -199,7 +217,7 @@ const LoginPage: React.FC = () => {
         Don't have an account?
         <span className="text-status-danger cursor-pointer"> Sign up here</span>
       </p> */}
-    </div>
+    </Card>
   );
 };
 
