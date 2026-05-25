@@ -2,7 +2,7 @@ import React from "react";
 import AuthLeftImagePanel from "../Organisms/AuthLeftImagePanel";
 import StepperLines from "../Atoms/StepperLines";
 import { useLocation } from "react-router-dom";
-import { authLayoutRouteConfig } from "../../Config/Auth/authImagePanelConfig";
+import { authLayoutRouteConfig } from "../../Config/Auth/AuthImagePanelConfig";
 
 interface AuthContentWrapperProps {
   children: React.ReactNode
