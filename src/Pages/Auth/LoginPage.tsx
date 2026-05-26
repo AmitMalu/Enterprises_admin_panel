@@ -48,9 +48,11 @@ const LoginPage: React.FC = () => {
       const { encryptedUsername, encryptedPassword, salt, iv } = encryptCredentials(values.username, values.password);
 
       try {
-        const isDevEnv = ["localhost", "127.0.0.1"].includes(window.location.hostname) ||
-          window.location.hostname.startsWith("192.168.") ||
-          window.location.hostname === ""; // in case of file:// or blank
+        const hostname = window.location.hostname;
+
+        const isDevEnv = ["localhost", "127.0.0.1"].includes(hostname) ||
+          hostname.startsWith("192.168.") ||
+          hostname === ""; // in case of file:// or blank
 
         const result = await dispatch(
           login({
@@ -58,7 +60,7 @@ const LoginPage: React.FC = () => {
             password: encryptedPassword,
             salt,
             iv,
-            url: isDevEnv ? "https://admin.nfttech.in/" : `${window.location.origin}/`,
+            url: isDevEnv ? "https://uat.nfttech.in/" : `${window.location.origin}/`,
           })
         ).unwrap();
 

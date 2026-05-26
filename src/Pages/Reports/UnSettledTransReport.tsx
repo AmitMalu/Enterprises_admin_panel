@@ -164,6 +164,8 @@ const UnSettledTransReport = () => {
                     size="xs"
                     shortcuts
                     required
+                    maxDate={new Date()}
+                    minDate={new Date(new Date().setMonth(new Date().getMonth() - 6))}
                     leftIcon={<IconCalendar size={16} />}
                   />
                 </Grid.Col>

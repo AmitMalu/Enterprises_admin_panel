@@ -42,7 +42,7 @@ export const initialValues = {
   productId: "",
   hierarchy: "",
   subHierarchy: "",
-  walletType: "",
+  // walletType: "",
   status: "",
 };
 
@@ -52,7 +52,7 @@ export const TransactionReportSchema = Yup.object().shape({
   productId: textField("Product", 100, false, true),
   hierarchy: textField("Hierarchy", 100, false, true),
   subHierarchy: textField("Hierarchy ID", 100, false, true),
-  walletType: textField("Wallet Type", 100, false, true),
+  // walletType: textField("Wallet Type", 100, false, true),
   status: textField("Status", 100, false, true),
 });
 
@@ -65,7 +65,7 @@ export const transformToTransactionReportPayload = (values: any) => {
     fromDate: moment(fromDate).format("YYYY-MM-DD"),
     toDate: moment(toDate).format("YYYY-MM-DD"),
     productId: values?.productId ?? "",
-    walletType: values.walletType ?? "",
+    // walletType: values.walletType ?? "",
     status: values.status ?? "",
   };
 };
@@ -73,9 +73,9 @@ export const transformToTransactionReportPayload = (values: any) => {
 export const headers: GenericTableHeader<TransactionReportTableType>[] = [
   { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "tranxId", label: "Transaction ID", filterType: "text" },
-  { key: "balBefore", label: "Balance Before", filterType: "text" },
-  { key: "balAfter", label: "Balance After", filterType: "text" },
-  { key: "amount", label: "Amount", filterType: "text" },
+  { key: "balBefore", label: "Balance Before", filterType: "amount" },
+  { key: "balAfter", label: "Balance After", filterType: "amount" },
+  { key: "amount", label: "Amount", filterType: "amount" },
   {
     key: "status",
     label: "Status",
@@ -89,7 +89,7 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
     ],
   },
   { key: "transactionDate", label: "Transaction Date", filterType: "none" },
-  { key: "transactionTime", label: "Transaction Time", filterType: "text" },
+  { key: "transactionTime", label: "Transaction Time", filterType: "time" },
   { key: "hierarchyId", label: "Hierarchy Id", filterType: "text" },
   { key: "productName", label: "Product", filterType: "text" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },
@@ -106,8 +106,8 @@ export const headers: GenericTableHeader<TransactionReportTableType>[] = [
     filterType: "text",
   },
   { key: "narration", label: "Narration", filterType: "text" },
-  { key: "latitude", label: "Latitude", filterType: "text" },
-  { key: "longitude", label: "Longitude", filterType: "text" },
+  { key: "latitude", label: "Latitude", filterType: "coordinate" },
+  { key: "longitude", label: "Longitude", filterType: "coordinate" },
   { key: "vendorName", label: "Vendor Name", filterType: "text" },
   { key: "vendorTransactionId", label: "Vendor TxnId", filterType: "text" },
 ];

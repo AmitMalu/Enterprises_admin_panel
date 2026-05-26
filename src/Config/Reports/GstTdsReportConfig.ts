@@ -27,6 +27,7 @@ export interface GstTdsReportTableType {
   transactionTime: string;
   productName: string;
   subProductName: string;
+  hierarchyId: string;
   walletType: string | null;
   txType: string;
   balBefore: string | number;
@@ -69,11 +70,12 @@ export const GstTdsheaders: GenericTableHeader<GstTdsReportTableType>[] = [
   { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "txId", label: "Transaction ID", filterType: "text" },
   { key: "txType", label: "Transaction Type", filterType: "text" },
-  { key: "balBefore", label: "Balance Before", filterType: "number" },
-  { key: "balAfter", label: "Balance After", filterType: "number" },
-  { key: "amount", label: "Amount", filterType: "number" },
+  { key: "balBefore", label: "Balance Before", filterType: "amount" },
+  { key: "balAfter", label: "Balance After", filterType: "amount" },
+  { key: "amount", label: "Amount", filterType: "amount" },
   { key: "productName", label: "Product", filterType: "text" },
   { key: "subProductName", label: "Sub Product", filterType: "text" },
+  { key: "hierarchyId", label: "Hierarchy ID", filterType: "text" },
   { key: "operator", label: "Operator", filterType: "text" },
   {
     key: "walletType",
@@ -82,9 +84,9 @@ export const GstTdsheaders: GenericTableHeader<GstTdsReportTableType>[] = [
     filterOptions: walletTypeSelectData,
   },
   { key: "transactionDate", label: "Transaction Date", filterType: "date" },
-  { key: "transactionTime", label: "Transaction Time", filterType: "text" },
-  { key: "latitude", label: "Latitude", filterType: "text" },
-  { key: "longitude", label: "Longitude", filterType: "text" },
+  { key: "transactionTime", label: "Transaction Time", filterType: "time" },
+  { key: "latitude", label: "Latitude", filterType: "coordinate" },
+  { key: "longitude", label: "Longitude", filterType: "coordinate" },
   { key: "vendorName", label: "Vendor Name", filterType: "text" },
   { key: "vendorTransactionId", label: "Vendor TxnId", filterType: "text" },
 ];

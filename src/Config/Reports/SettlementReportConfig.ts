@@ -45,9 +45,11 @@ export interface SettlementReportTableType {
   // txStart: string;
   // txEnd: string;
   dateOfTransaction: string;
+  timeOfTransaction: string;
+  updatedDateOfTransaction: string;
+  updatedTimeOfTransaction: string;
   medium: string;
   updateBy: string;
-  updatedAt: string;
   // site: string;
   // uriPath: string;
   latitude: string | null;
@@ -82,10 +84,10 @@ export const settlementReportFilterValidationSchema: Record<
 
 export const settlementReportHeaders: GenericTableHeader<SettlementReportTableType>[] =
   [
-    { key: "id", label: "Id", filterType: "number", searchable: true },
+    { key: "id", label: "Id", filterType: "number" },
     { key: "userId", label: "User ID", filterType: "text" },
-    { key: "mobileNo", label: "User Mobile No", filterType: "text" },
-    { key: "amount", label: "Amount", filterType: "text" },
+    { key: "mobileNo", label: "User Mobile No", filterType: "number" },
+    { key: "amount", label: "Amount", filterType: "amount" },
     // { key: "product", label: "Product", filterType: "text" },
     { key: "productName", label: "Product", filterType: "text" },
     { key: "subProductName", label: "Sub Product", filterType: "text" },
@@ -103,14 +105,16 @@ export const settlementReportHeaders: GenericTableHeader<SettlementReportTableTy
     { key: "schemeName", label: "Scheme Name", filterType: "text" },
     { key: "medium", label: "Medium", filterType: "text" },
     // { key: "updateBy", label: "Update By", filterType: "text" },
-    { key: "dateOfTransaction", label: "Created At", filterType: "date" },
-    { key: "updatedAt", label: "Updated At", filterType: "date" },
+    { key: "dateOfTransaction", label: "Date of TXN", filterType: "date" },
+    { key: "timeOfTransaction", label: "Time of TXN", filterType: "time" },
+    { key: "updatedDateOfTransaction", label: "Updated Date of TXN", filterType: "date" },
+    { key: "updatedTimeOfTransaction", label: "Updated Time of TXN", filterType: "time" },
     // { key: "refNo", label: "Ref No", filterType: "text" },
     // { key: "userOutletName", label: "User Outlet Name", filterType: "text" },
     // { key: "site", label: "Site", filterType: "text" },
     // { key: "uriPath", label: "URI Path", filterType: "text" },
-    { key: "latitude", label: "Latitude", filterType: "text" },
-    { key: "longitude", label: "Longitude", filterType: "text" },
+    { key: "latitude", label: "Latitude", filterType: "coordinate" },
+    { key: "longitude", label: "Longitude", filterType: "coordinate" },
     { key: "vendorName", label: "Vendor Name", filterType: "text" },
     { key: "vendorTransactionId", label: "Vendor TxnId", filterType: "text" },
   ];

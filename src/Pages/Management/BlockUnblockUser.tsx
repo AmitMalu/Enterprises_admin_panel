@@ -10,8 +10,10 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import debounce from "lodash.debounce";
-import { Loader, Tooltip } from "@mantine/core";
+import { Button, Group, Loader, Modal, Text, Tooltip } from "@mantine/core";
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
+import ButtonComponent from "../../Components/Atoms/ButtonComponent";
+import { colors } from "../../theme/colors";
 
 const BlockUnblockUser = () => {
 
@@ -25,6 +27,7 @@ const BlockUnblockUser = () => {
   const [search, setSearch] = useState("")
   const [debouncedSearchValue, setDebouncedSearchValue] = useState<string | null>("");
   const [loadingRowId, setLoadingRowId] = useState<string | null>(null); // track row
+  const [confirmData, setConfirmData] = useState<{ hierarchyId: string; isBlocked: boolean } | null>(null);
 
 
   const { data, loading, error, pagination, setPage, setPageSize } =
@@ -67,12 +70,12 @@ const BlockUnblockUser = () => {
   };
 
   const handleToggleAllColumns = (selectAll: boolean) => {
-      if (selectAll) {
-        setVisibleColumns(BlockUnblockUserHeaders.map((h) => h.key as string));
-      } else {
-        setVisibleColumns([]);
-      }
-    };
+    if (selectAll) {
+      setVisibleColumns(BlockUnblockUserHeaders.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
 
   const handleRefresh = () => {
     dispatch(resetMaster(BLOCK_USER_KEY));
@@ -161,7 +164,7 @@ const BlockUnblockUser = () => {
               >
                 <span
                   onClick={() =>
-                    !loadingRowId && handleBlockUnblockUser(item.hierarchyId, !item.isBlocked)
+                    !loadingRowId && setConfirmData({ hierarchyId: item.hierarchyId, isBlocked: !item.isBlocked })
                   }
                   className={`px-4 py-[4px] flex gap-2 rounded-full text-xs font-medium whitespace-nowrap cursor-pointer ${!item.isBlocked ? "bg-red-200 text-red-900" : "bg-green-200 text-green-900"
                     } ${loadingRowId ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -189,6 +192,48 @@ const BlockUnblockUser = () => {
           message={`Showing page ${pagination.currentPage} of ${pagination.totalPages}`}
         />
       )}
+
+      <Modal
+        opened={confirmData !== null}
+        onClose={() => setConfirmData(null)}
+        title={confirmData?.isBlocked ? "Confirm Block User" : "Confirm Unblock User"}
+        centered
+        radius="lg"
+        size="sm"
+      >
+        <div className="text-center">
+          <TextComponent fontSize={14} color="gray">
+            Do you really want to {confirmData?.isBlocked ? "block" : "unblock"} user{" "}
+            <strong>{confirmData?.hierarchyId}</strong>?
+          </TextComponent>
+        </div>
+        <div className="flex justify-end gap-3 mt-4">
+          <ButtonComponent
+            variant="outline"
+            bgColor={colors.surface.muted}
+            fontSize="12"
+            size="xs"
+            textColor={colors.text.secondary}
+            onClick={() => setConfirmData(null)}
+          >
+            Cancel
+          </ButtonComponent>
+          <ButtonComponent
+            bgColor={colors.brand.primary}
+            textColor={colors.text.inverse}
+            size="xs"
+            fontSize="12"
+            onClick={() => {
+              if (confirmData) {
+                handleBlockUnblockUser(confirmData.hierarchyId, confirmData.isBlocked);
+                setConfirmData(null);
+              }
+            }}
+          >
+            Confirm
+          </ButtonComponent>
+        </div>
+      </Modal>
     </div >
   );
 };

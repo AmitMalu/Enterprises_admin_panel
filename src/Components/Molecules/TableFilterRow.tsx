@@ -1,9 +1,12 @@
-import { Table } from "@mantine/core";
+import { ActionIcon, Table } from "@mantine/core";
 import { booleanSelectData2, GenericTableHeader } from "../../Utils/utils";
 import SelectComponent from "../Atoms/SelectComponent";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import moment from "moment";
 import CustomDatePicker from "../Atoms/CustomDatePicker";
+import { TimeInput } from "@mantine/dates";
+import { IconX } from "@tabler/icons-react";
+import CustomTimePicker from "../Atoms/CustomTimePicker";
 
 const TableFilterRow = <T,>({
   headers,
@@ -28,7 +31,7 @@ const TableFilterRow = <T,>({
           case "none":
             return (
               <Table.Td key={String(key)}>
-                
+
               </Table.Td>
             );
           case "boolean":
@@ -69,6 +72,21 @@ const TableFilterRow = <T,>({
                 />
               </Table.Td>
             );
+          case "time":
+            return (
+              <Table.Td key={String(key)}>
+                <CustomTimePicker
+                  value={value ?? ""}
+                  withSeconds
+                  onChange={(val) => {
+                    onFilterChange?.(String(key), val);
+                  }}
+                  onSubmit={(val) => {
+                    onFilterSubmit?.(String(key), val);
+                  }}
+                />
+              </Table.Td>
+            );
           case "number":
             return (
               <Table.Td key={String(key)}>
@@ -79,6 +97,56 @@ const TableFilterRow = <T,>({
                   onChange={(e) => {
                     const num = e.target.value.replace(/[^0-9]/g, ''); // only digits
                     onFilterChange?.(String(key), num);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      onFilterSubmit?.(String(key), value?.trim() ?? "");
+                    }
+                  }}
+                />
+              </Table.Td>
+            );
+          case "amount":
+            return (
+              <Table.Td key={String(key)}>
+                <TextInputComponent
+                  size="xs"
+                  name={String(key)}
+                  value={value}
+                  onChange={(e) => {
+                    let amount = e.target.value
+                      .replace(/[^0-9.]/g, "")
+                      .replace(/(\..*)\./g, "$1"); // only one dot
+
+                    // if starts with dot => add 0
+                    if (amount.startsWith(".")) {
+                      amount = `0${amount}`;
+                    }
+
+                    onFilterChange?.(String(key), amount);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      onFilterSubmit?.(String(key), value?.trim() ?? "");
+                    }
+                  }}
+                />
+              </Table.Td>
+            );
+          case "coordinate":
+            return (
+              <Table.Td key={String(key)}>
+                <TextInputComponent
+                  size="xs"
+                  name={String(key)}
+                  value={value}
+                  onChange={(e) => {
+                    const coordinate = e.target.value
+                      .replace(/[^0-9.-]/g, "")   // digits + dot + minus
+                      .replace(/(?!^)-/g, "")     // only one minus at start
+                      .replace(/(\..*)\./g, "$1"); // only one dot
+
+                    onFilterChange?.(String(key), coordinate);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
