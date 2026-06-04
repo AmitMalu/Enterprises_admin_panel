@@ -10,7 +10,7 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import debounce from "lodash.debounce";
-import { Button, Group, Loader, Modal, Text, Tooltip } from "@mantine/core";
+import { Loader, Modal, Tooltip } from "@mantine/core";
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { colors } from "../../theme/colors";

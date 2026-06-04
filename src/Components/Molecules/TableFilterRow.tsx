@@ -1,11 +1,9 @@
-import { ActionIcon, Table } from "@mantine/core";
+import { Table } from "@mantine/core";
 import { booleanSelectData2, GenericTableHeader } from "../../Utils/utils";
 import SelectComponent from "../Atoms/SelectComponent";
 import TextInputComponent from "../Atoms/TextInputComponent";
 import moment from "moment";
 import CustomDatePicker from "../Atoms/CustomDatePicker";
-import { TimeInput } from "@mantine/dates";
-import { IconX } from "@tabler/icons-react";
 import CustomTimePicker from "../Atoms/CustomTimePicker";
 
 const TableFilterRow = <T,>({
