@@ -113,7 +113,7 @@ export const fetchMasterList = createAsyncThunk(
       skipPagination = false,
       returnFullData = false,
     }: FetchMasterListParams,
-    { rejectWithValue, dispatch }
+    { rejectWithValue, dispatch },
   ) => {
     try {
       const params = new URLSearchParams();
@@ -175,7 +175,7 @@ export const fetchMasterList = createAsyncThunk(
                 pageSize: size ?? pageSize ?? 10,
                 currentPage: (number ?? pageNumber ?? 0) + 1,
               },
-            })
+            }),
           );
         }
 
@@ -197,7 +197,7 @@ export const fetchMasterList = createAsyncThunk(
         error?.response?.data?.message || error.message || "Failed to fetch";
       return rejectWithValue(errMsg);
     }
-  }
+  },
 );
 
 // All Request Data will be passed in body - pagination and data everything
@@ -205,7 +205,7 @@ export const fetchReport = createAsyncThunk(
   "masters/fetchReport",
   async (
     { url, key, data }: { url: string; key: any; data: any },
-    { rejectWithValue, dispatch }
+    { rejectWithValue, dispatch },
   ) => {
     try {
       let response = await axiosInstance.post(url, data);
@@ -232,7 +232,7 @@ export const fetchReport = createAsyncThunk(
               pageSize: size ?? pageSize,
               currentPage: number + 1 || pageNumber + 1,
             },
-          })
+          }),
         );
         return content;
       } else {
@@ -240,17 +240,17 @@ export const fetchReport = createAsyncThunk(
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "No list found"
+        error.response?.data?.message || error.message || "No list found",
       );
     }
-  }
+  },
 );
 
 export const fetchMasterById = createAsyncThunk(
   "masters/fetchMasterById",
   async (
     { key, endpoint, id, method = "GET" }: FetchMasterByIdParams,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     // dispatch(setLoading({ key, loading: true }));
     try {
@@ -280,16 +280,15 @@ export const fetchMasterById = createAsyncThunk(
       // dispatch(setError({ key, error: message }));
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 export const createMasterItem = createAsyncThunk(
   "masters/createMasterItem",
   async (
     { key, url, data, useFormData = false }: CreateMasterParams<any>,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
-
     try {
       const response = await axiosInstance.post(url, data, {
         headers: useFormData
@@ -302,7 +301,7 @@ export const createMasterItem = createAsyncThunk(
         return responseData;
       } else {
         throw new Error(
-          responseData?.message || `Failed to create ${key} Master`
+          responseData?.message || `Failed to create ${key} Master`,
         );
       }
     } catch (error: any) {
@@ -312,7 +311,7 @@ export const createMasterItem = createAsyncThunk(
         `Failed to create ${key} Master`;
       return rejectWithValue(errMsg);
     }
-  }
+  },
 );
 
 export const updateMasterItem = createAsyncThunk(
@@ -326,7 +325,7 @@ export const updateMasterItem = createAsyncThunk(
       mode = "PUT",
       useFormData = false,
     }: UpdateMasterParams<any>,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const endpoint = id ? `${url}/${id}` : url;
@@ -343,7 +342,7 @@ export const updateMasterItem = createAsyncThunk(
         return responseData;
       } else {
         throw new Error(
-          responseData?.message || `Failed to Update ${key} Master`
+          responseData?.message || `Failed to Update ${key} Master`,
         );
       }
     } catch (error: any) {
@@ -353,7 +352,7 @@ export const updateMasterItem = createAsyncThunk(
         `Error Updating ${key} Master`;
       return rejectWithValue(errMsg);
     }
-  }
+  },
 );
 
 export const fetchMasterDropdown = createAsyncThunk(
@@ -363,7 +362,7 @@ export const fetchMasterDropdown = createAsyncThunk(
       url,
       method = "GET",
     }: { url: string; method?: "GET" | "POST" | "PUT" | "DELETE" },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       let response;
@@ -382,10 +381,10 @@ export const fetchMasterDropdown = createAsyncThunk(
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "No list found"
+        error.response?.data?.message || error.message || "No list found",
       );
     }
-  }
+  },
 );
 
 export const deleteMasterItem = createAsyncThunk(
@@ -405,7 +404,7 @@ export const deleteMasterItem = createAsyncThunk(
       let finalUrl = url;
       if (params && Object.keys(params).length > 0) {
         const query = new URLSearchParams(
-          Object.entries(params).map(([k, v]) => [k, String(v)])
+          Object.entries(params).map(([k, v]) => [k, String(v)]),
         ).toString();
         finalUrl += url.includes("?") ? `&${query}` : `?${query}`;
       }
@@ -436,7 +435,7 @@ export const deleteMasterItem = createAsyncThunk(
       }
       return rejectWithValue(errMsg);
     }
-  }
+  },
 );
 
 export const AdhaarValidationApi = createAsyncThunk(
@@ -444,7 +443,7 @@ export const AdhaarValidationApi = createAsyncThunk(
   async ({ aadhaarNumber }: { aadhaarNumber: string }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `${API_ENDPOINTS.MANAGEMENT.ADHAAR_VERIFY}?aadhaarNumber=${aadhaarNumber}`
+        `${API_ENDPOINTS.MANAGEMENT.ADHAAR_VERIFY}?aadhaarNumber=${aadhaarNumber}`,
       );
 
       const responseData = response?.data;
@@ -457,11 +456,61 @@ export const AdhaarValidationApi = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-        error.message ||
-        "Error in Aadhaar verification"
+          error.message ||
+          "Error in Aadhaar verification",
       );
     }
-  }
+  },
+);
+
+export const InitializeDigilockerApi = createAsyncThunk(
+  "masters/initializeDigilocker",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        API_ENDPOINTS.MANAGEMENT.INITIALIZE_DIGILOCKER,
+      );
+
+      const responseData = response?.data;
+
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(
+          responseData?.message || "Failed to initialize DigiLocker",
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error initializing DigiLocker",
+      );
+    }
+  },
+);
+
+export const DownloadAadhaarApi = createAsyncThunk(
+  "masters/downloadAadhaar",
+  async ({ clientId }: { clientId: string }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.MANAGEMENT.DOWNLOAD_AADHAAR}/${clientId}`,
+      );
+
+      const responseData = response?.data;
+      if (responseData?.statusCode === 200) {
+        return responseData.data;
+      } else {
+        throw new Error(
+          responseData?.message || "Failed to Download Aadhaar",
+        );
+      }
+
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  },
 );
 
 export const PanValidationApi = createAsyncThunk(
@@ -469,7 +518,7 @@ export const PanValidationApi = createAsyncThunk(
   async ({ panNumber }: { panNumber: string }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `${API_ENDPOINTS.MANAGEMENT.PAN_VERIFY}?panNumber=${panNumber}`
+        `${API_ENDPOINTS.MANAGEMENT.PAN_VERIFY}?panNumber=${panNumber}`,
       );
 
       const responseData = response?.data;
@@ -478,17 +527,17 @@ export const PanValidationApi = createAsyncThunk(
         return responseData.data;
       } else {
         throw new Error(
-          responseData?.message || "Failed to Verify Pancard Number"
+          responseData?.message || "Failed to Verify Pancard Number",
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-        error.message ||
-        "Error in Pancard Number verification"
+          error.message ||
+          "Error in Pancard Number verification",
       );
     }
-  }
+  },
 );
 
 export const AdhaarPanLinkApi = createAsyncThunk(
@@ -496,7 +545,7 @@ export const AdhaarPanLinkApi = createAsyncThunk(
   async ({ aadhaarNumber }: { aadhaarNumber: string }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `${API_ENDPOINTS.MANAGEMENT.AADHAAR_PAN_LINK}?aadhaarNumber=${aadhaarNumber}`
+        `${API_ENDPOINTS.MANAGEMENT.AADHAAR_PAN_LINK}?aadhaarNumber=${aadhaarNumber}`,
       );
 
       const responseData = response?.data;
@@ -505,17 +554,17 @@ export const AdhaarPanLinkApi = createAsyncThunk(
         return responseData.data;
       } else {
         throw new Error(
-          responseData?.message || "Failed to Verify Aadhaar Pan Link"
+          responseData?.message || "Failed to Verify Aadhaar Pan Link",
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-        error.message ||
-        "Error in Aadhaar Pan Link verification"
+          error.message ||
+          "Error in Aadhaar Pan Link verification",
       );
     }
-  }
+  },
 );
 
 export const DocumentValidationApi = createAsyncThunk(
@@ -528,7 +577,7 @@ export const DocumentValidationApi = createAsyncThunk(
       documentType: string;
       value: string;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const configData = documentApiMap[documentType];
@@ -562,11 +611,11 @@ export const DocumentValidationApi = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
-        error.message ||
-        "Error in verification"
+          error.message ||
+          "Error in verification",
       );
     }
-  }
+  },
 );
 
 export const handleKycDocumentUpdate = createAsyncThunk(
@@ -585,7 +634,7 @@ export const handleKycDocumentUpdate = createAsyncThunk(
       docNumber?: string | number;
       imageFile?: File | null;
     },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const formData = new FormData();
@@ -610,7 +659,7 @@ export const handleKycDocumentUpdate = createAsyncThunk(
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       const responseData = response?.data;
@@ -622,10 +671,10 @@ export const handleKycDocumentUpdate = createAsyncThunk(
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "Error updating KYC"
+        error.response?.data?.message || error.message || "Error updating KYC",
       );
     }
-  }
+  },
 );
 
 export const downloadFileThunk = createAsyncThunk(
@@ -637,7 +686,7 @@ export const downloadFileThunk = createAsyncThunk(
       method = "GET",
       body,
     }: DownloadFileParams,
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const response = await axiosInstance.request({
@@ -664,7 +713,7 @@ export const downloadFileThunk = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error?.response?.data || "File download failed");
     }
-  }
+  },
 );
 
 const isFile = (file: any): file is File => file instanceof File;
@@ -691,24 +740,24 @@ export const createNetworkBank = createAsyncThunk(
         payload,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        },
       );
 
       if ([200, 201].includes(response.data.statusCode)) {
         return response.data;
       } else {
         throw new Error(
-          response.data?.message || "Failed to create Network Bank"
+          response.data?.message || "Failed to create Network Bank",
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data?.message ||
-        error.message ||
-        "Failed to create Network Bank"
+          error.message ||
+          "Failed to create Network Bank",
       );
     }
-  }
+  },
 );
 
 // Thunk to update a Network Bank
@@ -716,7 +765,7 @@ export const updateNetworkBank = createAsyncThunk(
   "networkBank/update",
   async (
     { id, formData }: { id: string; formData: NetworkBankMasterFormType },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
       const payload = new FormData();
@@ -735,24 +784,24 @@ export const updateNetworkBank = createAsyncThunk(
         payload,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        },
       );
 
       if (response.data.statusCode === 200) {
         return response.data;
       } else {
         throw new Error(
-          response.data?.message || "Failed to update Network Bank"
+          response.data?.message || "Failed to update Network Bank",
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data?.message ||
-        error.message ||
-        "Failed to update Network Bank"
+          error.message ||
+          "Failed to update Network Bank",
       );
     }
-  }
+  },
 );
 
 export const fetchWLDropdown = createAsyncThunk(
@@ -760,7 +809,9 @@ export const fetchWLDropdown = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       let response;
-      response = await axiosInstance.get(API_ENDPOINTS.NOTIFICATIONS.EMAIL_CREDENTIALS_WL_DROPDOWN);
+      response = await axiosInstance.get(
+        API_ENDPOINTS.NOTIFICATIONS.EMAIL_CREDENTIALS_WL_DROPDOWN,
+      );
 
       const responseData = response?.data;
 
@@ -771,10 +822,10 @@ export const fetchWLDropdown = createAsyncThunk(
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "No list found"
+        error.response?.data?.message || error.message || "No list found",
       );
     }
-  }
+  },
 );
 
 export const fetchSmsCredentialDropdown = createAsyncThunk(
@@ -793,8 +844,8 @@ export const fetchSmsCredentialDropdown = createAsyncThunk(
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "No list found"
+        error.response?.data?.message || error.message || "No list found",
       );
     }
-  }
+  },
 );

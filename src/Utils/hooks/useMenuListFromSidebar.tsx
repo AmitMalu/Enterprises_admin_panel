@@ -51,7 +51,7 @@ export const useMenuListFromSidebar = ({
             return;
         }
 
-        // 🚫 Remove Dashboard here too, so index mapping matches menuList
+        // Remove Dashboard here too, so index mapping matches menuList
         const filteredMenus = sidebarData.filter(
             (menu) => menu.label.toLowerCase() !== "dashboard"
         );

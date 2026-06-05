@@ -139,9 +139,9 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                     size="xs"
                     onClick={async () => {
                       formik.setFieldValue("lastVerifiedAadhaar", formik.values.aadhaarNumber);
-                      setAadhaarVerifying(true); // ✅ Start spinner
+                      // setAadhaarVerifying(true); // Start spinner
                       await onAadhaarVerify?.(formik);
-                      setAadhaarVerifying(false); // ✅ Stop spinner
+                      setAadhaarVerifying(false); // Stop spinner
                     }}
                   >
                     {aadhaarVerifying ? (
