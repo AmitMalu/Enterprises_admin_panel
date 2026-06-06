@@ -81,8 +81,8 @@ const BankDetailsForm = ({ }: { formik: FormikProps<any> }) => {
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
             name="websiteURL"
-            label="Website Url"
-            placeholder="Enter Your Website Url"
+            label="Login Domain URL"
+            placeholder="Enter Your Login Domain URL"
             withAsterisk
             required
             maxLength={100}

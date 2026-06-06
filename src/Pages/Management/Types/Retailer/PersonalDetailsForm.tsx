@@ -23,7 +23,6 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
   return (
     <>
       <Grid gutter="lg">
-        <div id="digilocker-button"></div>
         <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
           <FormikTextInputComponent
             name="parentAccount"

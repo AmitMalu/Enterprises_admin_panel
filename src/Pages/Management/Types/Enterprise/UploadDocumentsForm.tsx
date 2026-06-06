@@ -116,7 +116,9 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                     fontWeight: 500,
                   }}
                 >
-                  ✅ Verified
+                  {formik.values.aadhaarPanVerified
+                    ? "🔗 Linked"
+                    : "✓ Verified"}
                 </div>
               ) : showVerifyButton ? (
                 aadhaarVerifying ? (
@@ -182,7 +184,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                     fontWeight: 500,
                   }}
                 >
-                  ✅ Verified
+                  ✓ Verified
                 </div>
               ) : showPanVerifyButton ? (
                 panVerifying ? (

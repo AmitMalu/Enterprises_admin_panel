@@ -133,7 +133,7 @@ export const fetchMasterList = createAsyncThunk(
         });
       }
 
-      // ✅ Smart joiner: add `?` or `&` depending on presence of `?` in URL
+      // Smart joiner: add `?` or `&` depending on presence of `?` in URL
       const connector = url.includes("?") ? "&" : "?";
       const finalUrl = `${url}${connector}${params.toString()}`;
 

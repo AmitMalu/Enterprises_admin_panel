@@ -123,7 +123,7 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   branchName: textField("Branch Name", 50, false, true),
   bankHolderName: textField("Bank Holder Name", 100, true),
   isBankVerified: Yup.boolean(),
-  websiteURL: websiteValidation.required("Website URL is required"),
+  websiteURL: websiteValidation.required("Login Domain URL is required"),
   businessDesc: textField("Business Description", 500, true, true),
 
   // Documents

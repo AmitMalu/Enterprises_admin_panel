@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../Redux/hooks';
 import { toast } from 'react-toastify';
 import { KYC_VIEW_KEY, KycDetailsFormType, kycDetailsHeaders, kycDetailsInitialValues, kycDetailsSchema, KycDetailsTableType, PENDING_KYC_URL } from '../../Config/Management/PendingKycConfig';
-import { deleteMasterItem, DocumentValidationApi, fetchMasterById, handleKycDocumentUpdate } from '../../Redux/Features/Masters/MastersThunk';
+import { deleteMasterItem, DocumentValidationApi, DownloadAadhaarApi, fetchMasterById, handleKycDocumentUpdate, InitializeDigilockerApi } from '../../Redux/Features/Masters/MastersThunk';
 import BackHeader from '../../Components/Molecules/BackHeader';
 import BreadCrumb from '../../Components/Molecules/BreadCrumb';
 import ShimmerTableRows from '../../Components/Atoms/ShimmerTableRows';
@@ -45,11 +45,93 @@ const PendingKycView = () => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [formKey, setFormKey] = useState(0);
 
+    const handleDigilockerAadhaarVerify = async (
+        values: KycDetailsFormType,
+        formik: any
+    ) => {
+        try {
+            const response = await dispatch(
+                InitializeDigilockerApi()
+            ).unwrap();
+
+            const { token } = response.data;
+
+            document.getElementById("digilocker-button")!.innerHTML = "";
+
+            window.DigiboostSdk({
+                gateway: "production",
+                token,
+                selector: "#digilocker-button",
+
+                onSuccess: async (data: any) => {
+                    try {
+                        const clientId = data?.client_id;
+
+                        const aadhaarResponse = await dispatch(
+                            DownloadAadhaarApi({ clientId })
+                        ).unwrap();
+
+                        if (!aadhaarResponse) {
+                            throw new Error("Aadhaar download failed");
+                        }
+
+                        const imageFile =
+                            values.doc_image &&
+                                typeof values.doc_image !== "string"
+                                ? values.doc_image
+                                : undefined;
+
+                        await dispatch(
+                            handleKycDocumentUpdate({
+                                hierarchyId: id || "",
+                                category: values.doc_name,
+                                verified: true,
+                                docNumber: values.doc_number,
+                                imageFile,
+                            })
+                        ).unwrap();
+
+                        toast.success("Aadhaar verified successfully");
+
+                        await fetchAndSet();
+
+                        formik.resetForm();
+                        setFormKey((prev) => prev + 1);
+                    } catch (error) {
+                        toast.error("Aadhaar verification failed");
+                    }
+                },
+
+                onFailure: (error: any) => {
+                    console.error(error);
+                    toast.error("Aadhaar verification failed");
+                },
+            });
+
+            setTimeout(() => {
+                const sdkButton = document.querySelector(
+                    "#digilocker-button button"
+                ) as HTMLButtonElement | null;
+
+                sdkButton?.click();
+            }, 100);
+        } catch (error) {
+            toast.error("Failed to initialize Digilocker");
+        }
+    };
 
     const handleVerify = async (values: KycDetailsFormType, formik: any) => {
         setVerifying(true);
 
         try {
+            if (
+                values.doc_name === "AADHAAR_FRONT" ||
+                values.doc_name === "AADHAAR_BACK"
+            ) {
+                await handleDigilockerAadhaarVerify(values, formik);
+                return;
+            }
+
             const verificationResult = await dispatch(
                 DocumentValidationApi({ documentType: values.doc_name, value: values.doc_number })
             ).unwrap();
@@ -162,7 +244,10 @@ const PendingKycView = () => {
 
     return (
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
-
+            <div
+                id="digilocker-button"
+                style={{ display: "none" }}
+            />
             <BackHeader
                 title="PENDING KYC DETAILS"
                 backPath="/management/kyc-pending"
