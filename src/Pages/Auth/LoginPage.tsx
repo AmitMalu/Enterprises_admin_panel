@@ -64,7 +64,8 @@ const LoginPage: React.FC = () => {
           })
         ).unwrap();
 
-        const AllowedRoles = ["AD", "AU"]
+        //Admin , Admin User, WhiteLabel Admin, WhiteLabel User
+        const AllowedRoles = ["AD", "AU", "WLAD", "WLAU"]
 
         const role = result?.data?.role;
         if (!AllowedRoles.includes(role)) {

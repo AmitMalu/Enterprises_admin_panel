@@ -15,6 +15,7 @@ export const API_ENDPOINTS = {
     USER_CREATE: USER_FORM_ENDPOINTS,
     USER_CONFIGURATION: "api/user-config",
     ADMIN_USER: "api/admin-user",
+    WHITELABEL_USER: "api/whitelabel-user",
     VIEW_USER: "api/user",
     USER_MAPPING: "api/user-mapping",
     MENU: "api/menus",

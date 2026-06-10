@@ -107,9 +107,11 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                 onSubmit={handleSubmit}
             >
                 {(formik: FormikProps<any>) => {
+                    const currentUserRole = JSON.parse(localStorage.getItem("userInfo") || "{}")?.role || "";
 
                     const { menuList, subMenuList, loadingMenus, MenuError } = useMenuListFromSidebar({
                         selectedMenus: formik.values.menus,
+                        currentUserRole,
                     });
 
                     useEffect(() => {

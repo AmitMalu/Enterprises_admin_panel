@@ -19,7 +19,7 @@ const ProtectedRoutes = () => {
     .map((p: string) => p.trim()) // ["0101", "0203", "0103"]
     .filter(Boolean);
 
-  if (role === "AU") {
+  if (role === "AU" || role === "WLAU") {
     const allowedBaseLinks = getAllowedBaseLinks(role, permissions);
     const alwaysAllowedPaths = ["/", "/profile", "/change-password"];
     const isAllowed =
@@ -30,7 +30,7 @@ const ProtectedRoutes = () => {
       return <Navigate to="/" replace />;
     }
   }
-  
+
   return <Outlet />;
 };
 
