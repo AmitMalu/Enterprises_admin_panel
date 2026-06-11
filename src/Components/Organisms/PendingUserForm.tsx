@@ -690,8 +690,8 @@ const PendingUserForm = () => {
                       <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                         <FormikTextInputComponent
                           name="websiteURL"
-                          label="Website Url"
-                          placeholder="Enter Your Website Url"
+                          label="Login Domain Url"
+                          placeholder="Enter Your Login Domain Url"
                           withAsterisk
                           required
                           maxLength={100}

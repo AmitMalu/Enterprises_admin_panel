@@ -61,14 +61,14 @@
 
   /* Status */
   --color-status-success: #24d12c;
-  --color-status-success-alt: #28a745;
+  --color-status-success-alt: #45c764;
   --color-status-success-strong: #007b55;
   --color-status-success-bright: #47af0c;
   --color-status-danger: #bf0204;
   --color-status-danger-line: #dc2626;
   --color-status-danger-vivid: #ff4d4d;
   --color-status-danger-soft: #fde4e4;
-  --color-status-warning: #d97706;
+  --color-status-warning: #e69a43;
 }
 
 .segoe-text {

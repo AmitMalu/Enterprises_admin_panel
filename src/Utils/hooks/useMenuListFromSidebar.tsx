@@ -3,6 +3,7 @@ import { sidebarData } from "../../Config/Menus/MenuItems";
 
 interface UseMenuListFromSidebarProps {
     selectedMenus?: string[];
+    currentUserRole?: string;
 }
 
 interface MenuOption {
@@ -12,6 +13,7 @@ interface MenuOption {
 
 export const useMenuListFromSidebar = ({
     selectedMenus = [],
+    currentUserRole = "",
 }: UseMenuListFromSidebarProps) => {
     const [menuList, setMenuList] = useState<MenuOption[]>([]);
     const [subMenuList, setSubMenuList] = useState<MenuOption[]>([]);
@@ -22,9 +24,16 @@ export const useMenuListFromSidebar = ({
         setLoading(true);
         try {
             // Assign menu IDs as 2-digit codes (01, 02, etc.)
-            const filteredMenus = sidebarData.filter(
+            let filteredMenus = sidebarData.filter(
                 (menu) => menu.label.toLowerCase() !== "dashboard"
             );
+
+            // Exclude Masters menu for WLAD role when creating permissions
+            if (currentUserRole === "WLAD") {
+                filteredMenus = filteredMenus.filter(
+                    (menu) => menu.label !== "Masters"
+                );
+            }
 
             // Assign menu IDs as 2-digit codes (01, 02, etc.)
             const menus: MenuOption[] = filteredMenus.map((menu, menuIndex) => ({
@@ -43,7 +52,7 @@ export const useMenuListFromSidebar = ({
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [currentUserRole]);
 
     useEffect(() => {
         if (!selectedMenus.length) {
@@ -51,10 +60,17 @@ export const useMenuListFromSidebar = ({
             return;
         }
 
-        // 🚫 Remove Dashboard here too, so index mapping matches menuList
-        const filteredMenus = sidebarData.filter(
+        // Remove Dashboard here too, so index mapping matches menuList
+        let filteredMenus = sidebarData.filter(
             (menu) => menu.label.toLowerCase() !== "dashboard"
         );
+
+        // Exclude Masters menu for WLAD role when creating permissions
+        if (currentUserRole === "WLAD") {
+            filteredMenus = filteredMenus.filter(
+                (menu) => menu.label !== "Masters"
+            );
+        }
 
         const subMenus: MenuOption[] = [];
 
@@ -71,7 +87,7 @@ export const useMenuListFromSidebar = ({
         });
 
         setSubMenuList(subMenus);
-    }, [selectedMenus]);
+    }, [selectedMenus, currentUserRole]);
 
     return {
         menuList,

@@ -81,27 +81,27 @@ export const LedgerReportHeaders: GenericTableHeader<LedgerReportTableType>[] =
     {
       key: "timeOfTransaction",
       label: "Time of TXN",
-      filterType: "text",
+      filterType: "time",
     },
     {
       key: "balBeforeTran",
       label: "Balance Before TXN",
-      filterType: "text",
+      filterType: "amount",
     },
     {
       key: "amount",
       label: "Amount",
-      filterType: "text",
+      filterType: "amount",
     },
     {
       key: "balAfterTran",
       label: "Balance After TXN",
-      filterType: "text",
+      filterType: "amount",
     },
     {
       key: "finalBalance",
       label: "Final Balance",
-      filterType: "text",
+      filterType: "amount",
     },
     {
       key: "tranStatus",
@@ -122,7 +122,7 @@ export const LedgerReportHeaders: GenericTableHeader<LedgerReportTableType>[] =
     {
       key: "mobileNo",
       label: "Mobile Number",
-      filterType: "text",
+      filterType: "number",
     },
     {
       key: "subProductName",
@@ -144,8 +144,8 @@ export const LedgerReportHeaders: GenericTableHeader<LedgerReportTableType>[] =
       label: "Source Table",
       filterType: "text",
     },
-    { key: "latitude", label: "Latitude", filterType: "text" },
-    { key: "longitude", label: "Longitude", filterType: "text" },
+    { key: "latitude", label: "Latitude", filterType: "coordinate" },
+    { key: "longitude", label: "Longitude", filterType: "coordinate" },
     { key: "vendorName", label: "Vendor Name", filterType: "text" },
     { key: "vendorTransactionId", label: "Vendor TxnId", filterType: "text" },
   ];

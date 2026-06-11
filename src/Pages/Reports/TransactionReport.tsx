@@ -165,6 +165,8 @@ const TransactionReport = () => {
                     size="xs"
                     shortcuts
                     required
+                    maxDate={new Date()}
+                    minDate={new Date(new Date().setMonth(new Date().getMonth() - 6))}
                     leftIcon={<IconCalendar size={16} />}
                   />
                 </Grid.Col>
@@ -237,7 +239,7 @@ const TransactionReport = () => {
                   />
                 </Grid.Col>
 
-                <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
+                {/* <Grid.Col span={{ base: 2, md: 2, lg: 1.5 }}>
                   <FormikSelectComponent
                     name="walletType"
                     size="xs"
@@ -252,7 +254,7 @@ const TransactionReport = () => {
                       { label: "POSTPAID", value: "POSTPAID" },
                     ]}
                   />
-                </Grid.Col>
+                </Grid.Col> */}
 
                 <Grid.Col span="auto">
                   <div className="flex justify-end items-center mt-4">

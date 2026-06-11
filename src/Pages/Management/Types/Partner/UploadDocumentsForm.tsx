@@ -116,7 +116,9 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                     fontWeight: 500,
                   }}
                 >
-                  ✅ Verified
+                  {formik.values.aadhaarPanVerified
+                    ? "🔗 Linked"
+                    : "✓ Verified"}
                 </div>
               ) : showVerifyButton ? (
                 aadhaarVerifying ? (
@@ -139,9 +141,9 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                     size="xs"
                     onClick={async () => {
                       formik.setFieldValue("lastVerifiedAadhaar", formik.values.aadhaarNumber);
-                      setAadhaarVerifying(true); // ✅ Start spinner
+                      // setAadhaarVerifying(true); // Start spinner
                       await onAadhaarVerify?.(formik);
-                      setAadhaarVerifying(false); // ✅ Stop spinner
+                      setAadhaarVerifying(false); // Stop spinner
                     }}
                   >
                     {aadhaarVerifying ? (
@@ -182,7 +184,7 @@ const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDoc
                     fontWeight: 500,
                   }}
                 >
-                  ✅ Verified
+                  ✓ Verified
                 </div>
               ) : showPanVerifyButton ? (
                 panVerifying ? (

@@ -30,6 +30,11 @@ export const sidebarData = [
         icon: MastersIcon,
       },
       {
+        label: "Transaction Limit Settings",
+        link: "/schemes/transaction-limit",
+        icon: MastersIcon,
+      },
+      {
         label: "Operator Master",
         link: "/master/operator",
         icon: MastersIcon,
@@ -132,11 +137,6 @@ export const sidebarData = [
       //   link: "/schemes/transaction-routing",
       //   icon: schemesSvg,
       // },
-      {
-        label: "Transaction Limit Settings",
-        link: "/schemes/transaction-limit",
-        icon: schemesSvg,
-      },
     ],
   },
   {

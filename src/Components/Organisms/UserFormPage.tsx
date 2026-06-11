@@ -20,8 +20,13 @@ import { useAppDispatch } from "../../Redux/hooks";
 import FormSuccessModel from "../Atoms/FormSuccessModel";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import BackHeader from "../Molecules/BackHeader";
-import { AdhaarPanLinkApi, AdhaarValidationApi, PanValidationApi } from "../../Redux/Features/Masters/MastersThunk";
-import { toast } from "react-toastify";
+import {
+  AdhaarPanLinkApi,
+  DownloadAadhaarApi,
+  // AdhaarPanLinkApi, AdhaarValidationApi,
+  InitializeDigilockerApi, PanValidationApi
+} from "../../Redux/Features/Masters/MastersThunk";
+// import { toast } from "react-toastify";
 import PopupModal from "../Atoms/PopupModal";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import { colors } from "../../theme/colors";
@@ -46,57 +51,157 @@ const UserFormPage = () => {
   const userType: UserType = type;
   const config = UserConfig[userType];
 
+  // const handleAadhaarVerify = async (formik: FormikProps<any>) => {
+
+  //   const { aadhaarNumber } = formik.values;
+
+  //   if (!/^\d{12}$/.test(aadhaarNumber)) {
+  //     formik.setFieldError("aadhaarNumber", "Aadhaar must be 12 digits");
+  //     return;
+  //   }
+
+  //   try {
+  //     const resData = await dispatch(AdhaarValidationApi({ aadhaarNumber })).unwrap();
+  //     const isAadhaarSuccess = resData?.success === true && resData?.status_code === 200;
+
+  //     if (!isAadhaarSuccess) {
+  //       const remark = resData?.data?.remarks || resData?.message || "Verification failed.";
+
+  //       formik.setFieldValue("isAadhaarVerified", false);
+  //       formik.setFieldValue("aadhaarPanVerified", false);
+  //       formik.setTouched({ aadhaarNumber: true });
+
+  //       setTimeout(() => {
+  //         formik.setFieldError("aadhaarNumber", remark);
+  //       }, 0);
+
+  //       return;
+  //     }
+  //     // Aadhaar verification passed ✅
+  //     // Now check Aadhaar-PAN link
+  //     try {
+  //       const panLinkRes = await dispatch(AdhaarPanLinkApi({ aadhaarNumber })).unwrap();
+  //       const isPanApiSuccess = panLinkRes?.status_code === 200;
+  //       const isLinked = isPanApiSuccess && panLinkRes?.data?.linking_status === true;
+
+  //       // Save PAN linking status
+  //       formik.setFieldValue("aadhaarPanVerified", isLinked);
+
+  //       // Only now mark Aadhaar as fully verified
+  //       formik.setFieldValue("isAadhaarVerified", true);
+  //       formik.setFieldError("aadhaarNumber", "");
+  //     } catch (error) {
+  //       // PAN API failed – Aadhaar verification fails too ❌
+  //       console.error("Aadhaar-PAN link check failed:", error);
+  //       toast.error("Aadhaar-PAN link check failed. Please try again.");
+  //       formik.setFieldValue("aadhaarPanVerified", false);
+  //       formik.setFieldValue("isAadhaarVerified", false);
+  //       formik.setFieldError("aadhaarNumber", "Aadhaar-PAN link check failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Aadhaar verification error:", error);
+  //     formik.setFieldValue("isAadhaarVerified", false);
+  //     formik.setFieldError("aadhaarNumber", "Something went wrong during verification.");
+  //   }
+  // };
+
   const handleAadhaarVerify = async (formik: FormikProps<any>) => {
-
-    const { aadhaarNumber } = formik.values;
-
-    if (!/^\d{12}$/.test(aadhaarNumber)) {
-      formik.setFieldError("aadhaarNumber", "Aadhaar must be 12 digits");
-      return;
-    }
-
     try {
-      const resData = await dispatch(AdhaarValidationApi({ aadhaarNumber })).unwrap();
-      const isAadhaarSuccess = resData?.success === true && resData?.status_code === 200;
+      // DIGILOCKER FLOW - 1. Get Initialized Token
+      const response = await dispatch(InitializeDigilockerApi()).unwrap();
 
-      if (!isAadhaarSuccess) {
-        const remark = resData?.data?.remarks || resData?.message || "Verification failed.";
+      const { token } = response.data;
 
-        formik.setFieldValue("isAadhaarVerified", false);
-        formik.setFieldValue("aadhaarPanVerified", false);
-        formik.setTouched({ aadhaarNumber: true });
+      document.getElementById("digilocker-button")!.innerHTML = "";
 
-        setTimeout(() => {
-          formik.setFieldError("aadhaarNumber", remark);
-        }, 0);
+      window.DigiboostSdk({
+        gateway: "production",
+        token,
+        selector: "#digilocker-button",
+        onSuccess: async (data: any) => {
+          try {
+            const clientId = data?.client_id;
 
-        return;
-      }
-      // Aadhaar verification passed ✅
-      // Now check Aadhaar-PAN link
-      try {
-        const panLinkRes = await dispatch(AdhaarPanLinkApi({ aadhaarNumber })).unwrap();
-        const isPanApiSuccess = panLinkRes?.status_code === 200;
-        const isLinked = isPanApiSuccess && panLinkRes?.data?.linking_status === true;
+            const aadhaarResponse = await dispatch(
+              DownloadAadhaarApi({
+                clientId,
+              })
+            ).unwrap();
 
-        // Save PAN linking status
-        formik.setFieldValue("aadhaarPanVerified", isLinked);
+            const aadhaarData = aadhaarResponse?.data?.aadhaar_xml_data;
 
-        // Only now mark Aadhaar as fully verified
-        formik.setFieldValue("isAadhaarVerified", true);
-        formik.setFieldError("aadhaarNumber", "");
-      } catch (error) {
-        // PAN API failed – Aadhaar verification fails too ❌
-        console.error("Aadhaar-PAN link check failed:", error);
-        toast.error("Aadhaar-PAN link check failed. Please try again.");
-        formik.setFieldValue("aadhaarPanVerified", false);
-        formik.setFieldValue("isAadhaarVerified", false);
-        formik.setFieldError("aadhaarNumber", "Aadhaar-PAN link check failed");
-      }
+            // Update only name
+            formik.setFieldValue(
+              "name",
+              aadhaarData?.full_name || formik.values.name
+            );
+
+            // Aadhaar verified irrespective of PAN link
+            formik.setFieldValue(
+              "isAadhaarVerified",
+              true
+            );
+
+            // Aadhaar-PAN Link Check
+            try {
+              const panLinkRes = await dispatch(
+                AdhaarPanLinkApi({
+                  aadhaarNumber: formik.values.aadhaarNumber,
+                })
+              ).unwrap();
+
+              const isLinked =
+                panLinkRes?.status_code === 200 &&
+                panLinkRes?.data?.linking_status === true;
+
+              formik.setFieldValue(
+                "aadhaarPanVerified",
+                isLinked
+              );
+
+              formik.setFieldError(
+                "aadhaarNumber",
+                ""
+              );
+            } catch (error) {
+              console.error(
+                "Aadhaar PAN link check failed",
+                error
+              );
+
+              formik.setFieldValue(
+                "aadhaarPanVerified",
+                false
+              );
+            }
+          } catch (error) {
+            console.error("Download Aadhaar Failed", error);
+
+            formik.setFieldValue("isAadhaarVerified", false);
+          }
+        },
+
+        onFailure: (error: any) => {
+          console.error("SDK Failed", error);
+
+          formik.setFieldValue(
+            "isAadhaarVerified",
+            false
+          );
+        },
+      });
+
+      // Trigger SDK button click automatically
+      setTimeout(() => {
+        const sdkButton = document.querySelector(
+          "#digilocker-button button"
+        ) as HTMLButtonElement | null;
+
+        sdkButton?.click();
+      }, 100);
+
     } catch (error) {
-      console.error("Aadhaar verification error:", error);
-      formik.setFieldValue("isAadhaarVerified", false);
-      formik.setFieldError("aadhaarNumber", "Something went wrong during verification.");
+      console.error(error);
     }
   };
 
@@ -150,11 +255,18 @@ const UserFormPage = () => {
 
   return (
     <div className="p-4 w-full h-[calc(100vh-90px)] flex flex-col">
+
+      {/* Hidden SDK Container */}
+      <div
+        id="digilocker-button"
+        style={{ display: "none" }}
+      />
+
       {/* Formik Wrapper */}
       <Formik
         initialValues={{
           ...masterInitialValues,
-          parentAccount: hierarchyId, // ✅ dynamically inject before Formik mounts
+          parentAccount: hierarchyId, // dynamically inject before Formik mounts
         }}
         enableReinitialize
         validationSchema={getValidationSchema(userType, activeStep)}

@@ -218,7 +218,7 @@ export const pageSizeSelectData = [
 export type GenericTableHeader<T> = {
   key: keyof T;
   label?: string;
-  filterType?: "text" | "number" | "boolean" | "date" | "none";
+  filterType?: "text" | "number" | "amount" | "boolean" | "date" | "coordinate" | "time" | "none";
   filterOptions?: { label: string; value: any }[];
   searchable?: boolean; // optionally override with this
   renderType?: "link" | "custom" | "statusBadge"; //

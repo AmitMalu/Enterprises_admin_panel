@@ -163,6 +163,8 @@ const SettlementReport = () => {
                                         size="xs"
                                         shortcuts
                                         required
+                                        maxDate={new Date()}
+                                        minDate={new Date(new Date().setMonth(new Date().getMonth() - 6))}
                                         leftIcon={<IconCalendar size={16} />}
                                     />
                                 </Grid.Col>
@@ -247,8 +249,8 @@ const SettlementReport = () => {
                                         // required
                                         allowDeselect={true}
                                         data={[
-                                            { label: "ACCEPTED", value: "SUCCESS" },
-                                            { label: "REJECTED", value: "FAILURE" },
+                                            { label: "SUCCESS", value: "SUCCESS" },
+                                            { label: "FAILURE", value: "FAILURE" },
                                         ]}
                                     />
                                 </Grid.Col>

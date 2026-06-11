@@ -123,7 +123,7 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   branchName: textField("Branch Name", 50, false, true),
   bankHolderName: textField("Bank Holder Name", 100, true),
   isBankVerified: Yup.boolean(),
-  websiteURL: websiteValidation.required("Website URL is required"),
+  websiteURL: websiteValidation.required("Login Domain URL is required"),
   businessDesc: textField("Business Description", 500, true, true),
 
   // Documents
@@ -139,15 +139,15 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   aadhaarNumber: Yup.string()
     .trim()
     .matches(/^\d{12}$/, "Aadhaar must be exactly 12 digits")
-    .required("Aadhaar Number is required")
-    .test(
-      "aadhaar-verified",
-      "Aadhaar Verification is required",
-      function (value) {
-        const { isAadhaarVerified } = this.parent;
-        return !value || value.length !== 12 || isAadhaarVerified === true;
-      }
-    ),
+    .required("Aadhaar Number is required"),
+    // .test(
+    //   "aadhaar-verified",
+    //   "Aadhaar Verification is required",
+    //   function (value) {
+    //     const { isAadhaarVerified } = this.parent;
+    //     return !value || value.length !== 12 || isAadhaarVerified === true;
+    //   }
+    // ),
   isAadhaarVerified: Yup.boolean(),
   aadhaarPanVerified: Yup.boolean(),
   lastVerifiedAadhaar: Yup.string().nullable(), // or stricter version
@@ -155,11 +155,11 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   panNumber: Yup.string()
     .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, "Invalid PAN number format")
     .max(10, "PAN number must be exactly 10 characters")
-    .required("PAN number is required")
-    .test("pan-verified", "Pancard Verification is required", function (value) {
-      const { panVerified } = this.parent;
-      return !value || value.length !== 10 || panVerified === true;
-    }),
+    .required("PAN number is required"),
+    // .test("pan-verified", "Pancard Verification is required", function (value) {
+    //   const { panVerified } = this.parent;
+    //   return !value || value.length !== 10 || panVerified === true;
+    // }),
   panVerified: Yup.boolean(),
   shopNumber: textField("Shop Number", 50, true),
   businessNumber: textField("Business Number", 50, true),

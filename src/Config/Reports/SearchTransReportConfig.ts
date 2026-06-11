@@ -65,9 +65,9 @@ export const SearchTransReportHeaders: GenericTableHeader<SearchTransReportTable
       filterType: "boolean",
       filterOptions: walletTypeSelectData,
     },
-    { key: "balBefore", label: "Balance Before", filterType: "text" },
-    { key: "amount", label: "Amount", filterType: "text" },
-    { key: "balAfter", label: "Balance After", filterType: "text" },
+    { key: "balBefore", label: "Balance Before", filterType: "amount" },
+    { key: "amount", label: "Amount", filterType: "amount" },
+    { key: "balAfter", label: "Balance After", filterType: "amount" },
     { key: "subProductName", label: "Sub Product Name", filterType: "text" },
     { key: "narration", label: "Narration", filterType: "text" },
     {
@@ -78,8 +78,8 @@ export const SearchTransReportHeaders: GenericTableHeader<SearchTransReportTable
     },
     { key: "date", label: "Date", filterType: "date" },
     { key: "time", label: "Time", filterType: "text" },
-    { key: "latitude", label: "Latitude", filterType: "text" },
-    { key: "longitude", label: "Longitude", filterType: "text" },
+    { key: "latitude", label: "Latitude", filterType: "coordinate" },
+    { key: "longitude", label: "Longitude", filterType: "coordinate" },
     { key: "vendorName", label: "Vendor Name", filterType: "text" },
     { key: "vendorTransactionId", label: "Vendor TxnId", filterType: "text" },
   ];

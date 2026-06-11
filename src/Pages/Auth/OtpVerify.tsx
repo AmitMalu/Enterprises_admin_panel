@@ -176,12 +176,12 @@ const OtpVerify = () => {
         validationSchema={validationSchema}
         onSubmit={handleOTPSubmit}
       >
-        {({ values, handleChange, errors, submitCount, submitForm }) => {
-          useEffect(() => {
-            if (values.otp && values.otp.length === 6 && !hasError) {
-              submitForm();
-            }
-          }, [values.otp, hasError]);
+        {({ values, handleChange, errors, submitCount }) => {
+          // useEffect(() => {
+          //   if (values.otp && values.otp.length === 6 && !hasError) {
+          //     submitForm();
+          //   }
+          // }, [values.otp, hasError]);
 
           // Reset error state when user changes OTP
           useEffect(() => {

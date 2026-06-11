@@ -53,7 +53,7 @@ const GstTdsReport = () => {
 
     setPayload(() => ({
       ...transformToGstTdsReportPayload(values), // top filters
-      ...(submittedFilter || {}),                      // 🔴 keep inline filters
+      ...(submittedFilter || {}),                      // keep inline filters
     }));
 
     // setRefreshKey((prev) => prev + 1);
@@ -167,6 +167,8 @@ const GstTdsReport = () => {
                     size="xs"
                     shortcuts
                     required
+                    maxDate={new Date()}
+                    minDate={new Date(new Date().setMonth(new Date().getMonth() - 6))}
                     leftIcon={<IconCalendar size={16} />}
                   />
                 </Grid.Col>
