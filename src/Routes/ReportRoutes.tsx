@@ -14,9 +14,10 @@ import {
   ReconciliationReport,
   RefundReport,
   SearchTransactionReport,
+  SettlementReport,
   SmsReport,
   TransactionReport,
-  UnsettledTransactionReport,
+  UnSettledTransactionReport,
   UpdateTransactionReport,
 } from "../Pages/Reports";
 
@@ -27,15 +28,16 @@ export const ReportRoutes = (
       element={<LiveTransactionReport />}
     />
     <Route path="/report/transaction" element={<TransactionReport />} />
+    <Route path="/report/settlement" element={<SettlementReport />} />
     <Route
       path="/report/unsettled-transaction"
-      element={<UnsettledTransactionReport />}
+      element={<UnSettledTransactionReport />}
     />
-    <Route path="/report/ledger-transaction" element={<LedgerReport />} />
     <Route
       path="/report/pending-transaction"
       element={<PendingTransactionReport />}
     />
+    <Route path="/report/ledger-transaction" element={<LedgerReport />} />
     <Route
       path="/report/update-transaction"
       element={<UpdateTransactionReport />}

@@ -1,4 +1,4 @@
-import { GenericTableHeader } from "../../Utils/utils";
+import { formatDateTime, GenericTableHeader } from "../../Utils/utils";
 import { textField } from "../../Utils/ValidationUtils";
 import * as Yup from "yup";
 import { API_ENDPOINTS } from "../Api/EndPoints";
@@ -14,6 +14,8 @@ export interface SubMasterFormType {
 export interface SubMasterTableType extends SubMasterFormType {
   imMasterName: string;
   imSubMasterId: string;
+  createdOn?: string;
+  createdBy?: string;
 }
 
 export interface CreateSubMasterPayload extends SubMasterFormType {
@@ -42,22 +44,26 @@ export const validationSchema: Record<keyof SubMasterFormType, Yup.AnySchema> =
   };
 
 export const headers: GenericTableHeader<SubMasterTableType>[] = [
-  { key: "imMasterId", label: "Master Id", filterType: "text" },
+  { key: "imMasterId", label: "Master Id", filterType: "number" },
   { key: "imMasterName", label: "Master Name", filterType: "text" },
-  { key: "imSubMasterId", label: "Sub Master Id", filterType: "text" },
+  { key: "imSubMasterId", label: "Sub Master Id", filterType: "number" },
   { key: "imSubMasterName", label: "Sub Master Name", filterType: "text" },
+  { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
 ];
 
-// export const mapToDropdownTableType = (
-//   raw: Record<string, any>
-// ): DropdownTableType => {
-//   return {
-//     imMasterId: raw?.imMasterId ?? "",
-//     imSubMasterId: raw?.imSubMasterId ?? "",
-//     imMasterName: raw?.imMasterName ?? "",
-//     imSubMasterName: raw?.imSubMasterName ?? "",
-//   };
-// };
+export const mapToSubMasterTableType = (
+  raw: Record<string, any>
+): SubMasterTableType => {
+  return {
+    imMasterId: raw?.imMasterId ?? "",
+    imSubMasterId: raw?.imSubMasterId ?? "",
+    imMasterName: raw?.imMasterName ?? "",
+    imSubMasterName: raw?.imSubMasterName ?? "",
+    createdOn: formatDateTime(raw.createdOn) ?? "",
+    createdBy: raw.createdBy ?? "",
+  };
+};
 
 // Convert API response to Formik-compatible form data
 // export const transformDropdownListToFormData = (

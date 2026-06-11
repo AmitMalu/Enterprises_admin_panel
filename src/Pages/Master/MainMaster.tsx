@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { EditIcon, EyeIcon } from "../../assets/Icons";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
@@ -7,6 +6,7 @@ import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolba
 import {
   headers,
   MainMasterTableType,
+  mapToMainMasterTableType,
   MASTER_KEY,
   MASTER_URL,
 } from "../../Config/Master/MainMasterConfig";
@@ -31,26 +31,25 @@ const MainMaster = () => {
   );
   const dataRef = useRef<MainMasterTableType[] | null>(null);
 
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
   const { data, loading, error, pagination, setPage, setPageSize } =
     useFetchMasterList<MainMasterTableType>({
       key: MASTER_KEY,
       url: MASTER_URL,
+      transformDataFn: mapToMainMasterTableType,
       filter: submittedFilter,
       refreshKey,
+      defaultPageSize: 5
     });
 
   const handleAdd = () => {
     navigate("/master/main/add");
   };
 
-  const handleEdit = (id: string) => {
-    navigate(`/master/main/edit/${id}`, { state: id });
-  };
+  // const handleEdit = (id: string) => {
+  //   navigate(`/master/main/edit/${id}`, { state: id });
+  // };
 
   const handleFilterChange = (key: string, value: any) => {
     setFilterValues((prev) => ({ ...prev, [key]: value }));
@@ -60,10 +59,10 @@ const MainMaster = () => {
     dispatch(
       setPagination({
         key: MASTER_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -80,6 +79,14 @@ const MainMaster = () => {
     setVisibleColumns((prev) =>
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
+  };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
   };
 
   const handleRefresh = () => {
@@ -106,6 +113,7 @@ const MainMaster = () => {
         onAdd={handleAdd}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={headers}

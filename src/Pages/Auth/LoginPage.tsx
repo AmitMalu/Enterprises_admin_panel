@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
 import {
-  AppleSvg,
-  FacebookSvg,
-  GoogleSvg,
+  // AppleSvg,
+  // FacebookSvg,
+  // GoogleSvg,
   LockIconSvg,
   UsernameSvg,
 } from "../../assets/Icons/Svgs";
+import welcomeTextImage from "../../assets/Images/welcomeText.png";
+import loginAccountTextImage from "../../assets/Images/loginAccountText.png";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { persistOtpSession } from "../../Utils/utils";
+import { encryptCredentials, persistOtpSession } from "../../Utils/utils";
 import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import { login } from "../../Redux/Features/Auth/Thunk";
@@ -20,6 +22,8 @@ import {
 } from "../../Utils/ValidationUtils";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { colors } from "../../theme/colors";
+import { Card } from "@mantine/core";
 
 const validationSchema = Yup.object().shape({
   username: usernamePhoneEmailValidation,
@@ -40,18 +44,48 @@ const LoginPage: React.FC = () => {
     password: string;
   }>((values) => {
     const handleAsync = async () => {
+
+      const { encryptedUsername, encryptedPassword, salt, iv } = encryptCredentials(values.username, values.password);
+
       try {
+        const hostname = window.location.hostname;
+
+        const isDevEnv = ["localhost", "127.0.0.1"].includes(hostname) ||
+          hostname.startsWith("192.168.") ||
+          hostname === ""; // in case of file:// or blank
+
         const result = await dispatch(
-          login({ userName: values.username, password: values.password })
+          login({
+            userName: encryptedUsername,
+            password: encryptedPassword,
+            salt,
+            iv,
+            url: isDevEnv ? "https://uat.nfttech.in/" : `${window.location.origin}/`,
+          })
         ).unwrap();
 
+        //Admin , Admin User, WhiteLabel Admin, WhiteLabel User
+        const AllowedRoles = ["AD", "AU", "WLAD", "WLAU"]
+
+        const role = result?.data?.role;
+        if (!AllowedRoles.includes(role)) {
+          toast.error("Invalid credentials");
+          return;
+        }
+
         toast.success(result.message);
-        toast.success(result.data.otp, {
-          autoClose: 2500,
-        });
+        // toast.success(result.data.otp, {
+        //   toastId: "otp-toast",
+        //   autoClose: false, // Do not close automatically
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: false,
+        // });
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
-          state: { username: values.username, otpFor: "login" },
+          state: {
+            username: values.username, otpFor: "login" //, otp: result.data.otp
+          },
         });
       } catch (error) {
         toast.error((error as string) || "Login failed");
@@ -62,18 +96,33 @@ const LoginPage: React.FC = () => {
   }, 5000);
 
   useEffect(() => {
+    toast.dismiss();
     sessionStorage.removeItem("from-login-forget"); // Remove stale flag
   }, []);
 
   return (
-    <div className="w-full px-10 flex flex-col text-left">
+    <Card
+      shadow="xl"
+      p="xl"
+      radius="xl"
+      // withBorder
+      className="w-95 bg-white/95 backdrop-blur-sm border-gray-100"
+    >
       {/* Welcome Text */}
-      <p className="text-[#747483] font-extralight font-geologica text-xl md:text-sm xl:text-2xl 2xl:text-3xl mb-1">
-        Welcome Back
-      </p>
-      <h2 className="text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-medium mb-6">
-        Login to Your Account
-      </h2>
+      <div className="flex justify-center mb-4">
+        <img
+          src={welcomeTextImage}
+          alt="Welcome Back"
+          className="max-w-full h-auto"
+        />
+      </div>
+      <div className="flex justify-center mb-6">
+        <img
+          src={loginAccountTextImage}
+          alt="Login to Your Account"
+          className="max-w-full h-auto"
+        />
+      </div>
 
       <Formik
         enableReinitialize
@@ -97,6 +146,7 @@ const LoginPage: React.FC = () => {
               required
               error={formik.touched.username && formik.errors.username}
               maxLength={51}
+              radius="lg"
               leftSection={<UsernameSvg />}
               leftSectionWidth={36}
             />
@@ -107,8 +157,9 @@ const LoginPage: React.FC = () => {
               name="password"
               value={formik.values.password}
               onChange={formik.handleChange}
-              placeholder="Password"
+              placeholder="********"
               required
+              radius="lg"
               leftSection={<LockIconSvg />}
               leftSectionWidth={36}
               rightSectionWidth={48}
@@ -120,14 +171,25 @@ const LoginPage: React.FC = () => {
               maxLength={51}
             />
 
+            {/* Forgot Password? */}
+            <div
+              className="mt-1 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl text-right text-text-brand-light"
+            >
+              <span
+                className="cursor-pointer hover:underline"
+                onClick={handleForgetPassword}
+              >
+                Forget Password?
+              </span>
+            </div>
+
             {/* Login Button */}
-            <div className="flex justify-center items-center mt-5">
+            <div className="flex justify-center items-center mt-3">
               <ButtonComponent
-                fullWidth
                 size="md"
-                bgColor="#DB2729"
-                textColor="#fff"
-                radius={8}
+                bgColor={colors.brand.accent}
+                textColor={colors.text.inverse}
+                radius={24}
                 type="submit"
               >
                 LOGIN NOW
@@ -137,36 +199,28 @@ const LoginPage: React.FC = () => {
         )}
       </Formik>
 
-      {/* Forgot Password? */}
-      <div
-        onClick={handleForgetPassword}
-        className="mb-4 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl cursor-pointer text-right text-[#4C4C57]"
-      >
-        Forget Password?
-      </div>
-
       {/* Divider */}
-      <div className="flex items-center w-full">
+      {/* <div className="flex items-center w-full">
         <hr className="flex-grow border-t border-gray-300" />
         <span className="font-open px-3 text-black text-sm xl:text-sm 2xl:text-xl font-medium">
           Or Login With
         </span>
         <hr className="flex-grow border-t border-gray-400" />
-      </div>
+      </div> */}
 
       {/* Social Icons */}
-      <div className="flex items-center justify-center gap-6 my-6">
+      {/* <div className="flex items-center justify-center gap-6 my-6">
         <FacebookSvg />
         <GoogleSvg />
         <AppleSvg />
-      </div>
+      </div> */}
 
       {/* Sign Up Prompt */}
-      <p className="text-center text-sm xl:text-lg 2xl:text-xl font-lora text-[#747483] ">
+      {/* <p className="text-center text-sm xl:text-lg 2xl:text-xl font-lora text-text-soft ">
         Don't have an account?
-        <span className="text-[#BF0204] cursor-pointer"> Sign up here</span>
-      </p>
-    </div>
+        <span className="text-status-danger cursor-pointer"> Sign up here</span>
+      </p> */}
+    </Card>
   );
 };
 

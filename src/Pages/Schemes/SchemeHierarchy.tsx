@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { EditIcon, EditIcon2, EyeIcon2 } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import { useAppDispatch } from "../../Redux/hooks";
-import { resetSingleSchemesData, setPagination } from "../../Redux/Features/Schemes/slice";
+// import { resetSingleSchemesData, setPagination } from "../../Redux/Features/Schemes/slice";
 import { toast } from "react-toastify";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
@@ -11,6 +11,7 @@ import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
 import { headers, mapToSchemeHierarchyTableType, SCHEMES_HIERARCHY_KEY, SCHEMES_HIERARCHY_URL, SchemesHierarchyTableType } from "../../Config/Schemes/SchemesHierarchyConfig";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { useNavigate } from "react-router-dom";
+import { resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
 
 const SchemeHierarchy = () => {
     const dispatch = useAppDispatch();
@@ -24,10 +25,8 @@ const SchemeHierarchy = () => {
     );
     const dataRef = useRef<SchemesHierarchyTableType[] | null>(null);
 
-    const [submittedFilter, setSubmittedFilter] = useState<{
-        key: string;
-        value: any;
-    } | null>(null);
+    const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
 
     const { data, loading, error, pagination, setPage, setPageSize } =
         useFetchMasterList<SchemesHierarchyTableType>({
@@ -36,6 +35,7 @@ const SchemeHierarchy = () => {
             transformDataFn: mapToSchemeHierarchyTableType,
             filter: submittedFilter,
             refreshKey,
+            defaultPageSize: 5
         });
 
     const handleEdit = (id: any) => {
@@ -54,10 +54,10 @@ const SchemeHierarchy = () => {
         dispatch(
             setPagination({
                 key: SCHEMES_HIERARCHY_KEY,
-                pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+                pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
             })
         );
-        setSubmittedFilter({ key, value });
+        setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
     };
 
     const handleExportClick = () => {
@@ -75,8 +75,16 @@ const SchemeHierarchy = () => {
         );
     };
 
+    const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(headers.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
     const handleRefresh = () => {
-        dispatch(resetSingleSchemesData(SCHEMES_HIERARCHY_KEY));
+        dispatch(resetMaster(SCHEMES_HIERARCHY_KEY));
         setFilterValues({});
         setSubmittedFilter(null);
         setVisibleColumns(headers.map((h) => h.key as string));
@@ -102,6 +110,7 @@ const SchemeHierarchy = () => {
                 headers={headers}
                 onRefresh={handleRefresh}
                 onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
                 onExport={handleExportClick}
                 onFilter={() => setFilterVisible((prev) => !prev)}
                 visibleColumns={visibleColumns}

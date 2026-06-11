@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { EyeIcon } from "../../assets/Icons";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
@@ -13,7 +12,7 @@ import {
     setPagination,
 } from "../../Redux/Features/Masters/MastersSlice";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
-import { headers, MASTER_KEY, MASTER_URL, SubMasterTableType } from "../../Config/Master/SubMasterConfig";
+import { headers, mapToSubMasterTableType, MASTER_KEY, MASTER_URL, SubMasterTableType } from "../../Config/Master/SubMasterConfig";
 
 const SubMaster = () => {
     const navigate = useNavigate();
@@ -26,26 +25,25 @@ const SubMaster = () => {
     );
     const dataRef = useRef<SubMasterTableType[] | null>(null);
 
-    const [submittedFilter, setSubmittedFilter] = useState<{
-        key: string;
-        value: any;
-    } | null>(null);
+    const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
     const { data, loading, error, pagination, setPage, setPageSize } =
         useFetchMasterList<SubMasterTableType>({
             key: MASTER_KEY,
             url: `${MASTER_URL}/get-all-submaster`,
+            transformDataFn: mapToSubMasterTableType,
             filter: submittedFilter,
             refreshKey,
+            defaultPageSize: 5
         });
 
     const handleAdd = () => {
         navigate("/master/sub-master/add");
     };
 
-    const handleEdit = (id: string) => {
-        // navigate(`/master/sub-master//edit/${id}`, { state: id });
-    };
+    // const handleEdit = (id: string) => {
+    //     // navigate(`/master/sub-master//edit/${id}`, { state: id });
+    // };
 
     const handleFilterChange = (key: string, value: any) => {
         setFilterValues((prev) => ({ ...prev, [key]: value }));
@@ -55,10 +53,10 @@ const SubMaster = () => {
         dispatch(
             setPagination({
                 key: MASTER_KEY,
-                pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+                pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
             })
         );
-        setSubmittedFilter({ key, value });
+        setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
     };
 
     const handleExportClick = () => {
@@ -74,6 +72,14 @@ const SubMaster = () => {
         setVisibleColumns((prev) =>
             prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
         );
+    };
+
+    const handleToggleAllColumns = (selectAll: boolean) => {
+        if (selectAll) {
+            setVisibleColumns(headers.map((h) => h.key as string));
+        } else {
+            setVisibleColumns([]);
+        }
     };
 
     const handleRefresh = () => {
@@ -100,6 +106,7 @@ const SubMaster = () => {
                 onAdd={handleAdd}
                 onRefresh={handleRefresh}
                 onColumnChange={handleToggleColumn}
+                onToggleAll={handleToggleAllColumns}
                 onExport={handleExportClick}
                 onFilter={() => setFilterVisible((prev) => !prev)}
                 headers={headers}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { DeleteIcon, EditIcon, EditIcon2, EyeIcon2, SettingIcon2 } from "../../assets/Icons";
+import { EditIcon, SettingIcon2 } from "../../assets/Icons";
 import { headers, SCHEMES_KEY, SCHEMES_URL, SchemesListTableType } from "../../Config/Schemes/SchemesConfig";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../Redux/hooks";
@@ -11,13 +11,14 @@ import { fetchSchemesList } from "../../Redux/Features/Schemes/thunks";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import ShimmerTableRows from "../../Components/Atoms/ShimmerTableRows";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
+import { useTableStatePreservation } from "../../Utils/hooks/useTableStatePreservation";
 
 const SchemesList = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const meta = useAppSelector(SelectSchemesMeta(SCHEMES_KEY));
   const pagination = meta?.pagination || {
-    pageSize: 5,
+    pageSize: 10,
     currentPage: 1,
     totalPages: 0,
     totalElements: 0,
@@ -29,25 +30,40 @@ const SchemesList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filterVisible, setFilterVisible] = useState(false);
-  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(
-    headers.map((h) => h.key as string)
-  );
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+
+  const {
+    filterValues,
+    setFilterValues,
+    visibleColumns,
+    setVisibleColumns,
+    submittedFilter,
+    setSubmittedFilter,
+    saveStateBeforeNavigation,
+    resetToDefaults,
+  } = useTableStatePreservation({
+    tableKey: 'schemesList',
+    defaultVisibleColumns: headers.map((h) => h.key as string),
+    defaultFilterValues: {},
+    defaultSubmittedFilter: null,
+  });
 
   const handleEdit = (id: any) => {
+    // Save current state to sessionStorage before navigating
+    saveStateBeforeNavigation();
     navigate(`/schemes/schemeslist/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
+    // Save current state to sessionStorage before navigating
+    saveStateBeforeNavigation();
     navigate("/schemes/schemeslist/add");
   };
 
   const handleSetting = (item: any) => {
+    // Save current state to sessionStorage before navigating
+    saveStateBeforeNavigation();
+    
     navigate(`/schemes/schemeslist/setting`, {
       state: {
         schemeCode: item.schemeCode,
@@ -56,9 +72,9 @@ const SchemesList = () => {
     });
   };
 
-  const handleDelete = (id: any) => {
-    // navigate("/schemes/schemeslist/add/");
-  };
+  // const handleDelete = (id: any) => {
+  //   // navigate("/schemes/schemeslist/add/");
+  // };
 
   const handleFilterChange = (key: string, value: any) => {
     setFilterValues((prev) => ({ ...prev, [key]: value }));
@@ -91,10 +107,10 @@ const SchemesList = () => {
     dispatch(
       setPagination({
         key: SCHEMES_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -114,15 +130,24 @@ const SchemesList = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+      if (selectAll) {
+        setVisibleColumns(headers.map((h) => h.key as string));
+      } else {
+        setVisibleColumns([]);
+      }
+    };
+
   const handleRefresh = () => {
+    // Clear saved state and reset to defaults
+    resetToDefaults();
+    
     dispatch(resetSingleSchemesData(SCHEMES_KEY));
-    setFilterValues({});
-    setSubmittedFilter(null);
-    setVisibleColumns(headers.map((h) => h.key as string));
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -165,6 +190,7 @@ const SchemesList = () => {
         headers={headers}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         visibleColumns={visibleColumns}

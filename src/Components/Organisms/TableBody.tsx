@@ -1,5 +1,5 @@
-import { Table, Tooltip } from "@mantine/core";
-import { booleanSelectData2, ellipsisCellStyle, formatDateTime, GenericTableHeader } from "../../Utils/utils";
+import { Table } from "@mantine/core";
+import { booleanSelectData2, ellipsisCellStyle, formatDateTime, formatTime, GenericTableHeader } from "../../Utils/utils";
 import SelectComponent from "../Atoms/SelectComponent";
 import moment from "moment";
 import TextInputComponent from "../Atoms/TextInputComponent";
@@ -7,6 +7,28 @@ import CustomDatePicker from "../Atoms/CustomDatePicker";
 import { AddIconButton } from "../../assets/Icons";
 import { calculateCommission } from "../../Config/Schemes/SchemesConfig";
 import React from "react";
+import TableStatusBadge from "../Molecules/TableStatusBadge";
+import { EllipsisPopoverCell } from "../Molecules/EllipsisPopoverCell";
+import { colors } from "../../theme/colors";
+
+const dateKeys = [
+  "createdon",
+  "editedon",
+  "lasteditedon",
+  "createdat",
+  "requestdatetime",
+  "createdatetime",
+  "responsedatetime",
+  "timestamp",
+  "scheduletime",
+];
+
+const timeKeys = [
+  "time",
+  "timeoftransaction",
+  "updatedtimeoftransaction",
+  "transactiontime"
+];
 
 const TableBody = <T,>({
   data,
@@ -48,7 +70,7 @@ const TableBody = <T,>({
             {renderExtraRowCell && (
               <Table.Td>{renderExtraRowCell(item, index)}</Table.Td>
             )}
-            {headers.map(({ key, renderType, filterType, filterOptions, showCalculatedBelow }) => {
+            {headers.map(({ key, renderType, filterType, filterOptions, copyable }) => {
               const cellData = item[key];
               const isEmpty =
                 cellData === undefined || cellData === null || cellData === "";
@@ -126,34 +148,34 @@ const TableBody = <T,>({
                   {isEmpty ? (
                     displayValue
                   ) : renderType === "link" && typeof cellData === "string" ? (
-                    <a
-                      href={cellData}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      <Tooltip label={displayValue} withArrow>
-                        <span>{displayValue}</span>
-                      </Tooltip>
-                    </a>
+                    <EllipsisPopoverCell
+                      value={displayValue}
+                      renderAsLink
+                      linkUrl={cellData}
+                      showCopy={copyable}
+                    />
+                  ) : renderType === "statusBadge" ? (
+                    <TableStatusBadge status={String(cellData)} />
                   ) : (
-                    <Tooltip
-                      position="top-start"
-                      offset={{ mainAxis: -2, crossAxis: 50 }}
-                      style={{ fontSize: "12px" }}
-                      label={
-                        key === "createdOn" || key === "editedOn"
-                          ? formatDateTime(displayValue)
-                          : displayValue
+                    (() => {
+                      const keyName = key.toString().toLowerCase();
+
+                      let finalValue = displayValue;
+
+                      // DATE formatting (existing logic)
+                      if (dateKeys.includes(keyName)) {
+                        finalValue = formatDateTime(displayValue);
                       }
-                      withArrow
-                    >
-                      <span>
-                        {key === "createdOn" || key === "editedOn"
-                          ? formatDateTime(displayValue)
-                          : displayValue}
-                      </span>
-                    </Tooltip>
+
+                      // TIME formatting (NEW)
+                      else if (timeKeys.includes(keyName)) {
+                        finalValue = formatTime(displayValue);
+                      }
+
+                      return (
+                        <EllipsisPopoverCell value={finalValue} showCopy={copyable} />
+                      );
+                    })()
                   )}
                 </Table.Td>
               );
@@ -186,7 +208,9 @@ const TableBody = <T,>({
             );
 
             return hasAnyValue ? (
-              <Table.Tr style={{ backgroundColor: "#EBF7F6" }}>
+              <Table.Tr style={{ backgroundColor: colors.surface.nav }}>
+                {/* Add one blank column if an extra cell is rendered above */}
+                {renderExtraRowCell && <Table.Td></Table.Td>}
                 {calculatedCells}
               </Table.Tr>
             ) : null;
@@ -195,19 +219,23 @@ const TableBody = <T,>({
       ))}
 
       {showAddRow && (
-        <Table.Tr>
+        <Table.Tr className="cursor-pointer">
           <Table.Td
             colSpan={headers.length + (renderExtraRowCell ? 1 : 0)}
           >
             <div
-              className="flex items-center justify-center cursor-pointer p-2"
+              className="flex items-center justify-center p-2  hover:bg-gray-200 transition-transform duration-200 hover:scale-110 active:scale-95 hover:text-green-600"
               onClick={onAddRow}
+              title="Add Row"
             >
-              <AddIconButton
-              />
+              <span
+                className="transition-transform duration-200 hover:scale-110 active:scale-95 hover:text-green-600"
+              >
+                <AddIconButton />
+              </span>
             </div>
           </Table.Td>
-        </Table.Tr>
+        </Table.Tr >
       )}
     </>
   );

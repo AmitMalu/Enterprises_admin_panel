@@ -25,10 +25,7 @@ const PendingUser = () => {
   );
   const dataRef = useRef<UserAuthTableType[] | null>(null);
 
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
 
   const { data, loading, error, pagination, setPage, setPageSize } =
     useFetchMasterList<UserAuthTableType>({
@@ -36,16 +33,16 @@ const PendingUser = () => {
       url: `${URL}/getAll-records?status=pending`,
       filter: submittedFilter,
       refreshKey,
-      method: "POST"
+      method: "POST",
+      defaultPageSize: 5
     });
 
-  const handleEdit = (id: any) => {
-    navigate(`/management/user/pending/edit/${id}`, { state: id });
+  const handleEdit = (item: any) => {
+    navigate(`/management/user/pending/edit/${item.type}/${item.id}`);
   };
-
-  const handleAdd = () => {
-    // navigate("/management/userconfig/add");
-  };
+  // const handleAdd = () => {
+  //   // navigate("/management/userconfig/add");
+  // };
 
   const handleFilterChange = (key: string, value: any) => {
     setFilterValues((prev) => ({ ...prev, [key]: value }));
@@ -55,10 +52,10 @@ const PendingUser = () => {
     dispatch(
       setPagination({
         key: KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -75,6 +72,14 @@ const PendingUser = () => {
     setVisibleColumns((prev) =>
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
+  };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
   };
 
   const handleRefresh = () => {
@@ -102,6 +107,7 @@ const PendingUser = () => {
         headers={headers}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         visibleColumns={visibleColumns}
@@ -123,7 +129,7 @@ const PendingUser = () => {
           renderExtraRowCell={(item) => (
             <div className="flex justify-center gap-2 min-w-10">
               <span
-                onClick={() => handleEdit(item.id)}
+                onClick={() => handleEdit(item)}
                 className="cursor-pointer"
               >
                 <EditIcon />

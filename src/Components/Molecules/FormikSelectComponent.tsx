@@ -1,8 +1,7 @@
-import React from "react";
 import { useField, useFormikContext } from "formik";
 import SelectComponent from "../Atoms/SelectComponent";
 
-const FormikSelectComponent = ({ name, ...props }: any) => {
+const FormikSelectComponent = ({ name, onChange: externalOnChange, ...props }: any) => {
   const [field, meta] = useField(name);
   const { setFieldValue, setFieldTouched } = useFormikContext<any>();
 
@@ -21,6 +20,10 @@ const FormikSelectComponent = ({ name, ...props }: any) => {
         const finalValue =
           value === "true" ? true : value === "false" ? false : value;
         setFieldValue(name, finalValue);
+
+        if (externalOnChange) {
+          externalOnChange(finalValue);
+        }
       }}
       onBlur={() => setFieldTouched(name, true)}
     />

@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import UserTypeCard from "../Molecules/UserTypeCard";
 import { userTypeSelectorOptions } from "../../Config/UserCreationConfig/UserConfig";
-import { IMLogoWhiteBGSvg } from "../../assets/Icons";
+// import { IMLogoWhiteBGSvg } from "../../assets/Icons";
+import orgLogo from '../../assets/Images/orgLogo.png';
 
 const radius = 190;
 
@@ -11,12 +12,17 @@ const CreateUserTypeSelector = () => {
   const handleUserTypeClick = (type: string) => {
     navigate(`/management/user/create/${type}`);
   };
-  
+
   return (
     <div className="flex-1 flex items-center justify-center relative cursor-pointer">
       {/* Center Logo */}
-      <div className="w-fit h-fit p-8 pl-10 border-[14px] border-[#F0F3FF] bg-white rounded-full p-2 z-10 ">
-        <IMLogoWhiteBGSvg />
+      <div className="w-fit h-fit p-4 pl-4 border-[14px] border-border-ring bg-white rounded-full z-10 ">
+        {/* <IMLogoWhiteBGSvg /> */}
+        <img
+          src={orgLogo}
+          alt="Logo"
+          className="w-24 md:w-40 max-w-none"
+        />
       </div>
 
       {/* User Types */}

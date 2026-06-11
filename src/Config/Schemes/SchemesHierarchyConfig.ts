@@ -46,14 +46,14 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<SchemesHierarchyTableType>[] = [
-  { key: "id", label: "Id" },
+  { key: "id", label: "Id", filterType: "number" },
   { key: "schemeHierarchySelectionName", label: "Scheme Hierarchy Name" },
   { key: "schemeHierarchyCombination", label: "Scheme Hierarchy Combination" },
   { key: "combinationHashCode", label: "Combination Hashcode" },
-  { key: "createdOn", label: "Created On" },
   { key: "createdBy", label: "Created By" },
-  { key: "editedOn", label: "Edited On" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 // Transform form data to Create payload

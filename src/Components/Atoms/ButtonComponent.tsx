@@ -1,6 +1,7 @@
-import React, { forwardRef, useMemo } from "react";
+import React, { forwardRef, useEffect, useMemo } from "react";
 import { Button } from "@mantine/core";
 import throttle from "lodash.throttle";
+import { colors } from "../../theme/colors";
 
 interface ButtonComponentProps {
   onClick?: () => void;
@@ -41,7 +42,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
       radius,
       borderColor = "",
       bgColor = "transparent",
-      textColor = "#000000",
+      textColor = colors.text.primary,
       type = "button",
       font = "",
       fw = "500",
@@ -64,7 +65,13 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
       // Cleanup on unmount
       return throttled;
       // Note: DO NOT include `onClick` in dependencies
-    }, [throttleMs]);
+    }, [onClick, throttleMs]);
+
+    useEffect(() => {
+      return () => {
+        throttledOnClick?.cancel();
+      };
+    }, [throttledOnClick]);
 
     return (
       <Button
@@ -86,7 +93,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
             borderColor: borderColor ? borderColor : bgColor,
             margin: "3px",
             "&:hover": {
-              backgroundColor: variant === "filled" ? "#A30002" : "transparent",
+              backgroundColor: variant === "filled" ? colors.brand.primaryHover : "transparent",
               opacity: 0.8,
             },
             color: textColor,
@@ -104,7 +111,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
               fontSize: `${fontSize}px`,
               fontWeight: fw,
             }}
-            className="font-open text-sm xl:text-lg 2xl:text-xl 3xl:text-2xl font-semibold text-white"
+            className="font-open text-sm xl:text-lg 2xl:text-xl 3xl:text-2xl font-semibold"
           >
             {children}
           </span>

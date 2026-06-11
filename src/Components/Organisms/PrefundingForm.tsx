@@ -7,7 +7,6 @@ import {
   PrefundingFormType,
   validationSchema,
 } from "../../Config/Funding/preFundingConfig";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import ButtonComponent from "../Atoms/ButtonComponent";
@@ -15,6 +14,7 @@ import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import { Grid } from "@mantine/core";
 import * as Yup from "yup";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
+import { useTransactionCooldown } from "../../Utils/hooks/useTransactionCooldown";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../Redux/hooks";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
@@ -22,11 +22,14 @@ import {
   fetchFundingById,
   submitFundRequest,
 } from "../../Redux/Features/Fundings/thunks";
+import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 const PrefundingForm = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { checkDuplicate, store } = useTransactionCooldown("prefunding");
 
   const [formData, setFormData] = useState<PrefundingFormType>(initialValues);
   const [selectedAction, setSelectedAction] = useState<
@@ -45,17 +48,35 @@ const PrefundingForm = () => {
       return;
     }
 
+    // Check for duplicate transaction within 120 seconds
+    if (checkDuplicate(id || "", Number(values.depositAmount) || 0)) {
+      toast.error(
+        "You cannot repeat the same transaction within 2 minutes. Please try a different amount or try again shortly."
+      );
+      return;
+    }
+
     setIsSubmitting(true);
 
+    const adminHierarchyId = JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId;
+
+    if (!adminHierarchyId) {
+      toast.error("Admin Hierarchy ID not found. Cannot submit request.");
+      return; // stop execution if id is missing
+    }
+
     const payload = {
-      approveOrRejectHierarchyId: "IM-AD-024",
+      approveOrRejectHierarchyId: String(adminHierarchyId),
       fundRequestId: id,
       status: selectedAction,
+      remarks: values.remarks || ""
     };
 
     dispatch(submitFundRequest(payload))
       .unwrap()
       .then(() => {
+        // Store successful transaction to prevent duplicates
+        store(id || "", Number(values.depositAmount));
         toast.success(`Fund request ${selectedAction} successfully`);
         navigate("/funding/authorization");
       })
@@ -80,7 +101,10 @@ const PrefundingForm = () => {
           if (data.status !== "PENDING") {
             setIsActionDisabled(true);
           }
-          setFormData(data);
+          setFormData({
+            ...data,
+            remarks: data.remarks === "-" ? "" : data.remarks
+          });
         } catch (err: any) {
           const errorMessage = err || "Something went wrong";
           toast.error(errorMessage);
@@ -105,10 +129,12 @@ const PrefundingForm = () => {
   const readOnly = true;
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {"Prefunding Form"}
-      </TextComponent>
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
+
+      <BackHeader
+        title={"Prefunding Form"}
+        backPath="/funding/authorization"
+      />
 
       {/* Sub Heading */}
       <BreadCrumb type={"Prefunding"} text="Funding" />
@@ -173,7 +199,7 @@ const PrefundingForm = () => {
               />
             </Grid.Col>
 
-            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+            {/* <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
                 name="depositImage"
                 label="Deposit Slip"
@@ -182,7 +208,7 @@ const PrefundingForm = () => {
                 accept="image/png, image/jpeg, application/pdf"
                 size="sm"
               />
-            </Grid.Col>
+            </Grid.Col> */}
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
@@ -230,6 +256,17 @@ const PrefundingForm = () => {
                 ]}
               />
             </Grid.Col>
+
+            <Grid.Col className="" span={{ base: 12, md: 12, lg: 12 }}>
+              <FormikTextInputComponent
+                name="remarks"
+                label="Remark"
+                placeholder="Enter Remark"
+                maxLength={250}
+                disabled={isSubmitting || isActionDisabled}
+                size="md"
+              />
+            </Grid.Col>
           </Grid>
 
           {!loading && !fetchError && (
@@ -237,13 +274,13 @@ const PrefundingForm = () => {
               <ButtonComponent
                 fullWidth={false}
                 radius={6}
-                borderColor="#fff"
+                borderColor={colors.text.inverse}
                 variant="filled"
                 type="submit"
                 disabled={isSubmitting || isActionDisabled}
-                bgColor="#C30305"
-                textColor="#FFFFFF"
-                style={{ padding: "10px 30px" }}
+                bgColor={colors.status.danger}
+                textColor={colors.text.inverse}
+                style={{ padding: "0px 30px" }}
                 onClick={() => setSelectedAction("REJECTED")}
               >
                 REJECT
@@ -252,13 +289,13 @@ const PrefundingForm = () => {
               <ButtonComponent
                 fullWidth={false}
                 radius={6}
-                borderColor="#fff"
+                borderColor={colors.text.inverse}
                 variant="filled"
                 type="submit"
-                bgColor="#C30305"
+                bgColor={colors.status.successAlt}
                 disabled={isSubmitting || isActionDisabled}
-                textColor="#FFFFFF"
-                style={{ padding: "10px 30px" }}
+                textColor={colors.text.inverse}
+                style={{ padding: "0px 30px" }}
                 onClick={() => setSelectedAction("APPROVED")}
               >
                 APPROVED

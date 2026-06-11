@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
 import { API_ENDPOINTS } from "../../../Config/Api/EndPoints";
 import {
+  changePasswordPayload,
   forgetPasswordPayload,
   loginPayload,
   optVerifyPayload,
@@ -16,7 +17,7 @@ export const login = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.LOGIN,
-        payload // Sending payload as body
+        payload, // Sending payload as body
       );
 
       if (response?.data?.statusCode == 200) {
@@ -27,10 +28,10 @@ export const login = createAsyncThunk(
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "Login failed"
+        error.response?.data?.message || error.message || "Login failed",
       );
     }
-  }
+  },
 );
 
 export const otpVerify = createAsyncThunk(
@@ -39,7 +40,7 @@ export const otpVerify = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.VERIFY_OTP,
-        payload // No body, since we are sending query params
+        payload, // No body, since we are sending query params
         // {
         //   params: payload,
         // }
@@ -48,17 +49,17 @@ export const otpVerify = createAsyncThunk(
         return response?.data;
       } else {
         return rejectWithValue(
-          response?.data?.message || "OTP verification failed"
+          response?.data?.message || "OTP verification failed",
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
-          "OTP verification failed"
+          "OTP verification failed",
       );
     }
-  }
+  },
 );
 
 export const resendOtp = createAsyncThunk(
@@ -67,7 +68,7 @@ export const resendOtp = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.RESEND_OTP,
-        payload // No body, since we are sending query params
+        payload, // No body, since we are sending query params
         // {
         //   params: payload,
         // }
@@ -79,10 +80,10 @@ export const resendOtp = createAsyncThunk(
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "OTP Resend failed"
+        error.response?.data?.message || error.message || "OTP Resend failed",
       );
     }
-  }
+  },
 );
 
 export const forgetPassword = createAsyncThunk(
@@ -91,7 +92,7 @@ export const forgetPassword = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.FORGET_PASSWORD,
-        payload // No body, since we are sending query params
+        payload, // No body, since we are sending query params
         // {
         //   params: payload,
         // }
@@ -100,17 +101,17 @@ export const forgetPassword = createAsyncThunk(
         return response.data;
       } else {
         return rejectWithValue(
-          response.data.message || "forget Password failed"
+          response.data.message || "forget Password failed",
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
-          "forget Password failed"
+          "forget Password failed",
       );
     }
-  }
+  },
 );
 
 export const setPassword = createAsyncThunk(
@@ -119,7 +120,7 @@ export const setPassword = createAsyncThunk(
     try {
       const response = await axiosInstance.post(
         API_ENDPOINTS.AUTH.SET_PASSWORD,
-        payload // No body, since we are sending query params
+        payload, // No body, since we are sending query params
         // {
         //   params: payload,
         // }
@@ -128,17 +129,17 @@ export const setPassword = createAsyncThunk(
         return response.data;
       } else {
         return rejectWithValue(
-          response.data.message || "Failed to Set Password"
+          response.data.message || "Failed to Set Password",
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
-          "Failed to Set Password"
+          "Failed to Set Password",
       );
     }
-  }
+  },
 );
 
 export const fetchWalletBalance = createAsyncThunk(
@@ -146,21 +147,120 @@ export const fetchWalletBalance = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS.AUTH.WALLET_BALANCE}/${id}`
+        `${API_ENDPOINTS.AUTH.WALLET_BALANCE}/${id}`,
       );
       if (response.data.statusCode == 200 || response.data.statusCode == 201) {
         return response.data;
       } else {
         return rejectWithValue(
-          response.data.message || "Failed to Fetch Wallet Balance"
+          response.data.message || "Failed to Fetch Wallet Balance",
         );
       }
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message ||
           error.message ||
-          "Error Fetching Wallet Balance"
+          "Error Fetching Wallet Balance",
       );
     }
-  }
+  },
+);
+
+export const fetchProfileInfo = createAsyncThunk(
+  "auth/fetchProfileInfo",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.AUTH.PROFILE}/${id}`,
+      );
+      if (response.data.statusCode == 200 || response.data.statusCode == 201) {
+        return response.data;
+      } else {
+        return rejectWithValue(
+          response.data.message || "Failed to Fetch Profile Info",
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error Fetching Profile Info",
+      );
+    }
+  },
+);
+
+export const Dashboard_Api = createAsyncThunk(
+  "auth/Dashboard_Api",
+  async (data: any, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.COMMON.DASHBOARD_API}`,
+        data,
+      );
+      if (response.data.statusCode == 200 || response.data.statusCode == 201) {
+        return response.data;
+      } else {
+        return rejectWithValue(
+          response.data.message || "Failed to Fetch Dashboard data",
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error Fetching Dashboard data",
+      );
+    }
+  },
+);
+
+export const NotificationDropdowns_Api = createAsyncThunk(
+  "auth/NotificationDropdowns_Api",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        API_ENDPOINTS.NOTIFICATIONS.DROPDOWNS,
+      );
+      if (response.data.statusCode == 200 || response.data.statusCode == 201) {
+        return response.data;
+      } else {
+        return rejectWithValue(
+          response.data.message || "Failed to Fetch Notification Dropdowns",
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error Fetching Notification Dropdowns",
+      );
+    }
+  },
+);
+
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (payload: changePasswordPayload, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.AUTH.CHANGE_PASSWORD}`,
+        // "https://uat.decipay.in/enterprises/auth/change-password-admin",
+        payload,
+      );
+      if (response.data.statusCode == 200) {
+        return response.data;
+      } else {
+        return rejectWithValue(
+          response.data.message || "Failed to Change Password",
+        );
+      }
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Error While Change Password",
+      );
+    }
+  },
 );

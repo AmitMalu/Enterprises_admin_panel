@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import GenericMasterToolbar from "../../Components/Organisms/GenericMasterToolbar";
 import GenericMasterTable from "../../Components/Organisms/GenericMasterTable";
-import { EyeIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import { exportToCsv, pageSizeSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
 import {
@@ -26,7 +26,7 @@ const PreFundingAuth = () => {
   const dispatch = useAppDispatch();
   const meta = useAppSelector(SelectFundingMeta(FUNDING_KEY));
   const pagination = meta?.pagination || {
-    pageSize: 5,
+    pageSize: 10,
     currentPage: 1,
     totalPages: 0,
     totalElements: 0,
@@ -43,10 +43,9 @@ const PreFundingAuth = () => {
   const [visibleColumns, setVisibleColumns] = useState<string[]>(
     headers.map((h) => h.key as string)
   );
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+
+  const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
 
   const handleEdit = (id: any) => {
     navigate(`/funding/authorization/edit/${id}`, { state: id });
@@ -83,13 +82,13 @@ const PreFundingAuth = () => {
     dispatch(
       setPagination({
         key: FUNDING_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
-   const handleExportClick = () => {
+  const handleExportClick = () => {
     setData((current) => {
       if (!current || current.length === 0) {
         toast.warning("No data available to export.");
@@ -113,6 +112,14 @@ const PreFundingAuth = () => {
     setVisibleColumns(headers.map((h) => h.key as string));
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
+  };
+
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
   };
 
   useEffect(() => {
@@ -155,6 +162,7 @@ const PreFundingAuth = () => {
         headers={headers}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         visibleColumns={visibleColumns}
@@ -179,7 +187,7 @@ const PreFundingAuth = () => {
                 onClick={() => handleEdit(String(item?.id ?? ""))}
                 className="cursor-pointer"
               >
-                <EyeIcon />
+                <EditIcon />
               </span>
             </div>
           )}

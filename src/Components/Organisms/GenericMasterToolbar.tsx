@@ -1,16 +1,15 @@
-import { Checkbox, Menu, ScrollArea } from "@mantine/core";
 import {
   AddIconSvg,
-  ColIcon,
   DownloadIcon,
   FilterIcon,
   RefreshIcon,
-  SearchIcon,
 } from "../../assets/Icons";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import { GenericTableHeader } from "../../Utils/utils";
 import ColumnVisibilityMenu from "../Molecules/ColumnVisibilityMenu";
 import TextInputComponent from "../Atoms/TextInputComponent";
+import { useEffect, useRef } from "react";
+import { colors } from "../../theme/colors";
 
 type GenericMasterToolbarProps = {
   addButtonText?: string;
@@ -21,10 +20,12 @@ type GenericMasterToolbarProps = {
   onColumnChange?: (key: string) => void;
   headers?: GenericTableHeader<any>[];
   visibleColumns?: string[];
+  onToggleAll?: (selectAll: boolean) => void;
   loading?: boolean;
   error?: null | string;
   onSearch?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   searchValue?: string;
+  searchPlaceholder?: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
@@ -36,13 +37,24 @@ const GenericMasterToolbar = ({
   onSearch,
   searchValue,
   onKeyDown,
+  searchPlaceholder = "Search...",
   onRefresh,
   onColumnChange,
+  onToggleAll,
   headers,
   visibleColumns,
   loading = false,
-  error = null
+  error = null,
 }: GenericMasterToolbarProps) => {
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!loading && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [loading]);
+
   return (
     <>
       <div className="flex justify-between mt-2">
@@ -53,12 +65,12 @@ const GenericMasterToolbar = ({
               style={{ padding: "4px 8px", height: 32, margin: 0 }}
               radius={1}
               onClick={onAdd}
-              textColor="#fff"
+              textColor={colors.text.inverse}
               fontSize="14"
-              bgColor="#BF0204"
-              borderColor="#FFFFFF"
+              bgColor={colors.brand.primary}
+              borderColor={colors.text.inverse}
               leftIcon={<AddIconSvg />}
-              disabled={!!loading || !!error}
+              disabled={!!loading}
 
             >
               {addButtonText}
@@ -71,12 +83,15 @@ const GenericMasterToolbar = ({
           {/* Search Bar */}
           {onSearch && (
             <TextInputComponent
+              ref={inputRef}
               className="inline-block h-[40px] w-[250px] "
               name="search"
               size="sm"
               value={searchValue || ""}
-              placeholder="Search..."
+              placeholder={searchPlaceholder}
+              onKeyDown={onKeyDown}
               onChange={onSearch}
+              disabled={loading}
             />
           )}
 
@@ -84,11 +99,11 @@ const GenericMasterToolbar = ({
           {onFilter && <ButtonComponent
             style={{ padding: "4px 8px", height: 32 }}
             radius={1}
-            textColor="#000000"
-            borderColor="#CACACA"
+            textColor={colors.text.primary}
+            borderColor={colors.border.strong}
             fontSize="16"
             throttleMs={0}
-            bgColor="#ffffff"
+            bgColor={colors.text.inverse}
             onClick={onFilter}
             leftIcon={<FilterIcon />}
             disabled={!!loading || !!error}
@@ -97,43 +112,44 @@ const GenericMasterToolbar = ({
           </ButtonComponent>}
 
           {/* Download Icon */}
-          <ButtonComponent
+          {onExport && <ButtonComponent
             style={{ padding: "4px 8px", height: 32 }}
             radius={1}
-            textColor="#000000"
-            borderColor="#CACACA"
+            textColor={colors.text.primary}
+            borderColor={colors.border.strong}
             fontSize="16"
             throttleMs={5000}
-            bgColor="#ffffff"
+            bgColor={colors.text.inverse}
             onClick={onExport}
             leftIcon={<DownloadIcon />}
             disabled={!!loading || !!error}
           >
             Export
-          </ButtonComponent>
+          </ButtonComponent>}
 
           {/* Col Icon */}
-          <ColumnVisibilityMenu
+          {onColumnChange && <ColumnVisibilityMenu
             headers={headers || []}
             visibleColumns={visibleColumns || []}
             onToggleColumn={onColumnChange ?? (() => { })}
-          />
+            onToggleAll={onToggleAll}
+          />}
 
           {/* Refresh Icon */}
-          <ButtonComponent
+          {onRefresh && <ButtonComponent
             style={{ height: 32, width: 6, paddingLeft: "28px" }}
             radius={1}
-            textColor="#000000"
-            bgColor="#ffffff"
+            textColor={colors.text.primary}
+            bgColor={colors.text.inverse}
             fontSize="16"
             throttleMs={5000}
-            borderColor="#CACACA"
+            borderColor={colors.border.strong}
             leftIcon={<RefreshIcon />}
             onClick={onRefresh}
             disabled={!!loading}
           >
             <></>
-          </ButtonComponent>
+          </ButtonComponent>}
         </div>
       </div>
     </>

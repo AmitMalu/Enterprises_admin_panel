@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from "yup";
@@ -11,12 +10,14 @@ import FormikSelectComponent from "../../Components/Molecules/FormikSelectCompon
 import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
-import { initialValues, SCHEMES_KEY, SCHEMES_URL, SchemesListFormType, transformFormToCreateSchemesPayload, transformFormToUpdateSchemesPayload, validationSchema } from "../../Config/Schemes/SchemesConfig";
+import { initialValues, SCHEMES_KEY, SCHEMES_URL, SchemesListFormType, transformFormToCreateSchemesPayload, transformFormToUpdateSchemesPayload, transformSchemeListToFormData, validationSchema } from "../../Config/Schemes/SchemesConfig";
 import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
-import { useOperatorSubOperator } from "../../Utils/hooks/useOperatorSubOperator";
 import { useVendor } from "../../Utils/hooks/useVendor";
-import { useHeirarchyList } from "../../Utils/hooks/useHeirarchyList";
+import { useHeirarchyCombinationList } from "../../Utils/hooks/useHeirarchyCombinationList";
+import BackHeader from "../Molecules/BackHeader";
+import { booleanSelectData } from "../../Utils/utils";
+import { colors } from "../../theme/colors";
 
 type SchemesFormPageProps = { mode: "add" | "edit" };
 
@@ -28,10 +29,8 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
     const [formData, setFormData] = useState<SchemesListFormType>(initialValues);
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
-    const { operatorDropdownData, loadingOperatorList, operatorSubOperatorError } =
-        useOperatorSubOperator({});
-    const { vendorDropdownData, loadingVendorList, vendorError } = useVendor();
-    const { hierarchyList, loadingHierarchyList, hierarchyListError } = useHeirarchyList()
+    const { vendorDropdownData, loadingVendorList, vendorError } = useVendor({});
+    const { hierarchyList, loadingHierarchyList, hierarchyListError } = useHeirarchyCombinationList()
 
     const handleSubmit = useThrottleMasterFormSubmit<SchemesListFormType>({
         mode,
@@ -59,7 +58,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                         fetchSchemeById({ key: SCHEMES_KEY, endpoint: `${SCHEMES_URL}/get-by-id`, id })
                     ).unwrap();
 
-                    setFormData(data)
+                    setFormData(transformSchemeListToFormData(data))
                 } catch (err: any) {
                     toast.error(err);
                     setFetchError(err);
@@ -84,10 +83,12 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
     }, [dispatch, id, mode]);
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Scheme" : "Add Scheme"}
-            </TextComponent>
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
+
+            <BackHeader
+                title={mode === "edit" ? "Edit Scheme" : "Add Scheme"}
+                backPath="/schemes/schemeslist"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type={mode} text="Schemes" />
@@ -108,7 +109,6 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                         productSubproductError
                     } = useProductSubProduct({
                         selectedProductId: formik.values.productId,
-                        selectedSubProductId: formik.values.subProductId,
                         onSubProductReset: () => formik.setFieldValue("subProductId", ""),
                     });
 
@@ -126,16 +126,6 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                 </Grid.Col>
 
                                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                                    <FormikTextInputComponent
-                                        name="schemeCode"
-                                        label="Scheme Code"
-                                        placeholder="Enter Scheme Code"
-                                        withAsterisk
-                                        maxLength={30}
-                                    />
-                                </Grid.Col>
-
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                                     <FormikSelectComponent
                                         name="productId"
                                         label="Product"
@@ -143,6 +133,8 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         placeholder="Select Product"
                                         withAsterisk
                                         required
+                                        searchable
+                                        allowDeselect
                                         data={productDropdownData}
                                         disabled={loadingProductList}
                                     />
@@ -156,22 +148,11 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         data={subProductDropdownData}
                                         label="Sub Product"
                                         placeholder="Select Sub Product"
+                                        searchable
+                                        allowDeselect
                                         withAsterisk
                                         required
                                         disabled={loadingSubProductList}
-                                    />
-                                </Grid.Col>
-
-                                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                                    <FormikSelectComponent
-                                        name="operatorId"
-                                        label="Operator"
-                                        value={formik.values.operatorId}
-                                        placeholder="Select Operator"
-                                        withAsterisk
-                                        required
-                                        data={operatorDropdownData}
-                                        disabled={loadingOperatorList}
                                     />
                                 </Grid.Col>
 
@@ -181,6 +162,8 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         label="Vendor"
                                         value={formik.values.vendorId}
                                         placeholder="Select Vendor"
+                                        searchable
+                                        allowDeselect
                                         withAsterisk
                                         required
                                         data={vendorDropdownData}
@@ -200,18 +183,28 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
                                         disabled={loadingHierarchyList}
                                     />
                                 </Grid.Col>
+
+                                {mode === "edit" && <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                                    <FormikSelectComponent
+                                        name="isActive"
+                                        label="Active"
+                                        placeholder="Select"
+                                        withAsterisk
+                                        data={booleanSelectData}
+                                    />
+                                </Grid.Col>}
                             </Grid>
 
                             <div className="flex justify-end mt-4">
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
-                                    disabled={!!productSubproductError || !!vendorError || !!hierarchyListError || !!operatorSubOperatorError}
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
+                                    disabled={!!productSubproductError || !!vendorError || !!hierarchyListError}
                                     style={{ padding: "10px 30px" }}
                                 >
                                     SUBMIT

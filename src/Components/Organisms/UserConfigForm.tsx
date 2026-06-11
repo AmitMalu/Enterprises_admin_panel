@@ -1,12 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
-import { initialValues, KEY, transformFormToCreateUserConfigPayload, transformFormToUpdateUserConfigPayload, transformPermissionsToMenus, URL, UserConfigFormType, validationSchema } from "../../Config/Management/UserConfigurationConfig";
+import { initialValues, KEY, transformFormToCreateUserConfigPayload, transformFormToUpdateUserConfigPayload, URL, UserConfigFormType, validationSchema } from "../../Config/Management/UserConfigurationConfig";
 import { useEffect, useState } from "react";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik, FormikProps } from "formik";
 import { Grid } from "@mantine/core";
@@ -15,7 +14,10 @@ import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { useIndianStateCity } from "../../Utils/hooks/useIndianStateCity";
 import FormikMultiSelectComponent from "../Molecules/FormikMultiSelectComponent";
-import { useMenuSubMenuList } from "../../Utils/hooks/useMenuSubMenuList";
+import BackHeader from "../Molecules/BackHeader";
+import { useMenuListFromSidebar } from "../../Utils/hooks/useMenuListFromSidebar";
+import { transformPermissionsToMenus } from "../../Utils/utils";
+import { colors } from "../../theme/colors";
 
 type UserConfigFormProps = { mode: "add" | "edit" };
 
@@ -88,10 +90,12 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
 
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit User Configuration" : "Add User Configuration"}
-            </TextComponent>
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
+
+            <BackHeader
+                title={mode === "edit" ? "Edit User Configuration" : "Add User Configuration"}
+                backPath="/management/user-configuration"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type="User Configuration" text="Management" />
@@ -103,9 +107,11 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                 onSubmit={handleSubmit}
             >
                 {(formik: FormikProps<any>) => {
+                    const currentUserRole = JSON.parse(localStorage.getItem("userInfo") || "{}")?.role || "";
 
-                    const { menuList, subMenuList, loadingMenus, error } = useMenuSubMenuList({
+                    const { menuList, subMenuList, loadingMenus, MenuError } = useMenuListFromSidebar({
                         selectedMenus: formik.values.menus,
+                        currentUserRole,
                     });
 
                     useEffect(() => {
@@ -189,7 +195,7 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                                         withAsterisk
                                         searchable
                                         clearable
-                                        disabled={!!loadingMenus || !!loading || !!error}
+                                        disabled={!!loadingMenus || !!loading || !!MenuError}
                                     />
 
                                 </Grid.Col>
@@ -202,7 +208,7 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                                         withAsterisk
                                         searchable
                                         clearable
-                                        disabled={!formik.values.menus?.length || !!loading || !!loadingMenus || !!error}
+                                        disabled={!formik.values.menus?.length || !!loading || !!loadingMenus || !!MenuError}
                                     />
 
                                 </Grid.Col>
@@ -212,11 +218,11 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     disabled={!!fetchError || !!loading}
                                     style={{ padding: "10px 30px" }}
                                 >

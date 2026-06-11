@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Grid } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
@@ -20,18 +19,19 @@ import {
 } from "../../Config/Master/VendorConfig";
 import {
   booleanSelectData,
-  prioritySelectDataInNumbers,
   pubPvtSelectData,
 } from "../../Utils/utils";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useProductSubProduct } from "../../Utils/hooks/useProductSubProduct";
 import { toast } from "react-toastify";
-import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import { fetchMasterById, fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
-type ProductFormProps = { mode: "add" | "edit" };
+type VendorFormProps = { mode: "add" | "edit" };
 
-const VendorForm = ({ mode }: ProductFormProps) => {
+const VendorForm = ({ mode }: VendorFormProps) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -39,6 +39,9 @@ const VendorForm = ({ mode }: ProductFormProps) => {
   const [formData, setFormData] = useState<VendorFormType>(initialValues);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+
+  const [whiteLabelAdminList, setWhiteLabelAdminList] = useState<{ label: string; value: string }[]>([]);
+  const hasFetchedRef = useRef(false);
 
   const handleSubmit = useThrottleMasterFormSubmit<VendorFormType>({
     mode,
@@ -90,11 +93,11 @@ const VendorForm = ({ mode }: ProductFormProps) => {
   }, [dispatch, id, mode]);
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit" ? "Edit Vendor" : "Add Vendor"}
-      </TextComponent>
-
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
+      <BackHeader
+        title={mode === "edit" ? "Edit Vendor" : "Add Vendor"}
+        backPath="/master/vendor"
+      />
       {/* Sub Heading */}
       <BreadCrumb type={"Vendor"} text="Master" />
 
@@ -104,18 +107,43 @@ const VendorForm = ({ mode }: ProductFormProps) => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={handleSubmit}
       >
-        {(formik: FormikProps<any>) => {
+        {({ values }) => {
           const {
             productDropdownData,
             loadingProductList,
-            subProductDropdownData,
-            loadingSubProductList,
-            subProductKey,
-          } = useProductSubProduct({
-            selectedProductId: formik.values.productId,
-            selectedSubProductId: formik.values.subProductId,
-            onSubProductReset: () => formik.setFieldValue("subProductId", ""),
-          });
+          } = useProductSubProduct({});
+
+
+          useEffect(() => {
+            const fetchAdminDropdownList = async () => {
+              if (values.isWhiteLabelAdmin && !hasFetchedRef.current) {
+                try {
+                  const data = await dispatch(
+                    fetchMasterDropdown({ url: `/api/white-labels/admin-dropdown` })
+                  ).unwrap();
+
+                  const formattedData: { label: string; value: string }[] = data?.map((item: any) => ({
+                    label: String(item.displayName),
+                    value: String(item.whiteLabelId)
+                  }));
+
+                  setWhiteLabelAdminList(formattedData)
+                  hasFetchedRef.current = true;
+
+                } catch (err: any) {
+                  toast.error(err);
+                }
+                finally {
+                  setLoading(false);
+                }
+              } else if (!values.isWhiteLabelAdmin) {
+                setWhiteLabelAdminList([]); // Reset on false
+                hasFetchedRef.current = false; // Allow refetch if toggled again
+              }
+            };
+
+            fetchAdminDropdownList();
+          }, [values.isWhiteLabelAdmin, dispatch]);
 
           return (
             <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
@@ -147,26 +175,13 @@ const VendorForm = ({ mode }: ProductFormProps) => {
                   <FormikSelectComponent
                     name="productId"
                     label="Product"
-                    value={formik.values.productId}
                     placeholder="Select Product"
                     withAsterisk
                     required
+                    allowDeselect={true}
+                    searchable={true}
                     data={productDropdownData}
                     disabled={loadingProductList}
-                  />
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  <FormikSelectComponent
-                    name="subProductId"
-                    key={subProductKey}
-                    value={formik.values.subProductId}
-                    data={subProductDropdownData}
-                    label="Sub Product"
-                    placeholder="Select Sub Product"
-                    withAsterisk
-                    required
-                    disabled={loadingSubProductList}
                   />
                 </Grid.Col>
 
@@ -175,26 +190,63 @@ const VendorForm = ({ mode }: ProductFormProps) => {
                     name="modesSupported"
                     label="Modes Supported"
                     placeholder="Enter Mode Supported"
-                    withAsterisk
                     maxLength={50}
-                    allowSpecialChar={false}
+                    allowSpecialChar={true}
                   />
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikSelectComponent
-                    name="priority"
-                    label="Priority"
-                    placeholder="Select Priority"
+                    name="isWhiteLabelAdmin"
+                    label="Is WL-Admin"
+                    placeholder="Select"
                     withAsterisk
                     allowDeselect={false}
-                    data={prioritySelectDataInNumbers}
+                    data={booleanSelectData}
+                  />
+                </Grid.Col>
+
+                {values.isWhiteLabelAdmin && <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikSelectComponent
+                    name="whiteLabelAdminId"
+                    label="WL-Admin Id"
+                    placeholder="Select"
+                    withAsterisk
+                    allowDeselect={false}
+                    data={whiteLabelAdminList || []}
+                  />
+                </Grid.Col>}
+
+                {/* <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="userField1"
+                    label="User Field 1"
+                    placeholder="Enter User Field 1"
+                    maxLength={50}
                   />
                 </Grid.Col>
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="userField2"
+                    label="User Field 2"
+                    placeholder="Enter User Field 2"
+                    maxLength={50}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikTextInputComponent
+                    name="userField3"
+                    label="User Field 3"
+                    placeholder="Enter User Field 3"
+                    maxLength={50}
+                  />
+                </Grid.Col> */}
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikSelectComponent
-                    name="isActive"
+                    name="active"
                     label="Is Active"
                     placeholder="Select Active Status"
                     allowDeselect={false}
@@ -208,7 +260,6 @@ const VendorForm = ({ mode }: ProductFormProps) => {
                     name="bankType"
                     label="Bank Type"
                     placeholder="Select Bank Type"
-                    withAsterisk
                     allowDeselect={false}
                     data={pubPvtSelectData}
                   />
@@ -249,11 +300,11 @@ const VendorForm = ({ mode }: ProductFormProps) => {
                 {!loading && !fetchError && <ButtonComponent
                   fullWidth={false}
                   radius={6}
-                  borderColor="#fff"
+                  borderColor={colors.text.inverse}
                   variant="filled"
                   type="submit"
-                  bgColor="#C30305"
-                  textColor="#FFFFFF"
+                  bgColor={colors.brand.primary}
+                  textColor={colors.text.inverse}
                   style={{ padding: "10px 30px" }}
                 >
                   SUBMIT

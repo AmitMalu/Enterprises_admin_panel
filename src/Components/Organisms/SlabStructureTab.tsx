@@ -6,7 +6,9 @@ import GenericMasterTable from "./GenericMasterTable";
 import TextComponent from "../Atoms/TextComponent";
 import CenteredMessage from "../Molecules/CenteredMessage";
 import ShimmerTableRows from "../Atoms/ShimmerTableRows";
-import { Skeleton } from "@mantine/core";
+import { Skeleton, Table } from "@mantine/core";
+import { DeleteIcon } from "../../assets/Icons";
+import { colors } from "../../theme/colors";
 
 interface SlabStructureTabProps {
   data: any[];
@@ -20,10 +22,12 @@ interface SlabStructureTabProps {
   isSchemeActive?: boolean;
   showAddRow?: boolean;
   onAddRow?: (operatorCode: string) => void;
+  handleRemoveRow: (operatorCode: string, id: string | number) => void;
   tdsRate?: number | string;
+  hasSavedChanges?: boolean;
 }
 
-const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, isSchemeActive, tdsRate }: SlabStructureTabProps) => {
+const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, handleRemoveRow, isSchemeActive, tdsRate, hasSavedChanges = false }: SlabStructureTabProps) => {
 
   if (loading) {
     return (
@@ -44,14 +48,14 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, i
 
   return (
     <>
-      {data?.map((operator, operatorIndex) => {
+      {data?.map((operator) => {
         const headers = getFilteredSlabHeaders(operator.slabs);
 
         return (
           <div key={operator?.operatorCode} className="mb-6">
             {/* Operator Heading */}
             <TextComponent
-              color="#1D1F2C"
+              color={colors.text.heading}
               fontFamily="Inter"
               fontWeight={600}
               fontSize={18}
@@ -76,6 +80,20 @@ const SlabStructureTab = ({ data, loading, onDataChange, showAddRow, onAddRow, i
                 }
                 showAddRow={showAddRow}
                 onAddRow={() => onAddRow?.(operator.operatorCode)}
+                renderExtraHeader={() => <Table.Th></Table.Th>}
+                renderExtraRowCell={(item) =>
+                  !hasSavedChanges && typeof item.id === "string" && item.id.startsWith("new-") ? (
+                    <span
+                      onClick={() => handleRemoveRow(operator.operatorCode, String(item.id))}
+                      className="cursor-pointer flex items-center justify-center"
+                      title="Remove Slab"
+                    >
+                      <DeleteIcon />
+                    </span>
+                  ) : (
+                    <></>
+                  )
+                }
                 mt={2}
               />
             ) : (

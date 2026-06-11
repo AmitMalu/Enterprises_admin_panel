@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
 import { fetchMasterDropdown } from "../../Redux/Features/Masters/MastersThunk";
@@ -7,12 +7,14 @@ interface UseProductSubProductProps {
   selectedProductId?: string;
   selectedSubProductId?: string;
   onSubProductReset?: () => void;
+  isSettlement?: boolean;
 }
 
 export const useProductSubProduct = ({
   selectedProductId,
   selectedSubProductId,
   onSubProductReset,
+  isSettlement = false,
 }: UseProductSubProductProps) => {
   const dispatch = useAppDispatch();
 
@@ -25,39 +27,38 @@ export const useProductSubProduct = ({
   const [productError, setProductError] = useState<string | null>(null);
   const [subProductError, setSubProductError] = useState<string | null>(null);
 
+  const fetchProductList = useCallback(async () => {
+    setLoadingProductList(true);
+    setProductError(null);
+
+    try {
+      const result = await dispatch(
+        fetchMasterDropdown({
+          url: `${API_ENDPOINTS?.MASTER?.PRODUCTS}/dropdown/active`,
+        })
+      ).unwrap();
+
+      const filteredData = (result || [])?.map((item: any) => ({
+        label: item.productName,
+        value: String(item.id),
+      }));
+
+      setProductDropdownData(filteredData);
+    } catch (err: any) {
+      console.error("Failed to fetch product list", err);
+      toast.error(err);
+      setProductError(err);
+
+      setProductDropdownData([]);
+    } finally {
+      setLoadingProductList(false);
+    }
+  }, [dispatch]);
 
   // Fetch product list (always)
   useEffect(() => {
-    const fetchProductList = async () => {
-      setLoadingProductList(true);
-      setProductError(null);
-
-      try {
-        const result = await dispatch(
-          fetchMasterDropdown({
-            url: `${API_ENDPOINTS?.MASTER?.PRODUCTS}/dropdown/active`,
-          })
-        ).unwrap();
-
-        const filteredData = (result || [])?.map((item: any) => ({
-          label: item.productName,
-          value: String(item.id),
-        }));
-
-        setProductDropdownData(filteredData);
-      } catch (err: any) {
-        console.error("Failed to fetch product list", err);
-        toast.error(err);
-        setProductError(err);
-
-        setProductDropdownData([]);
-      } finally {
-        setLoadingProductList(false);
-      }
-    };
-
     fetchProductList();
-  }, [dispatch]);
+  }, [fetchProductList]);
 
   // Fetch sub-product list (only if productId is given)
   useEffect(() => {
@@ -68,11 +69,10 @@ export const useProductSubProduct = ({
       setSubProductError(null);
 
       try {
-        const result = await dispatch(
-          fetchMasterDropdown({
-            url: `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}/dropdown/${selectedProductId}`,
-          })
-        ).unwrap();
+        const url = `${API_ENDPOINTS?.MASTER?.SUB_PRODUCT}/dropdown/${selectedProductId}${isSettlement ? "?isSettlement=true" : ""
+          }`;
+
+        const result = await dispatch(fetchMasterDropdown({ url })).unwrap();
 
         const filteredData = (result || [])?.map((item: any) => ({
           label: item.subProduct_name,
@@ -80,8 +80,14 @@ export const useProductSubProduct = ({
         }));
 
         setSubProductDropdownData(filteredData);
-
         setSubProductKey(Date.now());
+        if (
+          selectedSubProductId &&
+          !filteredData.some((item: any) => item.value === String(selectedSubProductId))
+        ) {
+          if (onSubProductReset) onSubProductReset();
+        }
+        
       } catch (err: any) {
         console.error("Failed to fetch sub-product list", err);
         setSubProductError(err);
@@ -95,7 +101,7 @@ export const useProductSubProduct = ({
     };
 
     fetchSubProductList();
-  }, [selectedProductId, dispatch]);
+  }, [selectedProductId, dispatch, productDropdownData]);
 
   return {
     productDropdownData,
@@ -104,5 +110,6 @@ export const useProductSubProduct = ({
     loadingSubProductList,
     subProductKey,
     productSubproductError: productError || subProductError, // <- combined error
+    refetchProducts: fetchProductList
   };
 };

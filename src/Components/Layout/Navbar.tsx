@@ -53,14 +53,15 @@ const Navbar: React.FC = () => {
 
   return (
     <Group justify="flex-end" w="100%" gap="lg">
-      {/* Postpaid Balance */}
-      <TextComponent fontWeight={600} fontSize={14}>
-        Postpaid: ₹{postpaid}
-      </TextComponent>
-
+      
       {/* Prepaid Balance */}
       <TextComponent fontWeight={600} fontSize={14}>
         Prepaid: ₹{prepaid}
+      </TextComponent>
+
+      {/* Postpaid Balance */}
+      <TextComponent fontWeight={600} fontSize={14}>
+        Postpaid: ₹{postpaid}
       </TextComponent>
 
       {/* Refresh Button */}
@@ -85,7 +86,7 @@ const Navbar: React.FC = () => {
         </Menu.Target>
         <Menu.Dropdown>
           <Menu.Label>Account</Menu.Label>
-          <Menu.Item onClick={() => navigate("/profile")}>Profile</Menu.Item>
+          <Menu.Item onClick={() => navigate("/account/profile")}>Profile</Menu.Item>
           <Menu.Item onClick={() => navigate("/change-password")}>
             Change Password
           </Menu.Item>

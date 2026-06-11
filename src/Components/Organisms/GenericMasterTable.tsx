@@ -4,14 +4,16 @@ import { GenericTableHeader } from "../../Utils/utils";
 import TableFilterRow from "../Molecules/TableFilterRow";
 import TableBody from "./TableBody";
 import TableFooter from "./TableFooter";
+import { colors } from "../../theme/colors";
 
 const thStyle = {
-  backgroundColor: "#BF0204",
-  color: "white",
+  backgroundColor: colors.brand.primary,
+  color: colors.text.inverse,
   textAlign: "center" as const,
   padding: "6px 12px",
   fontWeight: 600,
   fontSize: 14,
+  minWidth : "100px",
   whiteSpace: "nowrap", // prevent wrapping
 };
 const tdStyle = {

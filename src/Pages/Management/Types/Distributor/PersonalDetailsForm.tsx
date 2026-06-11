@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormikProps } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
@@ -51,7 +51,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
           <FormikTextInputComponent
             name="prefix"
             label="Prefix"
-            placeholder="Type Prefix"
+            placeholder="Enter Prefix"
             withAsterisk
             capitalize
             maxLength={3}

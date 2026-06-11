@@ -5,7 +5,7 @@ import { useThrottledFormSubmit } from "./useThrottleFormSubmit";
 type UseThrottleMasterFormSubmitProps<T> = {
     mode?: "add" | "edit";
     id?: string;
-    useFormData? : boolean;
+    useFormData?: boolean;
     dispatch: any;
     navigate: any;
     resetFormData?: () => void;
@@ -14,9 +14,13 @@ type UseThrottleMasterFormSubmitProps<T> = {
     updateUrl: string;
     transformCreatePayload?: (values: T) => any;
     transformUpdatePayload?: (values: T) => any;
-    successNavigatePath: string;
+    successNavigatePath?: string;
     entityName: string;
     delay?: number;
+    toastOptions?: {
+        successAutoClose?: number | false;
+        errorAutoClose?: number | false;
+    };
 };
 
 export function useThrottleMasterFormSubmit<T>({
@@ -34,6 +38,7 @@ export function useThrottleMasterFormSubmit<T>({
     successNavigatePath,
     entityName,
     delay = 3000,
+    toastOptions,
 }: UseThrottleMasterFormSubmitProps<T>) {
     const submitFn = useCallback(
         (values: T) => {
@@ -52,6 +57,7 @@ export function useThrottleMasterFormSubmit<T>({
                 transformUpdatePayload,
                 successNavigatePath,
                 entityName,
+                toastOptions
             });
         },
         [
@@ -67,6 +73,7 @@ export function useThrottleMasterFormSubmit<T>({
             transformUpdatePayload,
             successNavigatePath,
             entityName,
+            toastOptions
         ]
     );
 

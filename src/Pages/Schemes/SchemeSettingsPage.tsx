@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import TextComponent from "../../Components/Atoms/TextComponent";
 import { useLocation, useNavigate } from "react-router-dom";
 import BreadCrumb from "../../Components/Molecules/BreadCrumb";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
@@ -15,13 +14,17 @@ import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMaster
 import { OperatorSlabData } from "../../Config/Schemes/SchemesConfig";
 import { updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
 import VerticalKeyValueTable from "../../Components/Organisms/VerticalKeyValueTable";
+import BackHeader from "../../Components/Molecules/BackHeader";
+import PopupModal from "../../Components/Atoms/PopupModal";
+import TextComponent from "../../Components/Atoms/TextComponent";
+import { colors } from "../../theme/colors";
 
 const SchemeSettingsPage = () => {
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation();
-  const { schemeCode, schemeName } = location.state || {};
+  const { schemeCode } = location.state || {};
 
   const [activeTab, setActiveTab] = useState<"slab" | "product">("slab");
   const [schemeDetails, setSchemeDetails] = useState<SchemeDetails | null>(null);
@@ -30,10 +33,14 @@ const SchemeSettingsPage = () => {
   const updatedOperatorsRef = useRef(updatedOperators);
   const [isSchemeActive, setIsSchemeActive] = useState<boolean | null>(false);
   const isSchemeActiveRef = useRef(isSchemeActive);
+  const [slabSize, setSlabSize] = useState<number>(500);
+
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const [productDetails, setProductDetails] = useState<Record<string, any> | null>(null);
   const [loadingScheme, setLoadingScheme] = useState(false);
   const [loadingProduct, setLoadingProduct] = useState(false);
+  const [hasSavedChanges, setHasSavedChanges] = useState(false);  
 
   const handleRowChange = (
     operatorCode: string,
@@ -54,6 +61,9 @@ const SchemeSettingsPage = () => {
           }
       )
     );
+
+    /* ---------- Reset hasSavedChanges when new changes are made ---------- */
+    setHasSavedChanges(false);
 
     /* ---------- 2. build / merge diff ---------- */
     setUpdatedOperators(prev => {
@@ -141,6 +151,14 @@ const SchemeSettingsPage = () => {
     }
   }
 
+  const resetUpdatedOperatorValues = () => {
+    setUpdatedOperators([]);
+    updatedOperatorsRef.current = [];
+    setHasSavedChanges(true);
+    // Fetch latest data after successful save
+    fetchSchemeData();
+  }
+
   const handleSubmit = useThrottleMasterFormSubmit<SlabPayload>({
     mode: "edit",
     dispatch,
@@ -148,25 +166,29 @@ const SchemeSettingsPage = () => {
     masterKey: SCHEME_RATE_KEY,
     addUrl: `${SCHEME_RATE_URL}/save`,
     updateUrl: `${SCHEME_RATE_URL}/update-slabs`,
-    successNavigatePath: "/schemes/schemeslist",
+    // successNavigatePath: "/schemes/schemeslist",
     entityName: "SchemeRate",
+    resetFormData: resetUpdatedOperatorValues,
     delay: 5000,
+    toastOptions: {
+      errorAutoClose: 10000, 
+    },
   });
 
   const handleSave = () => {
     const currentOperators = updatedOperatorsRef.current;
-
+    
     if (currentOperators.length === 0) {
       toast.info("No changes to save");
       return;
     }
 
-    const payload = buildSlabPayload(schemeCode, schemeName, currentOperators);
+    const payload = buildSlabPayload(schemeCode, schemeDetails?.schemeName || "", currentOperators);
 
     handleSubmit(payload);
   }
 
-  const handleAddRow = (operatorCode: string) => {
+  const handleAddRow = (operatorCode: string, slabSize: number) => {
     const operatorIdx = editableRows.findIndex(
       (op) => op.operatorCode === operatorCode
     );
@@ -175,7 +197,15 @@ const SchemeSettingsPage = () => {
 
     const operator = editableRows[operatorIdx];
     const headers = getFilteredSlabHeaders(operator.slabs);
-    const newSlab = makeBlankSlab(headers);
+
+    // get last slab's end value
+    const lastSlab = operator.slabs[operator.slabs.length - 1];
+    const lastEnd = lastSlab ? Number(lastSlab.slabEnd) : 0;
+
+    const newStart = lastEnd + 1;
+    const newEnd = newStart + slabSize - 1;
+
+    const newSlab = makeBlankSlab(headers, newStart, newEnd);
 
     // Add slab to editableRows
     const updatedEditable = [...editableRows];
@@ -204,6 +234,40 @@ const SchemeSettingsPage = () => {
     setUpdatedOperators(updatedDiff);
   };
 
+  const handleRemoveRow = (operatorCode: string, slabId: string | number) => {
+
+    // 1. Remove from UI copy
+    setEditableRows((prev) =>
+      prev.map((op) =>
+        op.operatorCode !== operatorCode
+          ? op
+          : {
+            ...op,
+            slabs: op.slabs.filter((slab) => slab.id !== slabId),
+          }
+      )
+    );
+
+    // 2. Remove from updatedOperators (diff state)
+    setUpdatedOperators((prev) => {
+      const opIndex = prev.findIndex((op) => op.operatorCode === operatorCode);
+      if (opIndex === -1) return prev;
+
+      const op = { ...prev[opIndex] };
+      op.slabs = op.slabs.filter((slab) => slab.id !== slabId);
+
+      const next = [...prev];
+      if (op.slabs.length === 0) {
+        next.splice(opIndex, 1);
+      } else {
+        next[opIndex] = op;
+      }
+
+      return next;
+    });
+  };
+
+
   useEffect(() => {
     updatedOperatorsRef.current = updatedOperators;
   }, [updatedOperators]);
@@ -213,28 +277,34 @@ const SchemeSettingsPage = () => {
   }, [isSchemeActive]);
 
   useEffect(() => {
-    if (!schemeCode) return;
-
-    const schemeRates = async () => {
-      setLoadingScheme(true);
-      try {
-        const data = await dispatch(
-          fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}`, id: schemeCode })
-        ).unwrap();
-        setSchemeDetails(data);
-        setIsSchemeActive(data.isActive);
-
-      } catch (err: any) {
-        toast.error(err);
-        setTimeout(() => {
-          navigate("/schemes/schemeslist");
-        }, 2000);
-      }
-      finally {
-        setLoadingScheme(false);
-      }
+    // If user reloads or lands on this page directly without state
+    if (!schemeCode) {
+      navigate("/schemes/schemeslist", { replace: true });
     }
-    schemeRates()
+  }, [schemeCode, navigate]);
+
+  const fetchSchemeData = async () => {
+    if (!schemeCode) return;
+    
+    setLoadingScheme(true);
+    try {
+      const data = await dispatch(
+        fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}/get-scheme-details-by-scheme-code`, id: schemeCode })
+      ).unwrap();
+      setSchemeDetails(data);
+      setIsSchemeActive(data.isActive);
+    } catch (err: any) {
+      toast.error(err);
+      setTimeout(() => {
+        navigate("/schemes/schemeslist");
+      }, 2000);
+    } finally {
+      setLoadingScheme(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchemeData();
   }, [schemeCode])
 
   useEffect(() => {
@@ -271,43 +341,54 @@ const SchemeSettingsPage = () => {
   }, [activeTab, schemeCode, productDetails]);
 
 
+  const handleBack = () => {
+    if (updatedOperators.length !== 0) {
+      setIsConfirmOpen(true)
+    } else {
+      navigate("/schemes/schemeslist")
+    }
+  }
+
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Header Section */}
       <div className="flex justify-between">
         <div>
           {/* Heading */}
-          <TextComponent
-            color="#1D1F2C"
-            fontFamily="Inter"
-            fontWeight={600}
-            fontSize={22}
-          >
-            {schemeName ? schemeName : "Scheme Name"}
-          </TextComponent>
+          <BackHeader
+            title={loadingScheme ? "Loading..." : schemeDetails?.schemeName || "-"}
+            onBack={handleBack}
+          // backPath="/schemes/schemeslist"
+          />
 
           {/*Sub Heading */}
           <div className="mt-2">
             <BreadCrumb
-              type={schemeCode ? schemeCode : "Scheme Code"}
-              text="PG"
+              type={schemeCode ? schemeCode : "-"}
+              text={loadingScheme ? "Loading..." : schemeDetails?.productName || "-"}
             />
           </div>
         </div>
 
         {/* Button */}
         <div className="flex items-end">
-          <Tooltip label={isSchemeActive ? "Click to Deactivate Scheme" : "Click to Activate Scheme"}>
+          <Tooltip label={
+            updatedOperators.length !== 0
+              ? "Please save your changes before toggling scheme status"
+              : isSchemeActive
+                ? "Click to Deactivate Scheme"
+                : "Click to Activate Scheme"
+          }>
             <ButtonComponent
               style={{ padding: "5px 10px", height: 40 }}
               radius={8}
               onClick={toggleSchemeStatus}
               font="Inter"
-              textColor="#fff"
-              bgColor={isSchemeActive ? "#BF0204" : "#28a745"}
+              textColor={colors.text.inverse}
+              bgColor={isSchemeActive ? colors.status.danger : colors.status.successAlt}
               fontSize="14"
               leftIcon={isSchemeActive ? <DeactivateIcon /> : null}
-              disabled={!!loadingScheme}
+              disabled={!!loadingScheme || updatedOperators.length !== 0}
             >
               {isSchemeActive ? "Deactivate" : "Activate"}
             </ButtonComponent>
@@ -330,17 +411,17 @@ const SchemeSettingsPage = () => {
             defaultValue="slab"
             value={activeTab}
             classNames={{
-              list: "flex w-full border border-[#DCDCDC] overflow-hidden",
+              list: "flex w-full border border-border-soft overflow-hidden",
               tab: `
       text-sm font-medium px-4 py-2 transition-all cursor-pointer 
-      data-[active=true]:bg-white data-[active=true]:text-[#CA4343]
-      data-[active=false]:bg-[#F7F7F7] data-[active=false]:text-[#3D3D3D]
+      data-[active=true]:bg-white data-[active=true]:text-brand-highlight
+      data-[active=false]:bg-surface-subtle data-[active=false]:text-text-neutral
     `,
             }}
           >
             <Tabs.List grow>
               <Tabs.Tab
-                style={{ borderRight: "1px solid #DCDCDC" }}
+                style={{ borderRight: `1px solid ${colors.border.soft}` }}
                 value="slab"
               >
                 Slab Structure
@@ -357,8 +438,10 @@ const SchemeSettingsPage = () => {
                 loading={loadingScheme}
                 onDataChange={handleRowChange}
                 showAddRow={!isSchemeActive}
-                onAddRow={handleAddRow}
+                onAddRow={(opCode) => handleAddRow(opCode, slabSize)}
+                handleRemoveRow={handleRemoveRow}
                 isSchemeActive={!isSchemeActive}
+                hasSavedChanges={hasSavedChanges}
               />
             </Tabs.Panel>
 
@@ -370,17 +453,54 @@ const SchemeSettingsPage = () => {
 
         {/* Right Side Form */}
         <Grid.Col span={{ base: 12, md: 3.5, lg: 3.5 }}>
-          <SchemeConfigurationForm />
+          <SchemeConfigurationForm
+            slabSize={slabSize}
+            onSlabSizeChange={setSlabSize}
+          />
         </Grid.Col>
 
         {updatedOperators.length !== 0 && (
           <div className="absolute bottom-0 right-0 p-4">
-            <ButtonComponent onClick={handleSave} bgColor="#BF0204" textColor="#fff" radius={8} font="Inter" fontSize="14">
+            <ButtonComponent onClick={handleSave} bgColor={colors.brand.primary} textColor={colors.text.inverse} radius={8} font="Inter" fontSize="14">
               Save Changes
             </ButtonComponent>
           </div>
         )}
       </Grid>
+
+      <PopupModal
+        opened={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        size="sm"
+        padding="md"
+      >
+        <div className="flex flex-col gap-4">
+          <TextComponent fontSize={14} color="gray" align="center">
+            You have unsaved changes. Are you sure you want to discard them?
+          </TextComponent>
+
+          <div className="flex justify-end gap-3 mt-4">
+            <ButtonComponent
+              variant="outline"
+              bgColor={colors.surface.muted}
+              textColor={colors.text.secondary}
+              onClick={() => setIsConfirmOpen(false)}
+            >
+              Cancel
+            </ButtonComponent>
+            <ButtonComponent
+              bgColor={colors.brand.primary}
+              textColor={colors.text.inverse}
+              onClick={() => {
+                setIsConfirmOpen(false);
+                navigate("/schemes/schemeslist")
+              }}
+            >
+              Discard
+            </ButtonComponent>
+          </div>
+        </div>
+      </PopupModal>
     </div>
   );
 };

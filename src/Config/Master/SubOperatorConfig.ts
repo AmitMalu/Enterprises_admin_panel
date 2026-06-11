@@ -52,7 +52,7 @@ export const validationSchema: Record<
 };
 
 export const headers: GenericTableHeader<SubOperatorTableType>[] = [
-  { key: "id", label: "ID", filterType: "text" },
+  { key: "id", label: "Id", filterType: "number", searchable: true },
   { key: "subOperatorName", label: "Sub Operator Name", filterType: "text" },
   {
     key: "operatorCode",
@@ -62,10 +62,10 @@ export const headers: GenericTableHeader<SubOperatorTableType>[] = [
   { key: "operatorAlias", label: "Operator Alias", filterType: "text" },
   { key: "category", label: "Operator Name", filterType: "text" },
   { key: "isBlocked", label: "isBlocked", filterType: "boolean" },
-  { key: "createdOn", label: "Created On", filterType: "date" },
-  { key: "editedOn", label: "Edited On", filterType: "date" },
   { key: "createdBy", label: "Created By", filterType: "text" },
+  { key: "createdOn", label: "Created On", filterType: "date" },
   { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "editedOn", label: "Edited On", filterType: "date" },
 ];
 
 export const mapToSubOperatorTableType = (

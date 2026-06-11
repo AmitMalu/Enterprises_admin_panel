@@ -18,7 +18,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
     <button
       {...props}
       className={clsx(
-        "bg-[#DB2729] py-2.5 w-full text-white font-open rounded-xl text-sm xl:text-lg 2xl:text-xl 3xl:text-2xl text-center font-normal",
+        "bg-brand-accent py-2.5 w-full text-text-inverse font-open rounded-xl text-sm xl:text-lg 2xl:text-xl 3xl:text-2xl text-center font-normal",
         className
       )}
     >

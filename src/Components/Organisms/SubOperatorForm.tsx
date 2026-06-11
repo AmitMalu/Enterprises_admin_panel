@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import {
   initialValues,
@@ -24,6 +23,8 @@ import { useOperatorSubOperator } from "../../Utils/hooks/useOperatorSubOperator
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 type ProductFormProps = { mode: "add" | "edit" };
 
@@ -88,12 +89,14 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
   }, [dispatch, id, mode]);
 
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-      <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-        {mode === "edit"
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
+
+      <BackHeader
+        title={mode === "edit"
           ? "Edit Sub-Operator"
           : "Add Sub-Operator"}
-      </TextComponent>
+        backPath="/master/sub-operator"
+      />
 
       {/* Sub Heading */}
       <BreadCrumb type={"Sub-Operator"} text="Master" />
@@ -104,7 +107,7 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
         validationSchema={Yup.object(validationSchema)}
         onSubmit={handleSubmit}
       >
-        {(formik: FormikProps<any>) => {
+        {() => {
           const { operatorDropdownData, loadingOperatorList } =
             useOperatorSubOperator({});
 
@@ -132,7 +135,9 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
                   <FormikSelectComponent
                     name="operatorCode"
                     label="Operator"
-                    value={formik.values.operatorName}
+                    allowDeselect={true}
+                    searchable={true}
+                    // value={formik.values.operatorName}
                     placeholder="Select Operator"
                     withAsterisk
                     required
@@ -169,11 +174,11 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
                 {!loading && !fetchError && <ButtonComponent
                   fullWidth={false}
                   radius={6}
-                  borderColor="#fff"
+                  borderColor={colors.text.inverse}
                   variant="filled"
                   type="submit"
-                  bgColor="#C30305"
-                  textColor="#FFFFFF"
+                  bgColor={colors.brand.primary}
+                  textColor={colors.text.inverse}
                   style={{ padding: "10px 30px" }}
                 >
                   SUBMIT

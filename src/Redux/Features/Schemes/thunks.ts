@@ -1,14 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../Config/Api/AxiosInstance";
 import { setPagination } from "./slice";
-import { API_ENDPOINTS } from "../../../Config/Api/EndPoints";
 
 type FetchSchemesListParams = {
   key: string;
   url: string;
   page?: number;
   size?: number;
-  filter?: { key: string; value: any } | null;
+  filter?: Record<string, any> | null;
 };
 
 export interface FetchSchemeByIdParams {
@@ -20,16 +19,22 @@ export interface FetchSchemeByIdParams {
 export const fetchSchemesList = createAsyncThunk(
   "schemes/fetchSchemesList",
   async (
-    { key, url, page = 1, size = 5, filter }: FetchSchemesListParams,
+    { key, url, page = 1, size = 10, filter }: FetchSchemesListParams,
     { rejectWithValue, dispatch }
   ) => {
     try {
       const params = new URLSearchParams();
       params.append("page", String(page - 1)); // 0 - based
       params.append("size", String(size));
-      if (filter?.key) {
-        params.append(filter.key, String(filter.value ?? ""));
+      // Handle multiple filters
+      if (filter && typeof filter === "object") {
+        Object.entries(filter).forEach(([k, v]) => {
+          if (v !== undefined && v !== null) {
+            params.append(k, String(v));
+          }
+        });
       }
+      
       const response = await axiosInstance.get(`${url}?${params.toString()}`);
       const responseData = response?.data;
 

@@ -5,14 +5,15 @@ import { useEffect, useState } from "react";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
 import { fetchSchemeById } from "../../Redux/Features/Schemes/thunks";
 import { toast } from "react-toastify";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikMultiSelectComponent from "../Molecules/FormikMultiSelectComponent";
+import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 
 type SchemeHierarchyFormProps = { mode: "add" | "edit" };
@@ -80,10 +81,12 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
 
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Scheme Hierarchy" : "Add Scheme Hierarchy"}
-            </TextComponent>
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
+
+            <BackHeader
+                title={mode === "edit" ? "Edit Scheme Hierarchy" : "Add Scheme Hierarchy"}
+                backPath="/schemes/hierarchy"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type="Hierarchy" text="Schemes" />
@@ -94,7 +97,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                 validationSchema={Yup.object(validationSchema)}
                 onSubmit={handleSubmit}
             >
-                {(formik: FormikProps<any>) => {
+                {() => {
 
                     return (
                         <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
@@ -105,6 +108,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                         label="Scheme Hierarchy Name"
                                         placeholder="Enter Scheme Hierarchy Name"
                                         withAsterisk
+                                        allowSpecialChar={false}
                                         maxLength={50}
                                     />
                                 </Grid.Col>
@@ -114,6 +118,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                         name="schemeHierarchyCombination"
                                         label="Hierarchy Combination "
                                         placeholder="Select Scheme Hierarchy combinations"
+                                        nothingFoundMessage="No Scheme found"
                                         withAsterisk
                                         data={["Retailer", "Distributor", "Partner", "SuperDistributor", "Whitelabel"]}
                                         clearable
@@ -128,11 +133,11 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
                                 {!loading && !fetchError && <ButtonComponent
                                     fullWidth={false}
                                     radius={6}
-                                    borderColor="#fff"
+                                    borderColor={colors.text.inverse}
                                     variant="filled"
                                     type="submit"
-                                    bgColor="#C30305"
-                                    textColor="#FFFFFF"
+                                    bgColor={colors.brand.primary}
+                                    textColor={colors.text.inverse}
                                     disabled={!!fetchError || !!loading}
                                     style={{ padding: "10px 30px" }}
                                 >

@@ -8,15 +8,20 @@ export const textField = (
   required = false,
   allowSpecialChars = false
 ) => {
-  let schema = Yup.string().max(
-    max,
-    `${field} cannot exceed ${max} characters`
-  );
+  let schema = Yup.string()
+    .transform((value) => (value ? value.trim() : value)) // Trim before validation
+    .max(max, `${field} cannot exceed ${max} characters`)
+    .nullable()
+    .notRequired(); // allow null and undefined by default
 
   if (!allowSpecialChars) {
-    schema = schema.matches(
-      /^[A-Za-z0-9\s.-]*$/,
-      `${field} should not contain special characters`
+    schema = schema.test(
+      "no-special-chars",
+      `${field} should not contain special characters`,
+      (value) => {
+        if (!value) return true; // skip if value is null or empty
+        return /^[A-Za-z0-9\s._\-()]*$/.test(value);
+      }
     );
   }
 
@@ -91,7 +96,8 @@ export const dobValidation = Yup.string()
 
 // Aadhaar Number: 12 digits only
 export const aadhaarValidation = Yup.string()
-  .matches(/^\d{12}$/, "Aadhaar must be 12 digits")
+  .trim()
+  .matches(/^\d{12}$/, "Aadhaar must be exactly 12 digits")
   .required("Aadhaar Number is required");
 
 // PAN Card Number: 10 characters (e.g., ABCDE1234F)
@@ -119,24 +125,69 @@ export const websiteValidation = Yup.string()
   .url("Must be a valid URL")
   .nullable();
 
+export const apiUrlValidation = Yup.string()
+  .matches(
+    /^https?:\/\/.+$/,
+    "Must be a valid API URL starting with http:// or https://"
+  )
+  .nullable();
+
+// export const fileValidation = (
+//   field: string,
+//   allowedTypes: string[] = ["image/jpeg", "image/png"],
+//   maxSizedMB = 1.5
+// ) =>
+//   Yup.mixed()
+//     .required(`${field} is required`)
+//     .test(
+//       "fileType",
+//       `Only ${allowedTypes.join(", ")} files are allowed`,
+//       (value) =>
+//         value instanceof File ? allowedTypes.includes(value.type) : false
+//     )
+//     .test(
+//       "fileSize",
+//       `File too large. Max ${maxSizedMB}MB`,
+//       (value) => value instanceof File && value.size <= maxSizedMB * 1024 * 1024
+//     );
+
 export const fileValidation = (
   field: string,
-  allowedTypes: string[] = ["image/jpeg", "image/png"],
-  maxSizedMB = 1.5
-) =>
-  Yup.mixed()
-    .required(`${field} is required`)
-    .test(
-      "fileType",
-      `Only ${allowedTypes.join(", ")} files are allowed`,
-      (value) => {
-        if (typeof value === "string") return true; // Allow URL (edit case)
-        return value instanceof File
-          ? allowedTypes.includes(value.type)
-          : false;
-      }
-    )
-    .test("fileSize", `File too large. Max ${maxSizedMB}MB`, (value) => {
+  allowedTypes: string[] = ["image/png", "image/jpeg"],
+  maxSizedMB = 1.5,
+  isRequired = true
+) => {
+  let schema = Yup.mixed().nullable();
+
+  if (isRequired) {
+    schema = schema.required(`${field} is required`);
+  }
+
+  schema = schema.test(
+    "fileType",
+    `Only ${allowedTypes.join(", ")} files are allowed`,
+    (value) => {
+      if (!value) return !isRequired; // Allow null/undefined if not required
       if (typeof value === "string") return true; // Allow URL (edit case)
-      return value instanceof File && value.size <= maxSizedMB * 1024 * 1024;
-    });
+      if (value instanceof File) {
+        return allowedTypes.includes(value.type);
+      }
+      return false;
+    }
+  );
+
+  schema = schema.test(
+    "fileSize",
+    `File too large. Max ${maxSizedMB}MB`,
+    (value) => {
+      if (!value) return !isRequired;
+      if (typeof value === "string") return true; // Allow URL (edit case)
+      if (value instanceof File) {
+        return value.size <= maxSizedMB * 1024 * 1024;
+      }
+      return false;
+    }
+  );
+
+  return schema as Yup.MixedSchema<string | File | null | undefined>;
+};

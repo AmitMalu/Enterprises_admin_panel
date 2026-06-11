@@ -1,5 +1,5 @@
 // components/Atoms/CustomDatePicker.tsx
-import { DatePickerInput, DatePickerInputProps } from "@mantine/dates";
+import { DatePickerInput, DatePickerInputProps, DateValue } from "@mantine/dates";
 import { LeftDateArrowSvgIcon, RightDateArrowSvgIcon } from "../../assets/Icons";
 
 const defaultClassNames = {
@@ -18,33 +18,49 @@ const defaultClassNames = {
     monthsListControl: "text-textColor font-[400] text-[18px]",
     yearsListRow: "flex items-center justify-between w-full gap-3",
     yearsListControl: "text-textColor font-[400] text-[18px]",
-    day: "font-[500] text-[14px] w-[30px] text-center",
+    day: `
+  font-[500] text-[14px] text-center 
+  w-8 h-8 rounded-md 
+  flex items-center justify-center 
+  data-[selected]:!text-status-danger
+   data-[in-range]:bg-red-100 data-[in-range]:text-red-800
+  data-[today]:border data-[today]:border-dashed data-[today]:border-blue-400
+  data-[outside]:text-gray-400
+`,
 };
 
-const CustomDatePicker = ({
+interface CustomDatePickerProps extends Omit<DatePickerInputProps<"default">, "type" | "value" | "onChange"> {
+    value?: DateValue | null;
+    onChange: (value: DateValue | null) => void;
+    minDate?: Date;
+    maxDate?: Date;
+};
+
+function CustomDatePicker({
     value,
     onChange,
     valueFormat = "DD/MM/YYYY",
     nextIcon = <RightDateArrowSvgIcon />,
     previousIcon = <LeftDateArrowSvgIcon />,
     placeholder = "Pick date",
+    minDate,
+    maxDate,
+    clearable = false,
     ...rest
-}: DatePickerInputProps) => {
+}: CustomDatePickerProps) {
     return (
         <DatePickerInput
+            clearable
             size="xs"
             value={value}
-            onChange={(value) => {
-                if (Array.isArray(value)) return;
-                if (value instanceof Date || value === null) {
-                    onChange?.(value);
-                }
-            }}
+            onChange={onChange}
             valueFormat={valueFormat}
             placeholder={placeholder}
             nextIcon={nextIcon}
             previousIcon={previousIcon}
             classNames={defaultClassNames}
+            minDate={minDate}
+            maxDate={maxDate}
             {...rest}
         />
     );

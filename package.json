@@ -4,9 +4,25 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "prebuild": "node scripts/generateBuildInfo.cjs",
+
+    "dev": "vite --mode development",
+    "dev:uat": "vite --mode uat",
+    "dev:prod": "vite --mode production",
+
+    "build:dev": "tsc -b && powershell -Command \"if (Test-Path dist) { Remove-Item -Recurse -Force dist }\" && vite build --mode development && npm run copy-webxml",
+    "build:uat": "tsc -b && powershell -Command \"if (Test-Path dist) { Remove-Item -Recurse -Force dist }\" && vite build --mode uat && npm run copy-webxml",
+    "build": "tsc -b && powershell -Command \"if (Test-Path dist) { Remove-Item -Recurse -Force dist }\" && vite build --mode production && npm run copy-webxml",
+
+    "war:dev": "npm run build:dev && powershell -Command \"Compress-Archive -Path dist\\* -DestinationPath app.zip -Force; Rename-Item app.zip app.war -Force\"",
+    "war:uat": "npm run build:uat && powershell -Command \"Compress-Archive -Path dist\\* -DestinationPath app.zip -Force; Rename-Item app.zip app.war -Force\"",
+    "war": "npm run build && powershell -Command \"Compress-Archive -Path dist\\* -DestinationPath app.zip -Force; Rename-Item app.zip app.war -Force\"",
+    
+    "copy-webxml": "powershell -Command \"New-Item -ItemType Directory -Force -Path dist\\WEB-INF; Copy-Item -Path deploy-resources\\WEB-INF\\* -Destination dist\\WEB-INF -Recurse -Force\"",
     "lint": "eslint .",
+
+    "preview:dev": "vite preview --mode development",
+    "preview:uat": "vite preview --mode uat",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -32,8 +48,9 @@
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
     "country-state-city": "^3.2.1",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.5.0",
-    "embla-carousel-react": "^7.1.0",
+    "embla-carousel-autoplay": "^7.1.0",
     "formik": "^2.4.6",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
@@ -50,10 +67,12 @@
     "redux-persist": "^6.0.0",
     "tailwind-scrollbar-hide": "^2.0.0",
     "usehooks-ts": "^3.1.1",
+    "xlsx": "^0.18.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@types/crypto-js": "^4.2.2",
     "@types/lodash.debounce": "^4.0.9",
     "@types/lodash.throttle": "^4.1.9",
     "@types/papaparse": "^5.3.16",

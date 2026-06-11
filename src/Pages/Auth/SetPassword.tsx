@@ -8,6 +8,10 @@ import { useAppDispatch } from "../../Redux/hooks";
 import TextInputComponent from "../../Components/Atoms/TextInputComponent";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { passwordValidation } from "../../Utils/ValidationUtils";
+import { colors } from "../../theme/colors";
+import { IconArrowLeft } from "@tabler/icons-react";
+import forgotPassText from '../../assets/Images/ForgotPassText.png'
+import { Card } from "@mantine/core";
 
 const validationSchema = Yup.object().shape({
   newPassword: passwordValidation,
@@ -60,6 +64,7 @@ const SetPassword: React.FC = () => {
   };
 
   useEffect(() => {
+    toast.dismiss();
     const username = sessionStorage.getItem("otp-username");
     const otpFor = sessionStorage.getItem("otpFor");
 
@@ -70,61 +75,85 @@ const SetPassword: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full px-10 flex flex-col text-left">
-      <h2 className="mb-8 text-[#4C4C57] font-geologica  text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl font-medium mb-6">
-        Set Password
-      </h2>
-
-      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-[#BF0204]">
-        Please Enter new Password
+    <Card
+      shadow="xl"
+      p="xl"
+      radius="xl"
+      // withBorder
+      className="w-95 bg-white/95 backdrop-blur-sm border-gray-100"
+    >
+      <div className="flex justify-center mb-4">
+        <img
+          src={forgotPassText}
+          alt="Set Password"
+          className="max-w-full h-auto"
+        />
+      </div>
+      <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-brand-primary">
+        Please Enter New Password
       </div>
 
       <form onSubmit={formik.handleSubmit}>
-        {/*New Password */}
         <TextInputComponent
           className="mb-8"
+          type="password"
           value={formik.values.newPassword}
           onChange={formik.handleChange}
           placeholder="New Password"
           required
           name="newPassword"
           maxLength={51}
+          radius="lg"
           error={
             formik.touched.newPassword
-              ? formik.errors.newPassword || false
+              ? formik.errors.newPassword
               : false
           }
         />
 
         <TextInputComponent
           className="mb-8"
+          type="password"
           value={formik.values.reEnteredPassword}
           onChange={formik.handleChange}
           placeholder="Re-Enter New Password"
           required
           name="reEnteredPassword"
           maxLength={51}
+          radius="lg"
           error={
             formik.touched.reEnteredPassword
-              ? formik.errors.reEnteredPassword || false
+              ? formik.errors.reEnteredPassword
               : false
           }
         />
 
-        <div className="flex justify-center items-center">
+        <div className="flex justify-around items-center">
           <ButtonComponent
-            fullWidth
             size="md"
-            bgColor="#DB2729"
-            textColor="#fff"
-            radius={12}
+            bgColor={colors.brand.accent}
+            textColor={colors.text.inverse}
+            radius={24}
+            leftIcon={<IconArrowLeft />}
+            onClick={() => navigate("/login")}
+          >
+            Back
+          </ButtonComponent>
+          <div className="font-poppins font-normal text-sm text-brand-primary">
+            OR
+          </div>
+          <ButtonComponent
+            size="md"
+            bgColor={colors.brand.accent}
+            textColor={colors.text.inverse}
+            radius={24}
             type="submit"
           >
             CONTINUE
           </ButtonComponent>
         </div>
       </form>
-    </div>
+    </Card>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormikProps } from "formik";
 import { Grid } from "@mantine/core";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
@@ -51,9 +51,9 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
         <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
           <FormikSelectComponent
             name="isAdmin"
-            label="Is Admin"
+            label="Is WL-Admin"
             allowDeselect={false}
-            placeholder="Select Is Admin"
+            placeholder="Select Is WL-Admin"
             withAsterisk
             data={booleanSelectData}
           />

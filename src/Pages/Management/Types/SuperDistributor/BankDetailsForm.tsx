@@ -1,9 +1,8 @@
 import { Grid } from "@mantine/core";
 import { FormikProps } from "formik";
-import React from "react";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
 
-const BankDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
+const BankDetailsForm = ({ }: { formik: FormikProps<any> }) => {
   return (
     <>
       <Grid gutter="lg">
@@ -52,6 +51,16 @@ const BankDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             name="branchName"
             label="Bank Branch Name"
             placeholder="Enter Your Bank branch Name"
+            withAsterisk
+            maxLength={50}
+          />
+        </Grid.Col>
+
+        <Grid.Col className="" span={{ base: 12, md: 6, lg: 6 }}>
+          <FormikTextInputComponent
+            name="bankHolderName"
+            label="Bank Holder Name"
+            placeholder="Enter Bank Holder Name"
             withAsterisk
             maxLength={50}
           />

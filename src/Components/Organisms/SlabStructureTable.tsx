@@ -1,7 +1,7 @@
-import React from "react";
 import { ellipsisCellStyle } from "../../Utils/utils";
 import { Table, Tooltip } from "@mantine/core";
 import TextComponent from "../Atoms/TextComponent";
+import { colors } from "../../theme/colors";
 
 type GenericTableProps<T> = {
   data: T[];
@@ -48,7 +48,7 @@ const SlabStructureTable = <T,>({
     <>
       {label && (
         <TextComponent
-          color="#1D1F2C"
+          color={colors.text.heading}
           fontFamily="Inter"
           fontWeight={500}
           fontSize={18}
@@ -65,7 +65,7 @@ const SlabStructureTable = <T,>({
           style={{
             borderRadius: 8,
             overflow: "hidden",
-            background: "#fff",
+            background: colors.text.inverse,
           }}
           styles={{
             th: {

@@ -1,6 +1,5 @@
 import { Form, Formik } from "formik";
 import ButtonComponent from "../Atoms/ButtonComponent";
-import TextComponent from "../Atoms/TextComponent";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Grid } from "@mantine/core";
 import * as Yup from "yup";
@@ -14,6 +13,8 @@ import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMaster
 import { initialValues, SubMasterFormType, transformFormToCreateSubMasterPayload, transformFormToUpdateSubMasterPayload, validationSchema } from "../../Config/Master/SubMasterConfig";
 import { MASTER_KEY, MASTER_URL } from "../../Config/Master/MainMasterConfig";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
+import BackHeader from "../Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 
 interface MasterDropdownItem {
@@ -116,10 +117,12 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
     }, [])
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                {mode === "edit" ? "Edit Sub Master" : "Add Sub Master"}
-            </TextComponent>
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
+
+            <BackHeader
+                title={mode === "edit" ? "Edit Sub Master" : "Add Sub Master"}
+                backPath="/master/sub-master"
+            />
 
             {/* Sub Heading */}
             <BreadCrumb type={"SubMaster"} text="Master" />
@@ -159,11 +162,11 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
                         {!loading && !fetchError && <ButtonComponent
                             fullWidth={false}
                             radius={6}
-                            borderColor="#fff"
+                            borderColor={colors.text.inverse}
                             variant="filled"
                             type="submit"
-                            bgColor="#C30305"
-                            textColor="#FFFFFF"
+                            bgColor={colors.brand.primary}
+                            textColor={colors.text.inverse}
                             style={{ padding: "10px 30px" }}
                         >
                             SUBMIT

@@ -1,11 +1,51 @@
-import { FileInput, Grid } from "@mantine/core";
-import { FormikProps } from "formik";
-import React from "react";
+import { Grid, Loader } from "@mantine/core";
 import FormikFileInput from "../../../../Components/Molecules/FormikFileInput";
-import FilePreview from "../../../../Components/Atoms/FilePreview";
 import FormikTextInputComponent from "../../../../Components/Molecules/FormikTextInputComponent";
+import { UploadDocumentsFormProps } from "../../../../Config/UserCreationConfig/UserConfig";
+import { useEffect, useState } from "react";
+import ButtonComponent from "../../../../Components/Atoms/ButtonComponent";
+import { colors } from "../../../../theme/colors";
 
-const UploadDocumentsForm = ({ formik }: { formik: FormikProps<any> }) => {
+const UploadDocumentsForm = ({ formik, onAadhaarVerify, onPanVerify }: UploadDocumentsFormProps) => {
+
+  const [aadhaarVerifying, setAadhaarVerifying] = useState(false);
+  const [panVerifying, setPanVerifying] = useState(false);
+
+  const showVerifyButton =
+    formik.values.aadhaarNumber?.length === 12 &&
+    formik.values.isAadhaarVerified !== true;
+
+  const showVerifiedMess = formik.values.aadhaarNumber?.length === 12 && formik.values.isAadhaarVerified;
+
+  const showPanVerifyButton =
+    formik.values.panNumber?.length === 10 &&
+    formik.values.panVerified !== true;
+
+  const showPanVerifiedMess = formik.values.panNumber?.length === 10 && formik.values.panVerified;
+
+  useEffect(() => {
+    if (
+      formik.values.isAadhaarVerified &&
+      formik.values.lastVerifiedAadhaar &&
+      formik.values.aadhaarNumber !== formik.values.lastVerifiedAadhaar
+    ) {
+      formik.setFieldValue("isAadhaarVerified", false);
+      formik.setFieldValue("aadhaarPanVerified", false);
+      formik.setFieldValue("lastVerifiedAadhaar", null);
+    }
+  }, [formik.values.aadhaarNumber]);
+
+  useEffect(() => {
+    if (
+      formik.values.panVerified &&
+      formik.values.lastVerifiedPan &&
+      formik.values.panNumber !== formik.values.lastVerifiedPan
+    ) {
+      formik.setFieldValue("panVerified", false);
+      formik.setFieldValue("lastVerifiedPan", null);
+    }
+  }, [formik.values.panNumber]);
+
   return (
     <>
       <Grid gutter="lg">
@@ -55,15 +95,68 @@ const UploadDocumentsForm = ({ formik }: { formik: FormikProps<any> }) => {
 
         <Grid.Col className="" span={{ base: 12, md: 4, lg: 4 }}>
           <FormikTextInputComponent
-            name="adhaarNumber"
-            label="Adhaar Number"
-            placeholder="Enter Your Adhaar Number"
+            name="aadhaarNumber"
+            label="Aadhaar Number"
+            placeholder="Enter Your Aadhaar Number"
             withAsterisk
             required
             maxLength={15}
             allowSpace={false}
             allowSpecialChar={false}
             size="sm"
+            rightSectionWidth={aadhaarVerifying ? 40 : 70}
+            rightSection={
+              showVerifiedMess ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: colors.status.successAlt,
+                    fontSize: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {formik.values.aadhaarPanVerified
+                    ? "🔗 Linked"
+                    : "✓ Verified"}
+                </div>
+              ) : showVerifyButton ? (
+                aadhaarVerifying ? (
+                  <div style={{ display: "flex", alignItems: "center", height: "24px" }}>
+                    <Loader size="xs" color={colors.status.successStrong} />
+                  </div>
+                ) : (
+                  <ButtonComponent
+                    fw="500"
+                    style={{
+                      marginRight: "0px",
+                      padding: "0px 8px",
+                      height: "24px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                    }}
+                    bgColor={colors.status.successStrong}
+                    textColor="white"
+                    fontSize="12"
+                    size="xs"
+                    onClick={async () => {
+                      formik.setFieldValue("lastVerifiedAadhaar", formik.values.aadhaarNumber);
+                      // setAadhaarVerifying(true); // Start spinner
+                      await onAadhaarVerify?.(formik);
+                      setAadhaarVerifying(false); // Stop spinner
+                    }}
+                  >
+                    {aadhaarVerifying ? (
+                      <>
+                        <span>Verifying</span>
+                        <span className="spinner" />
+                      </>
+                    ) : (
+                      "Verify"
+                    )}
+                  </ButtonComponent>
+                )
+              ) : null}
           />
         </Grid.Col>
 
@@ -73,11 +166,56 @@ const UploadDocumentsForm = ({ formik }: { formik: FormikProps<any> }) => {
             label="Pan Number"
             placeholder="Enter Your Pan Number"
             withAsterisk
+            capitalize
             required
             maxLength={15}
             allowSpace={false}
             allowSpecialChar={false}
             size="sm"
+            rightSectionWidth={panVerifying ? 40 : 70}
+            rightSection={
+              showPanVerifiedMess ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    color: colors.status.successAlt,
+                    fontSize: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  ✓ Verified
+                </div>
+              ) : showPanVerifyButton ? (
+                panVerifying ? (
+                  <div style={{ display: "flex", alignItems: "center", height: "24px" }}>
+                    <Loader size="xs" color={colors.status.successStrong} />
+                  </div>
+                ) : (
+                  <ButtonComponent
+                    fw="500"
+                    style={{
+                      marginRight: "0px",
+                      padding: "0px 8px",
+                      height: "24px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                    }}
+                    bgColor={colors.status.successStrong}
+                    textColor="white"
+                    fontSize="12"
+                    size="xs"
+                    onClick={async () => {
+                      formik.setFieldValue("lastVerifiedPan", formik.values.panNumber);
+                      setPanVerifying(true);
+                      await onPanVerify?.(formik);
+                      setPanVerifying(false);
+                    }}
+                  >
+                    {panVerifying ? "Verifying..." : "Verify"}
+                  </ButtonComponent>
+                )
+              ) : null}
           />
         </Grid.Col>
 
@@ -100,7 +238,7 @@ const UploadDocumentsForm = ({ formik }: { formik: FormikProps<any> }) => {
             label="Add Business Proof"
             withAsterisk
             placeholder="Select File"
-            accept="image/png, image/jpeg , application/pdf"
+            accept="image/png, image/jpeg, application/pdf"
             size="sm"
           />
         </Grid.Col>

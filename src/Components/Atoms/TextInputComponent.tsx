@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { forwardRef } from "react";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
 import { PasswordInput, PinInput, TextInput } from "@mantine/core";
+import { colors } from "../../theme/colors";
 
 type InputType = "text" | "password" | "number" | "email";
 
@@ -32,9 +33,10 @@ interface TextInputComponentProps {
   allowCharacter?: boolean;
   allowSpecialChar?: boolean;
   allowSpace?: boolean;
+  autoFocus?: boolean;
 }
 
-const TextInputComponent: React.FC<TextInputComponentProps> = ({
+const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>(({
   type = "text",
   label,
   name,
@@ -62,9 +64,10 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
   allowCharacter = true,
   allowSpecialChar = true,
   allowSpace = true,
-}) => {
+  autoFocus = false,
+}, ref) => {
   const screenSize = useScreenSize();
-  const [isFocused, setIsFocused] = useState(false);
+  // const [isFocused, setIsFocused] = useState(false);
 
   const defaultSize =
     size ||
@@ -90,7 +93,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     }
 
     if (!allowSpecialChar) {
-      newValue = newValue.replace(/[^a-zA-Z0-9\s]/g, "");
+      newValue = newValue.replace(/[^a-zA-Z0-9\s._\-()]/g, "");
     }
 
     if (!allowSpace) {
@@ -100,6 +103,10 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     if (capitalize) {
       newValue = newValue.toUpperCase();
     }
+    // Trim start and end spaces
+    newValue = newValue.trimStart(); // prevent leading space
+    // newValue = newValue.trim();      // if you want to also prevent trailing:
+
     onChange({
       ...event,
       target: {
@@ -117,14 +124,15 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     value,
     onChange: handleChange,
     onKeyDown,
-    onFocus: () => setIsFocused(true),
-    onBlur: () => setIsFocused(false),
+    // onFocus: () => setIsFocused(true),
+    // onBlur: () => setIsFocused(false),
     error: typeof error === "string" ? true : !!error,
     required,
     maxLength,
     minLength,
     radius: defaultRadius,
     size: defaultSize,
+    autoFocus,
     withAsterisk,
     disabled,
     leftSection,
@@ -134,14 +142,16 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
     length,
     styles: {
       input: {
-        color: "#282828",
+        color: colors.text.body,
         fontWeight: 500,
       },
     },
+    ref
   };
 
   const InputComponent = oneTimeCode ? (
     <PinInput
+      radius={radius}
       oneTimeCode
       value={value}
       onChange={(val) =>
@@ -154,6 +164,7 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
       type="number"
       error={typeof error === "string" ? true : !!error}
       placeholder=""
+      autoFocus
     />
   ) : type === "password" ? (
     <PasswordInput {...sharedProps} />
@@ -169,6 +180,8 @@ const TextInputComponent: React.FC<TextInputComponentProps> = ({
       )}
     </div>
   );
-};
+})
+
+TextInputComponent.displayName = "TextInputComponent";
 
 export default TextInputComponent;

@@ -4,7 +4,7 @@ import {
   LogsIcon,
   managementSvg,
   MastersIcon,
-  MenuSettingIcon,
+  // MenuSettingIcon,
   MyProfileIcon,
   NotificationIcon,
   reportsSvg,
@@ -30,6 +30,11 @@ export const sidebarData = [
         icon: MastersIcon,
       },
       {
+        label: "Transaction Limit Settings",
+        link: "/schemes/transaction-limit",
+        icon: MastersIcon,
+      },
+      {
         label: "Operator Master",
         link: "/master/operator",
         icon: MastersIcon,
@@ -42,6 +47,21 @@ export const sidebarData = [
       {
         label: "Vendor Master",
         link: "/master/vendor",
+        icon: MastersIcon,
+      },
+      {
+        label: "Vendor Credential Master",
+        link: "/master/vendor-credential",
+        icon: MastersIcon,
+      },
+      {
+        label: "Vendor Routing Master",
+        link: "/master/vendor-routing",
+        icon: MastersIcon,
+      },
+      {
+        label: "Bank Master",
+        link: "/master/banks",
         icon: MastersIcon,
       },
       {
@@ -59,15 +79,36 @@ export const sidebarData = [
         link: "/master/sub-master",
         icon: MastersIcon,
       },
-      // {
-      //   label: "User Configuration",
-      //   link: "/master/user-configuration",
-      //   icon: MastersIcon,
-      // },
       {
-        label: "Pincode Master",
-        link: "/master/pincode",
+        label: "Location Master",
         icon: MastersIcon,
+        links: [
+          {
+            label: "Country Master",
+            link: "/master/country",
+            icon: MastersIcon,
+          },
+          {
+            label: "State Master",
+            link: "/master/state",
+            icon: MastersIcon,
+          },
+          {
+            label: "District Master",
+            link: "/master/district",
+            icon: MastersIcon,
+          },
+          {
+            label: "City Master",
+            link: "/master/city",
+            icon: MastersIcon,
+          },
+          {
+            label: "Pincode Master",
+            link: "/master/pincode",
+            icon: MastersIcon,
+          },
+        ],
       },
     ],
   },
@@ -91,16 +132,11 @@ export const sidebarData = [
         link: "/schemes/allocation",
         icon: schemesSvg,
       },
-      {
-        label: "Transaction Routing",
-        link: "/schemes/transaction-routing",
-        icon: schemesSvg,
-      },
-      {
-        label: "Transaction Limit Settings",
-        link: "/schemes/transaction-limit",
-        icon: schemesSvg,
-      },
+      // {
+      //   label: "Transaction Routing",
+      //   link: "/schemes/transaction-routing",
+      //   icon: schemesSvg,
+      // },
     ],
   },
   {
@@ -118,19 +154,24 @@ export const sidebarData = [
         link: "/funding/credit-debit",
         icon: fundingSvg,
       },
-      {
-        label: "Manage Payment",
-        link: "/funding/manage-payment",
-        icon: fundingSvg,
-      },
-      {
-        label: "Manage Settlement",
-        link: "/funding/manage-settlement",
-        icon: fundingSvg,
-      },
+      // {
+      //   label: "Manage Payment",
+      //   link: "/funding/manage-payment",
+      //   icon: fundingSvg,
+      // },
+      // {
+      //   label: "Manage Settlement",
+      //   link: "/funding/manage-settlement",
+      //   icon: fundingSvg,
+      // },
       {
         label: "Settlement",
         link: "/funding/settlement",
+        icon: fundingSvg,
+      },
+      {
+        label: "Update Transaction",
+        link: "/funding/update-transaction",
         icon: fundingSvg,
       },
       {
@@ -170,21 +211,21 @@ export const sidebarData = [
         link: "/management/user/rejected",
         icon: managementSvg,
       },
+      // {
+      //   label: "User Configuration",
+      //   link: "/management/user-configuration",
+      //   icon: managementSvg,
+      // },
       {
-        label: "User Configuration",
-        link: "/management/user-configuration",
+        label: "Admin User",
+        link: "/management/admin-user",
         icon: managementSvg,
       },
-      {
-        label: "Add/Manage User",
-        link: "/management/add-manage-user",
-        icon: managementSvg,
-      },
-      {
-        label: "Search User",
-        link: "/management/search-user",
-        icon: managementSvg,
-      },
+      // {
+      //   label: "Search User",
+      //   link: "/management/search-user",
+      //   icon: managementSvg,
+      // },
       {
         label: "KYC Approved Summary",
         link: "/management/kyc-approved",
@@ -201,8 +242,8 @@ export const sidebarData = [
         icon: managementSvg,
       },
       {
-        label: "Block User",
-        link: "/management/block-user",
+        label: "Block/Unblock User",
+        link: "/management/block-unblock-user",
         icon: managementSvg,
       },
       {
@@ -222,14 +263,19 @@ export const sidebarData = [
     icon: reportsSvg,
     initiallyOpened: false,
     links: [
-      {
-        label: "Live transaction Report",
-        link: "/report/live-transaction",
-        icon: reportsSvg,
-      },
+      // {
+      //   label: "Live transaction Report",
+      //   link: "/report/live-transaction",
+      //   icon: reportsSvg,
+      // },
       {
         label: "Transaction report",
         link: "/report/transaction",
+        icon: reportsSvg,
+      },
+      {
+        label: "Settlement report",
+        link: "/report/settlement",
         icon: reportsSvg,
       },
       {
@@ -238,68 +284,68 @@ export const sidebarData = [
         icon: reportsSvg,
       },
       {
-        label: "Ledger Report",
-        link: "/report/ledger-transaction",
-        icon: reportsSvg,
-      },
-      {
         label: "Pending Transaction",
         link: "/report/pending-transaction",
         icon: reportsSvg,
       },
-      {
-        label: "Update Transaction report",
-        link: "/report/update-transaction",
-        icon: reportsSvg,
-      },
+      // {
+      //   label: "Update Transaction report",
+      //   link: "/report/update-transaction",
+      //   icon: reportsSvg,
+      // },
       {
         label: "Search Transaction report",
         link: "/report/search-transaction",
         icon: reportsSvg,
       },
       {
-        label: "API Performance report",
-        link: "/report/api-performance",
-        icon: reportsSvg,
-      },
-      {
-        label: "Account summary report",
-        link: "/report/account-summary",
-        icon: reportsSvg,
-      },
-      {
-        label: "Create Order Report",
-        link: "/report/create-order",
-        icon: reportsSvg,
-      },
-      {
-        label: "Cumilative report",
-        link: "/report/cumulative",
-        icon: reportsSvg,
-      },
-      {
-        label: "Download Report",
-        link: "/report/download",
-        icon: reportsSvg,
-      },
-      { label: "Email Report", link: "/report/email", icon: reportsSvg },
-      {
         label: "GST/TDS Report",
         link: "/report/gst-tds",
         icon: reportsSvg,
       },
-      { label: "Refund Report", link: "/report/refund", icon: reportsSvg },
       {
-        label: "Reconcillation report",
-        link: "/report/reconciliation",
+        label: "Ledger Report",
+        link: "/report/ledger-transaction",
         icon: reportsSvg,
       },
-      { label: "SMS Report", link: "/report/sms", icon: reportsSvg },
-      {
-        label: "Invoice report",
-        link: "/report/invoice",
-        icon: reportsSvg,
-      },
+      // {
+      //   label: "API Performance report",
+      //   link: "/report/api-performance",
+      //   icon: reportsSvg,
+      // },
+      // {
+      //   label: "Account summary report",
+      //   link: "/report/account-summary",
+      //   icon: reportsSvg,
+      // },
+      // {
+      //   label: "Create Order Report",
+      //   link: "/report/create-order",
+      //   icon: reportsSvg,
+      // },
+      // {
+      //   label: "Cumilative report",
+      //   link: "/report/cumulative",
+      //   icon: reportsSvg,
+      // },
+      // {
+      //   label: "Download Report",
+      //   link: "/report/download",
+      //   icon: reportsSvg,
+      // },
+      // { label: "Email Report", link: "/report/email", icon: reportsSvg },
+      // { label: "Refund Report", link: "/report/refund", icon: reportsSvg },
+      // {
+      //   label: "Reconcillation report",
+      //   link: "/report/reconciliation",
+      //   icon: reportsSvg,
+      // },
+      // { label: "SMS Report", link: "/report/sms", icon: reportsSvg },
+      // {
+      //   label: "Invoice report",
+      //   link: "/report/invoice",
+      //   icon: reportsSvg,
+      // },
     ],
   },
   {
@@ -308,28 +354,28 @@ export const sidebarData = [
     initiallyOpened: false,
     links: [
       {
-        label: "Alert Type",
+        label: "Alert Notification",
         link: "/notification/alert-type",
         icon: NotificationIcon,
       },
+      // {
+      //   label: "SMS Template",
+      //   link: "/notification/sms-template",
+      //   icon: NotificationIcon,
+      // },
+      // {
+      //   label: "Email Report",
+      //   link: "/notification/email-report",
+      //   icon: NotificationIcon,
+      // },
       {
-        label: "SMS Template",
-        link: "/notification/sms-template",
+        label: "SMS",
+        link: "/notification/sms-credentials",
         icon: NotificationIcon,
       },
       {
-        label: "Email Report",
-        link: "/notification/email-report",
-        icon: NotificationIcon,
-      },
-      {
-        label: "Send SMS",
-        link: "/notification/send-sms",
-        icon: NotificationIcon,
-      },
-      {
-        label: "Send Mail",
-        link: "/notification/send-mail",
+        label: "Mail",
+        link: "/notification/email-credentials",
         icon: NotificationIcon,
       },
     ],
@@ -340,16 +386,16 @@ export const sidebarData = [
     initiallyOpened: false,
     links: [
       { label: "Profile", link: "/account/profile", icon: MyProfileIcon },
-      {
-        label: "Design Receipts",
-        link: "/account/design-receipts",
-        icon: MyProfileIcon,
-      },
-      {
-        label: "Design Documents",
-        link: "/account/design-documents",
-        icon: MyProfileIcon,
-      },
+      // {
+      //   label: "Design Receipts",
+      //   link: "/account/design-receipts",
+      //   icon: MyProfileIcon,
+      // },
+      // {
+      //   label: "Design Documents",
+      //   link: "/account/design-documents",
+      //   icon: MyProfileIcon,
+      // },
     ],
   },
   {
@@ -362,30 +408,30 @@ export const sidebarData = [
         link: "/support/ticket-management",
         icon: SupportIcon,
       },
-      {
-        label: "Contact Us",
-        link: "/support/contact-us",
-        icon: SupportIcon,
-      },
+      // {
+      //   label: "Contact Us",
+      //   link: "/support/contact-us",
+      //   icon: SupportIcon,
+      // },
     ],
   },
-  {
-    label: "Website Settings",
-    icon: MenuSettingIcon,
-    initiallyOpened: false,
-    links: [
-      { label: "Brandings", link: "/website/brandings", icon: MenuSettingIcon },
-      {
-        label: "Website Settings",
-        link: "/website/settings",
-        icon: MenuSettingIcon,
-      },
-      {
-        label: "News Update",
-        link: "/website/news-update",
-        icon: MenuSettingIcon,
-      },
-    ],
-  },
+  // {
+  //   label: "Website Settings",
+  //   icon: MenuSettingIcon,
+  //   initiallyOpened: false,
+  //   links: [
+  //     { label: "Brandings", link: "/website/brandings", icon: MenuSettingIcon },
+  //     {
+  //       label: "Website Settings",
+  //       link: "/website/settings",
+  //       icon: MenuSettingIcon,
+  //     },
+  //     {
+  //       label: "News Update",
+  //       link: "/website/news-update",
+  //       icon: MenuSettingIcon,
+  //     },
+  //   ],
+  // },
   { label: "Logs", icon: LogsIcon, initiallyOpened: false, link: "/logs" },
 ];

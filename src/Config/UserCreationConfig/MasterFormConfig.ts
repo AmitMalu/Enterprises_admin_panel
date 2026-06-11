@@ -1,14 +1,11 @@
 import * as Yup from "yup";
 import {
-  aadhaarValidation,
   accountNumberValidation,
   dobValidation,
   emailValidation,
   fileValidation,
-  gstValidation,
   ifscValidation,
   mobileValidation,
-  panValidation,
   passwordValidation,
   prefixValidation,
   textField,
@@ -50,8 +47,10 @@ export const masterInitialValues = {
   // Bank Info
   bankName: "",
   accountNumber: "",
+  bankHolderName: "",
   ifsc: "",
   branchName: "",
+  isBankVerified: false,
   websiteURL: "", // Enterprise-specific
   businessDesc: "", // Enterprise-specific
 
@@ -61,8 +60,13 @@ export const masterInitialValues = {
   pancardPhoto: null,
   shopPhoto: null,
   businessProof: null,
-  adhaarNumber: "",
+  aadhaarNumber: "",
+  isAadhaarVerified: false,
+  aadhaarPanVerified: false,
+  lastVerifiedAadhaar: null, //field to track last verified Aadhaar number
+  lastVerifiedPan: null, // field to track last verified PAN number
   panNumber: "",
+  panVerified: false,
   shopNumber: "",
   businessNumber: "",
 
@@ -74,6 +78,10 @@ export const masterInitialValues = {
   allowPostpaidCards: false,
   postpaidCardName: "",
   isAdmin: false,
+
+  //Retailer Specific
+  longitude: "",
+  latitude: "",
 
   // Admin-only
   userName: "",
@@ -112,8 +120,10 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   bankName: textField("Bank Name", 50, true),
   accountNumber: accountNumberValidation,
   ifsc: ifscValidation,
-  branchName: textField("Branch Name", 50, true, true),
-  websiteURL: websiteValidation,
+  branchName: textField("Branch Name", 50, false, true),
+  bankHolderName: textField("Bank Holder Name", 100, true),
+  isBankVerified: Yup.boolean(),
+  websiteURL: websiteValidation.required("Login Domain URL is required"),
   businessDesc: textField("Business Description", 500, true, true),
 
   // Documents
@@ -126,8 +136,31 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
     "image/jpeg",
     "image/png",
   ]),
-  adhaarNumber: aadhaarValidation,
-  panNumber: panValidation,
+  aadhaarNumber: Yup.string()
+    .trim()
+    .matches(/^\d{12}$/, "Aadhaar must be exactly 12 digits")
+    .required("Aadhaar Number is required"),
+    // .test(
+    //   "aadhaar-verified",
+    //   "Aadhaar Verification is required",
+    //   function (value) {
+    //     const { isAadhaarVerified } = this.parent;
+    //     return !value || value.length !== 12 || isAadhaarVerified === true;
+    //   }
+    // ),
+  isAadhaarVerified: Yup.boolean(),
+  aadhaarPanVerified: Yup.boolean(),
+  lastVerifiedAadhaar: Yup.string().nullable(), // or stricter version
+  lastVerifiedPan: Yup.string().nullable(),
+  panNumber: Yup.string()
+    .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, "Invalid PAN number format")
+    .max(10, "PAN number must be exactly 10 characters")
+    .required("PAN number is required"),
+    // .test("pan-verified", "Pancard Verification is required", function (value) {
+    //   const { panVerified } = this.parent;
+    //   return !value || value.length !== 10 || panVerified === true;
+    // }),
+  panVerified: Yup.boolean(),
   shopNumber: textField("Shop Number", 50, true),
   businessNumber: textField("Business Number", 50, true),
 
@@ -139,6 +172,20 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   allowPostpaidCards: Yup.boolean(),
   postpaidCardName: textField("Postpaid Card Name", 50, true),
   isAdmin: Yup.boolean(),
+
+  // Retailer Specific
+  longitude: Yup.string()
+    .matches(
+      /^-?(180(\.0{1,6})?|1?[0-7]?\d(\.\d{1,6})?)$/,
+      "Longitude must be between -180 and 180 with up to 6 decimal places"
+    )
+    .required("Longitude is required"),
+  latitude: Yup.string()
+    .matches(
+      /^-?(90(\.0{1,6})?|[1-8]?\d(\.\d{1,6})?)$/,
+      "Latitude must be between -90 and 90 with up to 6 decimal places"
+    )
+    .required("Latitude is required"),
 
   // Admin-only
   userName: usernamePhoneEmailValidation,
@@ -225,8 +272,6 @@ export function transformUserCreationPayload(
   values: any,
   ip?: string | null
 ) {
-  console.log(ip, "ip");
-
   // Base payload structure common to all user types except IM-Admin
   const basePayload = {
     parentAccount: values.parentAccount || "",
@@ -238,8 +283,11 @@ export function transformUserCreationPayload(
     emailId: values.emailId || "",
     createdBy: localStorage.getItem("username") || "",
     createdByIPAddress: ip || "",
-    aadhaarNumber: values.adhaarNumber || "",
+    aadhaarNumber: values.aadhaarNumber || "",
+    isAadhaarVerified: values.isAadhaarVerified || false,
+    aadhaarPanVerified: values.aadhaarPanVerified || false,
     panNumber: values.panNumber || "",
+    panVerified: values.panVerified || false,
     shopNumber: values.shopNumber || "",
     businessNumber: values.businessNumber || "",
   };
@@ -262,12 +310,14 @@ export function transformUserCreationPayload(
     bankName: values.bankName || "",
     bankAccountNumber: values.accountNumber || "",
     ifscCode: values.ifsc || "",
-    branchName: values.branchName || "",
+    bankHolderName: values.bankHolderName || "",
+    isVerified: values.isBankVerified || false,
+    // branchName: values.branchName || "",
   };
 
   switch (userType) {
     case "partner":
-    case "retailer":
+    // case "retailer":
     case "distributor":
     case "super-distributor":
       return {
@@ -278,6 +328,19 @@ export function transformUserCreationPayload(
           outletName: values.outletName || "",
         },
         bankDetails,
+      };
+
+    case "retailer":
+      return {
+        ...basePayload,
+        address,
+        outletAddress: {
+          ...outletAddress,
+          outletName: values.outletName || "",
+        },
+        bankDetails,
+        longitude: values.longitude || "",
+        latitude: values.latitude || "",
       };
 
     case "enterprise":

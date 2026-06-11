@@ -8,8 +8,9 @@ import { toast } from "react-toastify";
 import TextComponent from "../../Components/Atoms/TextComponent";
 import { Grid, Loader } from "@mantine/core";
 import ButtonComponent from "../../Components/Atoms/ButtonComponent";
-import { object } from "yup";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
+import BackHeader from "../../Components/Molecules/BackHeader";
+import { colors } from "../../theme/colors";
 
 
 const EditSchemeAllocation = () => {
@@ -22,20 +23,20 @@ const EditSchemeAllocation = () => {
     const [schemeOptions, setSchemeOptions] = useState<Record<string, SchemeOption[]>>({});
     const [modifiedSchemes, setModifiedSchemes] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    // const [error, setError] = useState<string | null>(null);
     const [loadingDropdowns, setLoadingDropdowns] = useState<Record<string, boolean>>({});
 
     const schemeOptionsRef = useRef(schemeOptions);
     const modifiedSchemesRef = useRef(modifiedSchemes);
 
     // Fetch Scheme Option list when open any dropdown
-    const handleDropdownOpen = async (subProductName: string) => {
-        if (!schemeOptions[subProductName]) {
-            setLoadingDropdowns((prev) => ({ ...prev, [subProductName]: true }));
+    const handleDropdownOpen = async (item: SubProductWithScheme) => {
+        if (!schemeOptions[item.subProductCode]) {
+            setLoadingDropdowns((prev) => ({ ...prev, [item.subProductCode]: true }));
 
             try {
                 const res = await dispatch(fetchMasterDropdown({
-                    url: `${SCHEMES_ALLOCATION_URL}/scheme-dropdown/${subProductName}`,
+                    url: `${SCHEMES_ALLOCATION_URL}/scheme-dropdown/${item.subProductName}`,
                     method: "POST"
                 })).unwrap();
 
@@ -46,35 +47,37 @@ const EditSchemeAllocation = () => {
 
                 setSchemeOptions((prev) => ({
                     ...prev,
-                    [subProductName]: updatedOptions,
+                    [item.subProductCode]: updatedOptions,
                 }));
             } catch (err) {
                 toast.error("Failed to load schemes");
             } finally {
-                setLoadingDropdowns((prev) => ({ ...prev, [subProductName]: false }));
+                setLoadingDropdowns((prev) => ({ ...prev, [item.subProductCode]: false }));
             }
         }
     };
 
-    const handleSchemeChange = (subProductName: string, selectedSchemeName: string | null) => {
+    const handleSchemeChange = (item: SubProductWithScheme, selectedSchemeName: string | null) => {
+        const { subProductCode } = item;
+
         if (!selectedSchemeName) return;
 
         if (selectedSchemeName === "No scheme assigned") {
             setModifiedSchemes((prev) => ({
                 ...prev,
-                [subProductName]: "No scheme assigned",
+                [subProductCode]: "No scheme assigned",
             }));
             return;
         }
 
-        const selectedOption = schemeOptions[subProductName]?.find(
+        const selectedOption = schemeOptions[subProductCode]?.find(
             (opt) => opt.schemeName === selectedSchemeName
         );
 
         if (selectedOption) {
             setModifiedSchemes((prev) => ({
                 ...prev,
-                [subProductName]: String(selectedOption.schemeId)
+                [subProductCode]: String(selectedOption.schemeId)
             }));
         }
     };
@@ -109,7 +112,7 @@ const EditSchemeAllocation = () => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            setError(null);
+            // setError(null);
             try {
                 const response = await dispatch(
                     fetchMasterDropdown({
@@ -119,7 +122,7 @@ const EditSchemeAllocation = () => {
 
                 setSubProducts(response);
             } catch (err: any) {
-                setError(err);
+                // setError(err);
                 toast.error(err || "Failed to fetch scheme allocation data.");
                 setTimeout(() => {
                     navigate("/schemes/allocation");
@@ -143,10 +146,12 @@ const EditSchemeAllocation = () => {
     }, [modifiedSchemes])
 
     return (
-        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-[#F8F8F8]">
-            <TextComponent fontSize={24} fontFamily="Inter" fontWeight={600}>
-                Edit Scheme Allocation
-            </TextComponent>
+        <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col bg-surface-app">
+
+            <BackHeader
+                title={"Edit Scheme Allocation"}
+                backPath="/schemes/allocation"
+            />
 
             <div className="mt-4 p-2">
                 {loading ? (
@@ -160,8 +165,12 @@ const EditSchemeAllocation = () => {
                             </Grid.Col>
                         </Grid>
                     ))
+                ) : subProducts.length === 0 ? (
+                    <div className="text-center text-gray-500 text-sm p-4">
+                        No sub-products available for this hierarchy.
+                    </div>
                 ) : (
-                    subProducts.map((item) => (
+                    subProducts?.map((item) => (
                         <Grid key={item.subProductName} align="center" gutter="sm" className="mb-2">
                             <Grid.Col span={{ base: 2, md: 2, lg: 2 }}>
                                 <TextComponent fontSize={18} fontFamily="Inter" fontWeight={500} >{item.subProductName}</TextComponent>
@@ -171,31 +180,31 @@ const EditSchemeAllocation = () => {
                                 <SelectComponent
                                     name={item.subProductName}
                                     size="sm"
+                                    searchable
+                                    allowDeselect
                                     rightSection={
-                                        loadingDropdowns[item.subProductName] ? <Loader size={16} /> : null
+                                        loadingDropdowns[item.subProductCode] ? <Loader size={16} /> : null
                                     }
                                     value={
-                                        modifiedSchemes[item.subProductName]
-                                            ? schemeOptions[item.subProductName]?.find(
-                                                (opt) => String(opt.schemeId) === modifiedSchemes[item.subProductName]
+                                        modifiedSchemes[item.subProductCode]
+                                            ? schemeOptions[item.subProductCode]?.find(
+                                                (opt) => String(opt.schemeId) === modifiedSchemes[item.subProductCode]
                                             )?.schemeName || "No scheme assigned"
                                             : item.schemeName || "No scheme assigned"
                                     }
                                     placeholder="Select Scheme"
-                                    onFocus={() => handleDropdownOpen(item.subProductName)}
-                                    onChange={(value: string | null) =>
-                                        handleSchemeChange(item.subProductName, value)
-                                    }
+                                    onFocus={() => handleDropdownOpen(item)}
+                                    onChange={(value: string | null) => handleSchemeChange(item, value)}
                                     data={
-                                        loadingDropdowns[item.subProductName]
+                                        loadingDropdowns[item.subProductCode]
                                             ? [{ value: "__loading__", label: "Loading schemes..." }]
                                             : [
-                                                ...((schemeOptions[item.subProductName] || []).map((scheme) => ({
+                                                ...((schemeOptions[item.subProductCode] || []).map((scheme) => ({
                                                     value: scheme.schemeName,
                                                     label: scheme.schemeName,
                                                 }))),
                                                 // fallback to current item.schemeName if not in fetched list
-                                                ...(schemeOptions[item.subProductName]?.some(s => s.schemeName === item.schemeName)
+                                                ...(schemeOptions[item.subProductCode]?.some(s => s.schemeName === item.schemeName)
                                                     ? []
                                                     : item.schemeName
                                                         ? [{ value: item.schemeName, label: item.schemeName }]
@@ -214,10 +223,10 @@ const EditSchemeAllocation = () => {
                         fullWidth={false}
                         radius={6}
                         onClick={handleUpdate}
-                        borderColor="#fff"
+                        borderColor={colors.text.inverse}
                         variant="filled"
-                        bgColor="#C30305"
-                        textColor="#FFFFFF"
+                        bgColor={colors.brand.primary}
+                        textColor={colors.text.inverse}
                         style={{ padding: "10px 30px" }}
                     >
                         UPDATE

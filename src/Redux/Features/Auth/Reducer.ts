@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState } from "./Types";
 import {
+  fetchProfileInfo,
   fetchWalletBalance,
   forgetPassword,
   login,
   otpVerify,
   resendOtp,
   setPassword,
+  NotificationDropdowns_Api,
 } from "./Thunk";
 
 const initialState: AuthState = {
@@ -15,6 +17,8 @@ const initialState: AuthState = {
   error: null,
   token: null,
   walletBalance: {},
+  profileInfo: null,
+  notificationDropdowns: null,
 };
 
 const authReducer = createSlice({
@@ -92,6 +96,12 @@ const authReducer = createSlice({
       })
       .addCase(fetchWalletBalance.fulfilled, (state, action) => {
         state.walletBalance = action.payload.data;
+      })
+      .addCase(fetchProfileInfo.fulfilled, (state, action) => {
+        state.profileInfo = action.payload.data;
+      })
+      .addCase(NotificationDropdowns_Api.fulfilled, (state, action) => {
+        state.notificationDropdowns = action.payload.data;
       });
   },
 });

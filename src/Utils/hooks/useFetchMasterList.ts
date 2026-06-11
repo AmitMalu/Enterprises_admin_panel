@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   makeSelectMasterMeta,
   setPagination,
@@ -8,39 +7,78 @@ import { useCallback, useEffect, useState } from "react";
 import { fetchMasterList } from "../../Redux/Features/Masters/MastersThunk";
 import { toast } from "react-toastify";
 
-type FilterType = { key: string; value: any } | null;
+type FilterType = Record<string, any> | null;
+
+type PaginationType = {
+  totalPages: number;
+  totalElements: number;
+  pageSize: number;
+  currentPage: number;
+};
 
 interface UseMasterListProps<T> {
   key: string;
-  url: string;
+  url?: string;
   transformDataFn?: (item: any) => T;
-  filter: FilterType;
-  refreshKey: number;
+  filter?: FilterType;
+  refreshKey?: number;
   method?: "GET" | "POST";
+  defaultPageSize?: number;
+  payload?: any;
+  expectArray?: boolean;
+  skipPagination?: boolean;
+  returnFullData?: boolean;
 }
+
+// Overload for array data
+export function useFetchMasterList<T>(
+  props: UseMasterListProps<T> & { expectArray?: true }
+): {
+  data: T[];
+  loading: boolean;
+  error: string | null;
+  pagination: PaginationType;
+  setPage: (page: number) => void;
+  setPageSize: (size: number) => void;
+};
+
+// Overload for single object data
+export function useFetchMasterList<T>(
+  props: UseMasterListProps<T> & { expectArray: false }
+): {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+  pagination: PaginationType;
+  setPage: (page: number) => void;
+  setPageSize: (size: number) => void;
+};
 
 export function useFetchMasterList<T>({
   key,
   url,
   transformDataFn,
-  filter,
+  filter = null,
   refreshKey,
   method = "GET",
+  defaultPageSize,
+  payload = null,
+  expectArray = true,
+  skipPagination = false,
+  returnFullData = false,
 }: UseMasterListProps<T>) {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const meta = useAppSelector(makeSelectMasterMeta(key));
 
   const pagination = meta?.pagination || {
-    pageSize: 5,
+    pageSize: defaultPageSize || 10,
     currentPage: 1,
     totalPages: 0,
     totalElements: 0,
   };
   const currentPage = pagination.currentPage;
-  const pageSize = pagination.pageSize;
 
-  const [data, setData] = useState<T[]>([]);
+  const [data, setData] = useState<T[] | T | null>(expectArray ? [] : null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,6 +106,11 @@ export function useFetchMasterList<T>({
   };
 
   const fetchData = useCallback(async () => {
+    if (!url) {
+      //Skip fetch if URL is empty (e.g., on initial load)
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -80,14 +123,21 @@ export function useFetchMasterList<T>({
           size: pagination.pageSize,
           filter,
           method,
+          payload,
+          skipPagination,
+          returnFullData,
         })
       ).unwrap();
 
       const transformed = transformDataFn
-        ? response.map(transformDataFn)
+        ? Array.isArray(response)
+          ? response.map(transformDataFn)
+          : transformDataFn(response)
         : response;
+
       setData(transformed);
     } catch (err: any) {
+      setData(expectArray ? [] : null);
       setError(err);
       toast.error(err);
     } finally {
@@ -98,8 +148,9 @@ export function useFetchMasterList<T>({
     url,
     pagination.currentPage,
     pagination.pageSize,
-    filter,
+    JSON.stringify(filter),
     refreshKey,
+    payload
   ]);
 
   useEffect(() => {

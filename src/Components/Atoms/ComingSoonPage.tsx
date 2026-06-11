@@ -1,12 +1,12 @@
-import React from "react";
 import TextComponent from "./TextComponent";
+import { colors } from "../../theme/colors";
 
 const ComingSoonPage = ({ name }: { name?: string }) => {
   return (
-    <div className="p-2 w-full h-[calc(100vh-90px)] flex items-center justify-center bg-[#F9F9F9]">
+    <div className="p-2 w-full h-[calc(100vh-90px)] flex items-center justify-center bg-surface-elevated">
       <div className="text-center">
         <TextComponent
-          color="#BF0204"
+          color={colors.status.danger}
           fontWeight={700}
           fontSize={36}
           fontFamily="Inter"

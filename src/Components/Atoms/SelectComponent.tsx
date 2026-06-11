@@ -2,6 +2,7 @@
 import React from "react";
 import { Select } from "@mantine/core";
 import { useScreenSize } from "../../Utils/hooks/useScreenSize";
+import { colors } from "../../theme/colors";
 
 interface SelectComponentProps {
   label?: string;
@@ -30,7 +31,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   label,
   name,
   placeholder,
-  nothingFoundMessage,
+  nothingFoundMessage = "Not Found",
   value,
   onChange,
   error,
@@ -45,7 +46,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   onBlur,
   onFocus,
   allowDeselect = false,
-  searchable = true,
+  searchable = false,
   className = "",
 }) => {
   const screenSize = useScreenSize();
@@ -83,11 +84,19 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         data={data}
         clearable={clearable}
         searchable={searchable}
-        rightSection={rightSection} 
+        rightSection={rightSection}
         styles={{
           input: {
-            color: "#282828",
+            color: colors.text.body,
             fontWeight: 500,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          },
+          option: {
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
           },
         }}
       />

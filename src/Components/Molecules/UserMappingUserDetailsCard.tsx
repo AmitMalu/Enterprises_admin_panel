@@ -1,0 +1,75 @@
+import { Card, Table } from "@mantine/core";
+import TextComponent from "../Atoms/TextComponent";
+import { colors } from "../../theme/colors";
+
+interface UserDetails {
+    parentName?: string;
+    userName?: string;
+    mobileNumber?: string;
+    email?: string;
+    userType?: string;
+    prepaid?: number;
+    postpaid?: number;
+}
+
+interface Props {
+    title?: string;
+    userDetails: UserDetails;
+}
+
+export const UserMappingUserDetailsCard = ({ title = "User Details", userDetails }: Props) => {
+    const {
+        // parentName = "-",
+        userName = "-",
+        mobileNumber = "-",
+        email = "-",
+        // userType = "-",
+        prepaid = 0,
+        postpaid = 0,
+    } = userDetails;
+
+    return (
+        <Card shadow="lg" padding="xs" radius="md" withBorder mt="md" style={{ backgroundColor: colors.surface.elevated }}>
+            <TextComponent fontWeight={600} fontSize="sm" mb="sm">
+                {title}
+            </TextComponent>
+
+            <Table withColumnBorders>
+                <Table.Tbody>
+                    {/* <Table.Tr>
+                        <Table.Td fw={500}>Parent Name</Table.Td>
+                        <Table.Td>{parentName}</Table.Td>
+                    </Table.Tr> */}
+
+                    <Table.Tr>
+                        <Table.Td w="40%" fw={500}>User Name</Table.Td>
+                        <Table.Td>{userName}</Table.Td>
+                    </Table.Tr>
+
+                    <Table.Tr>
+                        <Table.Td fw={500}>Mobile Number</Table.Td>
+                        <Table.Td>{mobileNumber}</Table.Td>
+                    </Table.Tr>
+
+                    <Table.Tr>
+                        <Table.Td fw={500}>Email</Table.Td>
+                        <Table.Td>{email}</Table.Td>
+                    </Table.Tr>
+
+                    {/* <Table.Tr>
+                        <Table.Td fw={500}>User Type</Table.Td>
+                        <Table.Td>{userType}</Table.Td>
+                    </Table.Tr> */}
+
+                    <Table.Tr>
+                        <Table.Td fw={500}>Balance</Table.Td>
+                        <Table.Td>
+                            Prepaid: {postpaid}<br />
+                            Postpaid: {prepaid}
+                        </Table.Td>
+                    </Table.Tr>
+                </Table.Tbody>
+            </Table>
+        </Card>
+    );
+};

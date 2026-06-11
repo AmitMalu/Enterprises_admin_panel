@@ -1,0 +1,21 @@
+.control {
+  &[data-inactive] {
+    opacity: 0;
+    cursor: default;
+  }
+}
+
+.indicator {
+  width: 12px !important;
+  height: 4px;
+  transition: width 250ms ease;
+  bottom: -10px !important;
+
+  &[data-active] {
+    width: 40px !important;
+  }
+}
+
+.indicators {
+  bottom : 5px !important
+}

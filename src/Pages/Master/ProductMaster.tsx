@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextComponent from "../../Components/Atoms/TextComponent";
-import { EditIcon, EyeIcon } from "../../assets/Icons";
+import { EditIcon } from "../../assets/Icons";
 import {
   headers,
   MASTER_KEY,
@@ -20,22 +20,37 @@ import {
   setPagination,
 } from "../../Redux/Features/Masters/MastersSlice";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
+import { useTableStatePreservation } from "../../Utils/hooks/useTableStatePreservation";
 
 const ProductMaster = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const [filterVisible, setFilterVisible] = useState(false);
-  const [filterValues, setFilterValues] = useState<Record<string, any>>({});
   const [refreshKey, setRefreshKey] = useState(0);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(
-    headers.map((h) => h.key as string)
-  );
   const dataRef = useRef<ProductTableType[] | null>(null);
 
-  const [submittedFilter, setSubmittedFilter] = useState<{
-    key: string;
-    value: any;
-  } | null>(null);
+  // const [filterValues, setFilterValues] = useState<Record<string, any>>({});
+  // const [visibleColumns, setVisibleColumns] = useState<string[]>(
+  //   headers.map((h) => h.key as string)
+  // );
+  // const [submittedFilter, setSubmittedFilter] = useState<Record<string, any> | null>(null);
+
+  const {
+    filterValues,
+    setFilterValues,
+    visibleColumns,
+    setVisibleColumns,
+    submittedFilter,
+    setSubmittedFilter,
+    saveStateBeforeNavigation,
+    resetToDefaults,
+  } = useTableStatePreservation({
+    tableKey: 'productMaster',
+    defaultVisibleColumns: headers.map((h) => h.key as string),
+    defaultFilterValues: {},
+    defaultSubmittedFilter: null,
+  });
 
   const { data, loading, pagination, error, setPage, setPageSize } =
     useFetchMasterList<ProductTableType>({
@@ -44,13 +59,16 @@ const ProductMaster = () => {
       transformDataFn: transformProductToTableType,
       filter: submittedFilter,
       refreshKey,
+      defaultPageSize: 5
     });
 
   const handleEdit = (id: string) => {
+    saveStateBeforeNavigation();
     navigate(`/master/product/edit/${id}`, { state: id });
   };
 
   const handleAdd = () => {
+    saveStateBeforeNavigation();
     navigate("/master/product/add");
   };
 
@@ -62,10 +80,10 @@ const ProductMaster = () => {
     dispatch(
       setPagination({
         key: MASTER_KEY,
-        pagination: { ...pagination, currentPage: 1, pageSize: 5 },
+        pagination: { ...pagination, currentPage: 1, pageSize: pagination.pageSize },
       })
     );
-    setSubmittedFilter({ key, value });
+    setSubmittedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleExportClick = () => {
@@ -83,11 +101,20 @@ const ProductMaster = () => {
     );
   };
 
+  const handleToggleAllColumns = (selectAll: boolean) => {
+    if (selectAll) {
+      setVisibleColumns(headers.map((h) => h.key as string));
+    } else {
+      setVisibleColumns([]);
+    }
+  };
+
   const handleRefresh = () => {
+    resetToDefaults();
     dispatch(resetMaster(MASTER_KEY));
-    setFilterValues({});
-    setSubmittedFilter(null);
-    setVisibleColumns(headers.map((h) => h.key as string));
+    // setFilterValues({});
+    // setSubmittedFilter(null);
+    // setVisibleColumns(headers.map((h) => h.key as string));
     setRefreshKey((prev) => prev + 1);
     setFilterVisible(false);
   };
@@ -107,6 +134,7 @@ const ProductMaster = () => {
         onAdd={handleAdd}
         onRefresh={handleRefresh}
         onColumnChange={handleToggleColumn}
+        onToggleAll={handleToggleAllColumns}
         onExport={handleExportClick}
         onFilter={() => setFilterVisible((prev) => !prev)}
         headers={headers}

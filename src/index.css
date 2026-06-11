@@ -2,6 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Brand */
+  /* --color-brand-primary: #c30305; */
+  /* --color-brand-primary-hover: #a30002;
+  --color-brand-accent: #db2729;
+  --color-brand-highlight: #ca4343;
+  --color-brand-emphasis: #d82226; */
+
+  --color-brand-emphasis: #151a4d;
+  --color-brand-primary-hover: #1e2480;
+  --color-brand-primary: #2f3691;
+  --color-brand-accent: #4c54d9;
+  --color-brand-highlight: #8088f8;
+  --color-brand-light: #96addf;
+
+  /* Layout surfaces */
+  --color-surface-app: #f8f8f8;
+  --color-surface-nav: #ebf7f6;
+  --color-surface-card: #ffffff;
+  --color-surface-muted: #f1f1f1;
+  --color-surface-subtle: #f7f7f7;
+  --color-surface-elevated: #f9fafb;
+  --color-surface-accent-muted: #e6eaed;
+  --color-surface-auth: #f2ecec;
+  --color-surface-track: #ebeef2;
+  --color-surface-soft: #dbe5e4;
+  --color-surface-soft-active: #bdc4c3;
+
+  /* Borders */
+  --color-border-default: #cecece;
+  --color-border-soft: #dcdcdc;
+  --color-border-strong: #cacaca;
+  --color-border-light: #e0e2e7;
+  --color-border-ring: #f0f3ff;
+
+  /* Text */
+  --color-text-primary: #000000;
+  --color-text-brand-emphasis: #151a4d;
+  --color-text-brand-dark: #151a4d;
+  --color-text-brand-hover: #1e2480;
+  --color-text-brand: #2f3691;
+  --color-text-brand-accent: #4c54d9;
+  --color-text-brand-highlight: #8088f8;
+  --color-text-brand-light: #96addf;
+  --color-text-secondary: #333333;
+  --color-text-muted: #4c4c57;
+  --color-text-soft: #747483;
+  --color-text-disabled: #91929f;
+  --color-text-subtle: #667085;
+  --color-text-body: #282828;
+  --color-text-neutral: #3d3d3d;
+  --color-text-dim: #4d4e4e;
+  --color-text-title: #2b3241;
+  --color-text-tertiary: #777777;
+  --color-text-heading: #1d1f2c;
+  --color-text-inverse: #ffffff;
+
+  /* Status */
+  --color-status-success: #24d12c;
+  --color-status-success-alt: #45c764;
+  --color-status-success-strong: #007b55;
+  --color-status-success-bright: #47af0c;
+  --color-status-danger: #bf0204;
+  --color-status-danger-line: #dc2626;
+  --color-status-danger-vivid: #ff4d4d;
+  --color-status-danger-soft: #fde4e4;
+  --color-status-warning: #e69a43;
+}
+
 .segoe-text {
   font-family: "Segoe UI", sans-serif;
 }
