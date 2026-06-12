@@ -13,8 +13,9 @@ export const filterSidebarByPermissions = (
       // Always keep Dashboard
       if (isDashboard) return menu;
 
-      // Exclude Masters menu for WLAD and WLAU roles
-      if ((role === "WLAD" || role === "WLAU") && menu.label === "Masters") {
+      // Exclude Masters, Logs, and Notification menus for WLAD and WLAU roles
+      const wlExcludedMenus = ["Masters", "Logs", "Notification"];
+      if ((role === "WLAD" || role === "WLAU") && wlExcludedMenus.includes(menu.label)) {
         return null;
       }
 
