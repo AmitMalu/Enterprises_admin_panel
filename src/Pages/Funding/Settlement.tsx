@@ -112,7 +112,7 @@ const Settlement = () => {
     }
   };
 
-  const handleSettlementAction = async (action: "SUCCESS" | "REJECT") => {
+  const handleSettlementAction = async (action: "SUCCESS" | "FAILURE") => {
     if (!selectedIds.length) return;
     setLoadingActionSubmit(true); // set which row is loading
     if (!walletType) {
@@ -346,7 +346,7 @@ const Settlement = () => {
                 fontSize="16"
                 throttleMs={5000}
                 bgColor={colors.status.danger}
-                onClick={() => handleSettlementAction("REJECT")}
+                onClick={() => handleSettlementAction("FAILURE")}
                 leftIcon={<IconCancel />}
                 disabled={
                   loadingActionSubmit ||
