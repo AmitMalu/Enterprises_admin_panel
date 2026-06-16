@@ -7,7 +7,7 @@ import {
   UsernameSvg,
 } from "../../assets/Icons/Svgs";
 import welcomeTextImage from "../../assets/Images/WelcomeText.png";
-import loginAccountTextImage from "../../assets/Images/loginAccountText.png";
+import loginAccountTextImage from "../../assets/Images/LoginAccountText.png";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
