@@ -6,7 +6,7 @@ import {
   LockIconSvg,
   UsernameSvg,
 } from "../../assets/Icons/Svgs";
-import welcomeTextImage from "../../assets/Images/welcomeText.png";
+import welcomeTextImage from "../../assets/Images/WelcomeText.png";
 import loginAccountTextImage from "../../assets/Images/loginAccountText.png";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
