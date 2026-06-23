@@ -22,6 +22,7 @@ interface TextInputComponentProps {
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   withAsterisk?: boolean;
   disabled?: boolean;
+  description?: string;
   leftSection?: React.ReactNode;
   leftSectionWidth?: number;
   rightSection?: React.ReactNode;
@@ -52,6 +53,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
   size,
   withAsterisk = false,
   disabled = false,
+  description,
   leftSection,
   leftSectionWidth = 36,
   rightSection,
@@ -135,6 +137,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
     autoFocus,
     withAsterisk,
     disabled,
+    description,
     leftSection,
     leftSectionWidth,
     rightSection,
