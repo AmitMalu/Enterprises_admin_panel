@@ -184,6 +184,7 @@ const WalletPreview = () => {
                         hierarchyId: selectedHierarchyId,
                         prepaidCutoffAmount: Number(values.prepaidCutoffAmount),
                         postpaidCutoffAmount: Number(values.postpaidCutoffAmount),
+                        remark: values.remark
                     },
                     mode: "PUT",
                 })
