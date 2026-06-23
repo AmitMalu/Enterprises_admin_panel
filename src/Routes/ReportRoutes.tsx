@@ -5,6 +5,7 @@ import {
   CreateOrderReport,
   CumulativeReport,
   DownloadReport,
+  DownloadReportWallet,
   EmailReport,
   GstTdsReport,
   InvoiceReport,
@@ -59,5 +60,6 @@ export const ReportRoutes = (
     <Route path="/report/sms" element={<SmsReport />} />
 
     <Route path="/report/invoice" element={<InvoiceReport />} />
+    <Route path="/report/download-report" element={<DownloadReportWallet />} />
   </>
 );

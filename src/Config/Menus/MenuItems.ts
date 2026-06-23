@@ -313,6 +313,11 @@ export const sidebarData = [
         link: "/report/ledger-transaction",
         icon: reportsSvg,
       },
+      {
+        label: "Download Report",
+        link: "/report/download-report",
+        icon: reportsSvg,
+      },
       // {
       //   label: "API Performance report",
       //   link: "/report/api-performance",
