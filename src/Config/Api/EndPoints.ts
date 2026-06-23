@@ -69,6 +69,7 @@ export const API_ENDPOINTS = {
     LEDGER_REPORT: "api/ledger-report",
     REFUND_REPORT: "api/refund",
     REPORT: "api/reports",
+    WALLET_HISTORY: "api/reports/wallet-history",
   },
   COMMON: {
     HIERARCHY: "api/hierarchy",

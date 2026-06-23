@@ -17,3 +17,4 @@ export { default as RefundReport } from "./RefundReport";
 export { default as ReconciliationReport } from "./ReconciliationReport";
 export { default as SmsReport } from "./SmsReport";
 export { default as InvoiceReport } from "./InvoiceReport";
+export { default as DownloadReportWallet } from "./DownloadReportWallet";
