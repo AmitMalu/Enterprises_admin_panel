@@ -6,3 +6,4 @@ export { default as LowBalance } from "./LowBalance";
 export { default as BulkCreditDebit } from "./BulkCreditDebit";
 export { default as PreFundingAuth } from "./PreFundingAuth";
 export { default as UpdateTransaction } from "./UpdateTransaction";
+export { default as WalletPreview } from "./WalletPreview";

@@ -184,6 +184,11 @@ export const sidebarData = [
         link: "/funding/bulk-credit-debit",
         icon: fundingSvg,
       },
+      {
+        label: "Wallet Preview",
+        link: "/funding/wallet-preview",
+        icon: fundingSvg,
+      },
     ],
   },
   {

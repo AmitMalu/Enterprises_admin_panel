@@ -50,6 +50,7 @@ export const API_ENDPOINTS = {
     PREFUNDING: "api/prefund",
     SETTLEMENT: "api/settlement",
     FUNDING: "api/funding",
+    WALLET_PREVIEW: "api/funding/wallet-preview",
   },
   SCHEMES: {
     SCHEME_LIST: "api/scheme",
