@@ -83,44 +83,6 @@ export const walletPreviewEditValidationSchema: Record<
     remark: Yup.string().optional()
 };
 
-/** Dynamic schema — enforces lien: cutoff amount cannot exceed actual wallet balance */
-export const buildWalletPreviewEditSchema = (
-    prepaidBalance: number | null,
-    postpaidBalance: number | null
-) =>
-    Yup.object({
-        hierarchyId: Yup.string().optional(),
-        prepaidCutoffAmount: Yup.number()
-            .typeError("Prepaid Cutoff Amount must be a number")
-            .required("Prepaid Cutoff Amount is required")
-            .min(0, "Must be ≥ 0")
-            .test(
-                "lien-prepaid",
-                prepaidBalance !== null
-                    ? `Cutoff Amount cannot exceed actual balance (${prepaidBalance})`
-                    : "Cutoff Amount cannot exceed actual balance",
-                (value) =>
-                    prepaidBalance === null ||
-                    value === undefined ||
-                    value <= prepaidBalance
-            ),
-        postpaidCutoffAmount: Yup.number()
-            .typeError("Postpaid Cutoff Amount must be a number")
-            .required("Postpaid Cutoff Amount is required")
-            .min(0, "Must be ≥ 0")
-            .test(
-                "lien-postpaid",
-                postpaidBalance !== null
-                    ? `Cutoff Amount cannot exceed actual balance (${postpaidBalance})`
-                    : "`Cutoff Amount cannot exceed actual balance",
-                (value) =>
-                    postpaidBalance === null ||
-                    value === undefined ||
-                    value <= postpaidBalance
-            ),
-        remark: Yup.string().optional(),
-    });
-
 // ─── Table Headers ───────────────────────────────────────────────────────────
 
 export const walletPreviewHeaders: GenericTableHeader<WalletPreviewTableType>[] =

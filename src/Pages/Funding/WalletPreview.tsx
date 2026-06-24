@@ -20,7 +20,6 @@ import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { axiosInstance } from "../../Config/Api/AxiosInstance";
 import { colors } from "../../theme/colors";
 import {
-    buildWalletPreviewEditSchema,
     memberRoleOptions,
     transformWalletPreviewToEditForm,
     transformWalletPreviewToTableType,
@@ -32,6 +31,7 @@ import {
     WALLET_PREVIEW_URL,
     WalletPreviewEditForm,
     WalletPreviewTableType,
+    walletPreviewEditValidationSchema,
 } from "../../Config/Funding/WalletPreviewConfig";
 
 const WalletPreview = () => {
@@ -57,10 +57,6 @@ const WalletPreview = () => {
         walletPreviewEditInitialValues
     );
     const [selectedHierarchyId, setSelectedHierarchyId] = useState<string>("");
-    const [editBalances, setEditBalances] = useState<{ prepaid: number | null; postpaid: number | null }>({
-        prepaid: null,
-        postpaid: null,
-    });
 
     // ── fetch list ────────────────────────────────────────────────────────────
     const { data, loading, error, pagination, setPage, setPageSize } =
@@ -147,10 +143,6 @@ const WalletPreview = () => {
                 setEditInitialValues(
                     transformWalletPreviewToEditForm(responseData.data)
                 );
-                setEditBalances({
-                    prepaid: responseData.data.prepaidBalance ?? null,
-                    postpaid: responseData.data.postpaidBalance ?? null,
-                });
             } else {
                 toast.error(responseData?.message || "Failed to fetch wallet details.");
                 setEditModalOpen(false);
@@ -169,7 +161,6 @@ const WalletPreview = () => {
         setEditModalOpen(false);
         setSelectedHierarchyId("");
         setEditInitialValues(walletPreviewEditInitialValues);
-        setEditBalances({ prepaid: null, postpaid: null });
     };
 
     // ── Edit: submit PUT ──────────────────────────────────────────────────────
@@ -322,7 +313,7 @@ const WalletPreview = () => {
                     <Formik
                         initialValues={editInitialValues}
                         enableReinitialize
-                        validationSchema={buildWalletPreviewEditSchema(editBalances.prepaid, editBalances.postpaid)}
+                        validationSchema={Yup.object(walletPreviewEditValidationSchema)}
                         onSubmit={handleEditSubmit}
                     >
                         {() => (
@@ -359,11 +350,6 @@ const WalletPreview = () => {
                                             type="number"
                                             withAsterisk
                                             required
-                                            description={
-                                                editBalances.prepaid !== null
-                                                    ? `Current prepaid balance: ${editBalances.prepaid}`
-                                                    : undefined
-                                            }
                                         />
                                     </Grid.Col>
 
@@ -377,11 +363,6 @@ const WalletPreview = () => {
                                             type="number"
                                             withAsterisk
                                             required
-                                            description={
-                                                editBalances.postpaid !== null
-                                                    ? `Current postpaid balance: ${editBalances.postpaid}`
-                                                    : undefined
-                                            }
                                         />
                                     </Grid.Col>
                                 </Grid>
