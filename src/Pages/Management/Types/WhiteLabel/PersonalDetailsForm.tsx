@@ -8,12 +8,23 @@ import { booleanSelectData } from "../../../../Utils/utils";
 const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
 
   const [isReadOnly, setIsReadOnly] = useState(false);
+  const [isWLAdmin, setIsWLAdmin] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userInfo");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
+
+      const role = parsedUser?.role;
       const hierarchyId = parsedUser?.hierarchyId;
+
+      const hierarchyType = hierarchyId?.split("-")[1];
+
+      const isWLAdmin =
+        role === "WLAD" ||
+        hierarchyType === "WL";
+
+      setIsWLAdmin(isWLAdmin);
 
       if (hierarchyId) {
         formik.setFieldValue("parentAccount", hierarchyId);
@@ -55,6 +66,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             allowDeselect={false}
             placeholder="Select Is WL-Admin"
             withAsterisk
+            disabled={isWLAdmin}
             data={booleanSelectData}
           />
         </Grid.Col>
