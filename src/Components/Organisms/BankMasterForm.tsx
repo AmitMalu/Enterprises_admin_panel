@@ -3,14 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import BreadCrumb from "../Molecules/BreadCrumb";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { Grid } from "@mantine/core";
+import { Grid, Loader } from "@mantine/core";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { useAppDispatch } from "../../Redux/hooks";
 import { booleanSelectData } from "../../Utils/utils";
 import { toast } from "react-toastify";
-import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
+import { fetchMasterById, fetchWLDropdown } from "../../Redux/Features/Masters/MastersThunk";
 import {
     BankMasterFormType,
     initialValues,
@@ -35,6 +35,8 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
     const [formData, setFormData] = useState<BankMasterFormType>(initialValues);
     const [loading, setLoading] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
+    const [wlDropdownData, setWlDropdownData] = useState<any[]>([]);
+    const [dropdownLoading, setDropdownLoading] = useState(false);
 
     const handleSubmit = useThrottleMasterFormSubmit<BankMasterFormType>({
         mode,
@@ -51,6 +53,24 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
         entityName: "IM-Bank",
     });
 
+    useEffect(() => {
+        const fetchDropdowns = async () => {
+            try {
+                setDropdownLoading(true);
+
+                const wlResponse = await dispatch(fetchWLDropdown()).unwrap();
+
+                setWlDropdownData(wlResponse);
+            } catch (error) {
+                console.error("Failed to fetch dropdowns:", error);
+                toast.error("Failed to load options");
+            } finally {
+                setDropdownLoading(false);
+            }
+        };
+
+        fetchDropdowns();
+    }, []);
 
     useEffect(() => {
         const fetchAndSet = async () => {
@@ -106,6 +126,27 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
             >
                 <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
                     <Grid gutter="lg">
+                        <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                            <FormikSelectComponent
+                                name="whitelabelId"
+                                label="White Label"
+                                placeholder="Select White Label"
+                                data={wlDropdownData.map((item: any) => ({
+                                    value: item.value,
+                                    label: item.label,
+                                }))}
+                                nothingFoundMessage="Nothing found"
+                                allowDeselect={true}
+                                searchable={true}
+                                disabled={dropdownLoading}
+                                rightSection={
+                                    dropdownLoading ? <Loader size="xs" /> : null
+                                }
+                                withAsterisk
+                                required
+                            />
+                        </Grid.Col>
+
                         <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                             <FormikTextInputComponent
                                 name="bankName"

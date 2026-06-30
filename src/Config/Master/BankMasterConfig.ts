@@ -11,6 +11,7 @@ export const MASTER_KEY = "bank";
 export const MASTER_URL = API_ENDPOINTS.MASTER.BANK_MASTER;
 
 export interface BankMasterFormType {
+  whitelabelId: string;
   bankName: string;
   accountNumber: string;
   ifscCode: string;
@@ -43,6 +44,7 @@ export type FetchBankMasterListParams = {
 };
 
 export const initialValues: BankMasterFormType = {
+  whitelabelId: "",
   bankName: "",
   accountNumber: "",
   ifscCode: "",
@@ -53,18 +55,20 @@ export const initialValues: BankMasterFormType = {
 };
 
 export const validationSchema: Record<keyof BankMasterFormType, Yup.AnySchema> =
-  {
-    bankName: textField("Bank Name", 50, true, true),
-    accountNumber: accountNumberValidation,
-    ifscCode: ifscValidation,
-    charges: Yup.boolean().default(false),
-    chargesType: textField("Charges Type", 50, true, true),
-    isActive: Yup.boolean().default(false),
-    isBlocked: Yup.boolean().default(false),
-  };
+{
+  whitelabelId: Yup.string().required("White Label is required"),
+  bankName: textField("Bank Name", 50, true, true),
+  accountNumber: accountNumberValidation,
+  ifscCode: ifscValidation,
+  charges: Yup.boolean().default(false),
+  chargesType: textField("Charges Type", 50, true, true),
+  isActive: Yup.boolean().default(false),
+  isBlocked: Yup.boolean().default(false),
+};
 
 export const headers: GenericTableHeader<BankMasterTableType>[] = [
   { key: "id", label: "Id", filterType: "number", searchable: true },
+  { key: "whitelabelId", label: "White Label", filterType: "text" },
   { key: "bankName", label: "Bank Name", filterType: "text" },
   { key: "accountNumber", label: "Account Number", filterType: "text" },
   { key: "ifscCode", label: "IFSC Code", filterType: "text" },
@@ -91,6 +95,7 @@ export const transformToBankTableType = (
 ): BankMasterTableType => {
   return {
     id: raw.id ?? "",
+    whitelabelId: raw.whitelabelId,
     bankName: raw.bankName ?? "",
     accountNumber: raw.accountNumber ?? "",
     ifscCode: raw.ifscCode ?? "",
@@ -109,6 +114,7 @@ export const transformToBankTableType = (
 export const transformBankListToFormData = (
   raw: Record<string, any>
 ): BankMasterFormType => ({
+  whitelabelId: raw.whitelabelId ?? "",
   bankName: raw.bankName ?? "",
   accountNumber: raw.accountNumber ?? "",
   ifscCode: raw.ifscCode ?? "",
