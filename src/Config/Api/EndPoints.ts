@@ -62,7 +62,8 @@ export const API_ENDPOINTS = {
   },
   REPORTS: {
     LOGS: "api/report",
-    TRANSACTION: "api/my-transaction",
+    TRANSACTION: "api/transaction-report",
+    WALLET: "api/my-transaction",
     SETTLEMENT: "api/settlement",
     GST_TDS: "api/commission-charge",
     SEARCH_TRANSACTION: "api/search-transaction",
