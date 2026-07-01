@@ -12,6 +12,9 @@ import { API_ENDPOINTS } from "../Api/EndPoints";
 export const TRANX_REPORT_URL = API_ENDPOINTS.REPORTS.TRANSACTION;
 export const TRANX_REPORT_KEY = "transaction-report";
 
+export const WALLET_REPORT_URL = API_ENDPOINTS.REPORTS.WALLET;
+export const WALLET_REPORT_KEY = "wallet-report";
+
 export interface TransactionReportTableType {
   id: string;
   tranxId: string;
