@@ -20,6 +20,7 @@ import {
   TransactionReport,
   UnSettledTransactionReport,
   UpdateTransactionReport,
+  WalletReport,
 } from "../Pages/Reports";
 
 export const ReportRoutes = (
@@ -29,6 +30,7 @@ export const ReportRoutes = (
       element={<LiveTransactionReport />}
     />
     <Route path="/report/transaction" element={<TransactionReport />} />
+    <Route path="/report/wallet" element={<WalletReport />} />
     <Route path="/report/settlement" element={<SettlementReport />} />
     <Route
       path="/report/unsettled-transaction"

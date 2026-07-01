@@ -279,6 +279,11 @@ export const sidebarData = [
         icon: reportsSvg,
       },
       {
+        label: "Wallet Report",
+        link: "/report/wallet",
+        icon: reportsSvg,
+      },
+      {
         label: "Settlement report",
         link: "/report/settlement",
         icon: reportsSvg,

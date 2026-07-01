@@ -50,7 +50,7 @@ const TransactionReport = () => {
   const throttledSubmit = useThrottledFormSubmit((values: any) => {
     setPayload(() => ({
       ...transformToTransactionReportPayload(values), // top filters
-      ...(submittedFilter || {}),                      // 🔴 keep inline filters
+      ...(submittedFilter || {}),                      // keep inline filters
     }));
     // setRefreshKey((prev) => prev + 1);
     setViewSubmitted(true);
