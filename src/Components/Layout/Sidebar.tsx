@@ -9,7 +9,8 @@ const Sidebar: React.FC = () => {
   const [openMap, setOpenMap] = useState<Record<string, { level: number }>>({});
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
 
-  const role = userInfo?.role || "";
+  // Extract role: if not in userInfo, parse from hierarchyId (e.g., "ENT-AD-001" → "AD")
+  const role = userInfo?.role || userInfo?.hierarchyId?.split("-")[1] || "";
   const permissions = (userInfo?.permissions || "")
     .split(",")
     .map((p: string) => p.trim()) // ["0101", "0203", "0103"]
