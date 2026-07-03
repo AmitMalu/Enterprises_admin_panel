@@ -62,6 +62,8 @@ axiosInstance.interceptors.request.use(
       config.headers.set("IpAddress", ipAddress);
     }
 
+    config.headers.set("Medium", "web");
+
     return config;
   },
   (error) => {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { sidebarData } from "../../Config/Menus/MenuItems";
+import { WL_EXCLUDED_MENUS, WL_EXCLUDED_SUBMENUS } from "../filterSidebarByPermissions";
 
 interface UseMenuListFromSidebarProps {
     selectedMenus?: string[];
@@ -20,27 +21,28 @@ export const useMenuListFromSidebar = ({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<unknown>(null);
 
+    const isWL = currentUserRole === "WLAD" || currentUserRole === "WLAU";
+
     useEffect(() => {
         setLoading(true);
         try {
-            // Assign menu IDs as 2-digit codes (01, 02, etc.)
+            // Start with all non-dashboard menus
             let filteredMenus = sidebarData.filter(
                 (menu) => menu.label.toLowerCase() !== "dashboard"
             );
 
-            // Exclude Masters menu for WLAD role when creating permissions
-            if (currentUserRole === "WLAD") {
+            // For WL roles, exclude certain top-level menus
+            if (isWL) {
                 filteredMenus = filteredMenus.filter(
-                    (menu) => menu.label !== "Masters"
+                    (menu) => !WL_EXCLUDED_MENUS.includes(menu.label)
                 );
             }
 
-            // Assign menu IDs as 2-digit codes (01, 02, etc.)
+            // Build menu list with codes (01, 02, etc.)
             const menus: MenuOption[] = filteredMenus.map((menu, menuIndex) => ({
                 label: menu.label,
                 value: String(menuIndex + 1).padStart(2, "0"),
             }));
-
 
             setMenuList(menus);
             setError(null);
@@ -52,7 +54,7 @@ export const useMenuListFromSidebar = ({
         } finally {
             setLoading(false);
         }
-    }, [currentUserRole]);
+    }, [currentUserRole, isWL]);
 
     useEffect(() => {
         if (!selectedMenus.length) {
@@ -60,15 +62,14 @@ export const useMenuListFromSidebar = ({
             return;
         }
 
-        // Remove Dashboard here too, so index mapping matches menuList
+        // Build the same filtered menu list as above
         let filteredMenus = sidebarData.filter(
             (menu) => menu.label.toLowerCase() !== "dashboard"
         );
 
-        // Exclude Masters menu for WLAD role when creating permissions
-        if (currentUserRole === "WLAD") {
+        if (isWL) {
             filteredMenus = filteredMenus.filter(
-                (menu) => menu.label !== "Masters"
+                (menu) => !WL_EXCLUDED_MENUS.includes(menu.label)
             );
         }
 
@@ -79,7 +80,13 @@ export const useMenuListFromSidebar = ({
             const menu = filteredMenus[menuIndex];
 
             if (menu?.links?.length) {
+                // Get WL-excluded submenu labels for this parent menu
+                const excludedSubmenus = isWL ? (WL_EXCLUDED_SUBMENUS[menu.label] ?? []) : [];
+
                 menu.links.forEach((submenu, subIndex) => {
+                    // Skip submenus that are excluded for WL roles
+                    if (excludedSubmenus.includes(submenu.label)) return;
+
                     const submenuCode = menuCode + String(subIndex + 1).padStart(2, "0");
                     subMenus.push({ label: submenu.label, value: submenuCode });
                 });
@@ -87,7 +94,7 @@ export const useMenuListFromSidebar = ({
         });
 
         setSubMenuList(subMenus);
-    }, [selectedMenus, currentUserRole]);
+    }, [selectedMenus, currentUserRole, isWL]);
 
     return {
         menuList,
