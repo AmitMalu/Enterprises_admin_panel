@@ -219,7 +219,7 @@ export const slabStructureHeaders: GenericTableHeader<SlabStructureTableType>[] 
       ],
     },
     { key: "gross", label: "Gross" },
-    { key: "im", label: "IM", showCalculatedBelow: true },
+    { key: "im", label: "NFT", showCalculatedBelow: true },
     { key: "enterprise", label: "Enterprise", showCalculatedBelow: true },
     { key: "whitelabel", label: "WL", showCalculatedBelow: true },
     { key: "superDistributor", label: "SD", showCalculatedBelow: true },
