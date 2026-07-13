@@ -206,7 +206,8 @@ const SmsCredentialsForm = ({ mode }: SmsCredentialsFormProps) => {
                                             leftSection={<LockIconSvg />}
                                             leftSectionWidth={36}
                                             rightSectionWidth={48}
-                                            maxLength={255}
+                                            minLength={8}
+                                            maxLength={20}
                                         />
                                     </Grid.Col>
 

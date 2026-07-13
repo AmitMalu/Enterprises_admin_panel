@@ -66,7 +66,8 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             label="Name"
             placeholder="Type Name"
             withAsterisk
-            maxLength={51}
+            minLength={2}
+            maxLength={50}
             allowNumber={false}
             allowSpecialChar={false}
           />
@@ -101,6 +102,7 @@ const PersonalDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             placeholder="Enter Your Email Address"
             withAsterisk
             maxLength={50}
+            toLowerCase
           />
         </Grid.Col>
       </Grid>

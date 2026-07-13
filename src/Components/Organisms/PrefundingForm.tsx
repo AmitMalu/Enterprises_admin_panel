@@ -24,6 +24,8 @@ import {
 } from "../../Redux/Features/Fundings/thunks";
 import BackHeader from "../Molecules/BackHeader";
 import { colors } from "../../theme/colors";
+import FilePreviewModal from "../Atoms/FilePreviewModal";
+import FormikFileInput from "../Molecules/FormikFileInput";
 
 const PrefundingForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,6 +41,7 @@ const PrefundingForm = () => {
   const [loading, setLoading] = useState(true);
   const [isActionDisabled, setIsActionDisabled] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const handleSubmit = useThrottledFormSubmit<any>((values) => {
     if (isSubmitting) return;
@@ -126,6 +129,7 @@ const PrefundingForm = () => {
     };
   }, [dispatch, id]);
 
+
   const readOnly = true;
 
   return (
@@ -199,16 +203,13 @@ const PrefundingForm = () => {
               />
             </Grid.Col>
 
-            {/* <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-              <FormikTextInputComponent
-                name="depositImage"
+            <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
+              <FormikFileInput
+                name="depositeImage"
                 label="Deposit Slip"
                 disabled={readOnly}
-                placeholder="Add Deposit Slip"
-                accept="image/png, image/jpeg, application/pdf"
-                size="sm"
               />
-            </Grid.Col> */}
+            </Grid.Col>
 
             <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
               <FormikTextInputComponent
@@ -304,6 +305,13 @@ const PrefundingForm = () => {
           )}
         </Form>
       </Formik>
+
+      <FilePreviewModal
+        file={formData.depositeImage}
+        fileName="Deposit Slip"
+        opened={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+      />
     </div>
   );
 };

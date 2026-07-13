@@ -93,7 +93,8 @@ const ChangePassword = () => {
                                 placeholder="Enter Old Password"
                                 required
                                 withAsterisk
-                                maxLength={51}
+                                minLength={8}
+                                maxLength={20}
                             />
 
                             {/*New Password */}
@@ -104,7 +105,8 @@ const ChangePassword = () => {
                                 placeholder="Enter your New Password"
                                 required
                                 withAsterisk
-                                maxLength={51}
+                                minLength={8}
+                                maxLength={20}
                             />
 
                             <FormikTextInputComponent
@@ -114,7 +116,8 @@ const ChangePassword = () => {
                                 placeholder="Re-Enter New Password"
                                 required
                                 withAsterisk
-                                maxLength={51}
+                                minLength={8}
+                                maxLength={20}
                             />
 
                             <div className="flex justify-end">

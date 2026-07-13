@@ -68,27 +68,27 @@ export const initialValues: SubProductFormType = {
 };
 
 export const validationSchema: Record<keyof SubProductFormType, Yup.AnySchema> =
-  {
-    subProductTitle: textField("Sub Product Title", 100, true),
-    product: textField("Product", 50, true),
-    walletType: textField("Wallet Type", 50, true),
-    isSettlement: Yup.boolean().required("Is Settlement is Required"),
-    settlementTime: textField("Settlement Time", 50, false, true),
-    isWhiteLabelAdmin: Yup.boolean().default(false),
-    whiteLabelAdminId: Yup.string()
-      .max(50, "WL-Admin Id must be at most 50 characters")
-      .when("isWhiteLabelAdmin", {
-        is: true,
-        then: (schema) => schema.required("WL-Admin Id is required"),
-        otherwise: (schema) => schema.notRequired(),
-      }),
-    userField1: textField("User Field 1", 50, false, true),
-    userField2: textField("User Field 2", 50, false, true),
-    userField3: textField("User Field 3", 50, false, true),
-    isActive: Yup.boolean().default(true),
-    isBlocked: Yup.boolean().default(false),
-    isVisible: Yup.boolean().default(true),
-  };
+{
+  subProductTitle: textField("Sub Product Title", 100, true, true),
+  product: textField("Product", 50, true),
+  walletType: textField("Wallet Type", 50, true),
+  isSettlement: Yup.boolean().required("Is Settlement is Required"),
+  settlementTime: textField("Settlement Time", 50, false, true),
+  isWhiteLabelAdmin: Yup.boolean().default(false),
+  whiteLabelAdminId: Yup.string()
+    .max(50, "WL-Admin Id must be at most 50 characters")
+    .when("isWhiteLabelAdmin", {
+      is: true,
+      then: (schema) => schema.required("WL-Admin Id is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  userField1: textField("User Field 1", 50, false, true),
+  userField2: textField("User Field 2", 50, false, true),
+  userField3: textField("User Field 3", 50, false, true),
+  isActive: Yup.boolean().default(true),
+  isBlocked: Yup.boolean().default(false),
+  isVisible: Yup.boolean().default(true),
+};
 
 export const headers: GenericTableHeader<SubProductTableType>[] = [
   { key: "id", label: "Id", filterType: "number", searchable: true },

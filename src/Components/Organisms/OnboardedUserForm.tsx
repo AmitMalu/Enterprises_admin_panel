@@ -5,8 +5,8 @@ import { initialValues, USER_TYPE_KEBAB_CASE_MAP, UserTypeUpperSnakeCase } from 
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import BreadCrumb from "../Molecules/BreadCrumb";
-import { Form, Formik } from "formik";
-import { Grid } from "@mantine/core";
+import { Form, Formik, FormikProps } from "formik";
+import { Grid, Loader } from "@mantine/core";
 import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import BackHeader from "../Molecules/BackHeader";
@@ -17,6 +17,7 @@ import { booleanSelectData } from "../../Utils/utils";
 import { updateUser } from "../../Redux/Features/Management/Thunk";
 import { colors } from "../../theme/colors";
 import FormikFileInput from "../Molecules/FormikFileInput";
+import { useAddressFromZipcode } from "../../Utils/hooks/useAddressFromZipcode";
 
 type FieldVisibilityConfig = {
   basic: string[];
@@ -84,6 +85,130 @@ const FIELD_VISIBILITY_MAP: Record<UserType | "im-admin", FieldVisibilityConfig>
     bank: [],
     other: [],
   },
+};
+
+const AddressFields = ({
+  formik,
+  prefix,
+  visibleFields,
+  readOnly,
+  addressLabel = "Address",
+  zipCodeLabel = "Zip Code",
+  cityLabel = "City",
+  stateLabel = "State",
+  addressPlaceholder = "Enter Your Address",
+}: {
+  formik: FormikProps<any>;
+  prefix: string;
+  visibleFields: string[];
+  readOnly: boolean;
+  addressLabel?: string;
+  zipCodeLabel?: string;
+  cityLabel?: string;
+  stateLabel?: string;
+  addressPlaceholder?: string;
+}) => {
+  const { location, loading, error } = useAddressFromZipcode(formik.values?.[prefix]?.zipCode);
+
+  useEffect(() => {
+    if (formik.values?.[prefix]?.zipCode && !loading) {
+      if (location.state || location.city) {
+        formik.setValues((prev: any) => ({
+          ...prev,
+          [prefix]: {
+            ...prev[prefix],
+            state: location.state || "",
+            city: location.city || "",
+          },
+        }));
+        formik.setFieldError(`${prefix}.state`, "");
+        formik.setFieldError(`${prefix}.city`, "");
+      } else {
+        formik.setValues((prev: any) => ({
+          ...prev,
+          [prefix]: {
+            ...prev[prefix],
+            state: "",
+            city: "",
+          },
+        }));
+      }
+    }
+  }, [location.state, location.city, formik.values?.[prefix]?.zipCode, loading]);
+
+  useEffect(() => {
+    if (error) {
+      formik.setFieldError(`${prefix}.zipCode`, error);
+    } else {
+      formik.setFieldError(`${prefix}.zipCode`, "");
+    }
+  }, [error]);
+
+  return (
+    <Grid gutter="lg">
+      {visibleFields.includes("address") && (
+        <Grid.Col span={{ base: 12 }}>
+          <FormikTextInputComponent
+            name={`${prefix}.address`}
+            label={addressLabel}
+            placeholder={addressPlaceholder}
+            withAsterisk
+            required
+            minLength={15}
+            maxLength={100}
+            disabled={readOnly}
+          />
+        </Grid.Col>
+      )}
+      {visibleFields.includes("zipCode") && (
+        <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+          <FormikTextInputComponent
+            name={`${prefix}.zipCode`}
+            label={zipCodeLabel}
+            placeholder="Enter Zip Code"
+            withAsterisk
+            required
+            disabled={readOnly || !!loading}
+            maxLength={6}
+            allowSpecialChar={false}
+            allowCharacter={false}
+            allowSpace={false}
+            error={error}
+            rightSection={loading ? <Loader size={16} /> : null}
+          />
+        </Grid.Col>
+      )}
+      {visibleFields.includes("state") && (
+        <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+          <FormikTextInputComponent
+            value={formik.values?.[prefix]?.state || ""}
+            key={`state-${prefix}-${formik.values?.[prefix]?.state || "empty"}`}
+            name={`${prefix}.state`}
+            label={stateLabel}
+            placeholder="Auto-filled from Zip Code"
+            withAsterisk
+            disabled
+            rightSection={loading ? <Loader size={16} /> : null}
+          />
+        </Grid.Col>
+      )}
+      {visibleFields.includes("city") && (
+        <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+          <FormikTextInputComponent
+            value={formik.values?.[prefix]?.city || ""}
+            key={`city-${prefix}-${formik.values?.[prefix]?.city || "empty"}`}
+            name={`${prefix}.city`}
+            label={cityLabel}
+            placeholder="Auto-filled from Zip Code"
+            withAsterisk
+            required
+            disabled
+            rightSection={loading ? <Loader size={16} /> : null}
+          />
+        </Grid.Col>
+      )}
+    </Grid>
+  );
 };
 
 const OnboardedUserForm = () => {
@@ -211,7 +336,8 @@ const OnboardedUserForm = () => {
         onSubmit={(values, { resetForm }) => saveChanges(values, resetForm)}
         enableReinitialize
       >
-        {({ values, dirty, resetForm }) => {
+        {(formik) => {
+          const { values, dirty, resetForm } = formik;
 
           return (
             <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
@@ -228,7 +354,8 @@ const OnboardedUserForm = () => {
                           label="Name"
                           placeholder="Type Name"
                           withAsterisk
-                          maxLength={51}
+                          minLength={2}
+                          maxLength={50}
                           allowNumber={false}
                           allowSpecialChar={false}
                           disabled={readOnly}
@@ -273,6 +400,7 @@ const OnboardedUserForm = () => {
                           withAsterisk
                           maxLength={50}
                           disabled={readOnly}
+                          toLowerCase
                         />
                       </Grid.Col>
                     )}
@@ -397,60 +525,12 @@ const OnboardedUserForm = () => {
               {fieldConfig.address.length > 0 && (
                 <div className="mb-8 border-t pt-6">
                   <h3 className="text-lg font-semibold mb-4 text-gray-800">Primary Address</h3>
-                  <Grid gutter="lg">
-                    {fieldConfig.address.includes("address") && (
-                      <Grid.Col className="" span={{ base: 12 }}>
-                        <FormikTextInputComponent
-                          name="address.address"
-                          label="Address"
-                          placeholder="Enter Your Address"
-                          withAsterisk
-                          required
-                          maxLength={150}
-                          disabled={readOnly}
-                        />
-                      </Grid.Col>
-                    )}
-                    {fieldConfig.address.includes("city") && (
-                      <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-                        <FormikTextInputComponent
-                          name="address.city"
-                          label="City"
-                          placeholder="Enter Your City"
-                          withAsterisk
-                          maxLength={50}
-                          allowSpecialChar={false}
-                          allowCharacter={false}
-                          allowSpace={false}
-                          disabled={readOnly}
-                        />
-                      </Grid.Col>
-                    )}
-                    {fieldConfig.address.includes("state") && (
-                      <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-                        <FormikTextInputComponent
-                          name="address.state"
-                          label="State"
-                          placeholder="Enter State"
-                          withAsterisk
-                          required
-                          disabled={readOnly}
-                        />
-                      </Grid.Col>
-                    )}
-                    {fieldConfig.address.includes("zipCode") && (
-                      <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-                        <FormikTextInputComponent
-                          name="address.zipCode"
-                          label="Zip Code"
-                          placeholder="Enter Zip Code"
-                          withAsterisk
-                          required
-                          disabled={readOnly}
-                        />
-                      </Grid.Col>
-                    )}
-                  </Grid>
+                  <AddressFields
+                    formik={formik}
+                    prefix="address"
+                    visibleFields={fieldConfig.address}
+                    readOnly={readOnly}
+                  />
                 </div>
               )}
 
@@ -497,59 +577,18 @@ const OnboardedUserForm = () => {
                         />
                       </Grid.Col>
                     )}
-                    {fieldConfig.outletAddress.includes("address") && (
-                      <Grid.Col className="" span={{ base: 12 }}>
-                        <FormikTextInputComponent
-                          name="outletAddress.address"
-                          label="Company Address"
-                          placeholder="Enter Your Company Address"
-                          withAsterisk
-                          required
-                          maxLength={150}
-                          disabled={readOnly}
-                        />
-                      </Grid.Col>
-                    )}
-                    {fieldConfig.outletAddress.includes("city") && (
-                      <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-                        <FormikTextInputComponent
-                          name="outletAddress.city"
-                          label="Outlet City"
-                          placeholder="Select Your Outlet City"
-                          ithAsterisk
-                          required
-                          disabled={readOnly}
-                        />
-                      </Grid.Col>
-                    )}
-                    {fieldConfig.outletAddress.includes("state") && (
-                      <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-                        <FormikTextInputComponent
-                          name="outletAddress.state"
-                          label="Outlet State"
-                          placeholder="Select Your Outlet State"
-                          withAsterisk
-                          required
-                          disabled={readOnly}
-                        />
-                      </Grid.Col>
-                    )}
-                    {fieldConfig.outletAddress.includes("zipCode") && (
-                      <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
-                        <FormikTextInputComponent
-                          name="outletAddress.zipCode"
-                          label="Outlet Zip Code"
-                          placeholder="Enter Your Outlet Zipcode"
-                          withAsterisk
-                          maxLength={6}
-                          allowSpecialChar={false}
-                          allowCharacter={false}
-                          allowSpace={false}
-                          disabled={readOnly}
-                        />
-                      </Grid.Col>
-                    )}
                   </Grid>
+                  <AddressFields
+                    formik={formik}
+                    prefix="outletAddress"
+                    visibleFields={fieldConfig.outletAddress.filter(f => ["address", "city", "state", "zipCode"].includes(f))}
+                    readOnly={readOnly}
+                    addressLabel="Company Address"
+                    addressPlaceholder="Enter Your Company Address"
+                    cityLabel="Outlet City"
+                    stateLabel="Outlet State"
+                    zipCodeLabel="Outlet Zip Code"
+                  />
                 </div>
               )}
 

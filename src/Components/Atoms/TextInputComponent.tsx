@@ -30,6 +30,7 @@ interface TextInputComponentProps {
   className?: string;
   length?: number;
   capitalize?: boolean;
+  toLowerCase?: boolean;
   allowNumber?: boolean;
   allowCharacter?: boolean;
   allowSpecialChar?: boolean;
@@ -62,6 +63,7 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
   oneTimeCode = false,
   length = 6,
   capitalize = false,
+  toLowerCase = false,
   allowNumber = true,
   allowCharacter = true,
   allowSpecialChar = true,
@@ -105,9 +107,15 @@ const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>
     if (capitalize) {
       newValue = newValue.toUpperCase();
     }
-    // Trim start and end spaces
-    newValue = newValue.trimStart(); // prevent leading space
-    // newValue = newValue.trim();      // if you want to also prevent trailing:
+
+    if (toLowerCase) {
+      newValue = newValue.toLowerCase();
+    }
+    // Prevent consecutive spaces (e.g. "hello  world" → "hello world")
+    newValue = newValue.replace(/ {2,}/g, " ");
+
+    // Trim leading spaces
+    newValue = newValue.trimStart();
 
     onChange({
       ...event,
