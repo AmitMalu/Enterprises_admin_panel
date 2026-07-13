@@ -148,7 +148,8 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
                                         label="State Name"
                                         placeholder="Enter State Name"
                                         withAsterisk
-                                        maxLength={50}
+                                        minLength={2}
+                                        maxLength={25}
                                     />
                                 </Grid.Col>
 

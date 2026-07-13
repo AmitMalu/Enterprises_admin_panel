@@ -110,6 +110,7 @@ const ProductForm = ({ mode }: ProductFormProps) => {
                 label="Name"
                 placeholder="Enter Name"
                 withAsterisk
+                minLength={2}
                 maxLength={50}
               />
             </Grid.Col>

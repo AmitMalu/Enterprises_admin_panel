@@ -158,7 +158,8 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                         label="Name"
                                         placeholder="Type Name"
                                         withAsterisk
-                                        maxLength={51}
+                                        minLength={2}
+                                        maxLength={50}
                                     />
                                 </Grid.Col>
 
@@ -197,7 +198,8 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                         leftSection={<LockIconSvg />}
                                         leftSectionWidth={36}
                                         rightSectionWidth={48}
-                                        maxLength={51}
+                                        minLength={8}
+                                        maxLength={20}
                                     />
                                 </Grid.Col>
 
@@ -208,6 +210,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                         placeholder="Enter Your Email Address"
                                         withAsterisk
                                         maxLength={50}
+                                        toLowerCase
                                     />
                                 </Grid.Col>
 
@@ -228,7 +231,8 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                         placeholder="Enter Your Address"
                                         withAsterisk
                                         required
-                                        maxLength={150}
+                                        minLength={15}
+                                        maxLength={100}
                                     />
                                 </Grid.Col>
 

@@ -168,7 +168,8 @@ const LoginPage: React.FC = () => {
                   ? formik.errors.password || false
                   : false
               }
-              maxLength={51}
+              minLength={8}
+              maxLength={20}
             />
 
             {/* Forgot Password? */}

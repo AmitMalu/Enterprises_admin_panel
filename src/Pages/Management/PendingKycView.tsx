@@ -264,7 +264,7 @@ const PendingKycView = () => {
                     handleVerify(values, formikHelpers);
                 }}
             >
-                {({ setValues }) => {
+                {({ values, setValues }) => {
 
                     return (
                         <Form className="flex flex-col gap-2 mt-4">
@@ -292,6 +292,7 @@ const PendingKycView = () => {
                                         required
                                         withAsterisk
                                         maxLength={51}
+                                        toLowerCase={values.doc_name === "EMAIL"}
                                     />
                                 </Grid.Col>
 
