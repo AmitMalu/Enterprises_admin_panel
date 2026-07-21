@@ -277,7 +277,8 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                                         label="Password"
                                         placeholder="Enter Password"
                                         // withAsterisk
-                                        maxLength={50}
+                                        minLength={8}
+                                        maxLength={20}
                                     />
                                 </Grid.Col>
 

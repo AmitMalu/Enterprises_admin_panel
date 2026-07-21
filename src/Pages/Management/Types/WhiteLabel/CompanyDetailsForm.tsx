@@ -72,7 +72,8 @@ const CompanyDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             placeholder="Enter Your Company Address"
             withAsterisk
             required
-            maxLength={150}
+            minLength={15}
+            maxLength={100}
           />
         </Grid.Col>
 

@@ -173,6 +173,7 @@ const EmailCredentialsForm = ({ mode }: EmailCredentialsFormProps) => {
                                             label="Email"
                                             placeholder="sender@example.com"
                                             withAsterisk
+                                            toLowerCase
                                         />
                                     </Grid.Col>
 
@@ -188,7 +189,8 @@ const EmailCredentialsForm = ({ mode }: EmailCredentialsFormProps) => {
                                             leftSection={<LockIconSvg />}
                                             leftSectionWidth={36}
                                             rightSectionWidth={48}
-                                            maxLength={51}
+                                            minLength={8}
+                                            maxLength={20}
                                         />
                                     </Grid.Col>
                                 </Grid>

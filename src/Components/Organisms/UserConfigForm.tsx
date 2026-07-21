@@ -172,6 +172,7 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
                                         withAsterisk
                                         required
                                         maxLength={50}
+                                        toLowerCase
                                     />
                                 </Grid.Col>
 

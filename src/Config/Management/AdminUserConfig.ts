@@ -102,16 +102,16 @@ export const initialValues: AdminUserFormType = {
 
 export const validationSchema: Record<keyof AdminUserFormType, Yup.AnySchema> =
   {
-    name: textField("Name", 50, true, true),
+    name: textField("Name", 50, true, false, 2),
     mobileNumber: mobileValidation,
     username: textField("Username", 50, true, true),
     password: passwordValidation,
     emailId: emailValidation,
     emailVerified: Yup.boolean(),
     dob: dobValidation,
-    address: textField("Address", 150, true, true),
+    address: textField("Address", 100, true, true, 15),
     city: textField("City", 100, true),
-    state: textField("State", 100, true),
+    state: textField("State", 25, true),
     zipCode: zipValidation,
     menus: Yup.array()
       .of(Yup.string())

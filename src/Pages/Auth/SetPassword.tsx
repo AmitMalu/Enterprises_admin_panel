@@ -102,7 +102,8 @@ const SetPassword: React.FC = () => {
           placeholder="New Password"
           required
           name="newPassword"
-          maxLength={51}
+          minLength={8}
+          maxLength={20}
           radius="lg"
           error={
             formik.touched.newPassword
@@ -119,7 +120,8 @@ const SetPassword: React.FC = () => {
           placeholder="Re-Enter New Password"
           required
           name="reEnteredPassword"
-          maxLength={51}
+          minLength={8}
+          maxLength={20}
           radius="lg"
           error={
             formik.touched.reEnteredPassword

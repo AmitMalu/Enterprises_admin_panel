@@ -53,7 +53,8 @@ const ResidentialAddressForm = ({ formik }: { formik: FormikProps<any> }) => {
             placeholder="Enter Your Address"
             withAsterisk
             required
-            maxLength={150}
+            minLength={15}
+            maxLength={100}
           />
         </Grid.Col>
 

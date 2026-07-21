@@ -60,7 +60,8 @@ const OutletDetailsForm = ({ formik }: { formik: FormikProps<any> }) => {
             placeholder="Enter Outlet Address"
             withAsterisk
             required
-            maxLength={150}
+            minLength={15}
+            maxLength={100}
           />
         </Grid.Col>
 

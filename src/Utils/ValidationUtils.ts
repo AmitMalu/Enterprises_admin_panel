@@ -6,13 +6,18 @@ export const textField = (
   field = "This field",
   max = 100,
   required = false,
-  allowSpecialChars = false
+  allowSpecialChars = false,
+  min?: number
 ) => {
   let schema = Yup.string()
     .transform((value) => (value ? value.trim() : value)) // Trim before validation
     .max(max, `${field} cannot exceed ${max} characters`)
     .nullable()
     .notRequired(); // allow null and undefined by default
+
+  if (min) {
+    schema = schema.min(min, `${field} must be at least ${min} characters`);
+  }
 
   if (!allowSpecialChars) {
     schema = schema.test(
@@ -55,7 +60,7 @@ export const mobileValidation = Yup.string()
 export const passwordValidation = Yup.string()
   .required("Password is required")
   .min(8, "Password must be at least 8 characters long")
-  .max(50, "Password cannot be longer than 50 characters")
+  .max(20, "Password cannot be longer than 20 characters")
   .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
   .matches(/[a-z]/, "Password must contain at least one lowercase letter")
   .matches(/[0-9]/, "Password must contain at least one number")
@@ -92,6 +97,11 @@ export const dobValidation = Yup.string()
   })
   .test("not-in-future", "Birth date cannot be in the future", (value) => {
     return moment(value).isSameOrBefore(moment());
+  })
+  .test("age-range", "Age must be between 18 and 75 years", (value) => {
+    if (!value || !moment(value, "YYYY-MM-DD", true).isValid()) return false;
+    const age = moment().diff(moment(value, "YYYY-MM-DD"), "years");
+    return age >= 18 && age <= 75;
   });
 
 // Aadhaar Number: 12 digits only

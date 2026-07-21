@@ -95,22 +95,22 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   parentAccount: textField("Parent Account", 50, true, true),
   title: textField("Title", 50, true),
   prefix: prefixValidation,
-  name: textField("Name", 50, true),
+  name: textField("Name", 50, true, false, 2),
   dob: dobValidation,
   mobileNumber: mobileValidation,
   emailId: emailValidation,
   // createdBy: textField("Created By", 50, true), // field is not required in the form, but can be set programmatically
 
   // Address details
-  address: textField("Address", 150, true, true),
+  address: textField("Address", 100, true, true, 15),
   city: textField("City", 100, true),
-  state: textField("State", 100, true),
+  state: textField("State", 25, true),
   zipcode: zipValidation,
 
   // Outlet/company details
-  outletName: textField("Outlet Name", 50, true),
-  outletAddress: textField("Outlet Address", 150, true, true),
-  outletState: textField("Outlet State", 100, true),
+  outletName: textField("Outlet Name", 50, true, false, 2),
+  outletAddress: textField("Outlet Address", 100, true, true, 15),
+  outletState: textField("Outlet State", 25, true),
   outletCity: textField("Outlet City", 100, true),
   outletZipcode: zipValidation,
   companyName: textField("Company Name", 100, true), // Enterprise-specific

@@ -12,7 +12,7 @@ export interface PrefundingFormType {
   depositAmount: string;
   bankAccountNumber: string;
   depositDate: string;
-  depositImage: string | null;
+  depositeImage: string | null;
   // partnerName: string;
   requestedBy: string;
   ipAddress: string;
@@ -34,7 +34,7 @@ export const initialValues: PrefundingFormType = {
   depositAmount: "",
   bankAccountNumber: "",
   depositDate: "",
-  depositImage: "",
+  depositeImage: "",
   // partnerName: "",
   requestedBy: "",
   ipAddress: "",
@@ -50,7 +50,7 @@ export const validationSchema: Record<keyof PrefundingFormType, Yup.AnySchema> =
     depositAmount: textField("Deposit Amount", 150, false, true),
     bankAccountNumber: textField("Account Number", 150, false, true),
     depositDate: textField("Deposit Date", 150, false, true),
-    depositImage: Yup.string().nullable().notRequired(),
+    depositeImage: Yup.string().nullable().notRequired(),
     // partnerName: textField("Partner Name", 150, false, true),
     requestedBy: textField("Requested By", 150, false, true),
     ipAddress: textField("Client IP", 150, false, true),
@@ -66,7 +66,7 @@ export const headers: GenericTableHeader<PrefundingTableType>[] = [
   { key: "bankAccountNumber", label: "Account Number", filterType: "number" },
   { key: "depositDate", label: "Deposit Date", filterType: "date" },
   {
-    key: "depositImage",
+    key: "depositeImage",
     label: "Deposit Slip",
     filterType: "text",
     renderType: "link",
