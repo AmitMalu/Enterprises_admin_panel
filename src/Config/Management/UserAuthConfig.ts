@@ -33,14 +33,14 @@ export const userTypeFilterOptions: {
   label: string;
   value: UserTypeUpperSnakeCase;
 }[] = [
-  { label: "Retailer", value: "RETAILER" },
-  { label: "Enterprise", value: "ENTERPRISE" },
-  { label: "Admin", value: "IM_ADMIN" },
-  { label: "Distributor", value: "DISTRIBUTOR" },
-  { label: "Partner", value: "PARTNER" },
-  { label: "Super Distributor", value: "SUPER_DISTRIBUTOR" },
-  { label: "White Label", value: "WHITE_LABEL" },
-];
+    { label: "Retailer", value: "RETAILER" },
+    { label: "Enterprise", value: "ENTERPRISE" },
+    { label: "Admin", value: "IM_ADMIN" },
+    { label: "Distributor", value: "DISTRIBUTOR" },
+    { label: "Partner", value: "PARTNER" },
+    { label: "Super Distributor", value: "SUPER_DISTRIBUTOR" },
+    { label: "White Label", value: "WHITE_LABEL" },
+  ];
 
 export interface Address {
   outletName: string;
@@ -73,6 +73,8 @@ export interface UserAuthFormType {
   remarks?: string;
   editedBy?: string;
   lastEditedOn?: string;
+  approvedOn?: string;
+  approvedBy?: string;
   // Additional fields for retailer/user edit
   title?: string;
   abbreviation?: string;
@@ -87,7 +89,7 @@ export interface UserAuthFormType {
   rejectionReason?: string;
 }
 
-export interface UserAuthTableType extends UserAuthFormType {}
+export interface UserAuthTableType extends UserAuthFormType { }
 
 export interface UserAuthUpdatePayload {
   hierarchyId: string;
@@ -161,8 +163,10 @@ export const headers: GenericTableHeader<UserAuthTableType>[] = [
 
 export const onboardedHeaders: GenericTableHeader<UserAuthTableType>[] = [
   ...headers,
-  { key: "editedBy", label: "Approved By", filterType: "text" },
-  { key: "lastEditedOn", label: "Approved On", filterType: "date" },
+  { key: "editedBy", label: "Edited By", filterType: "text" },
+  { key: "lastEditedOn", label: "Edited On", filterType: "date" },
+  { key: "approvedBy", label: "Approved By", filterType: "text" },
+  { key: "approvedOn", label: "Approved On", filterType: "date" },
 ];
 
 export const RejectedUserHeaders: GenericTableHeader<UserAuthTableType>[] = [
