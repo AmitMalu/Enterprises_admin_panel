@@ -32,11 +32,14 @@ const OtpVerify = () => {
   const location = useLocation();
   const locationState = location.state as {
     username?: string;
+    password?: string;
     otpFor?: string;
     // otp?: string;
   };
   const username =
     locationState?.username ?? sessionStorage.getItem("otp-username") ?? "";
+  const password =
+    locationState?.password ?? sessionStorage.getItem("password") ?? "";
   const otpFor =
     locationState?.otpFor ?? sessionStorage.getItem("otpFor") ?? "";
   // const otp =
@@ -250,7 +253,9 @@ const OtpVerify = () => {
                       sessionStorage.setItem("from-login-forget", "true");
                       navigate("/forget-password");
                     } else {
-                      navigate("/login");
+                      navigate("/login", {
+                        state: { username, password },
+                      });
                     }
                     toast.dismiss();
                     sessionStorage.removeItem("otpFor");

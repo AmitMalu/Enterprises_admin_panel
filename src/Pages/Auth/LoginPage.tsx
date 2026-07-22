@@ -10,7 +10,7 @@ import welcomeTextImage from "../../assets/Images/WelcomeText.png";
 import loginAccountTextImage from "../../assets/Images/LoginAccountText.png";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { encryptCredentials, persistOtpSession } from "../../Utils/utils";
 import { useAppDispatch } from "../../Redux/hooks";
@@ -33,6 +33,7 @@ const validationSchema = Yup.object().shape({
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
   const handleForgetPassword = () => {
     sessionStorage.setItem("from-login-forget", "true");
@@ -84,7 +85,7 @@ const LoginPage: React.FC = () => {
         persistOtpSession(values.username, "login");
         navigate("/otp-verify", {
           state: {
-            username: values.username, otpFor: "login" //, otp: result.data.otp
+            username: values.username, password: values.password, otpFor: "login" //, otp: result.data.otp
           },
         });
       } catch (error) {
@@ -127,8 +128,8 @@ const LoginPage: React.FC = () => {
       <Formik
         enableReinitialize
         initialValues={{
-          username: "",
-          password: "",
+          username: (location.state as any)?.username || "",
+          password: (location.state as any)?.password || "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -144,7 +145,11 @@ const LoginPage: React.FC = () => {
               onChange={formik.handleChange}
               placeholder="Username"
               required
-              error={formik.touched.username && formik.errors.username}
+              error={
+                formik.touched.username && formik.errors.username
+                  ? String(formik.errors.username)
+                  : undefined
+              }
               maxLength={51}
               radius="lg"
               leftSection={<UsernameSvg />}
@@ -164,9 +169,9 @@ const LoginPage: React.FC = () => {
               leftSectionWidth={36}
               rightSectionWidth={48}
               error={
-                formik.touched.password
-                  ? formik.errors.password || false
-                  : false
+                formik.touched.password && formik.errors.password
+                  ? String(formik.errors.password)
+                  : undefined
               }
               minLength={8}
               maxLength={20}
