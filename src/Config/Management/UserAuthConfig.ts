@@ -71,6 +71,8 @@ export interface UserAuthFormType {
   createdBy?: string;
   createdOn?: string;
   remarks?: string;
+  editedBy?: string;
+  lastEditedOn?: string;
   // Additional fields for retailer/user edit
   title?: string;
   abbreviation?: string;
@@ -136,6 +138,8 @@ export const initialValues: UserAuthFormType = {
     isVerified: false,
   },
   rejectionReason: "",
+  editedBy: "",
+  lastEditedOn: "",
 };
 
 export const headers: GenericTableHeader<UserAuthTableType>[] = [
@@ -153,6 +157,12 @@ export const headers: GenericTableHeader<UserAuthTableType>[] = [
   { key: "status", label: "Status", filterType: "text" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
+];
+
+export const onboardedHeaders: GenericTableHeader<UserAuthTableType>[] = [
+  ...headers,
+  { key: "editedBy", label: "Approved By", filterType: "text" },
+  { key: "lastEditedOn", label: "Approved On", filterType: "date" },
 ];
 
 export const RejectedUserHeaders: GenericTableHeader<UserAuthTableType>[] = [
