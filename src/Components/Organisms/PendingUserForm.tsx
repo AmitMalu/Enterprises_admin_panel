@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
-import { useEffect, useState } from "react";
-import { initialValues, KEY, USER_TYPE_KEBAB_CASE_MAP, UserTypeUpperSnakeCase, URL } from "../../Config/Management/UserAuthConfig";
+import { useEffect, useRef, useState } from "react";
+import { initialValues, KEY, USER_TYPE_KEBAB_CASE_MAP, UserTypeUpperSnakeCase, URL, FIELD_VISIBILITY_MAP, getValidationSchema } from "../../Config/Management/UserAuthConfig";
 import { useThrottledFormSubmit } from "../../Utils/hooks/useThrottleFormSubmit";
 import { toast } from "react-toastify";
 import { fetchMasterById, updateMasterItem } from "../../Redux/Features/Masters/MastersThunk";
@@ -13,80 +13,12 @@ import ButtonComponent from "../Atoms/ButtonComponent";
 import BackHeader from "../Molecules/BackHeader";
 import PopupModal from "../Atoms/PopupModal";
 import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
-import { UserType } from "../../Config/UserCreationConfig/UserConfig";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { booleanSelectData } from "../../Utils/utils";
 import { updateUser } from "../../Redux/Features/Management/Thunk";
 import { colors } from "../../theme/colors";
+import FormikFileInput from "../Molecules/FormikFileInput";
 import { useAddressFromZipcode } from "../../Utils/hooks/useAddressFromZipcode";
-
-type FieldVisibilityConfig = {
-  basic: string[];
-  address: string[];
-  outletAddress: string[];
-  kyc: string[];
-  bank: string[];
-  other: string[];
-};
-
-const FIELD_VISIBILITY_MAP: Record<UserType | "im-admin", FieldVisibilityConfig> = {
-  "retailer": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["outletName", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: ["longitude", "latitude"],
-  },
-  "distributor": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["outletName", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: [],
-  },
-  "partner": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["outletName", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: [],
-  },
-  "super-distributor": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["outletName", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: [],
-  },
-  "enterprise": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["companyName", "companyType", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: ["theme", "domainURL", "businessDesc"],
-  },
-  "white-label": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "isAdmin"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["companyName", "companyType", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: ["theme", "domainURL", "businessDesc"],
-  },
-  "im-admin": {
-    basic: ["name", "userName", "emailId", "mobileNumber"],
-    address: [],
-    outletAddress: [],
-    kyc: [],
-    bank: [],
-    other: [],
-  },
-};
 
 const AddressFields = ({
   formik,
@@ -225,9 +157,7 @@ const PendingUserForm = () => {
 
   const [formData, setFormData] = useState<any>(initialValues);
   const [originalPayload, setOriginalPayload] = useState<any>(null);
-  const [selectedAction, setSelectedAction] = useState<
-    "APPROVED" | "REJECTED" | null
-  >(null);
+  const selectedActionRef = useRef<"APPROVED" | "REJECTED" | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -240,7 +170,8 @@ const PendingUserForm = () => {
   const handleSubmit = useThrottledFormSubmit<any>(() => {
     if (isSubmitting) return;
 
-    if (!selectedAction) {
+    const action = selectedActionRef.current;
+    if (!action) {
       toast.error("Please select APPROVE or REJECT.");
       return;
     }
@@ -249,16 +180,16 @@ const PendingUserForm = () => {
 
     const payload: { hierarchyId: string | undefined; isApproved: boolean; remarks?: string } = {
       hierarchyId: id,
-      isApproved: selectedAction === "APPROVED" ? true : false
+      isApproved: action === "APPROVED" ? true : false
     };
-    if (selectedAction === "REJECTED") {
+    if (action === "REJECTED") {
       payload.remarks = remark;
     }
 
     dispatch(updateMasterItem({ key: KEY, url: `${URL}/approve-or-reject`, data: payload, mode: "POST" }))
       .unwrap()
       .then(() => {
-        toast.success(`User ${selectedAction} Successfully`);
+        toast.success(`${action} Successfully`);
         navigate(`/management/user/pending`);
       })
       .catch((err: any) => {
@@ -290,12 +221,27 @@ const PendingUserForm = () => {
       ...values,
     };
 
+    const files = {
+      aadhaarCardFrontImage: values.aadhaarCardFrontImage,
+      aadhaarCardBackImage: values.aadhaarCardBackImage,
+      shopImage: values.shopImage,
+      panCardImage: values.panCardImage,
+      businessProofImage: values.businessProofImage,
+    };
+
+    // Remove the files from the JSON payload so they can be appended individually
+    delete payload.aadhaarCardFrontImage;
+    delete payload.aadhaarCardBackImage;
+    delete payload.shopImage;
+    delete payload.panCardImage;
+    delete payload.businessProofImage;
+
     try {
-      await dispatch(updateUser({ userType, payload, id })).unwrap();
+      await dispatch(updateUser({ userType, payload, id, files })).unwrap();
       toast.success("User details updated successfully");
-      setOriginalPayload(payload);
-      setFormData(payload);
-      resetForm({ values: payload });
+      setOriginalPayload(values);
+      setFormData(values);
+      resetForm({ values });
     } catch (err: any) {
       toast.error(err || "Update failed");
     } finally {
@@ -363,12 +309,27 @@ const PendingUserForm = () => {
 
       <Formik
         initialValues={formData}
-        validationSchema={null}
+        validationSchema={userType ? getValidationSchema(userType) : null}
         onSubmit={handleSubmit}
         enableReinitialize
       >
         {(formik) => {
-          const { handleSubmit, values, dirty, resetForm } = formik;
+          const { values, dirty, resetForm } = formik;
+
+          const setNestedTouched = (obj: any): any => {
+            if (typeof obj !== "object" || obj === null) {
+              return true;
+            }
+
+            if (Array.isArray(obj)) {
+              return obj.map((item) => setNestedTouched(item));
+            }
+
+            return Object.keys(obj).reduce((acc, key) => {
+              acc[key] = setNestedTouched(obj[key]);
+              return acc;
+            }, {} as any);
+          };
 
           return (
             <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
@@ -756,6 +717,58 @@ const PendingUserForm = () => {
                 </div>
               )}
 
+              {/* Documents Section */}
+              <div className="mb-8 border-t pt-6">
+                <h3 className="text-lg font-semibold mb-4 text-gray-800">Documents</h3>
+                <Grid gutter="lg">
+                  <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                    <FormikFileInput
+                      name="aadhaarCardFrontImage"
+                      label="Aadhaar Card Front Image"
+                      size="sm"
+                      accept="image/png, image/jpeg"
+                      disabled={readOnly}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                    <FormikFileInput
+                      name="aadhaarCardBackImage"
+                      label="Aadhaar Card Back Image"
+                      size="sm"
+                      accept="image/png, image/jpeg"
+                      disabled={readOnly}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                    <FormikFileInput
+                      name="shopImage"
+                      label="Shop Image"
+                      size="sm"
+                      accept="image/png, image/jpeg"
+                      disabled={readOnly}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                    <FormikFileInput
+                      name="panCardImage"
+                      label="PAN Card Image"
+                      size="sm"
+                      accept="image/png, image/jpeg"
+                      disabled={readOnly}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                    <FormikFileInput
+                      name="businessProofImage"
+                      label="Business Proof Image"
+                      size="sm"
+                      accept="image/png, image/jpeg"
+                      disabled={readOnly}
+                    />
+                  </Grid.Col>
+                </Grid>
+              </div>
+
               {/* Action Buttons */}
               {!loading && !fetchError && (
                 <div className="flex justify-center mt-8 gap-4 border-t pt-6">
@@ -787,7 +800,15 @@ const PendingUserForm = () => {
                         bgColor={colors.status.success}
                         textColor={colors.text.inverse}
                         style={{ padding: "0px 30px", letterSpacing: 2 }}
-                        onClick={() => saveChanges(values, resetForm)}
+                        onClick={async () => {
+                          const errors = await formik.validateForm();
+
+                          formik.setTouched(setNestedTouched(errors));
+
+                          if (Object.keys(errors).length === 0) {
+                            saveChanges(values, resetForm);
+                          }
+                        }}
                       >
                         {isSubmitting ? "SAVING..." : "SAVE CHANGES"}
                       </ButtonComponent>
@@ -804,7 +825,6 @@ const PendingUserForm = () => {
                         textColor={colors.text.inverse}
                         style={{ padding: "0px 30px", letterSpacing: 2 }}
                         onClick={() => {
-                          setSelectedAction("REJECTED");
                           setIsRemarkModalOpen(true);
                         }}
                       >
@@ -820,8 +840,8 @@ const PendingUserForm = () => {
                         textColor={colors.text.inverse}
                         style={{ padding: "0px 30px", letterSpacing: 2 }}
                         onClick={() => {
-                          setSelectedAction("APPROVED");
-                          handleSubmit();
+                          selectedActionRef.current = "APPROVED";
+                          formik.handleSubmit();
                         }}
                       >
                         APPROVED
@@ -871,10 +891,11 @@ const PendingUserForm = () => {
                         toast.error("Remark is mandatory for rejection.");
                       } else {
                         setIsRemarkModalOpen(false);
-                        handleSubmit();
+                        selectedActionRef.current = "REJECTED";
+                        formik.handleSubmit();
                       }
                     }}
-                    type="submit"
+                    type="button"
                     bgColor={colors.status.danger}
                     textColor={colors.text.inverse}
                   >
