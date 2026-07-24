@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useEffect, useRef, useState } from "react";
-import { headers, KEY, URL, UserAuthTableType } from "../../Config/Management/UserAuthConfig";
+import { pendingHeaders as headers, KEY, URL, UserAuthTableType } from "../../Config/Management/UserAuthConfig";
 import { useFetchMasterList } from "../../Utils/hooks/useFetchMasterList";
 import { resetMaster, setPagination } from "../../Redux/Features/Masters/MastersSlice";
 import { toast } from "react-toastify";
