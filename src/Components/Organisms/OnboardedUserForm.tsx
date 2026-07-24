@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks";
 import { useEffect, useState } from "react";
-import { initialValues, USER_TYPE_KEBAB_CASE_MAP, UserTypeUpperSnakeCase } from "../../Config/Management/UserAuthConfig";
+import { initialValues, USER_TYPE_KEBAB_CASE_MAP, UserTypeUpperSnakeCase, FIELD_VISIBILITY_MAP, getValidationSchema } from "../../Config/Management/UserAuthConfig";
 import { toast } from "react-toastify";
 import { fetchMasterById } from "../../Redux/Features/Masters/MastersThunk";
 import BreadCrumb from "../Molecules/BreadCrumb";
@@ -11,81 +11,12 @@ import FormikTextInputComponent from "../Molecules/FormikTextInputComponent";
 import ButtonComponent from "../Atoms/ButtonComponent";
 import BackHeader from "../Molecules/BackHeader";
 import { API_ENDPOINTS } from "../../Config/Api/EndPoints";
-import { UserType } from "../../Config/UserCreationConfig/UserConfig";
 import FormikSelectComponent from "../Molecules/FormikSelectComponent";
 import { booleanSelectData } from "../../Utils/utils";
 import { updateUser } from "../../Redux/Features/Management/Thunk";
 import { colors } from "../../theme/colors";
 import FormikFileInput from "../Molecules/FormikFileInput";
 import { useAddressFromZipcode } from "../../Utils/hooks/useAddressFromZipcode";
-
-type FieldVisibilityConfig = {
-  basic: string[];
-  address: string[];
-  outletAddress: string[];
-  kyc: string[];
-  bank: string[];
-  other: string[];
-};
-
-const FIELD_VISIBILITY_MAP: Record<UserType | "im-admin", FieldVisibilityConfig> = {
-  "retailer": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["outletName", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: ["longitude", "latitude"],
-  },
-  "distributor": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["outletName", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: [],
-  },
-  "partner": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["outletName", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: [],
-  },
-  "super-distributor": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["outletName", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: [],
-  },
-  "enterprise": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["companyName", "companyType", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: ["theme", "domainURL", "businessDesc"],
-  },
-  "white-label": {
-    basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "isAdmin"],
-    address: ["address", "city", "state", "zipCode"],
-    outletAddress: ["companyName", "companyType", "address", "city", "state", "zipCode"],
-    kyc: ["aadhaarNumber", "panNumber"],
-    bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
-    other: ["theme", "domainURL", "businessDesc"],
-  },
-  "im-admin": {
-    basic: ["name", "userName", "emailId", "mobileNumber"],
-    address: [],
-    outletAddress: [],
-    kyc: [],
-    bank: [],
-    other: [],
-  },
-};
 
 const AddressFields = ({
   formik,
@@ -332,12 +263,14 @@ const OnboardedUserForm = () => {
 
       <Formik
         initialValues={formData}
-        validationSchema={null}
+        validationSchema={userType ? getValidationSchema(userType) : null}
         onSubmit={(values, { resetForm }) => saveChanges(values, resetForm)}
         enableReinitialize
       >
         {(formik) => {
-          const { values, dirty, resetForm } = formik;
+          const { values, dirty, errors } = formik;
+          console.log(values, "chec");
+          console.log(errors, "errors");
 
           return (
             <Form className="flex-1 overflow-auto scrollbar-hide mt-4 py-2 xl:py-4 px-4 bg-white rounded-2xl">
@@ -803,7 +736,7 @@ const OnboardedUserForm = () => {
                     bgColor={colors.status.success}
                     textColor={colors.text.inverse}
                     style={{ padding: "0px 30px", letterSpacing: 2 }}
-                    onClick={() => saveChanges(values, resetForm)}
+                    onClick={() => formik.handleSubmit()}
                   >
                     {isSubmitting ? "SAVING..." : "SAVE CHANGES"}
                   </ButtonComponent>
