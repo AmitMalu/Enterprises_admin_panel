@@ -1,7 +1,7 @@
 import React from "react";
-import orgLogo from '../../assets/Images/orgLogo.png';
-import { Tooltip } from "@mantine/core";
-import { BUILD_INFO } from "../../buildInfo";
+// import orgLogo from '../../assets/Images/orgLogo.png';
+// import { Tooltip } from "@mantine/core";
+// import { BUILD_INFO } from "../../buildInfo";
 
 interface LeftSideLayoutProps {
   bgImage: string;
@@ -36,41 +36,27 @@ const LeftSideLayout: React.FC<LeftSideLayoutProps> = ({
         </div>
       )}
 
-      {/* Logo */}
-      <div className="absolute top-0 left-6">
+      {/* Logo - Commented out */}
+      {/* <div className="absolute top-0 left-6">
         <Tooltip label={`${BUILD_INFO.version} (${BUILD_INFO.builtAt})`}
           withArrow={false}
           position="right"
           openDelay={1000}
           styles={{
-
             tooltip: {
-
               backgroundColor: 'transparent',
-
               color: 'black',
-
               fontSize: '12px',
-
             }
-
           }}
-
         >
-
           <img
-
             src={orgLogo}
-
             alt="Logo"
-
             className="w-24 md:w-40 max-w-none"
-
           />
-
         </Tooltip>
-
-      </div>
+      </div> */}
 
       {children}
 
