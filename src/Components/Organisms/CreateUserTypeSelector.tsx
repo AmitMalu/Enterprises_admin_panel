@@ -8,6 +8,11 @@ const radius = 190;
 
 const CreateUserTypeSelector = () => {
   const navigate = useNavigate();
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  const logoPath = userInfo?.logoPath || "";
+  const role = userInfo?.role || userInfo?.hierarchyId?.split("-")[1] || "";
+  const isWhiteLabel = role === "WLAD" || role === "WLAU" || role === "WL";
+  const logoSrc = isWhiteLabel ? logoPath : orgLogo;
 
   const handleUserTypeClick = (type: string) => {
     navigate(`/management/user/create/${type}`);
@@ -16,14 +21,16 @@ const CreateUserTypeSelector = () => {
   return (
     <div className="flex-1 flex items-center justify-center relative cursor-pointer">
       {/* Center Logo */}
-      <div className="w-fit h-fit p-4 pl-4 border-[14px] border-border-ring bg-white rounded-full z-10 ">
-        {/* <IMLogoWhiteBGSvg /> */}
-        <img
-          src={orgLogo}
-          alt="Logo"
-          className="w-24 md:w-40 max-w-none"
-        />
-      </div>
+      {logoSrc && (
+        <div className="w-fit h-fit p-4 pl-4 border-[14px] border-border-ring bg-white rounded-full z-10 ">
+          {/* <IMLogoWhiteBGSvg /> */}
+          <img
+            src={logoSrc}
+            alt="Logo"
+            className="w-24 md:w-40 max-w-none object-contain"
+          />
+        </div>
+      )}
 
       {/* User Types */}
       {userTypeSelectorOptions.map((type, index) => {

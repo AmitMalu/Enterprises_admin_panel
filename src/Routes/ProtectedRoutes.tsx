@@ -21,7 +21,7 @@ const ProtectedRoutes = () => {
 
   if (role === "AU" || role === "WLAU") {
     const allowedBaseLinks = getAllowedBaseLinks(role, permissions);
-    const alwaysAllowedPaths = ["/", "/profile", "/change-password"];
+    const alwaysAllowedPaths = ["/", "/account/profile", "/change-password"];
     const isAllowed =
       alwaysAllowedPaths.includes(location.pathname) || // Dashboard always allowed
       allowedBaseLinks.some((base) => location.pathname.startsWith(base));
