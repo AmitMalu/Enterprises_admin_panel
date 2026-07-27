@@ -11,6 +11,9 @@ const Sidebar: React.FC = () => {
 
   // Extract role: if not in userInfo, parse from hierarchyId (e.g., "ENT-AD-001" → "AD")
   const role = userInfo?.role || userInfo?.hierarchyId?.split("-")[1] || "";
+  const logoPath = userInfo?.logoPath || "";
+  const isWhiteLabel = role === "WLAD" || role === "WLAU" || role === "WL";
+  const logoSrc = isWhiteLabel ? logoPath : orgLogo;
   const permissions = (userInfo?.permissions || "")
     .split(",")
     .map((p: string) => p.trim()) // ["0101", "0203", "0103"]
@@ -37,7 +40,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <Box w="100%" className="h-[98vh] flex flex-col">
-      <Box mb="sm">
+      <Box mb="sm" h={200}>
         <Tooltip label={`${BUILD_INFO.version} (${BUILD_INFO.builtAt})`}
           withArrow={false}
           position="top"
@@ -51,8 +54,11 @@ const Sidebar: React.FC = () => {
             }
           }}
         >
-          <Image src={orgLogo} alt="logo" w={180} mx="auto" />
-        </Tooltip>      </Box>
+          <Box w="80%" h="100%" className="flex items-center justify-center m-auto py-3">
+            {logoSrc && <Image src={logoSrc} alt="logo" w="auto" h="auto" maw="100%" mah="100%" fit="contain" />}
+          </Box>
+        </Tooltip>
+      </Box>
 
       <div className="flex-1 overflow-hidden">
         <ScrollArea h="100%" scrollbarSize={0}>
