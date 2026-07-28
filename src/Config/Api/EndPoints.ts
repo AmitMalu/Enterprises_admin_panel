@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
     EMAIL_VERIFY: "verification/email-validate",
     VOTERID_VERIFY: "verification/voterId-validate",
     KYC: "api/kyc",
+    TENANT: "api/tenant",
   },
   MASTER: {
     PRODUCTS: "api/products",
@@ -74,6 +75,7 @@ export const API_ENDPOINTS = {
   },
   COMMON: {
     HIERARCHY: "api/hierarchy",
+    HIERARCHY_WL: "api/hierarchy/hierarchy-details/WL",
     TRANSACTION: "api/transaction",
     DASHBOARD_API: `api/dashboard/data`,
   },

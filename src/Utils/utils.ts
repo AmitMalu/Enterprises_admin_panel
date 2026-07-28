@@ -312,8 +312,11 @@ export const trimFormValues = <T>(values: T): T => {
         typeof item === "string" ? item.trim() : trimFormValues(item),
       );
     } else if (typeof val === "object" && val !== null) {
-      // recurse for nested objects
-      cleaned[key] = trimFormValues(val);
+      if (val instanceof File || val instanceof Blob) {
+        cleaned[key] = val; // preserve File/Blob objects as-is
+      } else {
+        cleaned[key] = trimFormValues(val);
+      }
     } else {
       cleaned[key] = val; // keep other types as-is
     }
