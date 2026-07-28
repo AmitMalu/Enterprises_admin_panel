@@ -261,6 +261,11 @@ export const sidebarData = [
         link: "/management/user-mapping",
         icon: managementSvg,
       },
+      {
+        label: "Whitelabel Branding",
+        link: "/management/whitelabel-branding",
+        icon: managementSvg,
+      },
     ],
   },
   {
