@@ -20,6 +20,8 @@ import PendingUserForm from "../Components/Organisms/PendingUserForm";
 import AdminUserForm from "../Components/Organisms/AdminUserForm";
 import PendingKycView from "../Pages/Management/PendingKycView";
 import OnboardedUserForm from "../Components/Organisms/OnboardedUserForm";
+import WhitelabelBranding from "../Pages/Management/WhitelabelBranding";
+import WhitelabelBrandingForm from "../Components/Organisms/WhitelabelBrandingForm";
 
 export const ManagementRoutes = (
   <>
@@ -45,5 +47,8 @@ export const ManagementRoutes = (
     <Route path="/management/block-unblock-user" element={<BlockUnblockUser />} />
     <Route path="/management/settlement-bank" element={<SettlementBank />} />
     <Route path="/management/user-mapping" element={<UserMapping />} />
+    <Route path="/management/whitelabel-branding" element={<WhitelabelBranding />} />
+    <Route path="/management/whitelabel-branding/add" element={<WhitelabelBrandingForm mode="add" />} />
+    <Route path="/management/whitelabel-branding/edit/:id" element={<WhitelabelBrandingForm mode="edit" />} />
   </>
 );
