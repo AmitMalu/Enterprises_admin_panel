@@ -350,7 +350,7 @@ export const UserConfig: Record<
         "bankHolderName",
         "isBankVerified",
         "businessDesc",
-        "websiteURL",
+        "domainURL",
       ], // Step 3
       [
         "adhaarFront",
@@ -421,7 +421,7 @@ export const UserConfig: Record<
         "branchName",
         "bankHolderName",
         "isBankVerified",
-        "websiteURL",
+        "domainURL",
         "businessDesc",
       ], // Step 3
       [
