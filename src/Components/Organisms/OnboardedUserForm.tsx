@@ -432,7 +432,7 @@ const OnboardedUserForm = () => {
                           placeholder="Select Is WL-Admin"
                           withAsterisk
                           data={booleanSelectData}
-                          disabled={readOnly}
+                          disabled
                         />
                       </Grid.Col>
                     )}
@@ -630,7 +630,7 @@ const OnboardedUserForm = () => {
                     {fieldConfig.other.includes("domainURL") && (
                       <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                         <FormikTextInputComponent
-                          name="websiteURL"
+                          name="domainURL"
                           label="Login Domain URL"
                           placeholder="Enter Your Login Domain Url"
                           withAsterisk

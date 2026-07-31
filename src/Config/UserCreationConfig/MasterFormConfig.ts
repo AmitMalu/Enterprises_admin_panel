@@ -51,7 +51,7 @@ export const masterInitialValues = {
   ifsc: "",
   branchName: "",
   isBankVerified: false,
-  websiteURL: "", // Enterprise-specific
+  domainURL: "", // Enterprise-specific
   businessDesc: "", // Enterprise-specific
 
   // Documents
@@ -123,7 +123,7 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   branchName: textField("Branch Name", 50, false, true),
   bankHolderName: textField("Bank Holder Name", 100, true),
   isBankVerified: Yup.boolean(),
-  websiteURL: websiteValidation.required("Login Domain URL is required"),
+  domainURL: websiteValidation.required("Login Domain URL is required"),
   businessDesc: textField("Business Description", 500, true, true),
 
   // Documents
@@ -354,7 +354,7 @@ export function transformUserCreationPayload(
         },
         bankDetails,
         theme: { id: 1 },
-        domainURL: values.websiteURL || "",
+        domainURL: values.domainURL || "",
         businessDesc: values.businessDesc || "",
       };
 
@@ -370,7 +370,7 @@ export function transformUserCreationPayload(
         },
         bankDetails,
         theme: { id: 1 },
-        domainURL: values.websiteURL || "",
+        domainURL: values.domainURL || "",
         businessDesc: values.businessDesc || "",
       };
 
