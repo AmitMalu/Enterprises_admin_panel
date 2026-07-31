@@ -491,7 +491,7 @@ const PendingUserForm = () => {
                           placeholder="Select Is WL-Admin"
                           withAsterisk
                           data={booleanSelectData}
-                          disabled={readOnly}
+                          disabled
                         />
                       </Grid.Col>
                     )}
@@ -689,7 +689,7 @@ const PendingUserForm = () => {
                     {fieldConfig.other.includes("domainURL") && (
                       <Grid.Col className="" span={{ base: 12, md: 6, lg: 4 }}>
                         <FormikTextInputComponent
-                          name="websiteURL"
+                          name="domainURL"
                           label="Login Domain Url"
                           placeholder="Enter Your Login Domain Url"
                           withAsterisk
