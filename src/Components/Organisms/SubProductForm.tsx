@@ -203,6 +203,17 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
 
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikSelectComponent
+                    name="isIMSubProduct"
+                    label="Is IM Sub Product"
+                    placeholder="Select"
+                    withAsterisk
+                    allowDeselect={false}
+                    data={booleanSelectData}
+                  />
+                </Grid.Col>
+
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  <FormikSelectComponent
                     name="isWhiteLabelAdmin"
                     label="Is WL-Admin"
                     placeholder="Select"
