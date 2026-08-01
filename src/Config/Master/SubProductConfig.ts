@@ -16,6 +16,7 @@ export interface SubProductFormType {
   walletType: string;
   isSettlement: boolean;
   settlementTime?: string;
+  isIMSubProduct: boolean;
   isWhiteLabelAdmin: boolean;
   whiteLabelAdminId?: "";
   userField1?: string;
@@ -57,6 +58,7 @@ export const initialValues: SubProductFormType = {
   walletType: "",
   isSettlement: false,
   settlementTime: "3 hrs",
+  isIMSubProduct: false,
   isWhiteLabelAdmin: false,
   whiteLabelAdminId: "",
   userField1: "",
@@ -74,6 +76,7 @@ export const validationSchema: Record<keyof SubProductFormType, Yup.AnySchema> =
   walletType: textField("Wallet Type", 50, true),
   isSettlement: Yup.boolean().required("Is Settlement is Required"),
   settlementTime: textField("Settlement Time", 50, false, true),
+  isIMSubProduct: Yup.boolean().default(false),
   isWhiteLabelAdmin: Yup.boolean().default(false),
   whiteLabelAdminId: Yup.string()
     .max(50, "WL-Admin Id must be at most 50 characters")
@@ -126,6 +129,7 @@ export const mapToSubProductTableType = (
     walletType: raw.walletType ?? "",
     isSettlement: !!raw.isSettlement,
     settlementTime: raw.settlementTime ?? "",
+    isIMSubProduct: !!raw.isIMSubProduct,
     isWhiteLabelAdmin: !!raw.isWhiteLabelAdmin,
     whiteLabelAdminId: raw.whiteLabelAdminId ?? "",
     isActive: !!raw.isActive,
@@ -153,6 +157,7 @@ export const transformSubProductToFormData = (
       raw.settlementTime && raw.settlementTime !== "-"
         ? raw.settlementTime
         : "3 hrs",
+    isIMSubProduct: !!raw.isIMSubProduct,
     isWhiteLabelAdmin: !!raw.isWhiteLabelAdmin,
     whiteLabelAdminId:
       raw.whiteLabelAdminId && raw.whiteLabelAdminId !== "-"

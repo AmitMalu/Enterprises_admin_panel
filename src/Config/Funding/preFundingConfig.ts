@@ -80,9 +80,9 @@ export const headers: GenericTableHeader<PrefundingTableType>[] = [
     label: "Request Status",
     filterType: "boolean",
     filterOptions: [
-      { label: "PENDING", value: "pending" },
-      { label: "APPROVE", value: "approve" },
-      { label: "REJECT", value: "reject" },
+      { label: "PENDING", value: "PENDING" },
+      { label: "APPROVED", value: "APPROVED" },
+      { label: "REJECTED", value: "REJECTED" },
     ],
   },
   { key: "remarks", label: "Remark", filterType: "text", copyable: true },
