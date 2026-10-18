@@ -10,24 +10,16 @@ const StepperLines: React.FC<StepperLinesPrope> = ({
   totalSteps = 4,
 }) => {
   return (
-    <div className="flex items-center justify-center gap-4">
+    <div className="flex items-center justify-center gap-2">
       {Array.from({ length: totalSteps }).map((_, index) => (
         <div key={index} className="flex items-center gap-2">
           <div
-            className={`w-10 h-2 rounded-full transition-all duration-300
+            className={`h-1.5 rounded-full transition-all duration-300
                   ${index === activeStep - 1 
-                    ? "bg-brand-accent w-16" 
+                    ? "bg-emerald-500 w-12" 
                     : index < activeStep - 1
-                    ? "bg-brand-accent w-10"
-                    : "bg-gray-300 w-8"}`}
-          />
-          <div
-            className={`w-2 h-2 rounded-full transition-all duration-300
-                  ${index === activeStep - 1 
-                    ? "bg-brand-accent scale-150" 
-                    : index < activeStep - 1
-                    ? "bg-brand-accent"
-                    : "bg-gray-300"}`}
+                    ? "bg-emerald-300 w-8"
+                    : "bg-slate-200 w-6"}`}
           />
         </div>
       ))}

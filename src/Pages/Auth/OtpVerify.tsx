@@ -14,7 +14,6 @@ import { IconArrowLeft } from "@tabler/icons-react";
 import { colors } from "../../theme/colors";
 import { Card } from "@mantine/core";
 import { OtpKeyIconSvg } from "../../assets/Icons/Svgs";
-import ReadyToGrowText from '../../assets/Images/ReadyToGrowText.png'
 
 const validationSchema = Yup.object({
   otp: Yup.string().length(6, "OTP must be 6 digits").required("OTP is required"),
@@ -146,18 +145,13 @@ const OtpVerify = () => {
 
   return (
     <Card
-      shadow="xl"
+      shadow="none"
       p="xl"
-      radius="xl"
-      // withBorder
-      className="w-95 bg-white/95 backdrop-blur-sm border-gray-100"
+      withBorder={false}
+      className="w-full bg-transparent"
     >
-      <div className="flex justify-center mb-4">
-        <img
-          src={ReadyToGrowText}
-          alt="Forgot Password"
-          className="max-w-full h-auto"
-        />
+      <div className="mb-6">
+        <h1 className="text-[28px] font-extrabold tracking-tight text-slate-900">Verify it’s you</h1>
       </div>
 
       <div className="text-center mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-brand-primary">
@@ -246,7 +240,7 @@ const OtpVerify = () => {
                   bgColor={colors.text.inverse}
                   textColor={colors.brand.accent}
                   borderColor={colors.brand.accent}
-                  radius={24}
+                  radius={10}
                   leftIcon={<IconArrowLeft />}
                   onClick={() => {
                     if (otpFor === "forgetPassword") {
@@ -267,9 +261,9 @@ const OtpVerify = () => {
                 <ButtonComponent
                   fullWidth
                   size="md"
-                  bgColor={colors.brand.accent}
+                  bgColor={colors.brand.primary}
                   textColor={colors.text.inverse}
-                  radius={24}
+                  radius={10}
                   type="submit"
                 >
                   {isSubmitting ? (

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import UserTypeCard from "../Molecules/UserTypeCard";
 import { userTypeSelectorOptions } from "../../Config/UserCreationConfig/UserConfig";
 // import { IMLogoWhiteBGSvg } from "../../assets/Icons";
-import orgLogo from '../../assets/Images/orgLogo.png';
+import { BrandMark } from '../Brand/BrandLogo';
 
 const radius = 190;
 
@@ -12,7 +12,8 @@ const CreateUserTypeSelector = () => {
   const logoPath = userInfo?.logoPath || "";
   const role = userInfo?.role || userInfo?.hierarchyId?.split("-")[1] || "";
   const isWhiteLabel = role === "WLAD" || role === "WLAU" || role === "WL";
-  const logoSrc = isWhiteLabel ? logoPath : orgLogo;
+  // White-label admins see their own logo; everyone else sees the Smart Credit mark
+  const logoSrc = isWhiteLabel ? logoPath : "";
 
   const handleUserTypeClick = (type: string) => {
     navigate(`/management/user/create/${type}`);
@@ -21,16 +22,25 @@ const CreateUserTypeSelector = () => {
   return (
     <div className="flex-1 flex items-center justify-center relative cursor-pointer">
       {/* Center Logo */}
-      {logoSrc && (
-        <div className="w-fit h-fit p-4 pl-4 border-[14px] border-border-ring bg-white rounded-full z-10 ">
-          {/* <IMLogoWhiteBGSvg /> */}
+      <div className="w-fit h-fit p-4 border-[14px] border-border-ring bg-white rounded-full z-10 shadow-sm">
+        {logoSrc ? (
           <img
             src={logoSrc}
             alt="Logo"
             className="w-24 md:w-40 max-w-none object-contain"
           />
-        </div>
-      )}
+        ) : (
+          <div className="flex w-24 md:w-40 flex-col items-center justify-center gap-2 py-2">
+            <BrandMark size={64} />
+            <div className="text-center leading-tight">
+              <div className="text-[15px] font-extrabold tracking-tight text-slate-900">
+                Smart<span className="text-emerald-600">Credit</span>
+              </div>
+              <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-500">Solution</div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* User Types */}
       {userTypeSelectorOptions.map((type, index) => {

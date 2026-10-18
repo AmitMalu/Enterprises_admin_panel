@@ -21,7 +21,7 @@ const TextComponent: React.FC<TextComponentProps> = ({
   fontSize,
   fontWeight,
   color,
-  fontFamily,
+  fontFamily: _fontFamily,
   align,
   truncate,
   lineClamp,
@@ -34,7 +34,7 @@ const TextComponent: React.FC<TextComponentProps> = ({
   return (
     <Text
       component={component}
-      style={{ fontSize, fontFamily, ...style }} // Apply fontFamily and other styles dynamically
+      style={{ fontSize, ...style }} // fontFamily is ignored: the app-wide brand font always applies
       fw={fontWeight}
       c={color}
       truncate={truncate}

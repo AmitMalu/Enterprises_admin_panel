@@ -6,8 +6,6 @@ import {
   LockIconSvg,
   UsernameSvg,
 } from "../../assets/Icons/Svgs";
-import welcomeTextImage from "../../assets/Images/WelcomeText.png";
-import loginAccountTextImage from "../../assets/Images/LoginAccountText.png";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -103,26 +101,14 @@ const LoginPage: React.FC = () => {
 
   return (
     <Card
-      shadow="xl"
+      shadow="none"
       p="xl"
-      radius="xl"
-      // withBorder
-      className="w-95 bg-white/95 backdrop-blur-sm border-gray-100"
+      withBorder={false}
+      className="w-full bg-transparent"
     >
-      {/* Welcome Text */}
-      <div className="flex justify-center mb-4">
-        <img
-          src={welcomeTextImage}
-          alt="Welcome Back"
-          className="max-w-full h-auto"
-        />
-      </div>
-      <div className="flex justify-center mb-6">
-        <img
-          src={loginAccountTextImage}
-          alt="Login to Your Account"
-          className="max-w-full h-auto"
-        />
+      <div className="mb-6">
+        <h1 className="text-[28px] font-extrabold tracking-tight text-slate-900">Welcome back</h1>
+        <p className="mt-1 text-sm text-slate-500">Sign in to your Smart Credit admin console</p>
       </div>
 
       <Formik
@@ -174,31 +160,33 @@ const LoginPage: React.FC = () => {
                   : undefined
               }
               minLength={8}
-              maxLength={20}
+              maxLength={50}
             />
 
             {/* Forgot Password? */}
             <div
-              className="mt-1 font-geologica font-normal text-sm xl:text-sm 2xl:text-xl text-right text-text-brand-light"
+              className="mt-1 font-geologica font-normal text-sm text-right text-emerald-700 font-semibold"
             >
               <span
                 className="cursor-pointer hover:underline"
                 onClick={handleForgetPassword}
               >
-                Forget Password?
+                Forgot password?
               </span>
             </div>
 
             {/* Login Button */}
-            <div className="flex justify-center items-center mt-3">
+            <div className="mt-6">
               <ButtonComponent
                 size="md"
-                bgColor={colors.brand.accent}
+                bgColor={colors.brand.primary}
                 textColor={colors.text.inverse}
-                radius={24}
+                radius={10}
                 type="submit"
+                fullWidth
+                style={{ height: 46, margin: 0 }}
               >
-                LOGIN NOW
+                Sign in
               </ButtonComponent>
             </div>
           </Form>

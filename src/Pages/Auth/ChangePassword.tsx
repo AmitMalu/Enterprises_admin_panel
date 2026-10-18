@@ -94,7 +94,7 @@ const ChangePassword = () => {
                                 required
                                 withAsterisk
                                 minLength={8}
-                                maxLength={20}
+                                maxLength={50}
                             />
 
                             {/*New Password */}
@@ -106,7 +106,7 @@ const ChangePassword = () => {
                                 required
                                 withAsterisk
                                 minLength={8}
-                                maxLength={20}
+                                maxLength={50}
                             />
 
                             <FormikTextInputComponent
@@ -117,7 +117,7 @@ const ChangePassword = () => {
                                 required
                                 withAsterisk
                                 minLength={8}
-                                maxLength={20}
+                                maxLength={50}
                             />
 
                             <div className="flex justify-end">

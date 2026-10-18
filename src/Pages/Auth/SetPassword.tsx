@@ -10,7 +10,6 @@ import ButtonComponent from "../../Components/Atoms/ButtonComponent";
 import { passwordValidation } from "../../Utils/ValidationUtils";
 import { colors } from "../../theme/colors";
 import { IconArrowLeft } from "@tabler/icons-react";
-import forgotPassText from '../../assets/Images/ForgotPassText.png'
 import { Card } from "@mantine/core";
 
 const validationSchema = Yup.object().shape({
@@ -76,18 +75,13 @@ const SetPassword: React.FC = () => {
 
   return (
     <Card
-      shadow="xl"
+      shadow="none"
       p="xl"
-      radius="xl"
-      // withBorder
-      className="w-95 bg-white/95 backdrop-blur-sm border-gray-100"
+      withBorder={false}
+      className="w-full bg-transparent"
     >
-      <div className="flex justify-center mb-4">
-        <img
-          src={forgotPassText}
-          alt="Set Password"
-          className="max-w-full h-auto"
-        />
+      <div className="mb-6">
+        <h1 className="text-[28px] font-extrabold tracking-tight text-slate-900">Set a new password</h1>
       </div>
       <div className="mb-8 font-poppins font-normal text-sm 2xl:text-xl 3xl:text-2xl text-brand-primary">
         Please Enter New Password
@@ -103,7 +97,7 @@ const SetPassword: React.FC = () => {
           required
           name="newPassword"
           minLength={8}
-          maxLength={20}
+          maxLength={50}
           radius="lg"
           error={
             formik.touched.newPassword
@@ -121,7 +115,7 @@ const SetPassword: React.FC = () => {
           required
           name="reEnteredPassword"
           minLength={8}
-          maxLength={20}
+          maxLength={50}
           radius="lg"
           error={
             formik.touched.reEnteredPassword
@@ -133,9 +127,9 @@ const SetPassword: React.FC = () => {
         <div className="flex justify-around items-center">
           <ButtonComponent
             size="md"
-            bgColor={colors.brand.accent}
+            bgColor={colors.brand.primary}
             textColor={colors.text.inverse}
-            radius={24}
+            radius={10}
             leftIcon={<IconArrowLeft />}
             onClick={() => navigate("/login")}
           >
@@ -146,9 +140,9 @@ const SetPassword: React.FC = () => {
           </div>
           <ButtonComponent
             size="md"
-            bgColor={colors.brand.accent}
+            bgColor={colors.brand.primary}
             textColor={colors.text.inverse}
-            radius={24}
+            radius={10}
             type="submit"
           >
             CONTINUE

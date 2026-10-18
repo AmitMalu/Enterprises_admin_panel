@@ -1,12 +1,12 @@
 import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks'
 import { useNavigate } from 'react-router-dom'
-import { Avatar, Group, Menu } from '@mantine/core'
-import TextComponent from '../Atoms/TextComponent'
+import { ActionIcon, Avatar, Group, Menu, Tooltip, UnstyledButton } from '@mantine/core'
 import { fetchWalletBalance } from '../../Redux/Features/Auth/Thunk'
 import { logoutUser } from '../../Utils/utils'
-import { IconRefresh } from '@tabler/icons-react'
+import { IconChevronDown, IconKey, IconLogout, IconRefresh, IconUser, IconWallet } from '@tabler/icons-react'
 import profileIcon from '../../assets/Images/user.png'
+import BrandLogo from '../Brand/BrandLogo'
 import { toast } from 'react-toastify'
 
 const Navbar: React.FC = () => {
@@ -14,7 +14,12 @@ const Navbar: React.FC = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const hierarchyId = JSON.parse(localStorage.getItem("userInfo") || "{}")?.hierarchyId;
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  const hierarchyId = userInfo?.hierarchyId;
+  const userRole = userInfo?.role || hierarchyId?.split("-")[1] || "";
+  const isWhiteLabel = ["WLAD", "WLAU", "WL"].includes(userRole);
+  const logoPath = userInfo?.logoPath || "";
+  const displayName = userInfo?.name || userInfo?.userName || userInfo?.username || hierarchyId || "Account";
   const wallet = useAppSelector((state) => state.auth.walletBalance); // Assuming you store it in auth slice
 
   const postpaid = wallet?.postpaidBalance || 0;
@@ -51,55 +56,74 @@ const Navbar: React.FC = () => {
       });
   };
 
+  const formatInr = (value: number | string) =>
+    `₹${Number(value || 0).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
+
   return (
-    <Group justify="flex-end" w="100%" gap="lg">
-      
-      {/* Prepaid Balance */}
-      <TextComponent fontWeight={600} fontSize={14}>
-        Prepaid: ₹{prepaid}
-      </TextComponent>
+    <Group justify="space-between" w="100%" wrap="nowrap">
+      {isWhiteLabel && logoPath ? (
+        <div className="flex h-10 items-center rounded-lg bg-white px-2">
+          <img src={logoPath} alt="logo" className="max-h-8 w-auto max-w-[140px] object-contain" />
+        </div>
+      ) : (
+        <BrandLogo tone="light" size={34} subtitle="Admin Console" />
+      )}
 
-      {/* Postpaid Balance */}
-      <TextComponent fontWeight={600} fontSize={14}>
-        Postpaid: ₹{postpaid}
-      </TextComponent>
+      <Group gap="sm" wrap="nowrap" ml="auto">
+        {/* Wallet balances */}
+        <div className="hidden sm:flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-lg border border-emerald-400/25 bg-emerald-400/10 px-3 py-1.5">
+            <IconWallet size={16} className="text-emerald-400" />
+            <div className="leading-tight">
+              <div className="text-[10px] font-semibold uppercase tracking-wide text-emerald-300">Prepaid</div>
+              <div className="text-sm font-bold text-white">{formatInr(prepaid)}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5">
+            <IconWallet size={16} className="text-slate-400" />
+            <div className="leading-tight">
+              <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Postpaid</div>
+              <div className="text-sm font-bold text-white">{formatInr(postpaid)}</div>
+            </div>
+          </div>
+        </div>
 
-      {/* Refresh Button */}
-      <button
-        onClick={handleRefresh}
-        className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
-        title="Refresh Wallet Balance"
-      >
-        <IconRefresh size={20} />
-      </button>
+        <Tooltip label="Refresh wallet balance">
+          <ActionIcon variant="subtle" color="gray" size="lg" radius="md" onClick={handleRefresh} aria-label="Refresh wallet balance" className="!text-slate-300 hover:!bg-white/10">
+            <IconRefresh size={18} />
+          </ActionIcon>
+        </Tooltip>
 
-      {/* Profile Dropdown */}
-      <Menu shadow="md" width={180} position="bottom-end">
-        <Menu.Target>
-          <Avatar
-            radius="lg"
-            size="md"
-            className="cursor-pointer"
-            src={profileIcon}
-          >
-          </Avatar>
-        </Menu.Target>
-        <Menu.Dropdown>
-          <Menu.Label>Account</Menu.Label>
-          <Menu.Item onClick={() => navigate("/account/profile")}>Profile</Menu.Item>
-          <Menu.Item onClick={() => navigate("/change-password")}>
-            Change Password
-          </Menu.Item>
-          <Menu.Item
-            color="red"
-            onClick={() => logoutUser("You are now logged Out.")}
-          >
-            Logout
-          </Menu.Item>
-        </Menu.Dropdown>
-      </Menu>
+        {/* Profile Dropdown */}
+        <Menu shadow="md" width={200} position="bottom-end" radius="md">
+          <Menu.Target>
+            <UnstyledButton className="flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-white/10">
+              <Avatar radius="xl" size="md" src={profileIcon} />
+              <div className="hidden lg:block leading-tight text-left">
+                <div className="text-sm font-semibold text-white max-w-[140px] truncate">{displayName}</div>
+                <div className="text-[11px] text-slate-400">Administrator</div>
+              </div>
+              <IconChevronDown size={14} className="text-slate-400" />
+            </UnstyledButton>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Label>Account</Menu.Label>
+            <Menu.Item leftSection={<IconUser size={16} />} onClick={() => navigate("/account/profile")}>Profile</Menu.Item>
+            <Menu.Item leftSection={<IconKey size={16} />} onClick={() => navigate("/change-password")}>
+              Change Password
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Item
+              color="red"
+              leftSection={<IconLogout size={16} />}
+              onClick={() => logoutUser("You are now logged Out.")}
+            >
+              Logout
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+      </Group>
     </Group>
-
   )
 }
 

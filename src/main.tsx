@@ -3,6 +3,7 @@ import "./index.css";
 import App from "./App.tsx";
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
+import { mantineTheme } from "./theme/mantineTheme.ts";
 import { Provider } from "react-redux";
 import { persistor, store } from "./Redux/Store/store.ts";
 import { ErrorBoundary } from "react-error-boundary";
@@ -18,7 +19,7 @@ createRoot(document.getElementById("root")!).render(
       fallbackRender={ErrorFallback}
       onReset={() => redirectTo("/login")}
     >
-      <MantineProvider>
+      <MantineProvider theme={mantineTheme}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <App />

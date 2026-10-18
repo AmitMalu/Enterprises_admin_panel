@@ -2,6 +2,7 @@ import React from "react";
 import AuthLeftImagePanel from "../Organisms/AuthLeftImagePanel";
 import StepperLines from "../Atoms/StepperLines";
 import { useLocation } from "react-router-dom";
+import BrandLogo from "../Brand/BrandLogo";
 import { authLayoutRouteConfig } from "../../Config/Auth/AuthImagePanelConfig";
 
 interface AuthContentWrapperProps {
@@ -11,31 +12,25 @@ interface AuthContentWrapperProps {
 const AuthContentWrapper: React.FC<AuthContentWrapperProps> = ({ children }) => {
 
   const { pathname } = useLocation()
-  const { step = 1, bg = "", oneLiner = "", rightBg = "" } = authLayoutRouteConfig[pathname] || {}
+  const { step = 1, oneLiner = "" } = authLayoutRouteConfig[pathname] || {}
 
   return (
     <>
       {/* Left Side - only visible on large screens  */}
-      <AuthLeftImagePanel bgImage={bg} oneLiner={oneLiner}>
+      <AuthLeftImagePanel oneLiner={oneLiner}>
       </AuthLeftImagePanel>
 
-      <div className="w-full lg:w-[45%] h-full flex flex-col items-center justify-center overflow-auto relative">
-        {/* Background Image for Right Side */}
-        {rightBg && (
-          <img
-            src={rightBg}
-            alt="Background"
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
-          />
-        )}
-        
-        {/* Content Card */}
-        <div className="relative z-10 w-full max-w-md mx-auto">
+      <div className="w-full lg:w-[48%] h-full flex flex-col items-center justify-center overflow-auto relative bg-white px-6">
+        {/* Logo for small screens, where the left panel is hidden */}
+        <div className="lg:hidden mb-6">
+          <BrandLogo subtitle="Admin Console" />
+        </div>
+
+        <div className="relative z-10 w-full max-w-[420px] mx-auto">
           {children}
         </div>
-        
-        {/* Stepper Lines Below Card */}
-        <div className="relative z-10 mt-4">
+
+        <div className="relative z-10 mt-6">
           <StepperLines activeStep={step} totalSteps={4} />
         </div>
       </div>
