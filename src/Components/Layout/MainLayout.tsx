@@ -1,12 +1,14 @@
 import {
   AppShell,
   Burger,
+  Drawer,
   Group,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import TopMenuBar from "./TopMenuBar";
 import { useEffect } from "react";
 import { logoutUser } from "../../Utils/utils";
 import { useAppDispatch } from "../../Redux/hooks";
@@ -14,10 +16,15 @@ import { fetchWalletBalance } from "../../Redux/Features/Auth/Thunk";
 import { colors } from "../../theme/colors";
 
 const MainLayout: React.FC = () => {
-  const [opened, { toggle }] = useDisclosure();
+  const [opened, { toggle, close }] = useDisclosure();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  // Close the mobile menu drawer after navigating
+  useEffect(() => {
+    close();
+  }, [location.pathname]);
 
   // Fetch Wallet Balance
   useEffect(() => {
@@ -94,28 +101,40 @@ const MainLayout: React.FC = () => {
   }, []);
 
   return (
-    <AppShell
-      layout="alt"
-      header={{ height: 70 }}
-      navbar={{ width: 250, breakpoint: "sm", collapsed: { mobile: !opened } }}
-      padding="xs"
-    >
-      <AppShell.Header style={{ backgroundColor: colors.surface.app }}>
-        <Group justify="between" style={{ flexWrap: "nowrap", width: "100%" }} h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Navbar />
-        </Group>
+    <AppShell header={{ height: 112 }} padding="md">
+      <AppShell.Header style={{ border: "none", backgroundColor: "transparent" }}>
+        {/* Tier 1: dark brand bar */}
+        <div className="h-16 bg-[#0f172a]">
+          <Group h="100%" px="lg" wrap="nowrap" className="mx-auto max-w-[1600px]">
+            <Burger opened={opened} onClick={toggle} hiddenFrom="md" size="sm" color="#cbd5e1" />
+            <Navbar />
+          </Group>
+        </div>
+        {/* Tier 2: horizontal menu */}
+        <div className="h-12 border-b bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]" style={{ borderColor: colors.border.default }}>
+          <div className="mx-auto h-full max-w-[1600px] px-3 hidden md:block">
+            <TopMenuBar />
+          </div>
+        </div>
       </AppShell.Header>
 
-      <AppShell.Navbar p="sm" style={{ backgroundColor: colors.surface.nav }}>
-        <Group>
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Sidebar />
-        </Group>
-      </AppShell.Navbar>
+      {/* Small screens: the full menu opens in a drawer */}
+      <Drawer
+        opened={opened}
+        onClose={close}
+        size={280}
+        withCloseButton={false}
+        padding="sm"
+        hiddenFrom="md"
+        styles={{ content: { backgroundColor: "var(--color-sidebar-bg)" } }}
+      >
+        <Sidebar />
+      </Drawer>
 
       <AppShell.Main style={{ backgroundColor: colors.surface.app }}>
-        <Outlet />
+        <div className="mx-auto w-full max-w-[1600px]">
+          <Outlet />
+        </div>
       </AppShell.Main>
     </AppShell>
   );

@@ -199,7 +199,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
                                         leftSectionWidth={36}
                                         rightSectionWidth={48}
                                         minLength={8}
-                                        maxLength={20}
+                                        maxLength={50}
                                     />
                                 </Grid.Col>
 

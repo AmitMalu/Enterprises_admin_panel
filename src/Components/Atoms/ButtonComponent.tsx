@@ -44,7 +44,6 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
       bgColor = "transparent",
       textColor = colors.text.primary,
       type = "button",
-      font = "",
       fw = "500",
       fontSize = "",
       throttleMs = 1000, // default 1 second throttle
@@ -84,7 +83,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
         disabled={disabled}
         fullWidth={fullWidth}
         loading={loading}
-        radius={radius || 16}
+        radius={radius ?? 10}
         size={size}
         className={className || ""}
         styles={{
@@ -107,7 +106,6 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonComponentProps>(
           <span
             style={{
               color: textColor,
-              fontFamily: font,
               fontSize: `${fontSize}px`,
               fontWeight: fw,
             }}

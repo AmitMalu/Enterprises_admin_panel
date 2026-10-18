@@ -7,14 +7,19 @@ export default {
         "3xl": "1800px",
         "4xl": "2100px",
       },
+      // Every legacy font class now renders the new brand font
       fontFamily: {
-        geologica: ["Geologica", "sans-serif"],
-        open: ['"Open Sans"', "sans-serif"],
-        lora: ["Lora", "serif"],
-        poppins: ["Poppins", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
-        manrope : ["Manrope", "sans-serif"],
-        segoe: ["Segoe UI", "sans-serif"],
+        sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        geologica: ['"Plus Jakarta Sans"', "sans-serif"],
+        open: ['"Plus Jakarta Sans"', "sans-serif"],
+        lora: ['"Plus Jakarta Sans"', "sans-serif"],
+        poppins: ['"Plus Jakarta Sans"', "sans-serif"],
+        inter: ['"Plus Jakarta Sans"', "sans-serif"],
+        manrope: ['"Plus Jakarta Sans"', "sans-serif"],
+        segoe: ['"Plus Jakarta Sans"', "sans-serif"],
+      },
+      boxShadow: {
+        card: "0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.06)",
       },
       colors: {
         brand: {
