@@ -50,7 +50,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
         transformCreatePayload: transformFormToCreateBankMasterPayload,
         transformUpdatePayload: transformFormToUpdateBankMasterPayload,
         successNavigatePath: "/master/banks",
-        entityName: "IM-Bank",
+        entityName: "Company Bank",
     });
 
     useEffect(() => {

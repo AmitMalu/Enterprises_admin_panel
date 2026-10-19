@@ -165,7 +165,7 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   businessNumber: textField("Business Number", 50, true),
 
   // White label-specific
-  imAccountMemberID: textField("IM Account Member ID", 50, true),
+  imAccountMemberID: textField("SCS Account Member ID", 50, true),
   isServiceAllow: Yup.boolean(),
   allowPrepaidCards: Yup.boolean(),
   prepaidCardName: textField("Prepaid Card Name", 50, true),
