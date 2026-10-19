@@ -204,7 +204,7 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
                 <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
                   <FormikSelectComponent
                     name="isIMSubProduct"
-                    label="Is IM Sub Product"
+                    label="Is SCS Sub Product"
                     placeholder="Select"
                     withAsterisk
                     allowDeselect={false}
