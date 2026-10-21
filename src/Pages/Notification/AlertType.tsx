@@ -126,7 +126,7 @@ const AlertType = () => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        Alert Type Notifications
+        Alert Rules
       </TextComponent>
 
       {/* Toolbar with Date Range and Add Button */}

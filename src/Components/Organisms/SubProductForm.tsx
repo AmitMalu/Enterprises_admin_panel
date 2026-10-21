@@ -99,7 +99,7 @@ const SubProductForm = ({ mode }: SubProductFormProps) => {
       />
 
       {/* Sub Heading */}
-      <BreadCrumb type={"Sub Product"} text="Master" />
+      <BreadCrumb type={"Service"} text="Platform Setup" />
 
       <Formik
         enableReinitialize

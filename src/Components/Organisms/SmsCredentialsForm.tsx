@@ -120,7 +120,7 @@ const SmsCredentialsForm = ({ mode }: SmsCredentialsFormProps) => {
                 backPath="/notification/sms-credentials"
             />
 
-            <BreadCrumb type={"SMS Credential"} text="Notification" />
+            <BreadCrumb type={"SMS Gateway"} text="Messaging" />
 
             <Formik
                 enableReinitialize

@@ -99,7 +99,7 @@ const VendorForm = ({ mode }: VendorFormProps) => {
         backPath="/master/vendor"
       />
       {/* Sub Heading */}
-      <BreadCrumb type={"Vendor"} text="Master" />
+      <BreadCrumb type={"Service Provider"} text="Platform Setup" />
 
       <Formik
         enableReinitialize

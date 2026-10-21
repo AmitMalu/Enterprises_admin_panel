@@ -83,7 +83,7 @@ const TicketingForm = () => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"Support"} text="Ticket" />
+            <BreadCrumb type={"Support Ticket"} text="Help Desk" />
 
             <Formik
                 enableReinitialize

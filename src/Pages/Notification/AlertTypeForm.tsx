@@ -85,7 +85,7 @@ const AlertTypeForm = () => {
       />
 
       {/* Sub Heading */}
-      <BreadCrumb type={"Alert Type"} text="Notification" />
+      <BreadCrumb type={"Alert Rule"} text="Messaging" />
 
       <Formik
         enableReinitialize

@@ -7,7 +7,7 @@ const UserCreation: React.FC = () => {
     <div className="w-full min-h-[calc(100vh-90px)] flex flex-col p-2">
       {/* Heading */}
       <TextComponent fontFamily="Inter" fontWeight={600} fontSize={24}>
-        User Creation
+        Onboard Partner
       </TextComponent>
 
       {/* Logo and Blades */}

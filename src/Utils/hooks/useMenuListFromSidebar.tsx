@@ -28,7 +28,7 @@ export const useMenuListFromSidebar = ({
         try {
             // Start with all non-dashboard menus
             let filteredMenus = sidebarData.filter(
-                (menu) => menu.label.toLowerCase() !== "dashboard"
+                (menu) => menu.link !== "/"
             );
 
             // For WL roles, exclude certain top-level menus
@@ -64,7 +64,7 @@ export const useMenuListFromSidebar = ({
 
         // Build the same filtered menu list as above
         let filteredMenus = sidebarData.filter(
-            (menu) => menu.label.toLowerCase() !== "dashboard"
+            (menu) => menu.link !== "/"
         );
 
         if (isWL) {

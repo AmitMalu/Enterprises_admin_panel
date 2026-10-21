@@ -54,7 +54,7 @@ const EmailCredentials = () => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading + Add Button */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        Mail Credentials
+        Email Gateway
       </TextComponent>
 
       <GenericMasterToolbar
