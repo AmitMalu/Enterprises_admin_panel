@@ -138,7 +138,7 @@ const LedgerReport = () => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
       <TextComponent fontFamily="Inter" fontWeight={600} fontSize={24}>
-        Ledger Report
+        Account Ledger
       </TextComponent>
 
       <Formik

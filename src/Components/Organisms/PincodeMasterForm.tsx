@@ -98,7 +98,7 @@ const PincodeMasterForm = ({ mode }: PincodeMasterFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"Pincode"} text="Master" />
+            <BreadCrumb type={"PIN Code"} text="Platform Setup" />
 
             {formReady && (
                 <Formik

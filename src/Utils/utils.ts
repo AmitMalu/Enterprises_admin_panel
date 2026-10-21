@@ -60,7 +60,7 @@ export const capitalizeWords = (str: string) =>
     .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
 
 export const redirectTo = (path: string) => {
-  const basePath = import.meta.env.VITE_BASE_PATH || "";
+  const basePath = (import.meta.env.VITE_BASE_PATH || "").replace(/\/+$/, ""); // "/" or "/admin/" -> no trailing slash
 
   window.location.href = `${basePath}${path}`;
 };

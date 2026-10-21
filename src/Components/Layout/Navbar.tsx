@@ -122,6 +122,18 @@ const Navbar: React.FC = () => {
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
+
+        {/* Always-visible logout */}
+        <Tooltip label="Logout">
+          <UnstyledButton
+            aria-label="Logout"
+            onClick={() => logoutUser("You are now logged Out.")}
+            className="!hidden md:!flex !h-9 items-center gap-1.5 !rounded-lg !border !border-solid !border-white/20 !px-3 !text-sm !font-semibold !text-slate-200 transition-colors hover:!border-red-400/50 hover:!bg-red-500/15 hover:!text-red-200"
+          >
+            <IconLogout size={16} />
+            Logout
+          </UnstyledButton>
+        </Tooltip>
       </Group>
     </Group>
   )

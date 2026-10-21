@@ -71,12 +71,12 @@ const TopMenuBar: React.FC = () => {
 
   return (
     <ScrollArea type="never" offsetScrollbars={false}>
-      <nav className="flex h-12 items-stretch gap-1 whitespace-nowrap">
+      <nav className="flex h-12 items-stretch gap-0.5 whitespace-nowrap">
         {items.map((item) => {
           const active = containsPath(item, pathname);
           const trigger = (
             <UnstyledButton
-              className={`relative flex items-center gap-1 !px-3 text-[13.5px] font-semibold transition-colors ${
+              className={`relative flex items-center gap-1 !px-2.5 text-[13px] font-semibold transition-colors ${
                 active ? "text-emerald-700" : "text-slate-600 hover:text-slate-900"
               }`}
               onClick={() => !item.links?.length && item.link && navigate(item.link)}

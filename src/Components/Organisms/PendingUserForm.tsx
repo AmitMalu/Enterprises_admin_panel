@@ -305,7 +305,7 @@ const PendingUserForm = () => {
       />
 
       {/* Sub Heading */}
-      <BreadCrumb type={isEditMode ? "Edit User" : "Pending User"} text="Management" />
+      <BreadCrumb type={isEditMode ? "Edit User" : "Approval Queue"} text="Network" />
 
       <Formik
         initialValues={formData}

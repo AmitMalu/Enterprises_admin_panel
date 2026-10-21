@@ -103,7 +103,7 @@ const AdminUserForm = ({ mode }: AdminUserFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type="Admin User" text="Management" />
+            <BreadCrumb type="Staff Account" text="Network" />
 
             <Formik
                 enableReinitialize

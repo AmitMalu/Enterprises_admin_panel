@@ -259,7 +259,7 @@ const OnboardedUserForm = () => {
       />
 
       {/* Sub Heading */}
-      <BreadCrumb type={isEditMode ? "Edit Onboarded User" : "Onboarded User"} text="Management" />
+      <BreadCrumb type={isEditMode ? "Edit Active Partner" : "Active Partner"} text="Network" />
 
       <Formik
         initialValues={formData}

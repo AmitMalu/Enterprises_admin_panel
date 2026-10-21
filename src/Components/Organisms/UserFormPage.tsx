@@ -307,7 +307,7 @@ const UserFormPage = () => {
               />
 
               {/* Sub Heading */}
-              <BreadCrumb type={`${type} Form`} text="Management" />
+              <BreadCrumb type={`${type} Form`} text="Network" />
 
               {/* Stepper */}
               <FormStepper steps={config.steps} activeStep={activeStep} />

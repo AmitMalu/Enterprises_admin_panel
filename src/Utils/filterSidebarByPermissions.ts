@@ -4,12 +4,12 @@ import { sidebarData } from "../Config/Menus/MenuItems";
 
 // ─── WL Exclusion Config ─────────────────────────────────────────────────────
 // Menus never shown to WL-hierarchy roles (WLAD / WLAU).
-export const WL_EXCLUDED_MENUS = ["Masters", "Logs", "Notification"];
+export const WL_EXCLUDED_MENUS = ["Platform Setup", "Audit Trail", "Messaging"];
 
 // Submenus never shown to WL-hierarchy roles, keyed by parent menu label.
 // Add new entries here whenever a submenu needs to be hidden for all WL roles.
 export const WL_EXCLUDED_SUBMENUS: Record<string, string[]> = {
-  Reports: ["Download Report"],
+  Analytics: ["Export Center"],
 };
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -33,7 +33,7 @@ export const filterSidebarByPermissions = (
   // so that permission codes (e.g. "01", "04") resolve to the right menus.
   const visibleMenus = sidebarData
     .filter((m) => {
-      if (m.label.toLowerCase() === "dashboard") return false;
+      if (m.link === "/") return false; // Overview (dashboard) is never permission-controlled
       if (isWL && WL_EXCLUDED_MENUS.includes(m.label)) return false;
       return true;
     })
@@ -45,7 +45,7 @@ export const filterSidebarByPermissions = (
   return sidebarData
     .map((menu) => {
       // Always show Dashboard
-      if (menu.label.toLowerCase() === "dashboard") return menu;
+      if (menu.link === "/") return menu;
 
       // WL roles never see these menus
       if (isWL && WL_EXCLUDED_MENUS.includes(menu.label)) return null;

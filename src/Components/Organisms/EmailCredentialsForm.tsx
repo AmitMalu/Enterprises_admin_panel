@@ -113,7 +113,7 @@ const EmailCredentialsForm = ({ mode }: EmailCredentialsFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"Email Credential"} text="Notification" />
+            <BreadCrumb type={"Email Gateway"} text="Messaging" />
 
             {/* Form */}
             <Formik

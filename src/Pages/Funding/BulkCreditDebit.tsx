@@ -75,7 +75,7 @@ const BulkCreditDebit = () => {
       {/* Heading */}
       <div className="mb-4">
         <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-          Bulk Credit Debit
+          Bulk Adjustments
         </TextComponent>
       </div>
 

@@ -154,7 +154,7 @@ const PreFundingAuth = () => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        Prefunding Request
+        Top-up Approvals
       </TextComponent>
 
       {/* Toolbar */}

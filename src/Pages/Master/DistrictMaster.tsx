@@ -106,7 +106,7 @@ const DistrictMaster = () => {
   return (
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        District Master
+        Districts
       </TextComponent>
 
       <GenericMasterToolbar

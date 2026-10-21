@@ -4,7 +4,6 @@ import {
   LogsIcon,
   managementSvg,
   MastersIcon,
-  // MenuSettingIcon,
   MyProfileIcon,
   NotificationIcon,
   reportsSvg,
@@ -12,446 +11,132 @@ import {
   SupportIcon,
 } from "../../assets/Icons/Svgs";
 
+/*
+ * Admin portal navigation (Smart Credit Solution naming).
+ *
+ * Only labels and order are product decisions here: every `link` is a fixed route.
+ * IMPORTANT: Admin User / White-label User permissions are stored as codes built from
+ * the POSITION of each menu and sub-menu (e.g. "0102" = 1st menu, 2nd sub-menu, counted
+ * without the Overview item). Reordering or inserting items changes those codes, so
+ * existing Admin Users must have their permissions re-saved afterwards.
+ * Some code also matches menus by label (see filterSidebarByPermissions.ts).
+ */
 export const sidebarData = [
-  { label: "Dashboard", icon: DashboardSvg, initiallyOpened: false, link: "/" },
+  { label: "Overview", icon: DashboardSvg, initiallyOpened: false, link: "/" },
   {
-    label: "Masters",
+    label: "Network",
+    icon: managementSvg,
+    initiallyOpened: false,
+    links: [
+      { label: "Onboard Partner", link: "/management/user/create", icon: managementSvg },
+      { label: "Approval Queue", link: "/management/user/pending", icon: managementSvg },
+      { label: "Active Partners", link: "/management/user/onboarded", icon: managementSvg },
+      { label: "Declined Applications", link: "/management/user/rejected", icon: managementSvg },
+      { label: "Partner Directory", link: "/management/view-user", icon: managementSvg },
+      { label: "Network Mapping", link: "/management/user-mapping", icon: managementSvg },
+      { label: "KYC Review", link: "/management/kyc-pending", icon: managementSvg },
+      { label: "KYC Verified", link: "/management/kyc-approved", icon: managementSvg },
+      { label: "Access Control", link: "/management/block-unblock-user", icon: managementSvg },
+      { label: "Payout Accounts", link: "/management/settlement-bank", icon: managementSvg },
+      { label: "Staff Accounts", link: "/management/admin-user", icon: managementSvg },
+      { label: "Brand Studio", link: "/management/whitelabel-branding", icon: managementSvg },
+    ],
+  },
+  {
+    label: "Treasury",
+    icon: fundingSvg,
+    initiallyOpened: false,
+    links: [
+      { label: "Top-up Approvals", link: "/funding/authorization", icon: fundingSvg },
+      { label: "Wallet Adjustments", link: "/funding/credit-debit", icon: fundingSvg },
+      { label: "Bulk Adjustments", link: "/funding/bulk-credit-debit", icon: fundingSvg },
+      { label: "Settlements", link: "/funding/settlement", icon: fundingSvg },
+      { label: "Transaction Corrections", link: "/funding/update-transaction", icon: fundingSvg },
+      { label: "Low Balance Alerts", link: "/funding/low-balance", icon: fundingSvg },
+      { label: "Wallet Overview", link: "/funding/wallet-preview", icon: fundingSvg },
+    ],
+  },
+  {
+    label: "Commission Plans",
+    icon: schemesSvg,
+    initiallyOpened: false,
+    links: [
+      { label: "Plan Library", link: "/schemes/schemeslist", icon: schemesSvg },
+      { label: "Plan Levels", link: "/schemes/hierarchy", icon: schemesSvg },
+      { label: "Assign Plans", link: "/schemes/allocation", icon: schemesSvg },
+      { label: "Transaction Limits", link: "/schemes/transaction-limit", icon: schemesSvg },
+    ],
+  },
+  {
+    label: "Analytics",
+    icon: reportsSvg,
+    initiallyOpened: false,
+    links: [
+      { label: "Transactions", link: "/report/transaction", icon: reportsSvg },
+      { label: "Find a Transaction", link: "/report/search-transaction", icon: reportsSvg },
+      { label: "In-Process Transactions", link: "/report/pending-transaction", icon: reportsSvg },
+      { label: "Wallet Statement", link: "/report/wallet", icon: reportsSvg },
+      { label: "Account Ledger", link: "/report/ledger-transaction", icon: reportsSvg },
+      { label: "Settlement Summary", link: "/report/settlement", icon: reportsSvg },
+      { label: "Unsettled Payments", link: "/report/unsettled-transaction", icon: reportsSvg },
+      { label: "Tax Summary (GST/TDS)", link: "/report/gst-tds", icon: reportsSvg },
+      { label: "Export Center", link: "/report/download-report", icon: reportsSvg },
+    ],
+  },
+  {
+    label: "Platform Setup",
     icon: MastersIcon,
     initiallyOpened: false,
     links: [
+      { label: "Products", link: "/master/product", icon: MastersIcon },
+      { label: "Services", link: "/master/sub-product", icon: MastersIcon },
+      { label: "Billers & Operators", link: "/master/operator", icon: MastersIcon },
+      { label: "Operator Circles", link: "/master/sub-operator", icon: MastersIcon },
+      { label: "Service Providers", link: "/master/vendor", icon: MastersIcon },
+      { label: "Provider Keys", link: "/master/vendor-credential", icon: MastersIcon },
+      { label: "Smart Routing", link: "/master/vendor-routing", icon: MastersIcon },
+      { label: "Company Accounts", link: "/master/banks", icon: MastersIcon },
+      { label: "Partner Banks", link: "/master/network-banks", icon: MastersIcon },
+      { label: "Dropdown Lists", link: "/master/main", icon: MastersIcon },
+      { label: "Dropdown Values", link: "/master/sub-master", icon: MastersIcon },
       {
-        label: "Product Master",
-        link: "/master/product",
-        icon: MastersIcon,
-      },
-      {
-        label: "Sub-Product Master",
-        link: "/master/sub-product",
-        icon: MastersIcon,
-      },
-      {
-        label: "Transaction Limit Settings",
-        link: "/schemes/transaction-limit",
-        icon: MastersIcon,
-      },
-      {
-        label: "Operator Master",
-        link: "/master/operator",
-        icon: MastersIcon,
-      },
-      {
-        label: "Sub-Operator Master",
-        link: "/master/sub-operator",
-        icon: MastersIcon,
-      },
-      {
-        label: "Vendor Master",
-        link: "/master/vendor",
-        icon: MastersIcon,
-      },
-      {
-        label: "Vendor Credential Master",
-        link: "/master/vendor-credential",
-        icon: MastersIcon,
-      },
-      {
-        label: "Vendor Routing Master",
-        link: "/master/vendor-routing",
-        icon: MastersIcon,
-      },
-      {
-        label: "Bank Master",
-        link: "/master/banks",
-        icon: MastersIcon,
-      },
-      {
-        label: "Network Bank Master",
-        link: "/master/network-banks",
-        icon: MastersIcon,
-      },
-      {
-        label: "Main Master",
-        link: "/master/main",
-        icon: MastersIcon,
-      },
-      {
-        label: "Sub Master",
-        link: "/master/sub-master",
-        icon: MastersIcon,
-      },
-      {
-        label: "Location Master",
+        label: "Geography",
         icon: MastersIcon,
         links: [
-          {
-            label: "Country Master",
-            link: "/master/country",
-            icon: MastersIcon,
-          },
-          {
-            label: "State Master",
-            link: "/master/state",
-            icon: MastersIcon,
-          },
-          {
-            label: "District Master",
-            link: "/master/district",
-            icon: MastersIcon,
-          },
-          {
-            label: "City Master",
-            link: "/master/city",
-            icon: MastersIcon,
-          },
-          {
-            label: "Pincode Master",
-            link: "/master/pincode",
-            icon: MastersIcon,
-          },
+          { label: "Countries", link: "/master/country", icon: MastersIcon },
+          { label: "States", link: "/master/state", icon: MastersIcon },
+          { label: "Districts", link: "/master/district", icon: MastersIcon },
+          { label: "Cities", link: "/master/city", icon: MastersIcon },
+          { label: "PIN Codes", link: "/master/pincode", icon: MastersIcon },
         ],
       },
     ],
   },
   {
-    label: "Schemes",
-    icon: schemesSvg,
-    initiallyOpened: false,
-    links: [
-      {
-        label: "Schemes List",
-        link: "/schemes/schemeslist",
-        icon: schemesSvg,
-      },
-      {
-        label: "Schemes Hierarchy",
-        link: "/schemes/hierarchy",
-        icon: schemesSvg,
-      },
-      {
-        label: "Schemes Allocation",
-        link: "/schemes/allocation",
-        icon: schemesSvg,
-      },
-      // {
-      //   label: "Transaction Routing",
-      //   link: "/schemes/transaction-routing",
-      //   icon: schemesSvg,
-      // },
-    ],
-  },
-  {
-    label: "Funding",
-    icon: fundingSvg,
-    initiallyOpened: false,
-    links: [
-      {
-        label: "Prefunding Authorization",
-        link: "/funding/authorization",
-        icon: fundingSvg,
-      },
-      {
-        label: "Credit/Debit",
-        link: "/funding/credit-debit",
-        icon: fundingSvg,
-      },
-      // {
-      //   label: "Manage Payment",
-      //   link: "/funding/manage-payment",
-      //   icon: fundingSvg,
-      // },
-      // {
-      //   label: "Manage Settlement",
-      //   link: "/funding/manage-settlement",
-      //   icon: fundingSvg,
-      // },
-      {
-        label: "Settlement",
-        link: "/funding/settlement",
-        icon: fundingSvg,
-      },
-      {
-        label: "Update Transaction",
-        link: "/funding/update-transaction",
-        icon: fundingSvg,
-      },
-      {
-        label: "Low Balance",
-        link: "/funding/low-balance",
-        icon: fundingSvg,
-      },
-      {
-        label: "Bulk Credit/Debit",
-        link: "/funding/bulk-credit-debit",
-        icon: fundingSvg,
-      },
-      {
-        label: "Wallet Preview",
-        link: "/funding/wallet-preview",
-        icon: fundingSvg,
-      },
-    ],
-  },
-  {
-    label: "Management",
-    icon: managementSvg,
-    initiallyOpened: false,
-    links: [
-      {
-        label: "User Creation",
-        link: "/management/user/create",
-        icon: managementSvg,
-      },
-      {
-        label: "Pending User",
-        link: "/management/user/pending",
-        icon: managementSvg,
-      },
-      {
-        label: "Onboarded Users",
-        link: "/management/user/onboarded",
-        icon: managementSvg,
-      },
-      {
-        label: "Rejected User",
-        link: "/management/user/rejected",
-        icon: managementSvg,
-      },
-      // {
-      //   label: "User Configuration",
-      //   link: "/management/user-configuration",
-      //   icon: managementSvg,
-      // },
-      {
-        label: "Admin User",
-        link: "/management/admin-user",
-        icon: managementSvg,
-      },
-      // {
-      //   label: "Search User",
-      //   link: "/management/search-user",
-      //   icon: managementSvg,
-      // },
-      {
-        label: "KYC Approved Summary",
-        link: "/management/kyc-approved",
-        icon: managementSvg,
-      },
-      {
-        label: "Pending KYC",
-        link: "/management/kyc-pending",
-        icon: managementSvg,
-      },
-      {
-        label: "View User",
-        link: "/management/view-user",
-        icon: managementSvg,
-      },
-      {
-        label: "Block/Unblock User",
-        link: "/management/block-unblock-user",
-        icon: managementSvg,
-      },
-      {
-        label: "Settlement Bank",
-        link: "/management/settlement-bank",
-        icon: managementSvg,
-      },
-      {
-        label: "User Mapping",
-        link: "/management/user-mapping",
-        icon: managementSvg,
-      },
-      {
-        label: "Whitelabel Branding",
-        link: "/management/whitelabel-branding",
-        icon: managementSvg,
-      },
-    ],
-  },
-  {
-    label: "Reports",
-    icon: reportsSvg,
-    initiallyOpened: false,
-    links: [
-      // {
-      //   label: "Live transaction Report",
-      //   link: "/report/live-transaction",
-      //   icon: reportsSvg,
-      // },
-      {
-        label: "Transaction report",
-        link: "/report/transaction",
-        icon: reportsSvg,
-      },
-      {
-        label: "Wallet Report",
-        link: "/report/wallet",
-        icon: reportsSvg,
-      },
-      {
-        label: "Settlement report",
-        link: "/report/settlement",
-        icon: reportsSvg,
-      },
-      {
-        label: "Unsettled Transaction report",
-        link: "/report/unsettled-transaction",
-        icon: reportsSvg,
-      },
-      {
-        label: "Pending Transaction",
-        link: "/report/pending-transaction",
-        icon: reportsSvg,
-      },
-      // {
-      //   label: "Update Transaction report",
-      //   link: "/report/update-transaction",
-      //   icon: reportsSvg,
-      // },
-      {
-        label: "Search Transaction report",
-        link: "/report/search-transaction",
-        icon: reportsSvg,
-      },
-      {
-        label: "GST/TDS Report",
-        link: "/report/gst-tds",
-        icon: reportsSvg,
-      },
-      {
-        label: "Ledger Report",
-        link: "/report/ledger-transaction",
-        icon: reportsSvg,
-      },
-      {
-        label: "Download Report",
-        link: "/report/download-report",
-        icon: reportsSvg,
-      },
-      // {
-      //   label: "API Performance report",
-      //   link: "/report/api-performance",
-      //   icon: reportsSvg,
-      // },
-      // {
-      //   label: "Account summary report",
-      //   link: "/report/account-summary",
-      //   icon: reportsSvg,
-      // },
-      // {
-      //   label: "Create Order Report",
-      //   link: "/report/create-order",
-      //   icon: reportsSvg,
-      // },
-      // {
-      //   label: "Cumilative report",
-      //   link: "/report/cumulative",
-      //   icon: reportsSvg,
-      // },
-      // {
-      //   label: "Download Report",
-      //   link: "/report/download",
-      //   icon: reportsSvg,
-      // },
-      // { label: "Email Report", link: "/report/email", icon: reportsSvg },
-      // { label: "Refund Report", link: "/report/refund", icon: reportsSvg },
-      // {
-      //   label: "Reconcillation report",
-      //   link: "/report/reconciliation",
-      //   icon: reportsSvg,
-      // },
-      // { label: "SMS Report", link: "/report/sms", icon: reportsSvg },
-      // {
-      //   label: "Invoice report",
-      //   link: "/report/invoice",
-      //   icon: reportsSvg,
-      // },
-    ],
-  },
-  {
-    label: "Notification",
+    label: "Messaging",
     icon: NotificationIcon,
     initiallyOpened: false,
     links: [
-      {
-        label: "Alert Notification",
-        link: "/notification/alert-type",
-        icon: NotificationIcon,
-      },
-      // {
-      //   label: "SMS Template",
-      //   link: "/notification/sms-template",
-      //   icon: NotificationIcon,
-      // },
-      // {
-      //   label: "Email Report",
-      //   link: "/notification/email-report",
-      //   icon: NotificationIcon,
-      // },
-      {
-        label: "SMS",
-        link: "/notification/sms-credentials",
-        icon: NotificationIcon,
-      },
-      {
-        label: "Mail",
-        link: "/notification/email-credentials",
-        icon: NotificationIcon,
-      },
+      { label: "Alert Rules", link: "/notification/alert-type", icon: NotificationIcon },
+      { label: "SMS Gateway", link: "/notification/sms-credentials", icon: NotificationIcon },
+      { label: "Email Gateway", link: "/notification/email-credentials", icon: NotificationIcon },
     ],
   },
   {
-    label: "My Account",
-    icon: MyProfileIcon,
-    initiallyOpened: false,
-    links: [
-      { label: "Profile", link: "/account/profile", icon: MyProfileIcon },
-      // {
-      //   label: "Design Receipts",
-      //   link: "/account/design-receipts",
-      //   icon: MyProfileIcon,
-      // },
-      // {
-      //   label: "Design Documents",
-      //   link: "/account/design-documents",
-      //   icon: MyProfileIcon,
-      // },
-    ],
-  },
-  {
-    label: "Support Centre",
+    label: "Help Desk",
     icon: SupportIcon,
     initiallyOpened: false,
     links: [
-      {
-        label: "Ticket Management",
-        link: "/support/ticket-management",
-        icon: SupportIcon,
-      },
-      // {
-      //   label: "Contact Us",
-      //   link: "/support/contact-us",
-      //   icon: SupportIcon,
-      // },
+      { label: "Support Tickets", link: "/support/ticket-management", icon: SupportIcon },
     ],
   },
-  // {
-  //   label: "Website Settings",
-  //   icon: MenuSettingIcon,
-  //   initiallyOpened: false,
-  //   links: [
-  //     { label: "Brandings", link: "/website/brandings", icon: MenuSettingIcon },
-  //     {
-  //       label: "Website Settings",
-  //       link: "/website/settings",
-  //       icon: MenuSettingIcon,
-  //     },
-  //     {
-  //       label: "News Update",
-  //       link: "/website/news-update",
-  //       icon: MenuSettingIcon,
-  //     },
-  //   ],
-  // },
-  { label: "Logs", icon: LogsIcon, initiallyOpened: false, link: "/logs" },
+  {
+    label: "Profile",
+    icon: MyProfileIcon,
+    initiallyOpened: false,
+    links: [
+      { label: "My Profile", link: "/account/profile", icon: MyProfileIcon },
+    ],
+  },
+  { label: "Audit Trail", icon: LogsIcon, initiallyOpened: false, link: "/logs" },
 ];

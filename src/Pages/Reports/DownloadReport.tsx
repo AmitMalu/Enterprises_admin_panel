@@ -94,7 +94,7 @@ const DownloadReport = () => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
       <TextComponent fontFamily="Inter" fontWeight={600} fontSize={24}>
-        DOWNLOAD REPORT
+        EXPORT CENTER
       </TextComponent>
 
       <Formik

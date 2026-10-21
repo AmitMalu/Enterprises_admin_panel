@@ -175,7 +175,7 @@ const UpdateTransaction = () => {
         />
       ) : ( */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        UPDATE TRANSACTION
+        TRANSACTION CORRECTIONS
       </TextComponent>
       {/* )} */}
 

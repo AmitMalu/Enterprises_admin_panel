@@ -63,7 +63,7 @@ const CreditDebit = () => {
 
       {/* Heading */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        Credit Debit
+        Wallet Adjustments
       </TextComponent>
 
       <Formik

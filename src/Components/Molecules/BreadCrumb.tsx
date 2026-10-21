@@ -5,7 +5,7 @@ import { colors } from "../../theme/colors";
 
 const BreadCrumb = ({
   type,
-  text = "Management",
+  text = "Network",
   color = colors.brand.highlight,
   gap = 2,
 }: {
