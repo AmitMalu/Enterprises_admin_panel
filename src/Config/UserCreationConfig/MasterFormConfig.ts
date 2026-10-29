@@ -71,7 +71,7 @@ export const masterInitialValues = {
   businessNumber: "",
 
   // White label-specific
-  imAccountMemberID: "",
+  scsAccountMemberID: "",
   isServiceAllow: false,
   allowPrepaidCards: false,
   prepaidCardName: "",
@@ -165,7 +165,7 @@ export const masterValidationSchema: Record<FieldNames, Yup.AnySchema> = {
   businessNumber: textField("Business Number", 50, true),
 
   // White label-specific
-  imAccountMemberID: textField("SCS Account Member ID", 50, true),
+  scsAccountMemberID: textField("SCS Account Member ID", 50, true),
   isServiceAllow: Yup.boolean(),
   allowPrepaidCards: Yup.boolean(),
   prepaidCardName: textField("Prepaid Card Name", 50, true),
@@ -272,7 +272,7 @@ export function transformUserCreationPayload(
   values: any,
   ip?: string | null
 ) {
-  // Base payload structure common to all user types except IM-Admin
+  // Base payload structure common to all user types except SCS-Admin
   const basePayload = {
     parentAccount: values.parentAccount || "",
     title: values.title || "",
@@ -374,7 +374,7 @@ export function transformUserCreationPayload(
         businessDesc: values.businessDesc || "",
       };
 
-    case "im-admin":
+    case "scs-admin":
       return {
         name: values.name || "",
         mobileNumber: values.mobileNumber || "",

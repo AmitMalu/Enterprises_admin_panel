@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import UserTypeCard from "../Molecules/UserTypeCard";
 import { userTypeSelectorOptions } from "../../Config/UserCreationConfig/UserConfig";
-// import { IMLogoWhiteBGSvg } from "../../assets/Icons";
+// import { ScsLogoWhiteBGSvg } from "../../assets/Icons";
 import { BrandMark } from '../Brand/BrandLogo';
 
 const radius = 190;

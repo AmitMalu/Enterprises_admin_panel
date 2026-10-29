@@ -127,7 +127,7 @@ export type SlabStructureTableType = {
   slabEnd: string;
   rateType: string;
   gross: string;
-  im: string;
+  scs: string;
   enterprise?: string;
   whitelabel?: string;
   superDistributor?: string;
@@ -219,7 +219,7 @@ export const slabStructureHeaders: GenericTableHeader<SlabStructureTableType>[] 
       ],
     },
     { key: "gross", label: "Gross" },
-    { key: "im", label: "Admin", showCalculatedBelow: true },
+    { key: "scs", label: "Admin", showCalculatedBelow: true },
     { key: "enterprise", label: "Enterprise", showCalculatedBelow: true },
     { key: "whitelabel", label: "WL", showCalculatedBelow: true },
     { key: "superDistributor", label: "SD", showCalculatedBelow: true },
@@ -232,7 +232,7 @@ export const getFilteredSlabHeaders = (slabs: any[]) => {
   return slabStructureHeaders.filter(
     ({ key }) =>
       // Always include these base fields
-      ["slabStart", "slabEnd", "rateType", "gross", "im"].includes(
+      ["slabStart", "slabEnd", "rateType", "gross", "scs"].includes(
         key as string,
       ) ||
       // Include only if any slab has a non-null, non-undefined value
@@ -251,7 +251,7 @@ export const makeBlankSlab = (
     slabEnd: slabEnd.toString(),
     rateType: "FLAT", // default
     gross: "0",
-    im: "0",
+    scs: "0",
   };
 
   headers.forEach(({ key }) => {

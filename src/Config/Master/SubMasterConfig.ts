@@ -7,13 +7,13 @@ export const MASTER_KEY = "sub-master";
 export const MASTER_URL = API_ENDPOINTS.MASTER.MAIN_MASTER;
 
 export interface SubMasterFormType {
-  imMasterId: string;
-  imSubMasterName: string;
+  scsMasterId: string;
+  scsSubMasterName: string;
 }
 
 export interface SubMasterTableType extends SubMasterFormType {
-  imMasterName: string;
-  imSubMasterId: string;
+  scsMasterName: string;
+  scsSubMasterId: string;
   createdOn?: string;
   createdBy?: string;
 }
@@ -33,21 +33,21 @@ export type FetchSubMasterListParams = {
 };
 
 export const initialValues: SubMasterFormType = {
-  imMasterId: "",
-  imSubMasterName: "",
+  scsMasterId: "",
+  scsSubMasterName: "",
 };
 
 export const validationSchema: Record<keyof SubMasterFormType, Yup.AnySchema> =
   {
-    imMasterId: textField("Master", 50, true, true),
-    imSubMasterName: textField("Sub Master Name", 50, true, true),
+    scsMasterId: textField("Master", 50, true, true),
+    scsSubMasterName: textField("Sub Master Name", 50, true, true),
   };
 
 export const headers: GenericTableHeader<SubMasterTableType>[] = [
-  { key: "imMasterId", label: "Master Id", filterType: "number" },
-  { key: "imMasterName", label: "Master Name", filterType: "text" },
-  { key: "imSubMasterId", label: "Sub Master Id", filterType: "number" },
-  { key: "imSubMasterName", label: "Sub Master Name", filterType: "text" },
+  { key: "scsMasterId", label: "Master Id", filterType: "number" },
+  { key: "scsMasterName", label: "Master Name", filterType: "text" },
+  { key: "scsSubMasterId", label: "Sub Master Id", filterType: "number" },
+  { key: "scsSubMasterName", label: "Sub Master Name", filterType: "text" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
 ];
@@ -56,10 +56,10 @@ export const mapToSubMasterTableType = (
   raw: Record<string, any>
 ): SubMasterTableType => {
   return {
-    imMasterId: raw?.imMasterId ?? "",
-    imSubMasterId: raw?.imSubMasterId ?? "",
-    imMasterName: raw?.imMasterName ?? "",
-    imSubMasterName: raw?.imSubMasterName ?? "",
+    scsMasterId: raw?.scsMasterId ?? "",
+    scsSubMasterId: raw?.scsSubMasterId ?? "",
+    scsMasterName: raw?.scsMasterName ?? "",
+    scsSubMasterName: raw?.scsSubMasterName ?? "",
     createdOn: formatDateTime(raw.createdOn) ?? "",
     createdBy: raw.createdBy ?? "",
   };
@@ -69,8 +69,8 @@ export const mapToSubMasterTableType = (
 // export const transformDropdownListToFormData = (
 //   raw: Record<string, any>
 // ): DropdownFormType => ({
-//   imMasterName: raw?.imMasterName ?? "",
-//   imSubMasterName: raw?.imSubMasterName ?? "",
+//   scsMasterName: raw?.scsMasterName ?? "",
+//   scsSubMasterName: raw?.scsSubMasterName ?? "",
 // });
 
 // Transform form data to Create payload

@@ -1,6 +1,6 @@
 # Enterprise Admin Portal (`Enterprise_Admin_Portal`)
 
-Back-office admin web app for the Instant Mudra / NFTTech fintech platform. A single-page
+Back-office admin web app for the Smart Credit Solution / SmartCredit fintech platform. A single-page
 React app used by internal staff and white-label admins to manage the whole network:
 **Masters** (bank / location / vendor credentials), **Schemes** (commission setup &
 allocation), **Funding** (prefund approval, credit/debit), **Management** (create & manage the
@@ -55,7 +55,7 @@ Pure static SPA — no backend in this repo. All data comes from the Spring Boot
 
 ```bash
 # Node >= 18 (Node 20 LTS recommended)
-git clone https://github.com/Instant-Mudra-Prepaid/Enterprise_Admin_Portal.git
+git clone https://github.com/AmitMalu/Enterprises_admin_panel.git
 cd Enterprise_Admin_Portal
 git checkout DEV
 
@@ -75,7 +75,7 @@ files are git-ignored.
 
 | Var | Purpose |
 |-----|---------|
-| `VITE_API_BASE_URL` | Backend REST base URL (e.g. `https://api.nfttech.in/enterprises`) |
+| `VITE_API_BASE_URL` | Backend REST base URL (e.g. `https://admin1.utsabpay.com/enterprises`) |
 | `VITE_BASE_PATH` | URL sub-path the app is mounted at. **Must match the nginx `location` / Tomcat context.** Feeds `vite.config.ts` `base` and the router. e.g. prod = `/enterprise`, uat = `/enterprise-admin`. |
 | `VITE_SECRET_KEY` | AES key for encrypting the login credential payload (must match the backend). |
 
@@ -266,9 +266,9 @@ first**, then `ssh ciuser@10.1.3.4`. SSL is terminated at the load balancer.
 ### Production (nginx static, `main` branch)
 
 nginx on `10.1.3.4` serves this build from `/var/www/enterprise-admin/` on port **80**
-(`admin.nfttech.in`, path `/enterprise/`). Two ways:
+(`admin1.utsabpay.com`, path `/enterprise/`). Two ways:
 
-1. **Internal Deployment Console** — `https://admin.nfttech.in/internal/deployment-console/`
+1. **Internal Deployment Console** — `https://admin1.utsabpay.com/internal/deployment-console/`
    → **Deploy Admin** → enter the deploy password.
 2. **Manual** —
    ```bash
@@ -287,7 +287,7 @@ nginx on `10.1.3.4` serves this build from `/var/www/enterprise-admin/` on port 
 
 On the UAT server: the equivalent deploy script (defaults to `DEV`) builds with
 `npm run build:uat` and deploys into Tomcat `webapps/enterprise-admin/`. Serves
-`https://uat.nfttech.in/enterprises`.
+`https://portal1.utsabpay.com/enterprises`.
 
 > Full infra details (VPN credentials, server layout, PM2, nginx config) are in the handover
 > bundle given to the manager — not in this repo.

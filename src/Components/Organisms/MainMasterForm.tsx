@@ -100,7 +100,7 @@ const MainMasterForm = ({ mode }: MainMasterFormProps) => {
           <Grid gutter="lg">
             <Grid.Col span={{ base: 12, md: 12, lg: 12 }}>
               <FormikTextInputComponent
-                name="imMasterName"
+                name="scsMasterName"
                 label="Master Name"
                 placeholder="Enter Master Name"
                 withAsterisk

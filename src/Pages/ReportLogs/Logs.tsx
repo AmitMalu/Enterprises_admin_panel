@@ -104,7 +104,7 @@ const Logs = () => {
                       { label: "Callback Logs", value: "callback-logs-json" },
                       { label: "Audit Logs", value: "audit-logs-json" },
                       { label: "Vendor Logs", value: "vendor-logs-json" },
-                      { label: "System Logs", value: "im-logs-json" },
+                      { label: "System Logs", value: "scs-logs-json" },
                     ]}
                   />
                 </Grid.Col>
