@@ -1,4 +1,4 @@
-const IMAdminLogoSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+const ScsAdminLogoSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -42,4 +42,4 @@ const IMAdminLogoSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   );
 };
 
-export default IMAdminLogoSvg
+export default ScsAdminLogoSvg

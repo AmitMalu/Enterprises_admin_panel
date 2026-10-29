@@ -29,7 +29,7 @@ export const USER_TYPE_KEBAB_CASE_MAP: Record<
   SUPER_DISTRIBUTOR: "super-distributor",
   WHITE_LABEL: "white-label",
   ENTERPRISE: "enterprise",
-  IM_ADMIN: "im-admin",
+  SCS_ADMIN: "scs-admin",
 };
 
 // 1. Union type of user types
@@ -40,7 +40,7 @@ export type UserTypeUpperSnakeCase =
   | "SUPER_DISTRIBUTOR"
   | "ENTERPRISE"
   | "WHITE_LABEL"
-  | "IM_ADMIN";
+  | "SCS_ADMIN";
 
 // 2. Filter options for a Select/Dropdown
 export const userTypeFilterOptions: {
@@ -49,7 +49,7 @@ export const userTypeFilterOptions: {
 }[] = [
     { label: "Retailer", value: "RETAILER" },
     { label: "Enterprise", value: "ENTERPRISE" },
-    { label: "Admin", value: "IM_ADMIN" },
+    { label: "Admin", value: "SCS_ADMIN" },
     { label: "Distributor", value: "DISTRIBUTOR" },
     { label: "Partner", value: "PARTNER" },
     { label: "Super Distributor", value: "SUPER_DISTRIBUTOR" },
@@ -217,7 +217,7 @@ export type FieldVisibilityConfig = {
   other: string[];
 };
 
-export const FIELD_VISIBILITY_MAP: Record<UserType | "im-admin", FieldVisibilityConfig> = {
+export const FIELD_VISIBILITY_MAP: Record<UserType | "scs-admin", FieldVisibilityConfig> = {
   "retailer": {
     basic: ["name", "title", "emailId", "mobileNumber", "dob", "aadhaarNumber", "panNumber", "shopNumber", "businessNumber"],
     address: ["address", "city", "state", "zipCode"],
@@ -266,7 +266,7 @@ export const FIELD_VISIBILITY_MAP: Record<UserType | "im-admin", FieldVisibility
     bank: ["bankName", "bankAccountNumber", "bankHolderName", "ifscCode"],
     other: ["theme", "domainURL", "businessDesc"],
   },
-  "im-admin": {
+  "scs-admin": {
     basic: ["name", "userName", "emailId", "mobileNumber"],
     address: [],
     outletAddress: [],
@@ -339,7 +339,7 @@ const documentValidators: Record<string, Yup.AnySchema> = {
 };
 
 export const getValidationSchema = (
-  userType: UserType | "im-admin"
+  userType: UserType | "scs-admin"
 ): Yup.ObjectSchema<any> => {
   const config = FIELD_VISIBILITY_MAP[userType];
   const shape: Record<string, any> = {};

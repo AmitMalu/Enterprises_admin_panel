@@ -342,7 +342,7 @@ export const userCreationSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   );
 };
 
-export const IMLogoWhiteBGSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
+export const ScsLogoWhiteBGSvg: React.FC<React.SVGProps<SVGSVGElement>> = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -39,7 +39,7 @@ export const API_ENDPOINTS = {
     VENDOR_ROUTING: "api/vendor-routing",
     SUB_OPERATOR: "api/sub-operators",
     NETWORK_BANK_MASTER: "api/network-banks",
-    BANK_MASTER: "api/im-bank",
+    BANK_MASTER: "api/scs-bank",
     MAIN_MASTER: "api/master",
     COUNTRY_MASTER: "api/country",
     STATE_MASTER: "api/states",

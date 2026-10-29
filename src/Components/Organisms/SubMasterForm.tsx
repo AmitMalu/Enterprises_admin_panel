@@ -18,8 +18,8 @@ import { colors } from "../../theme/colors";
 
 
 interface MasterDropdownItem {
-    imMasterName: string;
-    imMasterId: string;
+    scsMasterName: string;
+    scsMasterId: string;
 }
 type SubMasterFormProps = { mode: "add" | "edit" };
 
@@ -89,8 +89,8 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
                 ).unwrap();
 
                 const formattedData: { label: string; value: string }[] = (data as MasterDropdownItem[])?.map((item: MasterDropdownItem) => ({
-                    label: String(item.imMasterName),
-                    value: String(item.imMasterId)
+                    label: String(item.scsMasterName),
+                    value: String(item.scsMasterId)
                 }));
 
                 setMainMasterList(formattedData)
@@ -137,7 +137,7 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
                     <Grid gutter="lg">
                         <Grid.Col span={{ base: 12, md: 12, lg: 12 }}>
                             <FormikSelectComponent
-                                name="imMasterId"
+                                name="scsMasterId"
                                 label="Master"
                                 placeholder="Select Master "
                                 withAsterisk
@@ -148,7 +148,7 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
 
                         <Grid.Col span={{ base: 12, md: 12, lg: 12 }}>
                             <FormikTextInputComponent
-                                name="imSubMasterName"
+                                name="scsSubMasterName"
                                 label="Sub Master Name"
                                 placeholder="Enter Sub Master Name"
                                 withAsterisk

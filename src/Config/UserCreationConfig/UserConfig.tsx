@@ -4,7 +4,7 @@ import * as partnerForm from "../../Pages/Management/Types/Partner";
 import * as superDistributorForm from "../../Pages/Management/Types/SuperDistributor";
 import * as whiteLabelForm from "../../Pages/Management/Types/WhiteLabel";
 import * as enterpriseForm from "../../Pages/Management/Types/Enterprise";
-import * as imAdminForm from "../../Pages/Management/Types/IMAdmin";
+import * as scsAdminForm from "../../Pages/Management/Types/ScsAdmin";
 
 import { FormikProps } from "formik";
 import { FieldNames } from "./MasterFormConfig";
@@ -18,7 +18,7 @@ import {
 } from "../../assets/Icons";
 
 export type UserType =
-  | "im-admin"
+  | "scs-admin"
   | "distributor"
   | "white-label"
   | "partner"
@@ -27,7 +27,7 @@ export type UserType =
   | "enterprise";
 
 export const userTypeSelectorOptions = [
-  // { label: "IM Admin", icon: <IMAdminLogoSvg />, type: "im-admin" },
+  // { label: "SCS Admin", icon: <ScsAdminLogoSvg />, type: "scs-admin" },
   { label: "Enterprise", icon: <EnterpriseLogoSvg />, type: "enterprise" },
   { label: "Retailer", icon: <RetailerLogoSvg />, type: "retailer" },
   {
@@ -459,7 +459,7 @@ export const UserConfig: Record<
       }
     },
   },
-  "im-admin": {
+  "scs-admin": {
     steps: ["Details"],
     stepFieldMap: [
       ["name", "mobileNumber", "emailId", "userName", "password"], // Step 0
@@ -467,9 +467,9 @@ export const UserConfig: Record<
     renderStepForm: (step, formik) => {
       switch (step) {
         case 0:
-          return <imAdminForm.PersonalDetails formik={formik} />;
+          return <scsAdminForm.PersonalDetails formik={formik} />;
         default:
-          return <imAdminForm.PersonalDetails formik={formik} />;
+          return <scsAdminForm.PersonalDetails formik={formik} />;
       }
     },
   },

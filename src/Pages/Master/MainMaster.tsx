@@ -138,7 +138,7 @@ const MainMaster = () => {
           //       <EyeIcon />
           //     </span>
           //     {/* <span   No Edit For Master
-          //       onClick={() => handleEdit(String(item?.imMasterId ?? ""))}
+          //       onClick={() => handleEdit(String(item?.scsMasterId ?? ""))}
           //       className="cursor-pointer"
           //     >
           //       <EditIcon />

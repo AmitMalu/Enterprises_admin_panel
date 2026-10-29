@@ -7,12 +7,12 @@ export const MASTER_KEY = "main-master";
 export const MASTER_URL = API_ENDPOINTS.MASTER.MAIN_MASTER;
 
 export interface MainMasterFormType {
-  imMasterName: string;
+  scsMasterName: string;
 }
 
 export interface MainMasterTableType extends MainMasterFormType {
-  imMasterId: string | number;
-  imMasterName: string;
+  scsMasterId: string | number;
+  scsMasterName: string;
   createdOn?: string;
   createdBy?: string;
   // editedOn?: string;
@@ -34,17 +34,17 @@ export type FetchMainMasterListParams = {
 };
 
 export const initialValues: MainMasterFormType = {
-  imMasterName: "",
+  scsMasterName: "",
 };
 
 export const validationSchema: Record<keyof MainMasterFormType, Yup.AnySchema> =
   {
-    imMasterName: textField("Master Name", 50, true, true),
+    scsMasterName: textField("Master Name", 50, true, true),
   };
 
 export const headers: GenericTableHeader<MainMasterTableType>[] = [
-  { key: "imMasterId", label: "Master Id", filterType: "number" },
-  { key: "imMasterName", label: "Master Name", filterType: "text" },
+  { key: "scsMasterId", label: "Master Id", filterType: "number" },
+  { key: "scsMasterName", label: "Master Name", filterType: "text" },
   { key: "createdBy", label: "Created By", filterType: "text" },
   { key: "createdOn", label: "Created On", filterType: "date" },
   // { key: "editedBy", label: "Edited By", filterType: "text" },
@@ -55,8 +55,8 @@ export const mapToMainMasterTableType = (
   raw: Record<string, any>
 ): MainMasterTableType => {
   return {
-    imMasterName: raw?.imMasterName ?? "",
-    imMasterId: raw?.imMasterId ?? "",
+    scsMasterName: raw?.scsMasterName ?? "",
+    scsMasterId: raw?.scsMasterId ?? "",
     createdOn: formatDateTime(raw.createdOn) ?? "",
     createdBy: raw.createdBy ?? "",
     // editedOn: formatDateTime(raw.editedOn) ?? "",
