@@ -3,7 +3,7 @@ import ComingSoonPage from "../../Components/Atoms/ComingSoonPage";
 const SettlementBank = () => {
   return (
     <div>
-      <ComingSoonPage name="Payout Accounts" />
+      <ComingSoonPage name="Settlement Bank" />
     </div>
   );
 };

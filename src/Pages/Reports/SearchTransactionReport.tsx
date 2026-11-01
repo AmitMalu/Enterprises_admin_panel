@@ -90,7 +90,7 @@ const SearchTransactionReport = () => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
       <TextComponent fontFamily="Inter" fontWeight={600} fontSize={24}>
-        Find a Transaction
+        Search Transaction Report
       </TextComponent>
 
       <Formik

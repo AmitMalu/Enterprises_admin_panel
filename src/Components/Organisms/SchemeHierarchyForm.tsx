@@ -89,7 +89,7 @@ const SchemeHierarchyForm = ({ mode }: SchemeHierarchyFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type="Plan Level" text="Commission Plans" />
+            <BreadCrumb type="Hierarchy" text="Schemes" />
 
             <Formik
                 enableReinitialize

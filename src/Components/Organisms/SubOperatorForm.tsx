@@ -99,7 +99,7 @@ const SubOperatorForm = ({ mode }: ProductFormProps) => {
       />
 
       {/* Sub Heading */}
-      <BreadCrumb type={"Operator Circle"} text="Platform Setup" />
+      <BreadCrumb type={"Sub-Operator"} text="Master" />
 
       <Formik
         enableReinitialize

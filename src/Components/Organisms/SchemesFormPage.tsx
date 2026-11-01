@@ -91,7 +91,7 @@ const SchemesFormPage = ({ mode }: SchemesFormPageProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={mode} text="Commission Plans" />
+            <BreadCrumb type={mode} text="Schemes" />
 
             <Formik
                 enableReinitialize

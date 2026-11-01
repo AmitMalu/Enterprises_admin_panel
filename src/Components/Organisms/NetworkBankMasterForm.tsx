@@ -100,7 +100,7 @@ const NetworkBankMasterForm = ({ mode }: NetworkBankMasterFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"Partner Bank"} text="Platform Setup" />
+            <BreadCrumb type={"Network Bank"} text="Master" />
 
             <Formik
                 enableReinitialize

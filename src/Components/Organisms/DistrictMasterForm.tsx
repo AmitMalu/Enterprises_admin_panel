@@ -99,7 +99,7 @@ const DistrictMasterForm = ({ mode }: DistrictMasterFormProps) => {
 
 
             {/* Sub Heading */}
-            <BreadCrumb type={"District"} text="Platform Setup" />
+            <BreadCrumb type={"District"} text="Master" />
 
             {formReady && (
                 <Formik

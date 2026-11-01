@@ -125,7 +125,7 @@ const SubMainMasterForm = ({ mode }: SubMasterFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"Dropdown Value"} text="Platform Setup" />
+            <BreadCrumb type={"SubMaster"} text="Master" />
 
             <Formik
                 enableReinitialize
