@@ -97,7 +97,7 @@ const StateMasterForm = ({ mode }: StateMasterFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"State"} text="Platform Setup" />
+            <BreadCrumb type={"State"} text="Master" />
 
             <Formik
                 enableReinitialize

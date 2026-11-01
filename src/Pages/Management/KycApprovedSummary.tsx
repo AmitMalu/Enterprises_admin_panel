@@ -81,7 +81,7 @@ const KycApprovedSummary = () => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        KYC VERIFIED
+        KYC APPROVED SUMMARY
       </TextComponent>
 
       {/* Toolbar */}

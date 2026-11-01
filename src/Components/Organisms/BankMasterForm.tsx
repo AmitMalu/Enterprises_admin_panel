@@ -50,7 +50,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
         transformCreatePayload: transformFormToCreateBankMasterPayload,
         transformUpdatePayload: transformFormToUpdateBankMasterPayload,
         successNavigatePath: "/master/banks",
-        entityName: "Company Bank",
+        entityName: "Bank",
     });
 
     useEffect(() => {
@@ -116,7 +116,7 @@ const BankMasterForm = ({ mode }: BankMasterFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"Company Account"} text="Platform Setup" />
+            <BreadCrumb type={"Bank"} text="Master" />
 
             <Formik
                 enableReinitialize

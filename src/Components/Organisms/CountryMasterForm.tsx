@@ -93,7 +93,7 @@ const CountryMasterForm = ({ mode }: CountryMasterFormProps) => {
                 backPath="/master/country"
             />
             {/* Sub Heading */}
-            <BreadCrumb type={"Country"} text="Platform Setup" />
+            <BreadCrumb type={"Country"} text="Master" />
 
             <Formik
                 enableReinitialize

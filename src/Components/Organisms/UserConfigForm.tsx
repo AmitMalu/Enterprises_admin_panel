@@ -98,7 +98,7 @@ const UserConfigForm = ({ mode }: UserConfigFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type="User Configuration" text="Network" />
+            <BreadCrumb type="User Configuration" text="Management" />
 
             <Formik
                 enableReinitialize

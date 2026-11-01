@@ -99,7 +99,7 @@ const VendorCredentialForm = ({ mode }: VendorCredentialFormProps) => {
                 backPath="/master/vendor-credential"
             />
             {/* Sub Heading */}
-            <BreadCrumb type={"Provider Key"} text="Platform Setup" />
+            <BreadCrumb type={"Vendor Credential"} text="Master" />
 
             <Formik
                 enableReinitialize

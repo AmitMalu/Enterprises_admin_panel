@@ -254,7 +254,7 @@ const PendingKycView = () => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"KYC Review"} text="Network" />
+            <BreadCrumb type={"Pending KYC"} text="Management" />
 
             <Formik
                 key={formKey}

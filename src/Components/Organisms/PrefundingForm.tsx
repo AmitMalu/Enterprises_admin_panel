@@ -141,7 +141,7 @@ const PrefundingForm = () => {
       />
 
       {/* Sub Heading */}
-      <BreadCrumb type={"Top-up Approval"} text="Treasury" />
+      <BreadCrumb type={"Prefunding"} text="Funding" />
 
       <Formik
         enableReinitialize

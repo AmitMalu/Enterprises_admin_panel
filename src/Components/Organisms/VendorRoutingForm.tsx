@@ -97,7 +97,7 @@ const VendorRoutingForm = ({ mode }: VendorRoutingFormProps) => {
                 backPath="/master/vendor-routing"
             />
             {/* Sub Heading */}
-            <BreadCrumb type={"Smart Routing"} text="Platform Setup" />
+            <BreadCrumb type={"Vendor Routing"} text="Master" />
 
             <Formik
                 enableReinitialize

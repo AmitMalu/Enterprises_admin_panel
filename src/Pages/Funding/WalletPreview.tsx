@@ -203,7 +203,7 @@ const WalletPreview = () => {
         <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
             {/* Heading */}
             <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-                Wallet Overview
+                Wallet Preview
             </TextComponent>
 
             {/* Member Role Filter */}

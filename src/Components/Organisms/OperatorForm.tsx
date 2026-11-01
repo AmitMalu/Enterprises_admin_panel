@@ -94,7 +94,7 @@ const OperatorForm = ({ mode }: OperatorFormProps) => {
       />
 
       {/* Sub Heading */}
-      <BreadCrumb type={"Biller / Operator"} text="Platform Setup" />
+      <BreadCrumb type={"Operator"} text="Master" />
 
       <Formik
         enableReinitialize
