@@ -121,7 +121,7 @@ const WhitelabelBrandingForm = ({ mode }: WhitelabelBrandingFormProps) => {
         backPath="/management/whitelabel-branding"
       />
 
-      <BreadCrumb type={"Whitelabel Branding"} text="Management" />
+      <BreadCrumb type={"White Label Branding"} text="Network" />
 
       <Formik
         enableReinitialize

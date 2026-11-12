@@ -8,14 +8,7 @@ import * as scsAdminForm from "../../Pages/Management/Types/ScsAdmin";
 
 import { FormikProps } from "formik";
 import { FieldNames } from "./MasterFormConfig";
-import {
-  DistributorLogoSvg,
-  EnterpriseLogoSvg,
-  PartnerLogoSvg,
-  RetailerLogoSvg,
-  SuperDistributorLogoSvg,
-  WhiteLabelLogoSvg,
-} from "../../assets/Icons";
+import NetworkTypeIcon from "../../Components/Atoms/NetworkTypeIcon";
 
 export type UserType =
   | "scs-admin"
@@ -27,17 +20,16 @@ export type UserType =
   | "enterprise";
 
 export const userTypeSelectorOptions = [
-  // { label: "SCS Admin", icon: <ScsAdminLogoSvg />, type: "scs-admin" },
-  { label: "Enterprise", icon: <EnterpriseLogoSvg />, type: "enterprise" },
-  { label: "Retailer", icon: <RetailerLogoSvg />, type: "retailer" },
+  { label: "Enterprise", icon: <NetworkTypeIcon type="enterprise" />, type: "enterprise" },
+  { label: "Retailer", icon: <NetworkTypeIcon type="retailer" />, type: "retailer" },
   {
     label: "Super Distributor",
-    icon: <SuperDistributorLogoSvg />,
+    icon: <NetworkTypeIcon type="super-distributor" />,
     type: "super-distributor",
   },
-  { label: "Partner", icon: <PartnerLogoSvg />, type: "partner" },
-  { label: "White Label", icon: <WhiteLabelLogoSvg />, type: "white-label" },
-  { label: "Distributor", icon: <DistributorLogoSvg />, type: "distributor" },
+  { label: "Partner", icon: <NetworkTypeIcon type="partner" />, type: "partner" },
+  { label: "White Label", icon: <NetworkTypeIcon type="white-label" />, type: "white-label" },
+  { label: "Distributor", icon: <NetworkTypeIcon type="distributor" />, type: "distributor" },
 ];
 
 export type UploadDocumentsFormProps = {
