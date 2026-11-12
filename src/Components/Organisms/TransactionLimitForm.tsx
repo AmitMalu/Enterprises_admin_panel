@@ -85,7 +85,7 @@ const TransactionLimitForm = ({ mode }: TransactionLimitFormProps) => {
             />
 
             {/* Sub Heading */}
-            <BreadCrumb type={"Transaction Limit Setting"} text="Scheme" />
+            <BreadCrumb type={"Transaction Limit"} text="Schemes" />
 
             <Formik
                 enableReinitialize

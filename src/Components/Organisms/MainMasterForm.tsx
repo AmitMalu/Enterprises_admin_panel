@@ -88,7 +88,7 @@ const MainMasterForm = ({ mode }: MainMasterFormProps) => {
         backPath="/master/main"
       />
       {/* Sub Heading */}
-      <BreadCrumb type={"Main"} text="Master" />
+      <BreadCrumb type={"Main Category"} text="Master" />
 
       <Formik
         enableReinitialize

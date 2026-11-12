@@ -98,7 +98,7 @@ const TransactionLimitSetting = () => {
     <div className="p-2 w-full h-[calc(100vh-90px)] flex flex-col">
       {/* Heading */}
       <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-        Transaction Limit Setting
+        Transaction Limits
       </TextComponent>
 
       {/* Toolbar */}

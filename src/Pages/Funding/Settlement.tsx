@@ -182,7 +182,7 @@ const Settlement = () => {
         />
       ) : (
         <TextComponent fontSize={22} fontFamily="Inter" fontWeight={600}>
-          SETTLEMENT
+          SETTLEMENTS
         </TextComponent>
       )}
 

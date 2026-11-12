@@ -4,12 +4,12 @@ import { sidebarData } from "../Config/Menus/MenuItems";
 
 // ─── WL Exclusion Config ─────────────────────────────────────────────────────
 // Menus never shown to WL-hierarchy roles (WLAD / WLAU).
-export const WL_EXCLUDED_MENUS = ["Masters", "Logs", "Notification"];
+export const WL_EXCLUDED_MENUS = ["Masters", "Activity Logs", "Notifications"];
 
 // Submenus never shown to WL-hierarchy roles, keyed by parent menu label.
 // Add new entries here whenever a submenu needs to be hidden for all WL roles.
 export const WL_EXCLUDED_SUBMENUS: Record<string, string[]> = {
-  Reports: ["Download Report"],
+  Reports: ["Report Downloads"],
 };
 // ─────────────────────────────────────────────────────────────────────────────
 
