@@ -7,7 +7,7 @@ import { Grid, Tabs, Tooltip } from "@mantine/core";
 import SchemeConfigurationForm from "../../Components/Organisms/SchemeConfigurationForm";
 import SlabStructureTab from "../../Components/Organisms/SlabStructureTab";
 import { fetchSchemeById, fetchSchemeByIdPost } from "../../Redux/Features/Schemes/thunks";
-import { buildSlabPayload, getFilteredSlabHeaders, makeBlankSlab, productHeaders, SCHEME_RATE_KEY, SCHEME_RATE_URL, SchemeDetails, SCHEMES_URL, SlabPayload, SlabStructureTableType } from "../../Config/Schemes/SchemesConfig";
+import { buildSlabPayload, getFilteredSlabHeaders, makeBlankSlab, productHeaders, SCHEME_RATE_KEY, SCHEME_RATE_URL, SchemeDetails, SCHEMES_URL, SlabPayload, SlabStructureTableType, withoutEnterpriseShare } from "../../Config/Schemes/SchemesConfig";
 import { useAppDispatch } from "../../Redux/hooks";
 import { toast } from "react-toastify";
 import { useThrottleMasterFormSubmit } from "../../Utils/hooks/useThrottleMasterFormSubmit";
@@ -291,7 +291,7 @@ const SchemeSettingsPage = () => {
       const data = await dispatch(
         fetchSchemeById({ key: SCHEME_RATE_KEY, endpoint: `${SCHEME_RATE_URL}/get-scheme-details-by-scheme-code`, id: schemeCode })
       ).unwrap();
-      setSchemeDetails(data);
+      setSchemeDetails(withoutEnterpriseShare(data));
       setIsSchemeActive(data.isActive);
     } catch (err: any) {
       toast.error(err);

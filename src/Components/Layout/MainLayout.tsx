@@ -1,14 +1,8 @@
-import {
-  AppShell,
-  Burger,
-  Drawer,
-  Group,
-} from "@mantine/core";
+import { AppShell, Burger, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import TopMenuBar from "./TopMenuBar";
 import { useEffect } from "react";
 import { logoutUser } from "../../Utils/utils";
 import { useAppDispatch } from "../../Redux/hooks";
@@ -21,7 +15,7 @@ const MainLayout: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Close the mobile menu drawer after navigating
+  // Close the mobile menu after navigating
   useEffect(() => {
     close();
   }, [location.pathname]);
@@ -101,35 +95,26 @@ const MainLayout: React.FC = () => {
   }, []);
 
   return (
-    <AppShell header={{ height: 112 }} padding="md">
-      <AppShell.Header style={{ border: "none", backgroundColor: "transparent" }}>
-        {/* Tier 1: dark brand bar */}
-        <div className="h-16 bg-[#0f172a]">
-          <Group h="100%" px="lg" wrap="nowrap" className="mx-auto max-w-[1600px]">
-            <Burger opened={opened} onClick={toggle} hiddenFrom="md" size="sm" color="#cbd5e1" />
-            <Navbar />
-          </Group>
-        </div>
-        {/* Tier 2: horizontal menu */}
-        <div className="h-12 border-b bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]" style={{ borderColor: colors.border.default }}>
-          <div className="mx-auto h-full max-w-[1600px] px-3 hidden md:block">
-            <TopMenuBar />
-          </div>
-        </div>
+    <AppShell
+      layout="alt"
+      header={{ height: 64 }}
+      navbar={{ width: 260, breakpoint: "md", collapsed: { mobile: !opened } }}
+      padding="md"
+    >
+      <AppShell.Header style={{ border: "none", backgroundColor: "#0f172a" }}>
+        <Group h="100%" px="lg" wrap="nowrap">
+          <Burger opened={opened} onClick={toggle} hiddenFrom="md" size="sm" color="#cbd5e1" />
+          <Navbar />
+        </Group>
       </AppShell.Header>
 
-      {/* Small screens: the full menu opens in a drawer */}
-      <Drawer
-        opened={opened}
-        onClose={close}
-        size={280}
-        withCloseButton={false}
-        padding="sm"
-        hiddenFrom="md"
-        styles={{ content: { backgroundColor: "var(--color-sidebar-bg)" } }}
+      {/* Left vertical menu (slides in on small screens) */}
+      <AppShell.Navbar
+        p="sm"
+        style={{ backgroundColor: "var(--color-sidebar-bg)", borderRight: "1px solid var(--color-sidebar-border)" }}
       >
         <Sidebar />
-      </Drawer>
+      </AppShell.Navbar>
 
       <AppShell.Main style={{ backgroundColor: colors.surface.app }}>
         <div className="mx-auto w-full max-w-[1600px]">
