@@ -19,17 +19,38 @@ export type UserType =
   | "retailer"
   | "enterprise";
 
+// Network levels offered on the Network Creation page, in hierarchy order
 export const userTypeSelectorOptions = [
-  { label: "Enterprise", icon: <NetworkTypeIcon type="enterprise" />, type: "enterprise" },
-  { label: "Retailer", icon: <NetworkTypeIcon type="retailer" />, type: "retailer" },
+  {
+    label: "White Label",
+    icon: <NetworkTypeIcon type="white-label" />,
+    type: "white-label",
+    description: "Your own branded business with its full network below it.",
+  },
   {
     label: "Super Distributor",
     icon: <NetworkTypeIcon type="super-distributor" />,
     type: "super-distributor",
+    description: "Manages partners and distributors across a large region.",
   },
-  { label: "Partner", icon: <NetworkTypeIcon type="partner" />, type: "partner" },
-  { label: "White Label", icon: <NetworkTypeIcon type="white-label" />, type: "white-label" },
-  { label: "Distributor", icon: <NetworkTypeIcon type="distributor" />, type: "distributor" },
+  {
+    label: "Partner",
+    icon: <NetworkTypeIcon type="partner" />,
+    type: "partner",
+    description: "Builds and supports a team of distributors.",
+  },
+  {
+    label: "Distributor",
+    icon: <NetworkTypeIcon type="distributor" />,
+    type: "distributor",
+    description: "Onboards retailers and keeps their wallets funded.",
+  },
+  {
+    label: "Retailer",
+    icon: <NetworkTypeIcon type="retailer" />,
+    type: "retailer",
+    description: "The outlet that serves customers with AEPS, DMT, bills and more.",
+  },
 ];
 
 export type UploadDocumentsFormProps = {

@@ -22,7 +22,7 @@ const ICONS: Record<string, Icon> = {
 const NetworkTypeIcon: React.FC<{ type: string }> = ({ type }) => {
   const TypeIcon = ICONS[type] ?? IconUsersGroup;
   return (
-    <span className="mb-1 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+    <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
       <TypeIcon size={24} stroke={1.75} />
     </span>
   );

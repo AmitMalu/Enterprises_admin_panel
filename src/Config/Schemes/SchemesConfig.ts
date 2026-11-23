@@ -220,13 +220,28 @@ export const slabStructureHeaders: GenericTableHeader<SlabStructureTableType>[] 
     },
     { key: "gross", label: "Gross" },
     { key: "scs", label: "Admin", showCalculatedBelow: true },
-    { key: "enterprise", label: "Enterprise", showCalculatedBelow: true },
     { key: "whitelabel", label: "WL", showCalculatedBelow: true },
     { key: "superDistributor", label: "SD", showCalculatedBelow: true },
     { key: "partner", label: "PT", showCalculatedBelow: true },
     { key: "distributor", label: "DT", showCalculatedBelow: true },
     { key: "retailer", label: "RT", showCalculatedBelow: true },
   ];
+
+/** Enterprise level is no longer used: move any old Enterprise share into Admin so totals still match gross. */
+export const withoutEnterpriseShare = (details: SchemeDetails): SchemeDetails => ({
+  ...details,
+  operators: (details?.operators ?? []).map((op) => ({
+    ...op,
+    slabs: (op.slabs ?? []).map((slab) => {
+      const enterprise = Number(slab.enterprise ?? 0) || 0;
+      if (slab.enterprise === undefined) return slab;
+      const { enterprise: _removed, ...rest } = slab;
+      return enterprise
+        ? { ...rest, scs: String(Number((Number(slab.scs || 0) + enterprise).toFixed(3))) }
+        : rest;
+    }),
+  })),
+});
 
 export const getFilteredSlabHeaders = (slabs: any[]) => {
   return slabStructureHeaders.filter(

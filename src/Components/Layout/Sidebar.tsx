@@ -38,7 +38,7 @@ const Sidebar: React.FC = () => {
   );
 
   return (
-    <Box w="100%" className="h-[98vh] flex flex-col">
+    <Box w="100%" className="h-full flex flex-col">
       <Tooltip label={`${BUILD_INFO.version} (${BUILD_INFO.builtAt})`} position="bottom" openDelay={1000}>
         <Box className="flex items-center px-2 pt-3 pb-5 mb-2 border-b border-[var(--color-sidebar-border)]">
           {isWhiteLabel && logoPath ? (

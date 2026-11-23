@@ -61,13 +61,15 @@ const Navbar: React.FC = () => {
 
   return (
     <Group justify="space-between" w="100%" wrap="nowrap">
-      {isWhiteLabel && logoPath ? (
-        <div className="flex h-10 items-center rounded-lg bg-white px-2">
-          <img src={logoPath} alt="logo" className="max-h-8 w-auto max-w-[140px] object-contain" />
-        </div>
-      ) : (
-        <BrandLogo tone="light" size={34} subtitle="Admin Console" />
-      )}
+      <div className="md:hidden">
+        {isWhiteLabel && logoPath ? (
+          <div className="flex h-10 items-center rounded-lg bg-white px-2">
+            <img src={logoPath} alt="logo" className="max-h-8 w-auto max-w-[140px] object-contain" />
+          </div>
+        ) : (
+          <BrandLogo tone="light" size={34} subtitle="Admin Console" />
+        )}
+      </div>
 
       <Group gap="sm" wrap="nowrap" ml="auto">
         {/* Wallet balances */}

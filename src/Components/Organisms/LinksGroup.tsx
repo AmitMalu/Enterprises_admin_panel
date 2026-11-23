@@ -123,7 +123,7 @@ const LinksGroup: React.FC<linksGroupProps> = ({
               stroke={1.75}
               size={15}
               color="var(--color-sidebar-text-muted)"
-              className={`transition-transform ${isOpened ? "rotate-[-90deg]" : "rotate-0"}`}
+              className={`transition-transform ${isOpened ? "rotate-90" : "rotate-0"}`}
             />
           )}
         </Group>
